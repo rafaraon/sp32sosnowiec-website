@@ -1,0 +1,688 @@
+<title>SP32 Sosnowiec — Strona Główna</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+<style>
+/* ── TOKENS ── */
+:root {
+  --cp: #1F4B3C;
+  --cp-d: #12251E;
+  --cp-l: #2D6B57;
+  --ca: #D4756A;
+  --ca-d: #BE5D52;
+  --clv: #D9D0EE;
+  --clv-l: #EDE8F8;
+  --bg: #F6F3FB;
+  --sf: #FFFFFF;
+  --tx: #12251E;
+  --tx-m: #4A6358;
+  --bd: #D4CDE8;
+  --ql1: #C14F4F;
+  --ql2: #5B4F9A;
+  --ql3: #1F6845;
+  --ql4: #9B6E2A;
+  --font-d: 'Bricolage Grotesque', system-ui, sans-serif;
+  --font-b: 'Atkinson Hyperlegible', system-ui, sans-serif;
+  --r: 12px;
+  --r-s: 8px;
+  --sh: 0 2px 12px rgba(31,75,60,.09);
+  --sh-m: 0 4px 24px rgba(31,75,60,.14);
+  --tr: .18s ease;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0D1A14; --sf: #15261D; --tx: #DFF0E8; --tx-m: #7BA890;
+    --bd: #253D30; --clv: #1E1A35; --clv-l: #18152A;
+    --sh: 0 2px 12px rgba(0,0,0,.25); --sh-m: 0 4px 24px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0D1A14; --sf: #15261D; --tx: #DFF0E8; --tx-m: #7BA890;
+  --bd: #253D30; --clv: #1E1A35; --clv-l: #18152A;
+  --sh: 0 2px 12px rgba(0,0,0,.25); --sh-m: 0 4px 24px rgba(0,0,0,.35);
+}
+
+/* ── RESET ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-b); background: var(--bg); color: var(--tx); line-height: 1.6; overflow-x: hidden; }
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+ul { list-style: none; }
+button { cursor: pointer; font-family: inherit; border: none; background: none; }
+
+/* ── SKIP LINK ── */
+.skip-link {
+  position: absolute; top: -100px; left: 1rem;
+  background: var(--ca); color: #fff; padding: .5rem 1rem;
+  border-radius: 0 0 var(--r-s) var(--r-s); font-family: var(--font-d);
+  font-weight: 700; font-size: .9rem; z-index: 9999; transition: top .2s;
+}
+.skip-link:focus { top: 0; }
+
+/* ── SCROLL PROGRESS ── */
+#scroll-bar {
+  position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+  background: linear-gradient(90deg, var(--ca) 0%, #e8a89e 100%);
+  z-index: 10000; transition: width .1s linear;
+}
+
+.container { width: min(1120px, 100% - 3rem); margin-inline: auto; }
+
+/* ════════════════════════
+   HEADER
+════════════════════════ */
+.site-header { position: sticky; top: 0; z-index: 100; background: var(--cp); box-shadow: 0 2px 16px rgba(0,0,0,.2); }
+.header-inner { display: flex; align-items: center; gap: 1.5rem; padding: .75rem 0; min-height: 64px; }
+
+.logo { display: flex; align-items: center; gap: .65rem; flex-shrink: 0; }
+.logo-img {
+  width: 44px; height: 44px; object-fit: contain; flex-shrink: 0;
+  filter: drop-shadow(0 1px 4px rgba(0,0,0,.3));
+  transition: transform var(--tr);
+}
+.logo:hover .logo-img { transform: scale(1.07); }
+.logo-text { display: flex; flex-direction: column; }
+.logo-name { font-family: var(--font-d); font-weight: 700; font-size: .85rem; color: #fff; line-height: 1.2; }
+.logo-patron { font-size: .65rem; color: rgba(255,255,255,.65); line-height: 1.3; }
+
+.main-nav { flex: 1; }
+.main-nav ul { display: flex; gap: .25rem; align-items: center; }
+.main-nav a {
+  font-family: var(--font-d); font-size: .82rem; font-weight: 600;
+  color: rgba(255,255,255,.82); padding: .45rem .7rem;
+  border-radius: var(--r-s); transition: background var(--tr), color var(--tr);
+  white-space: nowrap; display: flex; align-items: center; gap: .2rem;
+}
+.main-nav a:hover, .main-nav a.active { background: rgba(255,255,255,.12); color: #fff; }
+.main-nav a.active { color: var(--ca); }
+.nav-caret { font-size: .65rem; opacity: .7; }
+
+.header-controls { display: flex; align-items: center; gap: .5rem; flex-shrink: 0; }
+.a11y-controls { display: flex; gap: .25rem; }
+.a11y-btn {
+  width: 32px; height: 32px; border-radius: var(--r-s);
+  border: 1.5px solid rgba(255,255,255,.3); color: rgba(255,255,255,.8);
+  font-family: var(--font-d); font-size: .7rem; font-weight: 700;
+  transition: all var(--tr); display: flex; align-items: center; justify-content: center;
+}
+.a11y-btn:hover { background: rgba(255,255,255,.15); color: #fff; border-color: rgba(255,255,255,.6); }
+.a11y-btn:focus-visible { outline: 2px solid var(--ca); outline-offset: 2px; }
+
+.btn-edupage {
+  background: var(--ca); color: #fff; font-family: var(--font-d); font-weight: 700;
+  font-size: .82rem; padding: .5rem .9rem; border-radius: var(--r-s);
+  transition: background var(--tr), transform var(--tr); white-space: nowrap;
+}
+.btn-edupage:hover { background: var(--ca-d); transform: translateY(-1px); }
+.btn-edupage:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
+/* ════════════════════════
+   HERO — z prawdziwą ilustracją
+════════════════════════ */
+.hero { position: relative; min-height: 580px; display: flex; align-items: center; overflow: hidden; }
+
+.hero-bg {
+  position: absolute; inset: 0;
+  background-image: url('grafiki-ai/hero-szkola-ilustracja.png');
+  background-size: cover;
+  background-position: center 35%;
+}
+.hero-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(105deg,
+    rgba(12,37,25,.92) 0%,
+    rgba(12,37,25,.78) 45%,
+    rgba(12,37,25,.38) 100%);
+}
+
+.hero-content { position: relative; z-index: 1; padding: 4rem 0; max-width: 640px; }
+
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: .5rem;
+  font-family: var(--font-d); font-size: .78rem; font-weight: 600;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--ca); margin-bottom: 1.25rem;
+}
+.hero-eyebrow::before { content: ''; display: inline-block; width: 24px; height: 2px; background: var(--ca); }
+
+.hero-title {
+  font-family: var(--font-d); font-size: clamp(2.4rem, 5.5vw, 4rem); font-weight: 800;
+  color: #fff; line-height: 1.08; letter-spacing: -.03em; text-wrap: balance; margin-bottom: 1.25rem;
+}
+.hero-sub { font-family: var(--font-b); font-size: 1.05rem; color: rgba(255,255,255,.75); line-height: 1.55; margin-bottom: 2rem; max-width: 480px; }
+
+.hero-ctas { display: flex; gap: .75rem; flex-wrap: wrap; }
+.btn {
+  display: inline-flex; align-items: center; gap: .4rem; font-family: var(--font-d);
+  font-weight: 700; font-size: .95rem; padding: .75rem 1.5rem; border-radius: var(--r-s); transition: all var(--tr);
+}
+.btn:focus-visible { outline: 2px solid var(--ca); outline-offset: 3px; }
+.btn-prim { background: var(--ca); color: #fff; }
+.btn-prim:hover { background: var(--ca-d); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(212,117,106,.4); }
+.btn-ghost { border: 2px solid rgba(255,255,255,.5); color: rgba(255,255,255,.9); }
+.btn-ghost:hover { border-color: #fff; color: #fff; background: rgba(255,255,255,.1); }
+
+/* ════════════════════════
+   QUICKLINKS — CSS glow w kolorach palety
+════════════════════════ */
+.quicklinks { background: var(--sf); border-bottom: 1px solid var(--bd); }
+.quicklinks .container { display: grid; grid-template-columns: repeat(4, 1fr); }
+
+.ql-card {
+  display: flex; flex-direction: column; align-items: center; gap: .6rem;
+  padding: 1.75rem 1rem 1.5rem; text-align: center; border-right: 1px solid var(--bd);
+  transition: all var(--tr); position: relative;
+}
+.ql-card:last-child { border-right: none; }
+.ql-card::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+  height: 3px; border-radius: 2px 2px 0 0;
+  transform: scaleX(0); transition: transform var(--tr);
+}
+.ql-card:hover::after { transform: scaleX(1); }
+.ql-card:focus-visible { outline: 2px solid var(--ca); outline-offset: -2px; }
+
+/* CSS circle z glow — zastępuje neonowe tło ChatGPT */
+.ql-icon-circle {
+  width: 80px; height: 80px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: transform .22s ease, box-shadow .22s ease;
+}
+.ql-icon-circle img {
+  width: 58px; height: 58px; object-fit: contain; display: block;
+  /* ikony mają przezroczyste tło — białe kontury na kolorowym kółku */
+}
+.ql-card:hover .ql-icon-circle { transform: translateY(-5px) scale(1.07); }
+
+/* Kolor kółka + glow odpowiadający kolorowi quicklinka */
+.ql-dz .ql-icon-circle {
+  background: var(--ql1);
+  box-shadow: 0 0 18px rgba(193,79,79,.38), 0 0 38px rgba(193,79,79,.16);
+}
+.ql-pl .ql-icon-circle {
+  background: var(--ql2);
+  box-shadow: 0 0 18px rgba(91,79,154,.38), 0 0 38px rgba(91,79,154,.16);
+}
+.ql-za .ql-icon-circle {
+  background: var(--ql3);
+  box-shadow: 0 0 18px rgba(31,104,69,.38), 0 0 38px rgba(31,104,69,.16);
+}
+.ql-ja .ql-icon-circle {
+  background: var(--ql4);
+  box-shadow: 0 0 18px rgba(155,110,42,.38), 0 0 38px rgba(155,110,42,.16);
+}
+/* Intensywniejszy glow przy hover */
+.ql-dz:hover .ql-icon-circle { box-shadow: 0 0 28px rgba(193,79,79,.58), 0 0 56px rgba(193,79,79,.28); }
+.ql-pl:hover .ql-icon-circle { box-shadow: 0 0 28px rgba(91,79,154,.58), 0 0 56px rgba(91,79,154,.28); }
+.ql-za:hover .ql-icon-circle { box-shadow: 0 0 28px rgba(31,104,69,.58), 0 0 56px rgba(31,104,69,.28); }
+.ql-ja:hover .ql-icon-circle { box-shadow: 0 0 28px rgba(155,110,42,.58), 0 0 56px rgba(155,110,42,.28); }
+
+/* Underline accent */
+.ql-dz::after { background: var(--ql1); }
+.ql-pl::after { background: var(--ql2); }
+.ql-za::after { background: var(--ql3); }
+.ql-ja::after { background: var(--ql4); }
+
+.ql-label {
+  font-family: var(--font-d); font-weight: 700; font-size: .88rem; color: var(--tx);
+  transition: color var(--tr);
+}
+.ql-sub { font-size: .72rem; color: var(--tx-m); }
+.ql-dz:hover .ql-label { color: var(--ql1); }
+.ql-pl:hover .ql-label { color: var(--ql2); }
+.ql-za:hover .ql-label { color: var(--ql3); }
+.ql-ja:hover .ql-label { color: var(--ql4); }
+
+/* ════════════════════════
+   SECTION COMMONS
+════════════════════════ */
+.section { padding: 4rem 0; }
+.section-alt { background: var(--clv-l); }
+.section-green { background: color-mix(in srgb, var(--cp) 6%, var(--bg)); }
+
+.section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: 2rem; }
+.section-title { font-family: var(--font-d); font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; color: var(--tx); letter-spacing: -.02em; }
+.section-eyebrow { font-family: var(--font-d); font-size: .72rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--ca); margin-bottom: .4rem; }
+.section-link { font-family: var(--font-d); font-size: .85rem; font-weight: 700; color: var(--cp); transition: color var(--tr); white-space: nowrap; }
+.section-link:hover { color: var(--ca); }
+
+/* ════════════════════════
+   AKTUALNOŚCI
+════════════════════════ */
+.news-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+
+.news-card {
+  background: var(--sf); border-radius: var(--r); box-shadow: var(--sh);
+  border: 1px solid var(--bd); overflow: hidden; transition: transform var(--tr), box-shadow var(--tr);
+  display: flex; flex-direction: column;
+}
+.news-card:hover { transform: translateY(-4px); box-shadow: var(--sh-m); }
+
+.news-card-img {
+  height: 140px; display: flex; align-items: center; justify-content: center;
+  font-size: .65rem; font-family: var(--font-d); color: rgba(100,80,160,.4);
+  letter-spacing: .1em; text-transform: uppercase; font-weight: 700;
+}
+.nc-green { background: color-mix(in srgb, var(--cp) 15%, var(--sf)); color: rgba(31,75,60,.35); }
+.nc-coral { background: color-mix(in srgb, var(--ca) 12%, var(--sf)); color: rgba(212,117,106,.4); }
+.nc-arch  { background: color-mix(in srgb, #888 10%, var(--sf)); color: rgba(100,100,100,.35); }
+
+.news-card-body { padding: 1.1rem 1.2rem 1.25rem; flex: 1; display: flex; flex-direction: column; }
+.news-meta { display: flex; align-items: center; gap: .5rem; margin-bottom: .65rem; flex-wrap: wrap; }
+.news-date { font-size: .75rem; color: var(--tx-m); font-variant-numeric: tabular-nums; }
+.chip {
+  display: inline-flex; align-items: center; gap: .25rem; padding: .15rem .45rem;
+  border-radius: 20px; font-size: .68rem; font-family: var(--font-d); font-weight: 700; white-space: nowrap;
+}
+.chip-archive {
+  background: color-mix(in srgb, var(--tx-m) 10%, var(--sf));
+  border: 1px solid color-mix(in srgb, var(--tx-m) 20%, var(--bd)); color: var(--tx-m);
+}
+.chip-new { background: color-mix(in srgb, var(--cp) 10%, transparent); color: var(--cp); }
+.news-title { font-family: var(--font-d); font-size: 1rem; font-weight: 700; line-height: 1.35; color: var(--tx); margin-bottom: .6rem; flex: 1; }
+.news-excerpt { font-size: .85rem; color: var(--tx-m); line-height: 1.55; margin-bottom: 1rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.news-read-more { font-family: var(--font-d); font-size: .82rem; font-weight: 700; color: var(--cp); display: flex; align-items: center; gap: .25rem; margin-top: auto; transition: gap var(--tr), color var(--tr); }
+.news-card:hover .news-read-more { gap: .45rem; color: var(--ca); }
+
+/* ════════════════════════
+   O SZKOLE
+════════════════════════ */
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+.about-eyebrow { color: var(--ca); }
+.about-title { font-family: var(--font-d); font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; color: var(--tx); letter-spacing: -.025em; line-height: 1.15; text-wrap: balance; margin: .5rem 0 1rem; }
+.about-body { font-size: 1rem; color: var(--tx-m); line-height: 1.7; margin-bottom: 1.5rem; }
+.btn-sm {
+  display: inline-flex; align-items: center; gap: .35rem; font-family: var(--font-d);
+  font-weight: 700; font-size: .88rem; padding: .6rem 1.2rem; background: var(--cp); color: #fff;
+  border-radius: var(--r-s); transition: all var(--tr);
+}
+.btn-sm:hover { background: var(--cp-l); transform: translateY(-1px); }
+.btn-sm:focus-visible { outline: 2px solid var(--ca); outline-offset: 3px; }
+
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+.stat-card { background: var(--bg); border: 1px solid var(--bd); border-radius: var(--r); padding: 1.25rem; text-align: center; }
+.stat-number { font-family: var(--font-d); font-size: 2.2rem; font-weight: 800; color: var(--cp); letter-spacing: -.03em; display: block; line-height: 1; font-variant-numeric: tabular-nums; }
+.stat-label { font-size: .78rem; color: var(--tx-m); margin-top: .35rem; display: block; line-height: 1.4; }
+.stat-card:first-child .stat-number { color: var(--ca); }
+.stat-card:nth-child(3) .stat-number { color: var(--ql2); }
+
+/* ════════════════════════
+   GALERIA PREVIEW
+════════════════════════ */
+.gallery-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+.album-card { border-radius: var(--r); overflow: hidden; box-shadow: var(--sh); transition: transform var(--tr), box-shadow var(--tr); background: var(--sf); border: 1px solid var(--bd); }
+.album-card:hover { transform: translateY(-4px); box-shadow: var(--sh-m); }
+
+.album-thumb { height: 140px; display: flex; align-items: flex-end; padding: .75rem; position: relative; }
+.at-green { background: linear-gradient(135deg, #1F4B3C 0%, #2D6B57 100%); }
+.at-coral { background: linear-gradient(135deg, #D4756A 0%, #c25a4f 100%); }
+.at-gold  { background: linear-gradient(135deg, #9B6E2A 0%, #C49040 100%); }
+.at-lav   { background: linear-gradient(135deg, #5B4F9A 0%, #7B6DB8 100%); }
+
+.album-count { background: rgba(0,0,0,.45); color: rgba(255,255,255,.9); font-family: var(--font-d); font-size: .68rem; font-weight: 700; padding: .25rem .5rem; border-radius: 6px; letter-spacing: .04em; }
+.album-info { padding: .75rem .9rem .85rem; }
+.album-meta { display: flex; align-items: center; gap: .4rem; margin-bottom: .25rem; }
+.album-name { font-family: var(--font-d); font-size: .88rem; font-weight: 700; color: var(--tx); line-height: 1.3; }
+
+/* ════════════════════════
+   PROJEKTY BAND
+════════════════════════ */
+.projekty-band { background: var(--cp); padding: 2.5rem 0; }
+.projekty-inner { display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; }
+.projekty-text h3 { font-family: var(--font-d); font-size: 1.3rem; font-weight: 800; color: #fff; margin-bottom: .25rem; }
+.projekty-text p { font-size: .9rem; color: rgba(255,255,255,.7); }
+.projekty-count { font-family: var(--font-d); font-size: 3rem; font-weight: 800; color: var(--ca); letter-spacing: -.04em; line-height: 1; flex-shrink: 0; }
+.projekty-count span { font-size: 1rem; color: rgba(255,255,255,.6); font-weight: 600; }
+
+/* ════════════════════════
+   FOOTER
+════════════════════════ */
+.site-footer { background: var(--cp-d); color: rgba(255,255,255,.8); padding: 3rem 0 1.5rem; }
+.footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 3rem; margin-bottom: 2.5rem; }
+.footer-logo { display: flex; align-items: center; gap: .65rem; margin-bottom: 1rem; }
+.footer-logo-img { width: 36px; height: 36px; object-fit: contain; opacity: .9; }
+.footer-school-name { font-family: var(--font-d); font-size: .82rem; font-weight: 700; color: #fff; line-height: 1.3; }
+.footer-address { font-size: .82rem; line-height: 1.7; color: rgba(255,255,255,.6); margin-bottom: 1rem; }
+.footer-contact a { display: flex; align-items: center; gap: .4rem; font-size: .82rem; color: rgba(255,255,255,.65); margin-bottom: .3rem; transition: color var(--tr); }
+.footer-contact a:hover { color: var(--ca); }
+.footer-h { font-family: var(--font-d); font-size: .72rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.4); margin-bottom: .85rem; }
+.footer-links li { margin-bottom: .45rem; }
+.footer-links a { font-size: .82rem; color: rgba(255,255,255,.65); transition: color var(--tr); }
+.footer-links a:hover { color: var(--ca); }
+.footer-bottom { padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,.1); display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.footer-legal { font-size: .75rem; color: rgba(255,255,255,.35); line-height: 1.6; }
+.footer-a11y-link { font-size: .75rem; color: rgba(255,255,255,.45); font-family: var(--font-d); font-weight: 600; transition: color var(--tr); }
+.footer-a11y-link:hover { color: var(--ca); }
+
+/* ── BACK TO TOP ── */
+#back-top {
+  position: fixed; bottom: 1.5rem; right: 1.5rem; width: 44px; height: 44px;
+  background: var(--ca); color: #fff; border-radius: 50%; display: flex;
+  align-items: center; justify-content: center; font-size: 1.1rem;
+  box-shadow: 0 4px 16px rgba(212,117,106,.4); opacity: 0; transform: translateY(10px);
+  transition: all .25s; z-index: 50; cursor: pointer;
+}
+#back-top.visible { opacity: 1; transform: translateY(0); }
+#back-top:hover { background: var(--ca-d); transform: translateY(-2px); }
+#back-top:focus-visible { outline: 2px solid var(--cp); outline-offset: 3px; }
+
+/* ════════════════════════
+   RESPONSIVE
+════════════════════════ */
+@media (max-width: 900px) {
+  .logo-patron { display: none; }
+  .main-nav { display: none; }
+  .news-grid { grid-template-columns: 1fr; }
+  .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+  .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+}
+@media (max-width: 600px) {
+  .quicklinks .container { grid-template-columns: repeat(2, 1fr); }
+  .gallery-grid { grid-template-columns: 1fr 1fr; }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .hero { min-height: 480px; }
+  .ql-icon-circle { width: 68px; height: 68px; }
+  .ql-icon-circle img { width: 48px; height: 48px; }
+}
+
+:focus-visible { outline: 2px solid var(--ca); outline-offset: 3px; border-radius: 4px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+  html { scroll-behavior: auto; }
+}
+
+.wf-label {
+  position: fixed; top: .5rem; right: .5rem; background: rgba(0,0,0,.7); color: rgba(255,255,255,.7);
+  font-family: var(--font-d); font-size: .65rem; font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; padding: .25rem .5rem; border-radius: 5px; z-index: 200; pointer-events: none;
+}
+</style>
+
+<div id="scroll-bar" aria-hidden="true"></div>
+<a href="#main-content" class="skip-link">Przejdź do treści</a>
+<div class="wf-label">Wireframe v0.2</div>
+
+<!-- ══════════════════════════════════
+     HEADER
+══════════════════════════════════ -->
+<header class="site-header" role="banner">
+  <div class="container header-inner">
+
+    <a href="#" class="logo" aria-label="Szkoła Podstawowa nr 32 — strona główna">
+      <img src="grafiki-ai/tarcza-zielen.png" alt="" class="logo-img" width="44" height="44" aria-hidden="true">
+      <div class="logo-text">
+        <span class="logo-name">Szkoła Podstawowa nr 32</span>
+        <span class="logo-patron">im. L. Kruczkowskiego · Sosnowiec</span>
+      </div>
+    </a>
+
+    <nav class="main-nav" aria-label="Główna nawigacja">
+      <ul>
+        <li><a href="#" class="active" aria-current="page">Aktualności</a></li>
+        <li><a href="#">Nasza Szkoła <span class="nav-caret" aria-hidden="true">▾</span></a></li>
+        <li><a href="#">Uczniowie <span class="nav-caret" aria-hidden="true">▾</span></a></li>
+        <li><a href="#">Rodzice <span class="nav-caret" aria-hidden="true">▾</span></a></li>
+        <li><a href="#">Projekty</a></li>
+        <li><a href="#">Kontakt</a></li>
+      </ul>
+    </nav>
+
+    <div class="header-controls">
+      <div class="a11y-controls" aria-label="Narzędzia dostępności" role="group">
+        <button class="a11y-btn" aria-label="Zwiększ czcionkę">A+</button>
+        <button class="a11y-btn" aria-label="Zmniejsz czcionkę">A−</button>
+        <button class="a11y-btn" aria-label="Wysoki kontrast" title="Wysoki kontrast">◐</button>
+      </div>
+      <a href="https://sp32sosnowiec.edupage.org" class="btn-edupage" target="_blank" rel="noopener noreferrer" aria-label="E-Dziennik — otwiera EduPage w nowej karcie">
+        E-Dziennik →
+      </a>
+    </div>
+
+  </div>
+</header>
+
+<!-- ══════════════════════════════════
+     HERO
+══════════════════════════════════ -->
+<section class="hero" aria-label="Baner główny">
+  <div class="hero-bg" aria-hidden="true">
+    <div class="hero-overlay"></div>
+  </div>
+  <div class="container hero-content" id="main-content">
+    <p class="hero-eyebrow">Sosnowiec · od 1933 roku</p>
+    <h1 class="hero-title">Uczymy,<br>wychowujemy,<br>inspirujemy.</h1>
+    <p class="hero-sub">Szkoła Podstawowa nr 32 im. Leona Kruczkowskiego w Sosnowcu — miejsce, gdzie każde dziecko ma szansę się rozwijać.</p>
+    <div class="hero-ctas">
+      <a href="https://sp32sosnowiec.edupage.org" class="btn btn-prim" target="_blank" rel="noopener">E-Dziennik</a>
+      <a href="#" class="btn btn-ghost">Poznaj szkołę</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     QUICKLINKS
+══════════════════════════════════ -->
+<section class="quicklinks" aria-label="Szybki dostęp">
+  <div class="container">
+
+    <a href="https://sp32sosnowiec.edupage.org" class="ql-card ql-dz" target="_blank" rel="noopener" aria-label="E-Dziennik — logowanie EduPage">
+      <div class="ql-icon-circle" aria-hidden="true">
+        <img src="grafiki-ai/ikona-dziennik.png" alt="" width="58" height="58">
+      </div>
+      <span class="ql-label">E-Dziennik</span>
+      <span class="ql-sub">Oceny, frekwencja, wiadomości</span>
+    </a>
+
+    <a href="https://sp32sosnowiec.edupage.org/timetable/" class="ql-card ql-pl" target="_blank" rel="noopener" aria-label="Plan lekcji">
+      <div class="ql-icon-circle" aria-hidden="true">
+        <img src="grafiki-ai/ikona-plan.png" alt="" width="58" height="58">
+      </div>
+      <span class="ql-label">Plan lekcji</span>
+      <span class="ql-sub">Aktualny rozkład zajęć</span>
+    </a>
+
+    <a href="https://sp32sosnowiec.edupage.org/substitution/" class="ql-card ql-za" target="_blank" rel="noopener" aria-label="Zastępstwa na dziś">
+      <div class="ql-icon-circle" aria-hidden="true">
+        <img src="grafiki-ai/ikona-zastepstwa.png" alt="" width="58" height="58">
+      </div>
+      <span class="ql-label">Zastępstwa</span>
+      <span class="ql-sub">Zmiany na dziś i jutro</span>
+    </a>
+
+    <a href="https://sp32sosnowiec.edupage.org/menu/" class="ql-card ql-ja" target="_blank" rel="noopener" aria-label="Jadłospis na ten tydzień">
+      <div class="ql-icon-circle" aria-hidden="true">
+        <img src="grafiki-ai/ikona-jadlospis.png" alt="" width="58" height="58">
+      </div>
+      <span class="ql-label">Jadłospis</span>
+      <span class="ql-sub">Menu stołówki na tydzień</span>
+    </a>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     AKTUALNOŚCI
+══════════════════════════════════ -->
+<section class="section section-alt" aria-labelledby="news-h">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <p class="section-eyebrow">Co nowego?</p>
+        <h2 class="section-title" id="news-h">Aktualności</h2>
+      </div>
+      <a href="#" class="section-link" aria-label="Wszystkie aktualności">Zobacz wszystkie →</a>
+    </div>
+    <div class="news-grid">
+      <article class="news-card">
+        <div class="news-card-img nc-green" aria-label="Zdjęcie: zakończenie roku szkolnego">Zdjęcie</div>
+        <div class="news-card-body">
+          <div class="news-meta"><time class="news-date" datetime="2026-06-27">27 czerwca 2026</time></div>
+          <h3 class="news-title">Uroczyste zakończenie roku szkolnego 2025/2026</h3>
+          <p class="news-excerpt">W piątek 27 czerwca pożegnaliśmy kończącą się rok szkolny. Gratulujemy wszystkim uczniom i życzymy udanych wakacji!</p>
+          <a href="#" class="news-read-more">Czytaj więcej →</a>
+        </div>
+      </article>
+      <article class="news-card">
+        <div class="news-card-img nc-coral" aria-label="Zdjęcie: wycieczka do Wieliczki">Zdjęcie</div>
+        <div class="news-card-body">
+          <div class="news-meta"><time class="news-date" datetime="2026-05-15">15 maja 2026</time></div>
+          <h3 class="news-title">Klasy IV w Kopalni Soli w Wieliczce — relacja z wycieczki</h3>
+          <p class="news-excerpt">Uczniowie klas czwartych odwiedzili wpisaną na listę UNESCO Kopalnię Soli w Wieliczce. Wrażenia były niezapomniane!</p>
+          <a href="#" class="news-read-more">Czytaj więcej →</a>
+        </div>
+      </article>
+      <article class="news-card">
+        <div class="news-card-img nc-arch" aria-label="Zdjęcie z archiwum">Archiwum</div>
+        <div class="news-card-body">
+          <div class="news-meta">
+            <time class="news-date" datetime="2024-03-12">12 marca 2024</time>
+            <span class="chip chip-archive" aria-label="Artykuł w archiwum EduPage">↗ Archiwum EduPage</span>
+          </div>
+          <h3 class="news-title">Wyniki szkolnego konkursu plastycznego „Moja szkoła"</h3>
+          <p class="news-excerpt">Ogłaszamy wyniki konkursu plastycznego. Nagrody wręczono podczas apelu 15 marca. Gratulujemy wszystkim uczestnikom!</p>
+          <a href="https://sp32sosnowiec.edupage.org" class="news-read-more" target="_blank" rel="noopener">Czytaj w archiwum →</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     O SZKOLE
+══════════════════════════════════ -->
+<section class="section" aria-labelledby="about-h">
+  <div class="container">
+    <div class="about-grid">
+      <div>
+        <p class="section-eyebrow about-eyebrow">Nasza szkoła</p>
+        <h2 class="about-title" id="about-h">Tradycja i nowoczesność<br>w jednym miejscu</h2>
+        <p class="about-body">Jesteśmy szkołą z ponad 90-letnią tradycją, w której każde dziecko ma szansę rozwijać swoje pasje i talenty. Stawiamy na kreatywność, współpracę i odpowiedzialność — we współpracy ze świetnym gronem pedagogów i specjalistów.</p>
+        <a href="#" class="btn-sm">Poznaj naszą historię →</a>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card"><span class="stat-number">90+</span><span class="stat-label">lat tradycji (od 1933)</span></div>
+        <div class="stat-card"><span class="stat-number">~400</span><span class="stat-label">uczniów w 16 oddziałach</span></div>
+        <div class="stat-card"><span class="stat-number">30+</span><span class="stat-label">programów edukacyjnych</span></div>
+        <div class="stat-card"><span class="stat-number">50+</span><span class="stat-label">nauczycieli i specjalistów</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     GALERIA PREVIEW
+══════════════════════════════════ -->
+<section class="section section-green" aria-labelledby="gallery-h">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <p class="section-eyebrow">Zdjęcia ze szkoły</p>
+        <h2 class="section-title" id="gallery-h">Galeria</h2>
+      </div>
+      <a href="#" class="section-link">Wszystkie albumy →</a>
+    </div>
+    <div class="gallery-grid">
+      <a href="#" class="album-card" aria-label="Album: Dzień Sportu 2026, 48 zdjęć">
+        <div class="album-thumb at-green"><span class="album-count">48 zdjęć</span></div>
+        <div class="album-info"><div class="album-meta"><span class="chip chip-new">Nowe</span></div><p class="album-name">Dzień Sportu 2026</p></div>
+      </a>
+      <a href="#" class="album-card" aria-label="Album: Wycieczka do Wieliczki, 112 zdjęć">
+        <div class="album-thumb at-coral"><span class="album-count">112 zdjęć</span></div>
+        <div class="album-info"><div class="album-meta"><span class="chip chip-new">Nowe</span></div><p class="album-name">Wycieczka do Wieliczki — kl. IV</p></div>
+      </a>
+      <a href="https://sp32sosnowiec.edupage.org" class="album-card" target="_blank" rel="noopener" aria-label="Album: Jasełka 2023 — archiwum EduPage">
+        <div class="album-thumb at-gold"><span class="album-count">67 zdjęć</span></div>
+        <div class="album-info"><div class="album-meta"><span class="chip chip-archive">↗ Archiwum EduPage</span></div><p class="album-name">Jasełka 2023</p></div>
+      </a>
+      <a href="https://sp32sosnowiec.edupage.org" class="album-card" target="_blank" rel="noopener" aria-label="Album: Konkurs plastyczny 2022 — archiwum EduPage">
+        <div class="album-thumb at-lav"><span class="album-count">34 zdjęcia</span></div>
+        <div class="album-info"><div class="album-meta"><span class="chip chip-archive">↗ Archiwum EduPage</span></div><p class="album-name">Konkurs plastyczny 2022</p></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     PROJEKTY BAND
+══════════════════════════════════ -->
+<div class="projekty-band" aria-label="Programy edukacyjne">
+  <div class="container projekty-inner">
+    <div class="projekty-text">
+      <h3>Programy i projekty edukacyjne</h3>
+      <p>Uczestniczymy w licznych ogólnopolskich i europejskich programach. Sprawdź, co robimy dla Twoich dzieci.</p>
+      <a href="#" style="display:inline-flex;align-items:center;gap:.4rem;margin-top:.85rem;font-family:var(--font-d);font-weight:700;font-size:.88rem;color:var(--ca);transition:gap var(--tr);">Poznaj wszystkie programy →</a>
+    </div>
+    <div class="projekty-count" aria-label="Ponad 30 programów edukacyjnych">30+ <span>programów</span></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     FOOTER
+══════════════════════════════════ -->
+<footer class="site-footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">
+          <img src="grafiki-ai/tarcza-zielen.png" alt="" class="footer-logo-img" width="36" height="36" aria-hidden="true">
+          <div class="footer-school-name">Szkoła Podstawowa nr 32<br>im. L. Kruczkowskiego w Sosnowcu</div>
+        </div>
+        <address class="footer-address" style="font-style:normal">
+          ul. [adres szkoły]<br>41-200 Sosnowiec<br>woj. śląskie
+        </address>
+        <div class="footer-contact">
+          <a href="tel:+48XXXXXXXXX">📞 +48 XX XXX XX XX</a>
+          <a href="mailto:sp32@sosnowiec.edu.pl">✉ sp32@sosnowiec.edu.pl</a>
+        </div>
+      </div>
+      <div>
+        <p class="footer-h">Szybkie linki</p>
+        <ul class="footer-links">
+          <li><a href="#">Aktualności</a></li>
+          <li><a href="#">Historia szkoły</a></li>
+          <li><a href="#">Galeria</a></li>
+          <li><a href="#">Projekty</a></li>
+          <li><a href="#">Rekrutacja</a></li>
+          <li><a href="#">Kontakt</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-h">Dla rodziców</p>
+        <ul class="footer-links">
+          <li><a href="https://sp32sosnowiec.edupage.org" target="_blank" rel="noopener">E-Dziennik ↗</a></li>
+          <li><a href="#">Rada Rodziców</a></li>
+          <li><a href="#">Dokumenty szkolne</a></li>
+          <li><a href="#">Stołówka</a></li>
+          <li><a href="#">Pedagog i psycholog</a></li>
+        </ul>
+        <p class="footer-h" style="margin-top:1.25rem">Informacje prawne</p>
+        <ul class="footer-links">
+          <li><a href="#">Deklaracja Dostępności</a></li>
+          <li><a href="#">Polityka prywatności</a></li>
+          <li><a href="#">RODO</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-legal">© 2026 Szkoła Podstawowa nr 32 im. L. Kruczkowskiego w Sosnowcu<br>NIP: XX XXX XXX XX · REGON: XXXXXXXXX</p>
+      <a href="#" class="footer-a11y-link">Deklaracja Dostępności WCAG 2.1 AA</a>
+    </div>
+  </div>
+</footer>
+
+<button id="back-top" aria-label="Wróć na górę strony" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+  const bar = document.getElementById('scroll-bar');
+  const btn = document.getElementById('back-top');
+  window.addEventListener('scroll', () => {
+    const pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+    bar.style.width = Math.min(pct, 100) + '%';
+    btn.classList.toggle('visible', window.scrollY > 400);
+  }, { passive: true });
+</script>
