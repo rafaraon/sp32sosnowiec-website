@@ -1,3 +1,4 @@
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SP32 Sosnowiec — Strona Główna</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -98,7 +99,107 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
 }
 .main-nav a:hover, .main-nav a.active { background: rgba(255,255,255,.12); color: #fff; }
 .main-nav a.active { color: var(--ca); }
-.nav-caret { font-size: .65rem; opacity: .7; }
+.nav-caret { font-size: .65rem; opacity: .7; transition: transform .16s; }
+.has-dropdown:hover .nav-caret,
+.has-dropdown.open .nav-caret { transform: rotate(180deg); }
+
+/* ════════════════════════
+   DROPDOWN
+════════════════════════ */
+.has-dropdown { position: relative; }
+.dropdown {
+  position: absolute; top: calc(100% + 6px); left: 0;
+  min-width: 212px;
+  background: var(--sf); border: 1px solid var(--bd); border-radius: var(--r);
+  box-shadow: var(--sh-m); padding: .4rem; list-style: none;
+  opacity: 0; visibility: hidden; transform: translateY(-6px);
+  transition: opacity .16s ease, transform .16s ease, visibility .16s;
+  z-index: 200;
+}
+.dropdown-wide {
+  min-width: 424px;
+  display: grid; grid-template-columns: 1fr 1fr; column-gap: .25rem;
+}
+.has-dropdown:hover .dropdown,
+.has-dropdown.open   .dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+.dropdown-item {
+  display: flex; align-items: center; gap: .6rem;
+  padding: .55rem .75rem; border-radius: var(--r-s);
+  color: var(--tx); font-family: var(--font-d); font-size: .82rem; font-weight: 600;
+  transition: background var(--tr), color var(--tr); white-space: nowrap;
+}
+.dropdown-item:hover, .dropdown-item:focus-visible { background: var(--clv-l); color: var(--cp); outline: none; }
+.dropdown-item img { width: 20px; height: 20px; object-fit: contain; flex-shrink: 0; }
+
+/* ════════════════════════
+   HAMBURGER + MOBILE NAV
+════════════════════════ */
+.nav-hamburger {
+  display: none; width: 40px; height: 40px; border-radius: var(--r-s);
+  border: 1.5px solid rgba(255,255,255,.3); color: #fff;
+  flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+  transition: background var(--tr);
+}
+.nav-hamburger:hover { background: rgba(255,255,255,.12); }
+.hamburger-line {
+  width: 18px; height: 2px; background: currentColor;
+  border-radius: 1px; pointer-events: none;
+  transition: transform .2s, opacity .2s;
+}
+.nav-hamburger[aria-expanded="true"] .hamburger-line:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-hamburger[aria-expanded="true"] .hamburger-line:nth-child(2) { opacity: 0; }
+.nav-hamburger[aria-expanded="true"] .hamburger-line:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+.mob-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 149;
+  opacity: 0; visibility: hidden; transition: opacity .2s, visibility .2s;
+}
+.mob-overlay.open { opacity: 1; visibility: visible; }
+.mob-drawer {
+  position: fixed; top: 0; right: 0;
+  width: min(340px, 100vw); height: 100%;
+  background: var(--sf); z-index: 150;
+  overflow-y: auto; transform: translateX(100%);
+  transition: transform .25s ease; padding-bottom: 2rem;
+}
+.mob-drawer.open { transform: translateX(0); }
+.mob-head {
+  position: sticky; top: 0;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: .85rem 1.25rem; background: var(--cp);
+  border-bottom: 1px solid rgba(255,255,255,.1);
+}
+.mob-head-name { font-family: var(--font-d); font-size: .82rem; font-weight: 700; color: #fff; }
+.mob-close {
+  width: 36px; height: 36px; border-radius: var(--r-s);
+  background: rgba(255,255,255,.15); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; transition: background var(--tr);
+}
+.mob-close:hover { background: rgba(255,255,255,.25); }
+.mob-body { padding: .75rem .75rem 0; }
+.mob-link {
+  display: flex; align-items: center; gap: .85rem;
+  padding: .85rem .75rem; border-radius: var(--r-s);
+  font-family: var(--font-d); font-weight: 700; font-size: .95rem;
+  color: var(--tx); transition: background var(--tr), color var(--tr); min-height: 52px;
+}
+.mob-link:hover, .mob-link:focus-visible { background: var(--clv-l); color: var(--cp); outline: none; }
+.mob-link img { width: 22px; height: 22px; object-fit: contain; flex-shrink: 0; }
+.mob-divider { border: none; border-top: 1px solid var(--bd); margin: .5rem 0; }
+.mob-section-title {
+  font-family: var(--font-d); font-size: .65rem; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--tx-m);
+  padding: .5rem .75rem .25rem;
+}
+.mob-sub {
+  display: flex; align-items: center; gap: .75rem;
+  padding: .65rem .75rem; border-radius: var(--r-s);
+  font-size: .88rem; font-family: var(--font-d); font-weight: 600;
+  color: var(--tx); transition: background var(--tr), color var(--tr); min-height: 44px;
+}
+.mob-sub:hover, .mob-sub:focus-visible { background: var(--clv-l); color: var(--cp); outline: none; }
+.mob-sub img { width: 18px; height: 18px; object-fit: contain; flex-shrink: 0; }
 
 .header-controls { display: flex; align-items: center; gap: .5rem; flex-shrink: 0; }
 .a11y-controls { display: flex; gap: .25rem; }
@@ -375,10 +476,15 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
 @media (max-width: 900px) {
   .logo-patron { display: none; }
   .main-nav { display: none; }
+  .nav-hamburger { display: flex; }
   .news-grid { grid-template-columns: 1fr; }
   .about-grid { grid-template-columns: 1fr; gap: 2rem; }
   .gallery-grid { grid-template-columns: repeat(2, 1fr); }
   .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+}
+/* Tablet: foldable-unfolded, iPad mini — menu może być widoczny ale sprawdzamy */
+@media (min-width: 768px) and (max-width: 900px) {
+  .logo-patron { display: none; }
 }
 @media (max-width: 600px) {
   .quicklinks .container { grid-template-columns: repeat(2, 1fr); }
@@ -387,6 +493,12 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   .hero { min-height: 480px; }
   .ql-icon-circle { width: 68px; height: 68px; }
   .ql-icon-circle img { width: 48px; height: 48px; }
+}
+/* iPhone Ultra / Pro Max / large foldable unfolded */
+@media (max-width: 430px) {
+  .header-inner { gap: .5rem; }
+  .a11y-controls { display: none; }
+  .logo-name { font-size: .78rem; }
 }
 
 :focus-visible { outline: 2px solid var(--ca); outline-offset: 3px; border-radius: 4px; }
@@ -424,9 +536,49 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
     <nav class="main-nav" aria-label="Główna nawigacja">
       <ul>
         <li><a href="#" class="active" aria-current="page">Aktualności</a></li>
-        <li><a href="#">Nasza Szkoła <span class="nav-caret" aria-hidden="true">▾</span></a></li>
-        <li><a href="#">Uczniowie <span class="nav-caret" aria-hidden="true">▾</span></a></li>
-        <li><a href="#">Rodzice <span class="nav-caret" aria-hidden="true">▾</span></a></li>
+
+        <li class="has-dropdown">
+          <a href="#" aria-haspopup="true" aria-expanded="false">Nasza Szkoła <span class="nav-caret" aria-hidden="true">▾</span></a>
+          <ul class="dropdown" role="menu">
+            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-nasza-szkola-historia.png" srcset="grafiki-ai/nav-nasza-szkola-historia@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Historia szkoły</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-nasza-szkola-profil.png" srcset="grafiki-ai/nav-nasza-szkola-profil@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Profil szkoły</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-nasza-szkola-dyrekcja.png" srcset="grafiki-ai/nav-nasza-szkola-dyrekcja@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Dyrekcja i kadra</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-nasza-szkola-sukcesy.png" srcset="grafiki-ai/nav-nasza-szkola-sukcesy@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Sukcesy</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-nasza-szkola-galeria.png" srcset="grafiki-ai/nav-nasza-szkola-galeria@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Galeria</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-nasza-szkola-rocznica.png" srcset="grafiki-ai/nav-nasza-szkola-rocznica@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">90. rocznica szkoły</a></li>
+          </ul>
+        </li>
+
+        <li class="has-dropdown">
+          <a href="#" aria-haspopup="true" aria-expanded="false">Uczniowie <span class="nav-caret" aria-hidden="true">▾</span></a>
+          <ul class="dropdown" role="menu">
+            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-uczniowie-biblioteka.png" srcset="grafiki-ai/nav-uczniowie-biblioteka@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Biblioteka</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-uczniowie-swietlica.png" srcset="grafiki-ai/nav-uczniowie-swietlica@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Świetlica</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-uczniowie-wolontariat.png" srcset="grafiki-ai/nav-uczniowie-wolontariat@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Wolontariat</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-uczniowie-klub-ak.png" srcset="grafiki-ai/nav-uczniowie-klub-ak@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Klub AK</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-uczniowie-klub-europejski.png" srcset="grafiki-ai/nav-uczniowie-klub-europejski@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Klub Europejski</a></li>
+          </ul>
+        </li>
+
+        <li class="has-dropdown">
+          <a href="#" aria-haspopup="true" aria-expanded="false">Rodzice <span class="nav-caret" aria-hidden="true">▾</span></a>
+          <ul class="dropdown dropdown-wide" role="menu">
+            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-rodzice-informacje.png" srcset="grafiki-ai/nav-rodzice-informacje@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Informacje dla rodziców</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-rodzice-rada-rodzicow.png" srcset="grafiki-ai/nav-rodzice-rada-rodzicow@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Rada Rodziców</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-rodzice-kalendarz.png" srcset="grafiki-ai/nav-rodzice-kalendarz@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Kalendarz roku szkolnego</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-rodzice-zebrania.png" srcset="grafiki-ai/nav-rodzice-zebrania@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Zebrania i konsultacje</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-rodzice-stypendia.png" srcset="grafiki-ai/nav-rodzice-stypendia@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Stypendia szkolne</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-rodzice-zfss.png" srcset="grafiki-ai/nav-rodzice-zfss@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">ZFŚS</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-rodzice-rekrutacja-0.png" srcset="grafiki-ai/nav-rodzice-rekrutacja-0@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Rekrutacja — klasa 0</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-rodzice-rekrutacja-1.png" srcset="grafiki-ai/nav-rodzice-rekrutacja-1@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Rekrutacja — klasa I</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-rodzice-jadlospis.png" srcset="grafiki-ai/nav-rodzice-jadlospis@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Jadłospis / Stołówka</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-rodzice-pedagog.png" srcset="grafiki-ai/nav-rodzice-pedagog@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Pedagog szkolny</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-rodzice-psycholog.png" srcset="grafiki-ai/nav-rodzice-psycholog@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Psycholog szkolny</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-rodzice-doradca.png" srcset="grafiki-ai/nav-rodzice-doradca@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Doradca zawodowy</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-rodzice-pielegnarka.png" srcset="grafiki-ai/nav-rodzice-pielegnarka@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Pielęgniarka</a></li>
+          </ul>
+        </li>
+
         <li><a href="#">Projekty</a></li>
         <li><a href="#">Kontakt</a></li>
       </ul>
@@ -438,6 +590,11 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
         <button class="a11y-btn" aria-label="Zmniejsz czcionkę">A−</button>
         <button class="a11y-btn" aria-label="Wysoki kontrast" title="Wysoki kontrast">◐</button>
       </div>
+      <button class="nav-hamburger" id="nav-hamburger" aria-label="Otwórz menu" aria-expanded="false" aria-controls="mob-drawer">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
       <a href="https://sp32sosnowiec.edupage.org" class="btn-edupage" target="_blank" rel="noopener noreferrer" aria-label="E-Dziennik — otwiera EduPage w nowej karcie">
         E-Dziennik →
       </a>
@@ -445,6 +602,55 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
 
   </div>
 </header>
+
+<!-- ══════════════════════════════════
+     MOBILE NAV DRAWER
+══════════════════════════════════ -->
+<div class="mob-overlay" id="mob-overlay" aria-hidden="true"></div>
+<nav class="mob-drawer" id="mob-drawer" aria-label="Menu mobilne" aria-hidden="true">
+  <div class="mob-head">
+    <span class="mob-head-name">SP32 Sosnowiec</span>
+    <button class="mob-close" id="mob-close" aria-label="Zamknij menu">✕</button>
+  </div>
+  <div class="mob-body">
+    <a href="#" class="mob-link"><img src="grafiki-ai/nav-mobile-aktualnosci.png" srcset="grafiki-ai/nav-mobile-aktualnosci@2x.png 2x" alt="" width="22" height="22" aria-hidden="true">Aktualności</a>
+    <a href="#" class="mob-link"><img src="grafiki-ai/nav-mobile-projekty.png" srcset="grafiki-ai/nav-mobile-projekty@2x.png 2x" alt="" width="22" height="22" aria-hidden="true">Projekty</a>
+    <a href="#" class="mob-link"><img src="grafiki-ai/nav-mobile-kontakt.png" srcset="grafiki-ai/nav-mobile-kontakt@2x.png 2x" alt="" width="22" height="22" aria-hidden="true">Kontakt</a>
+
+    <hr class="mob-divider">
+    <p class="mob-section-title"><img src="grafiki-ai/nav-mobile-nasza-szkola.png" srcset="grafiki-ai/nav-mobile-nasza-szkola@2x.png 2x" alt="" width="16" height="16" aria-hidden="true" style="display:inline;vertical-align:middle;margin-right:.4rem">Nasza Szkoła</p>
+    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-nasza-szkola-historia.png" srcset="grafiki-ai/nav-nasza-szkola-historia@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Historia szkoły</a>
+    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-nasza-szkola-profil.png" srcset="grafiki-ai/nav-nasza-szkola-profil@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Profil szkoły</a>
+    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-nasza-szkola-dyrekcja.png" srcset="grafiki-ai/nav-nasza-szkola-dyrekcja@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Dyrekcja i kadra</a>
+    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-nasza-szkola-sukcesy.png" srcset="grafiki-ai/nav-nasza-szkola-sukcesy@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Sukcesy</a>
+    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-nasza-szkola-galeria.png" srcset="grafiki-ai/nav-nasza-szkola-galeria@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Galeria</a>
+    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-nasza-szkola-rocznica.png" srcset="grafiki-ai/nav-nasza-szkola-rocznica@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">90. rocznica szkoły</a>
+
+    <hr class="mob-divider">
+    <p class="mob-section-title"><img src="grafiki-ai/nav-mobile-uczniowie.png" srcset="grafiki-ai/nav-mobile-uczniowie@2x.png 2x" alt="" width="16" height="16" aria-hidden="true" style="display:inline;vertical-align:middle;margin-right:.4rem">Uczniowie</p>
+    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-uczniowie-biblioteka.png" srcset="grafiki-ai/nav-uczniowie-biblioteka@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Biblioteka</a>
+    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-uczniowie-swietlica.png" srcset="grafiki-ai/nav-uczniowie-swietlica@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Świetlica</a>
+    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-uczniowie-wolontariat.png" srcset="grafiki-ai/nav-uczniowie-wolontariat@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Wolontariat</a>
+    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-uczniowie-klub-ak.png" srcset="grafiki-ai/nav-uczniowie-klub-ak@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Klub AK</a>
+    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-uczniowie-klub-europejski.png" srcset="grafiki-ai/nav-uczniowie-klub-europejski@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Klub Europejski</a>
+
+    <hr class="mob-divider">
+    <p class="mob-section-title"><img src="grafiki-ai/nav-mobile-rodzice.png" srcset="grafiki-ai/nav-mobile-rodzice@2x.png 2x" alt="" width="16" height="16" aria-hidden="true" style="display:inline;vertical-align:middle;margin-right:.4rem">Rodzice</p>
+    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-rodzice-informacje.png" srcset="grafiki-ai/nav-rodzice-informacje@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Informacje dla rodziców</a>
+    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-rodzice-rada-rodzicow.png" srcset="grafiki-ai/nav-rodzice-rada-rodzicow@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Rada Rodziców</a>
+    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-rodzice-kalendarz.png" srcset="grafiki-ai/nav-rodzice-kalendarz@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Kalendarz roku szkolnego</a>
+    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-rodzice-zebrania.png" srcset="grafiki-ai/nav-rodzice-zebrania@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Zebrania i konsultacje</a>
+    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-rodzice-stypendia.png" srcset="grafiki-ai/nav-rodzice-stypendia@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Stypendia szkolne</a>
+    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-rodzice-zfss.png" srcset="grafiki-ai/nav-rodzice-zfss@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">ZFŚS</a>
+    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-rodzice-rekrutacja-0.png" srcset="grafiki-ai/nav-rodzice-rekrutacja-0@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Rekrutacja — klasa 0</a>
+    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-rodzice-rekrutacja-1.png" srcset="grafiki-ai/nav-rodzice-rekrutacja-1@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Rekrutacja — klasa I</a>
+    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-rodzice-jadlospis.png" srcset="grafiki-ai/nav-rodzice-jadlospis@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Jadłospis / Stołówka</a>
+    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-rodzice-pedagog.png" srcset="grafiki-ai/nav-rodzice-pedagog@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Pedagog szkolny</a>
+    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-rodzice-psycholog.png" srcset="grafiki-ai/nav-rodzice-psycholog@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Psycholog szkolny</a>
+    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-rodzice-doradca.png" srcset="grafiki-ai/nav-rodzice-doradca@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Doradca zawodowy</a>
+    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-rodzice-pielegnarka.png" srcset="grafiki-ai/nav-rodzice-pielegnarka@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Pielęgniarka</a>
+  </div>
+</nav>
 
 <!-- ══════════════════════════════════
      HERO
@@ -678,6 +884,7 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
 <button id="back-top" aria-label="Wróć na górę strony" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
 <script>
+  /* Scroll bar + back-to-top */
   const bar = document.getElementById('scroll-bar');
   const btn = document.getElementById('back-top');
   window.addEventListener('scroll', () => {
@@ -685,4 +892,63 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
     bar.style.width = Math.min(pct, 100) + '%';
     btn.classList.toggle('visible', window.scrollY > 400);
   }, { passive: true });
+
+  /* Desktop dropdowns */
+  const dropToggles = document.querySelectorAll('.has-dropdown > a');
+  dropToggles.forEach(toggle => {
+    toggle.addEventListener('click', e => {
+      e.preventDefault();
+      const li = toggle.parentElement;
+      const isOpen = li.classList.contains('open');
+      document.querySelectorAll('.has-dropdown.open').forEach(el => {
+        el.classList.remove('open');
+        el.querySelector('a').setAttribute('aria-expanded', 'false');
+      });
+      if (!isOpen) {
+        li.classList.add('open');
+        toggle.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.has-dropdown')) {
+      document.querySelectorAll('.has-dropdown.open').forEach(el => {
+        el.classList.remove('open');
+        el.querySelector('a').setAttribute('aria-expanded', 'false');
+      });
+    }
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.has-dropdown.open').forEach(el => {
+        el.classList.remove('open');
+        el.querySelector('a').setAttribute('aria-expanded', 'false');
+      });
+    }
+  });
+
+  /* Mobile nav */
+  const hamburger = document.getElementById('nav-hamburger');
+  const overlay   = document.getElementById('mob-overlay');
+  const drawer    = document.getElementById('mob-drawer');
+  const mobClose  = document.getElementById('mob-close');
+
+  function openMob() {
+    hamburger.setAttribute('aria-expanded', 'true');
+    overlay.classList.add('open'); overlay.removeAttribute('aria-hidden');
+    drawer.classList.add('open');  drawer.removeAttribute('aria-hidden');
+    document.body.style.overflow = 'hidden';
+    mobClose.focus();
+  }
+  function closeMob() {
+    hamburger.setAttribute('aria-expanded', 'false');
+    overlay.classList.remove('open'); overlay.setAttribute('aria-hidden', 'true');
+    drawer.classList.remove('open');  drawer.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    hamburger.focus();
+  }
+  hamburger?.addEventListener('click', openMob);
+  overlay?.addEventListener('click', closeMob);
+  mobClose?.addEventListener('click', closeMob);
+  drawer?.addEventListener('keydown', e => { if (e.key === 'Escape') closeMob(); });
 </script>
