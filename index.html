@@ -109,13 +109,17 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
 ════════════════════════ */
 .has-dropdown { position: relative; }
 .dropdown {
-  position: absolute; top: calc(100% + 6px); left: 0;
+  position: absolute; top: 100%; left: 0;
   min-width: 212px;
   background: var(--sf); border: 1px solid var(--bd); border-radius: var(--r);
-  box-shadow: var(--sh-m); padding: .4rem; list-style: none;
+  box-shadow: var(--sh-m); padding: .4rem; padding-top: .6rem; list-style: none;
   opacity: 0; visibility: hidden; transform: translateY(-6px);
   transition: opacity .16s ease, transform .16s ease, visibility .16s;
   z-index: 200;
+}
+.dropdown::before {
+  content: ''; position: absolute;
+  top: -8px; left: 0; right: 0; height: 8px;
 }
 .dropdown-wide {
   min-width: 424px;
@@ -124,13 +128,28 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
 .has-dropdown:hover .dropdown,
 .has-dropdown.open   .dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
 .dropdown-item {
-  display: flex; align-items: center; gap: .6rem;
-  padding: .55rem .75rem; border-radius: var(--r-s);
+  display: flex; align-items: center; gap: .65rem;
+  padding: .45rem .6rem; border-radius: var(--r-s);
   color: var(--tx); font-family: var(--font-d); font-size: .82rem; font-weight: 600;
   transition: background var(--tr), color var(--tr); white-space: nowrap;
 }
 .dropdown-item:hover, .dropdown-item:focus-visible { background: var(--clv-l); color: var(--cp); outline: none; }
-.dropdown-item img { width: 20px; height: 20px; object-fit: contain; flex-shrink: 0; }
+.di-icon {
+  width: 30px; height: 30px; border-radius: 7px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--di-bg, rgba(31,75,60,.1));
+}
+.di-icon img {
+  width: 18px; height: 18px; object-fit: contain;
+  mix-blend-mode: multiply;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .di-icon img { mix-blend-mode: normal; filter: invert(1) brightness(1.4); }
+}
+:root[data-theme="dark"] .di-icon img { mix-blend-mode: normal; filter: invert(1) brightness(1.4); }
+.main-nav > ul > li:nth-child(2) .di-icon { --di-bg: rgba(31,75,60,.13); }
+.main-nav > ul > li:nth-child(3) .di-icon { --di-bg: rgba(217,208,238,.65); }
+.main-nav > ul > li:nth-child(4) .di-icon { --di-bg: rgba(212,117,106,.18); }
 
 /* ════════════════════════
    HAMBURGER + MOBILE NAV
@@ -541,42 +560,42 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
         <li class="has-dropdown">
           <a href="#" aria-haspopup="true" aria-expanded="false">Nasza Szkoła <span class="nav-caret" aria-hidden="true">▾</span></a>
           <ul class="dropdown" role="menu">
-            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-nasza-szkola-historia.png" srcset="grafiki-ai/nav-nasza-szkola-historia@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Historia szkoły</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-nasza-szkola-profil.png" srcset="grafiki-ai/nav-nasza-szkola-profil@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Profil szkoły</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-nasza-szkola-dyrekcja.png" srcset="grafiki-ai/nav-nasza-szkola-dyrekcja@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Dyrekcja i kadra</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-nasza-szkola-sukcesy.png" srcset="grafiki-ai/nav-nasza-szkola-sukcesy@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Sukcesy</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-nasza-szkola-galeria.png" srcset="grafiki-ai/nav-nasza-szkola-galeria@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Galeria</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-nasza-szkola-rocznica.png" srcset="grafiki-ai/nav-nasza-szkola-rocznica@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">90. rocznica szkoły</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-nasza-szkola-historia.png" srcset="grafiki-ai/nav-nasza-szkola-historia@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Historia szkoły</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-nasza-szkola-profil.png" srcset="grafiki-ai/nav-nasza-szkola-profil@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Profil szkoły</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-nasza-szkola-dyrekcja.png" srcset="grafiki-ai/nav-nasza-szkola-dyrekcja@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Dyrekcja i kadra</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-nasza-szkola-sukcesy.png" srcset="grafiki-ai/nav-nasza-szkola-sukcesy@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Sukcesy</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-nasza-szkola-galeria.png" srcset="grafiki-ai/nav-nasza-szkola-galeria@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Galeria</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-nasza-szkola-rocznica.png" srcset="grafiki-ai/nav-nasza-szkola-rocznica@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>90. rocznica szkoły</a></li>
           </ul>
         </li>
 
         <li class="has-dropdown">
           <a href="#" aria-haspopup="true" aria-expanded="false">Uczniowie <span class="nav-caret" aria-hidden="true">▾</span></a>
           <ul class="dropdown" role="menu">
-            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-uczniowie-biblioteka.png" srcset="grafiki-ai/nav-uczniowie-biblioteka@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Biblioteka</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-uczniowie-swietlica.png" srcset="grafiki-ai/nav-uczniowie-swietlica@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Świetlica</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-uczniowie-wolontariat.png" srcset="grafiki-ai/nav-uczniowie-wolontariat@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Wolontariat</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-uczniowie-klub-ak.png" srcset="grafiki-ai/nav-uczniowie-klub-ak@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Klub AK</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-uczniowie-klub-europejski.png" srcset="grafiki-ai/nav-uczniowie-klub-europejski@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Klub Europejski</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-uczniowie-biblioteka.png" srcset="grafiki-ai/nav-uczniowie-biblioteka@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Biblioteka</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-uczniowie-swietlica.png" srcset="grafiki-ai/nav-uczniowie-swietlica@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Świetlica</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-uczniowie-wolontariat.png" srcset="grafiki-ai/nav-uczniowie-wolontariat@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Wolontariat</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-uczniowie-klub-ak.png" srcset="grafiki-ai/nav-uczniowie-klub-ak@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Klub AK</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-uczniowie-klub-europejski.png" srcset="grafiki-ai/nav-uczniowie-klub-europejski@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Klub Europejski</a></li>
           </ul>
         </li>
 
         <li class="has-dropdown">
           <a href="#" aria-haspopup="true" aria-expanded="false">Rodzice <span class="nav-caret" aria-hidden="true">▾</span></a>
           <ul class="dropdown dropdown-wide" role="menu">
-            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-rodzice-informacje.png" srcset="grafiki-ai/nav-rodzice-informacje@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Informacje dla rodziców</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-rodzice-rada-rodzicow.png" srcset="grafiki-ai/nav-rodzice-rada-rodzicow@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Rada Rodziców</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-rodzice-kalendarz.png" srcset="grafiki-ai/nav-rodzice-kalendarz@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Kalendarz roku szkolnego</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-rodzice-zebrania.png" srcset="grafiki-ai/nav-rodzice-zebrania@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Zebrania i konsultacje</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-rodzice-stypendia.png" srcset="grafiki-ai/nav-rodzice-stypendia@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Stypendia szkolne</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-rodzice-zfss.png" srcset="grafiki-ai/nav-rodzice-zfss@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">ZFŚS</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-rodzice-rekrutacja-0.png" srcset="grafiki-ai/nav-rodzice-rekrutacja-0@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Rekrutacja — klasa 0</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-rodzice-rekrutacja-1.png" srcset="grafiki-ai/nav-rodzice-rekrutacja-1@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Rekrutacja — klasa I</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-rodzice-jadlospis.png" srcset="grafiki-ai/nav-rodzice-jadlospis@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Jadłospis / Stołówka</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-rodzice-pedagog.png" srcset="grafiki-ai/nav-rodzice-pedagog@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Pedagog szkolny</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-rodzice-psycholog.png" srcset="grafiki-ai/nav-rodzice-psycholog@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Psycholog szkolny</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-rodzice-doradca.png" srcset="grafiki-ai/nav-rodzice-doradca@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Doradca zawodowy</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><img src="grafiki-ai/nav-rodzice-pielegnarka.png" srcset="grafiki-ai/nav-rodzice-pielegnarka@2x.png 2x" alt="" width="20" height="20" aria-hidden="true">Pielęgniarka</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-informacje.png" srcset="grafiki-ai/nav-rodzice-informacje@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Informacje dla rodziców</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-rada-rodzicow.png" srcset="grafiki-ai/nav-rodzice-rada-rodzicow@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Rada Rodziców</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-kalendarz.png" srcset="grafiki-ai/nav-rodzice-kalendarz@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Kalendarz roku szkolnego</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-zebrania.png" srcset="grafiki-ai/nav-rodzice-zebrania@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Zebrania i konsultacje</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-stypendia.png" srcset="grafiki-ai/nav-rodzice-stypendia@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Stypendia szkolne</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-zfss.png" srcset="grafiki-ai/nav-rodzice-zfss@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>ZFŚS</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-rekrutacja-0.png" srcset="grafiki-ai/nav-rodzice-rekrutacja-0@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Rekrutacja — klasa 0</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-rekrutacja-1.png" srcset="grafiki-ai/nav-rodzice-rekrutacja-1@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Rekrutacja — klasa I</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-jadlospis.png" srcset="grafiki-ai/nav-rodzice-jadlospis@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Jadłospis / Stołówka</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-pedagog.png" srcset="grafiki-ai/nav-rodzice-pedagog@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Pedagog szkolny</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-psycholog.png" srcset="grafiki-ai/nav-rodzice-psycholog@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Psycholog szkolny</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-doradca.png" srcset="grafiki-ai/nav-rodzice-doradca@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Doradca zawodowy</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-pielegnarka.png" srcset="grafiki-ai/nav-rodzice-pielegnarka@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Pielęgniarka</a></li>
           </ul>
         </li>
 
