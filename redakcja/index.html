@@ -709,9 +709,29 @@ document.getElementById('removeCoverBtn').addEventListener('click', () => {
   setCoverPreview(null);
 });
 
+function compressImage(file, maxW = 1400, quality = 0.85) {
+  return new Promise(resolve => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      const scale = Math.min(1, maxW / img.width);
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(img.width * scale);
+      canvas.height = Math.round(img.height * scale);
+      canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+      URL.revokeObjectURL(url);
+      canvas.toBlob(blob => {
+        resolve(new File([blob], file.name.replace(/\.[^.]+$/, '.jpg'), { type: 'image/jpeg' }));
+      }, 'image/jpeg', quality);
+    };
+    img.src = url;
+  });
+}
+
 async function uploadCover(file) {
   const zone = document.getElementById('coverUploadZone');
-  zone.innerHTML = '<div class="upload-loading"><span class="spinner"></span> Wgrywam...</div>';
+  zone.innerHTML = '<div class="upload-loading"><span class="spinner"></span> Komprymuję i wgrywam...</div>';
+  file = await compressImage(file);
 
   try {
     const r = await api.upload(file);
@@ -901,10 +921,11 @@ galImgZone.addEventListener('drop', e => {
 
 async function uploadGalleryImages(files) {
   if (!S.editingGalleryId) { toast('Najpierw zapisz galerię.', 'error'); return; }
-  toast(`Wgrywam ${files.length} zdjęcie(a)...`);
+  toast(`Kompresuję i wgrywam ${files.length} zdjęcie(a)...`);
   for (const file of files) {
     try {
-      const r = await api.upload(file);
+      const compressed = await compressImage(file, 1400, 0.82);
+      const r = await api.upload(compressed);
       if (r.url) {
         await api.post(`/api/galleries/${S.editingGalleryId}/images`, { url: r.url });
       }
