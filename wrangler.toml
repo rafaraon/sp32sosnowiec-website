@@ -4,7 +4,7 @@ compatibility_date = "2024-09-23"
 [[d1_databases]]
 binding = "DB"
 database_name = "sp32-cms"
-database_id = "REPLACE_WITH_YOUR_DATABASE_ID"
+database_id = "dbd2f0d1-4af8-4145-9259-016ebdfd7eeb"
 
 [[r2_buckets]]
 binding = "MEDIA"
