@@ -407,120 +407,19 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
     </header>
 
     <div class="filter-bar" role="group" aria-label="Filtruj aktualności">
-      <button class="filter-tab active">Wszystkie <span class="filter-count">(28)</span></button>
-      <button class="filter-tab">Szkolne <span class="filter-count">(19)</span></button>
-      <button class="filter-tab">Projekty <span class="filter-count">(6)</span></button>
-      <button class="filter-tab">Archiwum EduPage <span class="filter-count">(47)</span></button>
+      <button class="filter-tab active" data-category="">Wszystkie</button>
+      <button class="filter-tab" data-category="szkolne">Szkolne</button>
+      <button class="filter-tab" data-category="projekty">Projekty</button>
+      <button class="filter-tab" data-category="ogloszenia">Ogłoszenia</button>
     </div>
 
-    <!-- Featured article -->
-    <article class="news-featured" aria-label="Wyróżniony artykuł">
-      <div class="news-featured-img" aria-hidden="true">ZDJĘCIE</div>
-      <div class="news-featured-body">
-        <p class="news-featured-label">Wyróżnione</p>
-        <div class="news-meta">
-          <time class="news-date" datetime="2026-06-27">27 czerwca 2026</time>
-          <span class="news-chip chip-szkolne">Szkolne</span>
-        </div>
-        <a href="artykul.html" class="news-title">Uroczyste zakończenie roku szkolnego 2025/2026</a>
-        <p class="news-excerpt">W piątek 27 czerwca pożegnaliśmy kończący się rok szkolny. Gratulujemy wszystkim uczniom i życzymy udanych wakacji! Podziękowania dla nauczycieli i rodziców za wspólną pracę przez cały rok.</p>
-        <a href="artykul.html" class="news-read-more">Czytaj więcej →</a>
-      </div>
-    </article>
+    <div id="featured-container"></div>
 
-    <!-- News grid -->
-    <div class="news-grid" role="list">
-
-      <article class="news-card" role="listitem">
-        <div class="news-card-img" aria-hidden="true"><span class="news-card-img-placeholder">ZDJĘCIE</span></div>
-        <div class="news-card-body">
-          <div class="news-meta">
-            <time class="news-date" datetime="2026-06-15">15 maja 2026</time>
-            <span class="news-chip chip-szkolne">Szkolne</span>
-          </div>
-          <a href="artykul.html" class="news-title">Klasy IV w Kopalni Soli w Wieliczce</a>
-          <p class="news-excerpt">Uczniowie klas czwartych odwiedzili wpisaną na listę UNESCO Kopalnię Soli w Wieliczce. Relacja z wycieczki.</p>
-          <a href="artykul.html" class="news-read-more">Czytaj więcej →</a>
-        </div>
-      </article>
-
-      <article class="news-card" role="listitem">
-        <div class="news-card-img" aria-hidden="true"><span class="news-card-img-placeholder">ZDJĘCIE</span></div>
-        <div class="news-card-body">
-          <div class="news-meta">
-            <time class="news-date" datetime="2026-05-20">20 maja 2026</time>
-            <span class="news-chip chip-projekty">Projekty</span>
-          </div>
-          <a href="artykul.html" class="news-title">Dzień Europy — Szkolny Klub Europejski</a>
-          <p class="news-excerpt">Z okazji Dnia Europy nasz Szkolny Klub Europejski zorganizował kiermasz wiedzy o krajach UE.</p>
-          <a href="artykul.html" class="news-read-more">Czytaj więcej →</a>
-        </div>
-      </article>
-
-      <article class="news-card" role="listitem">
-        <div class="news-card-img" aria-hidden="true"><span class="news-card-img-placeholder">ZDJĘCIE</span></div>
-        <div class="news-card-body">
-          <div class="news-meta">
-            <time class="news-date" datetime="2026-05-05">5 maja 2026</time>
-            <span class="news-chip chip-szkolne">Szkolne</span>
-          </div>
-          <a href="artykul.html" class="news-title">Turniej piłki nożnej — zwycięstwo klasy 6b</a>
-          <p class="news-excerpt">Coroczny turniej szkolny zakończył się triumfem uczniów klasy 6b. Gratulujemy zawodnikom!</p>
-          <a href="artykul.html" class="news-read-more">Czytaj więcej →</a>
-        </div>
-      </article>
-
-      <article class="news-card" role="listitem">
-        <div class="news-card-img" aria-hidden="true"><span class="news-card-img-placeholder">ZDJĘCIE</span></div>
-        <div class="news-card-body">
-          <div class="news-meta">
-            <time class="news-date" datetime="2026-04-10">10 kwietnia 2026</time>
-            <span class="news-chip chip-szkolne">Szkolne</span>
-          </div>
-          <a href="artykul.html" class="news-title">Rekrutacja do klasy I — wyniki</a>
-          <p class="news-excerpt">Opublikowaliśmy wyniki rekrutacji na rok szkolny 2026/2027. Serdecznie witamy nowych uczniów!</p>
-          <a href="artykul.html" class="news-read-more">Czytaj więcej →</a>
-        </div>
-      </article>
-
-      <article class="news-card" role="listitem">
-        <div class="news-card-img" aria-hidden="true"><span class="news-card-img-placeholder">ZDJĘCIE</span></div>
-        <div class="news-card-body">
-          <div class="news-meta">
-            <time class="news-date" datetime="2026-03-22">22 marca 2026</time>
-            <span class="news-chip chip-projekty">Projekty</span>
-          </div>
-          <a href="artykul.html" class="news-title">Projekt „Czytamy razem" — podsumowanie</a>
-          <p class="news-excerpt">Zakończył się kolejny etap projektu ogólnopolskiego promującego czytelnictwo wśród dzieci w wieku 6–10 lat.</p>
-          <a href="artykul.html" class="news-read-more">Czytaj więcej →</a>
-        </div>
-      </article>
-
-      <article class="news-card is-archive" role="listitem">
-        <div class="news-card-img" aria-hidden="true"><span class="news-card-img-placeholder">ARCHIWUM</span></div>
-        <div class="news-card-body">
-          <div class="news-meta">
-            <time class="news-date" datetime="2024-03-12">12 marca 2024</time>
-            <span class="news-chip chip-archive">↗ Archiwum EduPage</span>
-          </div>
-          <a href="https://sp32sosnowiec.edupage.org" target="_blank" rel="noopener" class="news-title">Wyniki szkolnego konkursu plastycznego „Moja szkoła"</a>
-          <p class="news-excerpt">Ogłaszamy wyniki konkursu plastycznego. Nagrody wręczono podczas apelu 15 marca.</p>
-          <a href="https://sp32sosnowiec.edupage.org" target="_blank" rel="noopener" class="news-read-more">Czytaj w archiwum →</a>
-        </div>
-      </article>
-
+    <div class="news-grid" id="news-grid" role="list">
+      <p style="color:var(--tx-m);padding:2rem;text-align:center;grid-column:1/-1">Ładowanie aktualności…</p>
     </div>
 
-    <!-- Pagination -->
-    <nav class="pagination" aria-label="Strony aktualności">
-      <button class="page-btn page-prev" aria-label="Poprzednia strona" disabled>← Wcześniej</button>
-      <button class="page-btn active" aria-current="page" aria-label="Strona 1">1</button>
-      <button class="page-btn" aria-label="Strona 2">2</button>
-      <button class="page-btn" aria-label="Strona 3">3</button>
-      <span class="page-dots" aria-hidden="true">…</span>
-      <button class="page-btn" aria-label="Strona 8">8</button>
-      <button class="page-btn page-next" aria-label="Następna strona">Później →</button>
-    </nav>
+    <nav class="pagination" id="pagination" aria-label="Strony aktualności"></nav>
 
   </div>
 </main>
@@ -604,7 +503,115 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   function openMob(){hamburger.setAttribute('aria-expanded','true');overlay.classList.add('open');overlay.removeAttribute('aria-hidden');drawer.classList.add('open');drawer.removeAttribute('aria-hidden');document.body.style.overflow='hidden';mobClose.focus();}
   function closeMob(){hamburger.setAttribute('aria-expanded','false');overlay.classList.remove('open');overlay.setAttribute('aria-hidden','true');drawer.classList.remove('open');drawer.setAttribute('aria-hidden','true');document.body.style.overflow='';hamburger.focus();}
   hamburger?.addEventListener('click',openMob);overlay?.addEventListener('click',closeMob);mobClose?.addEventListener('click',closeMob);drawer?.addEventListener('keydown',e=>{if(e.key==='Escape')closeMob();});
+  /* ── DYNAMIC NEWS ── */
+  const MONTHS = ['stycznia','lutego','marca','kwietnia','maja','czerwca','lipca','sierpnia','września','października','listopada','grudnia'];
+  const CAT_CHIP = { szkolne:'chip-szkolne', projekty:'chip-projekty', ogloszenia:'chip-ogloszenia' };
+  const CAT_LABEL = { szkolne:'Szkolne', projekty:'Projekty', ogloszenia:'Ogłoszenia' };
+  const PER_PAGE = 6;
+  let currentCategory = '';
+  let currentPage = 0;
+
+  function fmtDate(iso) {
+    const d = new Date(iso);
+    return `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+  }
+  function chip(cat) {
+    return `<span class="news-chip ${CAT_CHIP[cat]||'chip-szkolne'}">${CAT_LABEL[cat]||cat}</span>`;
+  }
+  function imgStyle(url) {
+    return url ? `style="background:url('${url}') center/cover no-repeat"` : '';
+  }
+
+  function renderFeatured(a) {
+    const date = a.published_at || a.created_at;
+    return `<article class="news-featured" aria-label="Wyróżniony artykuł">
+      <div class="news-featured-img" aria-hidden="true" ${imgStyle(a.cover_url)}>${a.cover_url?'':'ZDJĘCIE'}</div>
+      <div class="news-featured-body">
+        <p class="news-featured-label">Wyróżnione</p>
+        <div class="news-meta">
+          <time class="news-date" datetime="${date}">${fmtDate(date)}</time>
+          ${chip(a.category)}
+        </div>
+        <a href="artykul.html?slug=${a.slug}" class="news-title">${a.title}</a>
+        <p class="news-excerpt">${a.lead||''}</p>
+        <a href="artykul.html?slug=${a.slug}" class="news-read-more">Czytaj więcej →</a>
+      </div>
+    </article>`;
+  }
+
+  function renderCard(a) {
+    const date = a.published_at || a.created_at;
+    return `<article class="news-card" role="listitem">
+      <div class="news-card-img" ${imgStyle(a.cover_url)} aria-hidden="true">${a.cover_url?'':`<span class="news-card-img-placeholder">ZDJĘCIE</span>`}</div>
+      <div class="news-card-body">
+        <div class="news-meta">
+          <time class="news-date" datetime="${date}">${fmtDate(date)}</time>
+          ${chip(a.category)}
+        </div>
+        <a href="artykul.html?slug=${a.slug}" class="news-title">${a.title}</a>
+        <p class="news-excerpt">${a.lead||''}</p>
+        <a href="artykul.html?slug=${a.slug}" class="news-read-more">Czytaj więcej →</a>
+      </div>
+    </article>`;
+  }
+
+  function renderPagination(total) {
+    const nav = document.getElementById('pagination');
+    const pages = Math.ceil(total / PER_PAGE);
+    if (pages <= 1) { nav.innerHTML = ''; return; }
+    let html = `<button class="page-btn page-prev" onclick="changePage(${currentPage-1})" ${currentPage===0?'disabled':''} aria-label="Poprzednia strona">← Wcześniej</button>`;
+    for (let i = 0; i < pages; i++) {
+      if (pages > 6 && i > 1 && i < pages-1 && Math.abs(i-currentPage) > 1) {
+        if (i===2 || i===pages-2) html += '<span class="page-dots" aria-hidden="true">…</span>';
+        continue;
+      }
+      html += `<button class="page-btn${i===currentPage?' active':''}" onclick="changePage(${i})" aria-label="Strona ${i+1}"${i===currentPage?' aria-current="page"':''}>${i+1}</button>`;
+    }
+    html += `<button class="page-btn page-next" onclick="changePage(${currentPage+1})" ${currentPage>=pages-1?'disabled':''} aria-label="Następna strona">Później →</button>`;
+    nav.innerHTML = html;
+  }
+
+  async function loadArticles() {
+    const grid = document.getElementById('news-grid');
+    const featuredEl = document.getElementById('featured-container');
+    grid.innerHTML = '<p style="color:var(--tx-m);padding:2rem;text-align:center;grid-column:1/-1">Ładowanie…</p>';
+
+    const q = new URLSearchParams({ status:'published', limit: PER_PAGE, offset: currentPage*PER_PAGE });
+    if (currentCategory) q.set('category', currentCategory);
+
+    const [data, featData] = await Promise.all([
+      fetch(`/api/articles?${q}`).then(r=>r.json()),
+      currentPage===0 ? fetch('/api/articles?status=published&featured=1&limit=1').then(r=>r.json()) : Promise.resolve({articles:[]}),
+    ]);
+
+    const articles = data.articles || [];
+    const featuredArt = featData.articles?.[0] || null;
+
+    featuredEl.innerHTML = (currentPage===0 && featuredArt) ? renderFeatured(featuredArt) : '';
+
+    const gridArts = featuredArt ? articles.filter(a=>a.id!==featuredArt.id) : articles;
+    grid.innerHTML = gridArts.length
+      ? gridArts.map(renderCard).join('')
+      : '<p style="color:var(--tx-m);padding:2rem;text-align:center;grid-column:1/-1">Brak artykułów w tej kategorii.</p>';
+
+    renderPagination(data.total||0);
+  }
+
+  function changePage(p) {
+    currentPage = p;
+    window.scrollTo({top:0,behavior:'smooth'});
+    loadArticles();
+  }
+
   document.querySelectorAll('.filter-tab').forEach(tab => {
-    tab.addEventListener('click', () => { document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active')); tab.classList.add('active'); });
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      currentCategory = tab.dataset.category || '';
+      currentPage = 0;
+      loadArticles();
+    });
   });
+
+  loadArticles();
 </script>
