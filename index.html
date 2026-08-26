@@ -568,16 +568,46 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   html { scroll-behavior: auto; }
 }
 
-.wf-label {
-  position: fixed; top: .5rem; right: .5rem; background: rgba(0,0,0,.7); color: rgba(255,255,255,.7);
-  font-family: var(--font-d); font-size: .65rem; font-weight: 700; letter-spacing: .08em;
-  text-transform: uppercase; padding: .25rem .5rem; border-radius: 5px; z-index: 200; pointer-events: none;
+/* ════════════════════════
+   SCROLL REVEAL
+════════════════════════ */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity .6s cubic-bezier(.22,.61,.36,1), transform .6s cubic-bezier(.22,.61,.36,1);
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+  .stagger .reveal:nth-child(2) { transition-delay: .09s; }
+  .stagger .reveal:nth-child(3) { transition-delay: .18s; }
+  .stagger .reveal:nth-child(4) { transition-delay: .27s; }
+  .stagger .reveal:nth-child(5) { transition-delay: .36s; }
 }
+
+/* Header frosted glass on scroll */
+.site-header { transition: background .3s ease, backdrop-filter .3s ease; }
+.site-header.scrolled {
+  background: rgba(18,37,30,.9);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+/* News card image subtle zoom */
+.news-card-img { transition: transform .45s cubic-bezier(.22,.61,.36,1); }
+.news-card:hover .news-card-img { transform: scale(1.04); }
+
+/* Album thumb subtle zoom */
+.album-thumb { transition: transform .45s cubic-bezier(.22,.61,.36,1); overflow: hidden; }
+.album-card:hover .album-thumb { transform: scale(1.04); }
+
+/* QL card accent ring on focus/hover */
+.ql-card { transition: transform var(--tr), box-shadow var(--tr), border-color var(--tr); }
+.ql-card:hover { box-shadow: 0 8px 32px rgba(31,75,60,.15); }
 </style>
 
 <div id="scroll-bar" aria-hidden="true"></div>
 <a href="#main-content" class="skip-link">Przejdź do treści</a>
-<div class="wf-label">Wireframe v0.2</div>
+
 
 <!-- ══════════════════════════════════
      HEADER
@@ -776,44 +806,15 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
 ══════════════════════════════════ -->
 <section class="section section-alt" aria-labelledby="news-h">
   <div class="container">
-    <div class="section-head">
+    <div class="section-head reveal">
       <div>
         <p class="section-eyebrow">Co nowego?</p>
         <h2 class="section-title" id="news-h">Aktualności</h2>
       </div>
-      <a href="#" class="section-link" aria-label="Wszystkie aktualności">Zobacz wszystkie →</a>
+      <a href="aktualnosci.html" class="section-link" aria-label="Wszystkie aktualności">Zobacz wszystkie →</a>
     </div>
-    <div class="news-grid">
-      <article class="news-card">
-        <div class="news-card-img nc-green" aria-label="Zdjęcie: zakończenie roku szkolnego">Zdjęcie</div>
-        <div class="news-card-body">
-          <div class="news-meta"><time class="news-date" datetime="2026-06-27">27 czerwca 2026</time></div>
-          <h3 class="news-title">Uroczyste zakończenie roku szkolnego 2025/2026</h3>
-          <p class="news-excerpt">W piątek 27 czerwca pożegnaliśmy kończącą się rok szkolny. Gratulujemy wszystkim uczniom i życzymy udanych wakacji!</p>
-          <a href="#" class="news-read-more">Czytaj więcej →</a>
-        </div>
-      </article>
-      <article class="news-card">
-        <div class="news-card-img nc-coral" aria-label="Zdjęcie: wycieczka do Wieliczki">Zdjęcie</div>
-        <div class="news-card-body">
-          <div class="news-meta"><time class="news-date" datetime="2026-05-15">15 maja 2026</time></div>
-          <h3 class="news-title">Klasy IV w Kopalni Soli w Wieliczce — relacja z wycieczki</h3>
-          <p class="news-excerpt">Uczniowie klas czwartych odwiedzili wpisaną na listę UNESCO Kopalnię Soli w Wieliczce. Wrażenia były niezapomniane!</p>
-          <a href="#" class="news-read-more">Czytaj więcej →</a>
-        </div>
-      </article>
-      <article class="news-card">
-        <div class="news-card-img nc-arch" aria-label="Zdjęcie z archiwum">Archiwum</div>
-        <div class="news-card-body">
-          <div class="news-meta">
-            <time class="news-date" datetime="2024-03-12">12 marca 2024</time>
-            <span class="chip chip-archive" aria-label="Artykuł w archiwum EduPage">↗ Archiwum EduPage</span>
-          </div>
-          <h3 class="news-title">Wyniki szkolnego konkursu plastycznego „Moja szkoła"</h3>
-          <p class="news-excerpt">Ogłaszamy wyniki konkursu plastycznego. Nagrody wręczono podczas apelu 15 marca. Gratulujemy wszystkim uczestnikom!</p>
-          <a href="https://sp32sosnowiec.edupage.org" class="news-read-more" target="_blank" rel="noopener">Czytaj w archiwum →</a>
-        </div>
-      </article>
+    <div class="news-grid stagger" id="home-news-grid">
+      <div style="grid-column:1/-1;text-align:center;padding:2.5rem;color:var(--tx-m)">Ładowanie aktualności…</div>
     </div>
   </div>
 </section>
@@ -850,7 +851,7 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
         <p class="section-eyebrow">Zdjęcia ze szkoły</p>
         <h2 class="section-title" id="gallery-h">Galeria</h2>
       </div>
-      <a href="#" class="section-link">Wszystkie albumy →</a>
+      <a href="galeria.html" class="section-link">Wszystkie albumy →</a>
     </div>
     <div class="gallery-grid">
       <a href="#" class="album-card" aria-label="Album: Dzień Sportu 2026, 48 zdjęć">
@@ -900,8 +901,8 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
       </a>
       <div class="footer-ext" aria-label="Serwisy zewnętrzne">
         <a href="https://sp32sosnowiec.edupage.org" class="footer-ext-link" target="_blank" rel="noopener">E-Dziennik ↗</a>
-        <a href="#" class="footer-ext-link">BIP ↗</a>
-        <a href="#" class="footer-ext-link">Facebook ↗</a>
+        <a href="https://sp_32_sosnowiec.bip.gov.pl/" class="footer-ext-link" target="_blank" rel="noopener">BIP ↗</a>
+        <a href="https://www.facebook.com/SP32Sosnowiec" class="footer-ext-link" target="_blank" rel="noopener">Facebook ↗</a>
         <a href="https://www.gov.pl/web/edukacja" class="footer-ext-link" target="_blank" rel="noopener">MEN.gov.pl ↗</a>
         <a href="https://www.sosnowiec.pl" class="footer-ext-link" target="_blank" rel="noopener">Sosnowiec.pl ↗</a>
       </div>
@@ -910,18 +911,18 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
     <div class="footer-info" role="group" aria-label="Dane kontaktowe szkoły">
       <div class="footer-info-card">
         <p class="footer-info-label">Adres</p>
-        <address>ul. [adres szkoły]<br>41-200 Sosnowiec<br>woj. śląskie</address>
-        <a href="https://maps.google.com" target="_blank" rel="noopener">Otwórz w Mapach →</a>
+        <address>ul. Armii Krajowej 93<br>41-215 Sosnowiec<br>woj. śląskie</address>
+        <a href="https://maps.google.com/?q=ul.+Armii+Krajowej+93,+41-215+Sosnowiec" target="_blank" rel="noopener">Otwórz w Mapach →</a>
       </div>
       <div class="footer-info-card">
         <p class="footer-info-label">Kontakt</p>
-        <p><a href="tel:+48XXXXXXXXX">+48 XX XXX XX XX</a></p>
+        <p><a href="tel:+48322634301">32 263-43-01</a></p>
         <p><a href="mailto:sp32@sosnowiec.edu.pl">sp32@sosnowiec.edu.pl</a></p>
-        <p class="footer-note">Sekretariat: pon–pt 7:30–15:30</p>
+        <p class="footer-note">Sekretariat: pon–pt 7:00–15:00</p>
       </div>
       <div class="footer-info-card">
         <p class="footer-info-label">Godziny pracy</p>
-        <p>Szkoła: 7:00–17:00</p>
+        <p>Szkoła: 8:00–16:25</p>
         <p>Świetlica: 6:30–17:00</p>
         <p class="footer-note">W dni nauki szkolnej</p>
       </div>
@@ -952,7 +953,7 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
     </nav>
 
     <div class="footer-bottom">
-      <p class="footer-legal">© 2026 Szkoła Podstawowa nr 32 im. L. Kruczkowskiego w Sosnowcu &nbsp;·&nbsp; NIP: XX XXX XXX XX &nbsp;·&nbsp; REGON: XXXXXXXXX</p>
+      <p class="footer-legal">© 2026 Szkoła Podstawowa nr 32 im. L. Kruczkowskiego w Sosnowcu &nbsp;·&nbsp; NIP: 644-30-91-938 &nbsp;·&nbsp; REGON: 000738792</p>
       <a href="#" class="footer-a11y-link">Deklaracja Dostępności WCAG 2.1 AA →</a>
     </div>
 
@@ -1029,4 +1030,62 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   overlay?.addEventListener('click', closeMob);
   mobClose?.addEventListener('click', closeMob);
   drawer?.addEventListener('keydown', e => { if (e.key === 'Escape') closeMob(); });
+
+  /* ── SCROLL REVEAL ── */
+  const io = new IntersectionObserver((es) => {
+    es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.07, rootMargin: '0px 0px -32px 0px' });
+  function revealAll() { document.querySelectorAll('.reveal:not(.visible)').forEach(el => io.observe(el)); }
+
+  document.querySelectorAll('.ql-card, .album-card, .stat-card, .about-grid, .projekty-band').forEach(el => el.classList.add('reveal'));
+  document.querySelectorAll('.gallery-grid, .stats-grid').forEach(g => g.classList.add('stagger'));
+  revealAll();
+
+  /* ── HEADER FROSTED ON SCROLL ── */
+  const siteHeader = document.querySelector('.site-header');
+  window.addEventListener('scroll', () => {
+    siteHeader?.classList.toggle('scrolled', window.scrollY > 60);
+  }, { passive: true });
+
+  /* ── AKTUALNOŚCI Z API ── */
+  (async () => {
+    const MONTHS = ['stycznia','lutego','marca','kwietnia','maja','czerwca','lipca','sierpnia','września','października','listopada','grudnia'];
+    const CAT = {
+      szkolne:   { cls: 'chip-szkolne',  lab: 'Szkolne' },
+      projekty:  { cls: 'chip-projekty', lab: 'Projekty' },
+      ogloszenia:{ cls: 'chip-ogloszenia', lab: 'Ogłoszenia' }
+    };
+    const grid = document.getElementById('home-news-grid');
+    if (!grid) return;
+    try {
+      const { articles = [] } = await fetch('/api/articles?status=published&limit=3').then(r => r.json());
+      if (!articles.length) {
+        grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--tx-m)">Brak aktualności. Dodaj pierwszy artykuł w panelu redakcji.</p>';
+        return;
+      }
+      grid.innerHTML = articles.map(a => {
+        const d = new Date(a.published_at || a.created_at);
+        const ds = `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+        const cat = CAT[a.category] || { cls: 'chip-szkolne', lab: a.category };
+        const imgPart = a.cover_url
+          ? `<div class="news-card-img" style="background:url('${a.cover_url}') center/cover no-repeat"></div>`
+          : `<div class="news-card-img nc-green"></div>`;
+        return `<article class="news-card reveal">
+          ${imgPart}
+          <div class="news-card-body">
+            <div class="news-meta">
+              <time class="news-date" datetime="${(a.published_at||a.created_at).slice(0,10)}">${ds}</time>
+              <span class="chip ${cat.cls}">${cat.lab}</span>
+            </div>
+            <h3 class="news-title">${a.title}</h3>
+            <p class="news-excerpt">${a.lead || ''}</p>
+            <a href="artykul.html?slug=${a.slug}" class="news-read-more">Czytaj więcej →</a>
+          </div>
+        </article>`;
+      }).join('');
+      revealAll();
+    } catch {
+      grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--tx-m)">Nie udało się załadować aktualności.</p>';
+    }
+  })();
 </script>
