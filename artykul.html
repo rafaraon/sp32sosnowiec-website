@@ -1,0 +1,683 @@
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Artykuł — SP32 Sosnowiec</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+<style>
+/* ── TOKENS ── */
+:root {
+  --cp: #1F4B3C; --cp-d: #12251E; --cp-l: #2D6B57;
+  --ca: #D4756A; --ca-d: #BE5D52;
+  --clv: #D9D0EE; --clv-l: #EDE8F8;
+  --bg: #F6F3FB; --sf: #FFFFFF;
+  --tx: #12251E; --tx-m: #4A6358; --bd: #D4CDE8;
+  --font-d: 'Bricolage Grotesque', system-ui, sans-serif;
+  --font-b: 'Atkinson Hyperlegible', system-ui, sans-serif;
+  --r: 12px; --r-s: 8px;
+  --sh: 0 2px 12px rgba(31,75,60,.09); --sh-m: 0 4px 24px rgba(31,75,60,.14);
+  --tr: .18s ease;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0D1A14; --sf: #15261D; --tx: #DFF0E8; --tx-m: #7BA890;
+    --bd: #253D30; --clv: #1E1A35; --clv-l: #18152A;
+    --sh: 0 2px 12px rgba(0,0,0,.25); --sh-m: 0 4px 24px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0D1A14; --sf: #15261D; --tx: #DFF0E8; --tx-m: #7BA890;
+  --bd: #253D30; --clv: #1E1A35; --clv-l: #18152A;
+  --sh: 0 2px 12px rgba(0,0,0,.25); --sh-m: 0 4px 24px rgba(0,0,0,.35);
+}
+
+/* ── RESET ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-b); background: var(--bg); color: var(--tx); line-height: 1.6; overflow-x: hidden; }
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+ul { list-style: none; }
+button { cursor: pointer; font-family: inherit; border: none; background: none; }
+
+.skip-link {
+  position: absolute; top: -100px; left: 1rem;
+  background: var(--ca); color: #fff; padding: .5rem 1rem;
+  border-radius: 0 0 var(--r-s) var(--r-s); font-family: var(--font-d);
+  font-weight: 700; font-size: .9rem; z-index: 9999; transition: top .2s;
+}
+.skip-link:focus { top: 0; }
+#scroll-bar {
+  position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+  background: linear-gradient(90deg, var(--ca) 0%, #e8a89e 100%);
+  z-index: 10000; transition: width .1s linear;
+}
+.container { width: min(1120px, 100% - 3rem); margin-inline: auto; }
+
+/* ════ HEADER ════ */
+.site-header { position: sticky; top: 0; z-index: 100; background: var(--cp); box-shadow: 0 2px 16px rgba(0,0,0,.2); }
+.header-inner { display: flex; align-items: center; gap: 1.5rem; padding: .75rem 0; min-height: 64px; }
+.logo { display: flex; align-items: center; gap: .65rem; flex-shrink: 0; }
+.logo-img { width: 44px; height: 44px; object-fit: contain; }
+.logo-name { font-family: var(--font-d); font-weight: 700; font-size: .85rem; color: #fff; line-height: 1.2; }
+.logo-patron { font-size: .65rem; color: rgba(255,255,255,.65); line-height: 1.3; }
+.main-nav { flex: 1; }
+.main-nav > ul { display: flex; gap: .25rem; align-items: center; }
+.main-nav > ul > li > a {
+  font-family: var(--font-d); font-size: .82rem; font-weight: 600;
+  color: rgba(255,255,255,.82); padding: .45rem .7rem;
+  border-radius: var(--r-s); transition: background var(--tr), color var(--tr);
+  white-space: nowrap; display: flex; align-items: center; gap: .2rem;
+}
+.main-nav > ul > li > a:hover,
+.main-nav > ul > li > a.active { background: rgba(255,255,255,.12); color: #fff; }
+.main-nav > ul > li > a.active { color: var(--ca); }
+.nav-caret { font-size: .65rem; opacity: .7; transition: transform .16s; }
+.has-dropdown:hover .nav-caret, .has-dropdown.open .nav-caret { transform: rotate(180deg); }
+.has-dropdown { position: relative; }
+.dropdown {
+  position: absolute; top: 100%; left: 0; min-width: 212px;
+  background: var(--sf); border: 1px solid var(--bd); border-radius: var(--r);
+  box-shadow: var(--sh-m); padding: .4rem; padding-top: .6rem; list-style: none;
+  opacity: 0; visibility: hidden; transform: translateY(-6px);
+  transition: opacity .16s ease, transform .16s ease, visibility .16s; z-index: 200;
+}
+.dropdown::before { content: ''; position: absolute; top: -8px; left: 0; right: 0; height: 8px; }
+.dropdown-wide { min-width: 424px; display: grid; grid-template-columns: 1fr 1fr; column-gap: .25rem; }
+.has-dropdown:hover .dropdown, .has-dropdown.open .dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+.dropdown-item {
+  display: flex; align-items: center; gap: .65rem; padding: .45rem .6rem;
+  border-radius: var(--r-s); color: var(--tx); font-family: var(--font-d);
+  font-size: .82rem; font-weight: 600; transition: background var(--tr), color var(--tr); white-space: nowrap;
+}
+.dropdown-item:hover, .dropdown-item:focus-visible { background: var(--clv-l); color: var(--cp); outline: none; }
+.di-icon { width: 30px; height: 30px; border-radius: 7px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: var(--di-bg, rgba(31,75,60,.1)); }
+.di-icon img { width: 18px; height: 18px; object-fit: contain; mix-blend-mode: multiply; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .di-icon img { mix-blend-mode: normal; filter: invert(1) brightness(1.4); } }
+:root[data-theme="dark"] .di-icon img { mix-blend-mode: normal; filter: invert(1) brightness(1.4); }
+.main-nav > ul > li:nth-child(2) .di-icon { --di-bg: rgba(31,75,60,.13); }
+.main-nav > ul > li:nth-child(3) .di-icon { --di-bg: rgba(217,208,238,.65); }
+.main-nav > ul > li:nth-child(4) .di-icon { --di-bg: rgba(212,117,106,.18); }
+.header-controls { display: flex; align-items: center; gap: .5rem; flex-shrink: 0; }
+.a11y-controls { display: flex; align-items: center; gap: .2rem; }
+.a11y-btn {
+  width: 32px; height: 32px; border-radius: var(--r-s);
+  border: 1.5px solid rgba(255,255,255,.25); color: rgba(255,255,255,.7);
+  font-size: .75rem; font-family: var(--font-d); font-weight: 700; transition: all var(--tr);
+}
+.a11y-btn:hover { background: rgba(255,255,255,.1); color: #fff; border-color: rgba(255,255,255,.4); }
+.nav-hamburger {
+  display: none; width: 40px; height: 40px; border-radius: var(--r-s);
+  border: 1.5px solid rgba(255,255,255,.3); color: #fff;
+  flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+  transition: background var(--tr);
+}
+.nav-hamburger:hover { background: rgba(255,255,255,.12); }
+.hamburger-line { width: 18px; height: 2px; background: currentColor; border-radius: 1px; pointer-events: none; transition: transform .2s, opacity .2s; }
+.nav-hamburger[aria-expanded="true"] .hamburger-line:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-hamburger[aria-expanded="true"] .hamburger-line:nth-child(2) { opacity: 0; }
+.nav-hamburger[aria-expanded="true"] .hamburger-line:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.btn-edupage {
+  background: var(--ca); color: #fff; font-family: var(--font-d);
+  font-size: .78rem; font-weight: 700; padding: .45rem .9rem;
+  border-radius: var(--r-s); white-space: nowrap; transition: background var(--tr);
+}
+.btn-edupage:hover { background: var(--ca-d); }
+
+/* ════ MOBILE NAV ════ */
+.mob-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 149; opacity: 0; visibility: hidden; transition: opacity .2s, visibility .2s; }
+.mob-overlay.open { opacity: 1; visibility: visible; }
+.mob-drawer { position: fixed; top: 0; right: 0; width: min(340px,100vw); height: 100%; background: var(--sf); z-index: 150; overflow-y: auto; transform: translateX(100%); transition: transform .25s ease; padding-bottom: 2rem; }
+.mob-drawer.open { transform: translateX(0); }
+.mob-head { position: sticky; top: 0; display: flex; align-items: center; justify-content: space-between; padding: .85rem 1.25rem; background: var(--cp); border-bottom: 1px solid rgba(255,255,255,.1); }
+.mob-head-name { font-family: var(--font-d); font-size: .82rem; font-weight: 700; color: #fff; }
+.mob-close { width: 36px; height: 36px; border-radius: var(--r-s); background: rgba(255,255,255,.15); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; transition: background var(--tr); }
+.mob-close:hover { background: rgba(255,255,255,.25); }
+.mob-body { padding: .75rem .75rem 0; }
+.mob-link { display: flex; align-items: center; gap: .85rem; padding: .85rem .75rem; border-radius: var(--r-s); font-family: var(--font-d); font-weight: 700; font-size: .95rem; color: var(--tx); transition: background var(--tr), color var(--tr); min-height: 52px; }
+.mob-link:hover { background: var(--clv-l); color: var(--cp); }
+.mob-link img { width: 22px; height: 22px; object-fit: contain; flex-shrink: 0; }
+.mob-divider { border: none; border-top: 1px solid var(--bd); margin: .5rem 0; }
+.mob-section-title { font-family: var(--font-d); font-size: .65rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--tx-m); padding: .5rem .75rem .25rem; }
+.mob-sub { display: flex; align-items: center; gap: .75rem; padding: .65rem .75rem; border-radius: var(--r-s); font-size: .88rem; font-family: var(--font-d); font-weight: 600; color: var(--tx); transition: background var(--tr), color var(--tr); min-height: 44px; }
+.mob-sub:hover { background: var(--clv-l); color: var(--cp); }
+.mob-sub img { width: 18px; height: 18px; object-fit: contain; flex-shrink: 0; }
+
+/* ════ BREADCRUMB ════ */
+.breadcrumb-wrap { background: var(--sf); border-bottom: 1px solid var(--bd); }
+.breadcrumb { display: flex; align-items: center; gap: .35rem; padding: .65rem 0; font-size: .78rem; color: var(--tx-m); font-family: var(--font-d); flex-wrap: wrap; }
+.breadcrumb a { color: var(--cp); font-weight: 600; transition: color var(--tr); }
+.breadcrumb a:hover { color: var(--ca); }
+.breadcrumb-sep { opacity: .4; font-size: .7rem; }
+.breadcrumb-current { color: var(--tx-m); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 22ch; }
+
+/* ════ ARTICLE LAYOUT ════ */
+.article-wrap { padding: 2.5rem 0 4rem; }
+.article-layout { display: grid; grid-template-columns: 1fr min(680px, 100%); gap: 3rem; align-items: start; }
+.article-main { min-width: 0; }
+
+/* Article header */
+.article-header { margin-bottom: 1.75rem; }
+.article-meta { display: flex; align-items: center; gap: .5rem; margin-bottom: .9rem; flex-wrap: wrap; }
+.news-chip {
+  font-family: var(--font-d); font-size: .65rem; font-weight: 700;
+  letter-spacing: .06em; text-transform: uppercase;
+  padding: .18rem .55rem; border-radius: 20px;
+}
+.chip-szkolne { background: rgba(31,75,60,.1); color: var(--cp); }
+.chip-projekty { background: rgba(217,208,238,.6); color: #5B4F9A; }
+.article-date { font-size: .78rem; color: var(--tx-m); font-family: var(--font-d); }
+.article-reading-time { font-size: .78rem; color: var(--tx-m); font-family: var(--font-d); }
+.article-meta-dot { width: 3px; height: 3px; background: var(--bd); border-radius: 50%; }
+.article-title { font-family: var(--font-d); font-size: clamp(1.6rem, 3.5vw, 2.4rem); font-weight: 800; line-height: 1.15; color: var(--tx); text-wrap: balance; margin-bottom: .75rem; }
+.article-lead { font-size: 1.1rem; color: var(--tx-m); line-height: 1.65; font-weight: 400; border-left: 3px solid var(--ca); padding-left: 1rem; }
+
+/* Hero image */
+.article-hero {
+  aspect-ratio: 16/9; background: linear-gradient(135deg, var(--cp) 0%, var(--cp-l) 70%, rgba(212,117,106,.3) 100%);
+  border-radius: var(--r); margin: 1.75rem 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-d); font-size: .78rem; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.35);
+}
+.article-hero-caption { font-size: .78rem; color: var(--tx-m); font-style: italic; text-align: center; margin-top: -.75rem; margin-bottom: 1.75rem; }
+
+/* Article body */
+.article-body { font-size: 1rem; line-height: 1.75; color: var(--tx); }
+.article-body h2 { font-family: var(--font-d); font-size: 1.35rem; font-weight: 700; color: var(--tx); margin: 2rem 0 .75rem; line-height: 1.25; }
+.article-body h3 { font-family: var(--font-d); font-size: 1.05rem; font-weight: 700; color: var(--tx); margin: 1.5rem 0 .5rem; }
+.article-body p { margin-bottom: 1.1rem; }
+.article-body p:last-child { margin-bottom: 0; }
+.article-body ul, .article-body ol { margin: .5rem 0 1.1rem 1.5rem; display: flex; flex-direction: column; gap: .35rem; }
+.article-body ul { list-style: disc; }
+.article-body ol { list-style: decimal; }
+.article-body li { line-height: 1.65; }
+.article-body strong { font-weight: 700; }
+.article-body em { font-style: italic; }
+.article-body blockquote {
+  border-left: 3px solid var(--clv); padding: .75rem 1.25rem;
+  background: var(--clv-l); border-radius: 0 var(--r-s) var(--r-s) 0;
+  margin: 1.25rem 0; font-style: italic; color: var(--tx-m);
+}
+.article-inline-img {
+  background: var(--clv-l); border-radius: var(--r-s);
+  aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-d); font-size: .72rem; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--clv); margin: 1.5rem 0 .5rem;
+}
+.article-img-caption { font-size: .78rem; color: var(--tx-m); font-style: italic; margin-bottom: 1.5rem; }
+
+/* Tags */
+.article-tags { display: flex; align-items: center; gap: .4rem; flex-wrap: wrap; margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid var(--bd); }
+.article-tags-label { font-family: var(--font-d); font-size: .72rem; font-weight: 700; color: var(--tx-m); text-transform: uppercase; letter-spacing: .08em; }
+.tag { font-family: var(--font-d); font-size: .72rem; font-weight: 600; color: var(--tx-m); padding: .2rem .6rem; border: 1.5px solid var(--bd); border-radius: 20px; transition: all var(--tr); }
+.tag:hover { border-color: var(--cp); color: var(--cp); }
+
+/* Share bar */
+.article-share { display: flex; align-items: center; gap: .5rem; margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid var(--bd); }
+.article-share-label { font-family: var(--font-d); font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--tx-m); margin-right: .25rem; }
+.share-btn {
+  font-family: var(--font-d); font-size: .75rem; font-weight: 700;
+  padding: .35rem .75rem; border-radius: var(--r-s);
+  border: 1.5px solid var(--bd); color: var(--tx-m); transition: all var(--tr);
+}
+.share-btn:hover { border-color: var(--cp); color: var(--cp); background: var(--clv-l); }
+
+/* Navigation (prev/next) */
+.article-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2rem; }
+.article-nav-btn {
+  display: flex; flex-direction: column; gap: .3rem; padding: 1rem 1.25rem;
+  background: var(--sf); border: 1px solid var(--bd); border-radius: var(--r);
+  transition: box-shadow var(--tr), border-color var(--tr);
+}
+.article-nav-btn:hover { box-shadow: var(--sh); border-color: var(--cp); }
+.article-nav-btn.next { text-align: right; }
+.article-nav-label { font-family: var(--font-d); font-size: .65rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--tx-m); }
+.article-nav-title { font-family: var(--font-d); font-size: .88rem; font-weight: 700; color: var(--tx); line-height: 1.3; }
+
+/* Back link */
+.article-back { display: inline-flex; align-items: center; gap: .4rem; margin-top: 1.5rem; font-family: var(--font-d); font-size: .82rem; font-weight: 700; color: var(--cp); transition: color var(--tr); }
+.article-back:hover { color: var(--ca); }
+
+/* ════ SIDEBAR ════ */
+.article-sidebar { display: flex; flex-direction: column; gap: 1.25rem; }
+.sidebar-widget { background: var(--sf); border: 1px solid var(--bd); border-radius: var(--r); padding: 1.25rem; box-shadow: var(--sh); }
+.sidebar-title { font-family: var(--font-d); font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--tx-m); margin-bottom: 1rem; }
+.sidebar-toc { display: flex; flex-direction: column; gap: .1rem; }
+.toc-link { font-family: var(--font-d); font-size: .82rem; font-weight: 600; color: var(--tx-m); padding: .35rem .5rem; border-radius: var(--r-s); border-left: 2px solid transparent; transition: all var(--tr); }
+.toc-link:hover, .toc-link.active { color: var(--cp); border-left-color: var(--ca); background: var(--clv-l); padding-left: .75rem; }
+.sidebar-meta-row { display: flex; flex-direction: column; gap: .6rem; }
+.sidebar-meta-item { display: flex; flex-direction: column; gap: .15rem; }
+.sidebar-meta-label { font-family: var(--font-d); font-size: .62rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--ca); }
+.sidebar-meta-val { font-size: .82rem; font-weight: 600; color: var(--tx); }
+
+/* ════ RELATED ARTICLES ════ */
+.related-section { padding: 2.5rem 0 3rem; border-top: 1px solid var(--bd); }
+.related-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+.related-title { font-family: var(--font-d); font-size: 1.3rem; font-weight: 800; color: var(--tx); }
+.related-all { font-family: var(--font-d); font-size: .82rem; font-weight: 700; color: var(--cp); transition: color var(--tr); }
+.related-all:hover { color: var(--ca); }
+.related-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+.related-card { background: var(--sf); border: 1px solid var(--bd); border-radius: var(--r); overflow: hidden; box-shadow: var(--sh); transition: box-shadow var(--tr), transform var(--tr); }
+.related-card:hover { box-shadow: var(--sh-m); transform: translateY(-2px); }
+.related-card-img { aspect-ratio: 16/9; background: var(--clv-l); display: flex; align-items: center; justify-content: center; font-family: var(--font-d); font-size: .65rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--clv); }
+.related-card-body { padding: 1rem; display: flex; flex-direction: column; gap: .35rem; }
+.related-card-meta { display: flex; align-items: center; gap: .4rem; }
+.related-card-date { font-size: .72rem; color: var(--tx-m); font-family: var(--font-d); }
+.related-card-title { font-family: var(--font-d); font-size: .9rem; font-weight: 700; color: var(--tx); line-height: 1.3; }
+.related-card:hover .related-card-title { color: var(--cp); }
+
+/* ════ FOOTER ════ */
+.site-footer { background: var(--cp-d); color: rgba(255,255,255,.8); padding: 0; }
+.footer-top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.5rem 0; border-bottom: 1px solid rgba(255,255,255,.08); }
+.footer-logo { display: flex; align-items: center; gap: .65rem; flex-shrink: 0; }
+.footer-logo-img { width: 36px; height: 36px; object-fit: contain; opacity: .9; }
+.footer-school-name { font-family: var(--font-d); font-size: .82rem; font-weight: 700; color: #fff; line-height: 1.3; }
+.footer-ext { display: flex; align-items: center; gap: .4rem; flex-wrap: wrap; }
+.footer-ext-link { font-family: var(--font-d); font-size: .7rem; font-weight: 700; color: rgba(255,255,255,.45); padding: .3rem .6rem; border: 1px solid rgba(255,255,255,.1); border-radius: 6px; transition: all var(--tr); }
+.footer-ext-link:hover { color: #fff; border-color: rgba(255,255,255,.3); background: rgba(255,255,255,.06); }
+.footer-info { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; background: rgba(255,255,255,.06); border-radius: var(--r); overflow: hidden; margin: 1.75rem 0; }
+.footer-info-card { background: rgba(255,255,255,.03); padding: 1.1rem 1.25rem; display: flex; flex-direction: column; gap: .3rem; }
+.footer-info-label { font-family: var(--font-d); font-size: .65rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ca); margin-bottom: .2rem; }
+.footer-info-card p, .footer-info-card address { font-size: .82rem; color: rgba(255,255,255,.6); line-height: 1.6; font-style: normal; }
+.footer-info-card a { color: rgba(255,255,255,.6); transition: color var(--tr); }
+.footer-info-card a:hover { color: var(--ca); }
+.footer-info-card .footer-note { font-size: .72rem; color: rgba(255,255,255,.3); margin-top: .2rem; }
+.footer-nav { display: flex; flex-wrap: wrap; gap: .4rem; padding-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,.08); }
+.footer-chip { font-family: var(--font-d); font-size: .72rem; font-weight: 600; color: rgba(255,255,255,.5); padding: .28rem .65rem; background: rgba(255,255,255,.05); border-radius: 20px; border: 1px solid rgba(255,255,255,.08); transition: all var(--tr); }
+.footer-chip:hover { color: #fff; background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.2); }
+.footer-bottom { padding: 1.25rem 0; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.footer-legal { font-size: .72rem; color: rgba(255,255,255,.3); line-height: 1.6; }
+.footer-a11y-link { font-size: .72rem; color: rgba(255,255,255,.4); font-family: var(--font-d); font-weight: 600; transition: color var(--tr); }
+.footer-a11y-link:hover { color: var(--ca); }
+
+/* ════ BACK TO TOP ════ */
+#back-top { position: fixed; bottom: 1.5rem; right: 1.5rem; width: 44px; height: 44px; border-radius: 50%; background: var(--cp); color: #fff; font-size: 1.1rem; box-shadow: var(--sh-m); display: none; align-items: center; justify-content: center; z-index: 90; transition: background var(--tr), transform var(--tr); }
+#back-top.visible { display: flex; }
+#back-top:hover { background: var(--cp-l); transform: translateY(-2px); }
+:focus-visible { outline: 2px solid var(--ca); outline-offset: 3px; border-radius: 4px; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } html { scroll-behavior: auto; } }
+
+/* ════ RESPONSIVE ════ */
+@media (max-width: 1000px) {
+  .article-layout { grid-template-columns: 1fr; }
+  .article-sidebar { display: none; }
+}
+@media (max-width: 900px) {
+  .logo-patron { display: none; }
+  .main-nav { display: none; }
+  .nav-hamburger { display: flex; }
+  .related-grid { grid-template-columns: 1fr 1fr; }
+  .article-nav { grid-template-columns: 1fr; }
+  .article-nav-btn.next { text-align: left; }
+  .footer-top { flex-direction: column; align-items: flex-start; gap: 1rem; }
+  .footer-info { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .related-grid { grid-template-columns: 1fr; }
+  .a11y-controls { display: none; }
+}
+</style>
+
+<div id="scroll-bar" aria-hidden="true"></div>
+<a href="#main-content" class="skip-link">Przejdź do treści</a>
+
+<!-- HEADER -->
+<header class="site-header" role="banner">
+  <div class="container header-inner">
+    <a href="index.html" class="logo" aria-label="Szkoła Podstawowa nr 32 — strona główna">
+      <img src="grafiki-ai/tarcza-zielen.png" alt="" class="logo-img" width="44" height="44" aria-hidden="true">
+      <div class="logo-text">
+        <span class="logo-name">Szkoła Podstawowa nr 32</span>
+        <span class="logo-patron">im. L. Kruczkowskiego · Sosnowiec</span>
+      </div>
+    </a>
+    <nav class="main-nav" aria-label="Główna nawigacja">
+      <ul>
+        <li><a href="aktualnosci.html" class="active">Aktualności</a></li>
+        <li class="has-dropdown">
+          <a href="#" aria-haspopup="true" aria-expanded="false">Nasza Szkoła <span class="nav-caret" aria-hidden="true">▾</span></a>
+          <ul class="dropdown" role="menu">
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-nasza-szkola-historia.png" srcset="grafiki-ai/nav-nasza-szkola-historia@2x.png 2x" alt="" width="18" height="18" aria-hidden="true"></span>Historia szkoły</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-nasza-szkola-profil.png" srcset="grafiki-ai/nav-nasza-szkola-profil@2x.png 2x" alt="" width="18" height="18" aria-hidden="true"></span>Profil szkoły</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-nasza-szkola-dyrekcja.png" srcset="grafiki-ai/nav-nasza-szkola-dyrekcja@2x.png 2x" alt="" width="18" height="18" aria-hidden="true"></span>Dyrekcja i kadra</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-nasza-szkola-sukcesy.png" srcset="grafiki-ai/nav-nasza-szkola-sukcesy@2x.png 2x" alt="" width="18" height="18" aria-hidden="true"></span>Sukcesy</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-nasza-szkola-galeria.png" srcset="grafiki-ai/nav-nasza-szkola-galeria@2x.png 2x" alt="" width="18" height="18" aria-hidden="true"></span>Galeria</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-nasza-szkola-rocznica.png" srcset="grafiki-ai/nav-nasza-szkola-rocznica@2x.png 2x" alt="" width="18" height="18" aria-hidden="true"></span>90. rocznica szkoły</a></li>
+          </ul>
+        </li>
+        <li class="has-dropdown">
+          <a href="#" aria-haspopup="true" aria-expanded="false">Uczniowie <span class="nav-caret" aria-hidden="true">▾</span></a>
+          <ul class="dropdown" role="menu">
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-uczniowie-biblioteka.png" srcset="grafiki-ai/nav-uczniowie-biblioteka@2x.png 2x" alt="" width="18" height="18" aria-hidden="true"></span>Biblioteka</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-uczniowie-swietlica.png" srcset="grafiki-ai/nav-uczniowie-swietlica@2x.png 2x" alt="" width="18" height="18" aria-hidden="true"></span>Świetlica</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-uczniowie-wolontariat.png" srcset="grafiki-ai/nav-uczniowie-wolontariat@2x.png 2x" alt="" width="18" height="18" aria-hidden="true"></span>Wolontariat</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-uczniowie-klub-ak.png" srcset="grafiki-ai/nav-uczniowie-klub-ak@2x.png 2x" alt="" width="18" height="18" aria-hidden="true"></span>Klub AK</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-uczniowie-klub-europejski.png" srcset="grafiki-ai/nav-uczniowie-klub-europejski@2x.png 2x" alt="" width="18" height="18" aria-hidden="true"></span>Klub Europejski</a></li>
+          </ul>
+        </li>
+        <li class="has-dropdown">
+          <a href="#" aria-haspopup="true" aria-expanded="false">Rodzice <span class="nav-caret" aria-hidden="true">▾</span></a>
+          <ul class="dropdown dropdown-wide" role="menu">
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-informacje.png" srcset="grafiki-ai/nav-rodzice-informacje@2x.png 2x" alt="" width="18" height="18" aria-hidden="true"></span>Informacje dla rodziców</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-rada-rodzicow.png" srcset="grafiki-ai/nav-rodzice-rada-rodzicow@2x.png 2x" alt="" width="18" height="18" aria-hidden="true"></span>Rada Rodziców</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-kalendarz.png" srcset="grafiki-ai/nav-rodzice-kalendarz@2x.png 2x" alt="" width="18" height="18" aria-hidden="true"></span>Kalendarz roku szkolnego</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-zebrania.png" srcset="grafiki-ai/nav-rodzice-zebrania@2x.png 2x" alt="" width="18" height="18" aria-hidden="true"></span>Zebrania i konsultacje</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-stypendia.png" srcset="grafiki-ai/nav-rodzice-stypendia@2x.png 2x" alt="" width="18" height="18" aria-hidden="true"></span>Stypendia szkolne</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-zfss.png" srcset="grafiki-ai/nav-rodzice-zfss@2x.png 2x" alt="" width="18" height="18" aria-hidden="true"></span>ZFŚS</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-rekrutacja-0.png" srcset="grafiki-ai/nav-rodzice-rekrutacja-0@2x.png 2x" alt="" width="18" height="18" aria-hidden="true"></span>Rekrutacja — klasa 0</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-rekrutacja-1.png" srcset="grafiki-ai/nav-rodzice-rekrutacja-1@2x.png 2x" alt="" width="18" height="18" aria-hidden="true"></span>Rekrutacja — klasa I</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-jadlospis.png" srcset="grafiki-ai/nav-rodzice-jadlospis@2x.png 2x" alt="" width="18" height="18" aria-hidden="true"></span>Jadłospis / Stołówka</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-pedagog.png" srcset="grafiki-ai/nav-rodzice-pedagog@2x.png 2x" alt="" width="18" height="18" aria-hidden="true"></span>Pedagog szkolny</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-psycholog.png" srcset="grafiki-ai/nav-rodzice-psycholog@2x.png 2x" alt="" width="18" height="18" aria-hidden="true"></span>Psycholog szkolny</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-doradca.png" srcset="grafiki-ai/nav-rodzice-doradca@2x.png 2x" alt="" width="18" height="18" aria-hidden="true"></span>Doradca zawodowy</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-pielegnarka.png" srcset="grafiki-ai/nav-rodzice-pielegnarka@2x.png 2x" alt="" width="18" height="18" aria-hidden="true"></span>Pielęgniarka</a></li>
+          </ul>
+        </li>
+        <li><a href="#">Projekty</a></li>
+        <li><a href="#">Kontakt</a></li>
+      </ul>
+    </nav>
+    <div class="header-controls">
+      <div class="a11y-controls" aria-label="Narzędzia dostępności" role="group">
+        <button class="a11y-btn" aria-label="Zwiększ czcionkę">A+</button>
+        <button class="a11y-btn" aria-label="Zmniejsz czcionkę">A−</button>
+        <button class="a11y-btn" aria-label="Wysoki kontrast" title="Wysoki kontrast">◐</button>
+      </div>
+      <button class="nav-hamburger" id="nav-hamburger" aria-label="Otwórz menu" aria-expanded="false" aria-controls="mob-drawer">
+        <span class="hamburger-line"></span><span class="hamburger-line"></span><span class="hamburger-line"></span>
+      </button>
+      <a href="https://sp32sosnowiec.edupage.org" class="btn-edupage" target="_blank" rel="noopener noreferrer">E-Dziennik →</a>
+    </div>
+  </div>
+</header>
+
+<!-- MOBILE NAV -->
+<div class="mob-overlay" id="mob-overlay" aria-hidden="true"></div>
+<nav class="mob-drawer" id="mob-drawer" aria-label="Menu mobilne" aria-hidden="true">
+  <div class="mob-head">
+    <span class="mob-head-name">SP32 Sosnowiec</span>
+    <button class="mob-close" id="mob-close" aria-label="Zamknij menu">✕</button>
+  </div>
+  <div class="mob-body">
+    <a href="aktualnosci.html" class="mob-link"><img src="grafiki-ai/nav-mobile-aktualnosci.png" srcset="grafiki-ai/nav-mobile-aktualnosci@2x.png 2x" alt="" width="22" height="22" aria-hidden="true">Aktualności</a>
+    <a href="#" class="mob-link"><img src="grafiki-ai/nav-mobile-projekty.png" srcset="grafiki-ai/nav-mobile-projekty@2x.png 2x" alt="" width="22" height="22" aria-hidden="true">Projekty</a>
+    <a href="#" class="mob-link"><img src="grafiki-ai/nav-mobile-kontakt.png" srcset="grafiki-ai/nav-mobile-kontakt@2x.png 2x" alt="" width="22" height="22" aria-hidden="true">Kontakt</a>
+    <hr class="mob-divider">
+    <p class="mob-section-title">Nasza Szkoła</p>
+    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-nasza-szkola-historia.png" srcset="grafiki-ai/nav-nasza-szkola-historia@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Historia szkoły</a>
+    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-nasza-szkola-profil.png" srcset="grafiki-ai/nav-nasza-szkola-profil@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Profil szkoły</a>
+    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-nasza-szkola-dyrekcja.png" srcset="grafiki-ai/nav-nasza-szkola-dyrekcja@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Dyrekcja i kadra</a>
+    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-nasza-szkola-sukcesy.png" srcset="grafiki-ai/nav-nasza-szkola-sukcesy@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Sukcesy</a>
+    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-nasza-szkola-galeria.png" srcset="grafiki-ai/nav-nasza-szkola-galeria@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Galeria</a>
+  </div>
+</nav>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb-wrap">
+  <div class="container">
+    <nav class="breadcrumb" aria-label="Jesteś tutaj">
+      <a href="index.html">Strona główna</a>
+      <span class="breadcrumb-sep" aria-hidden="true">›</span>
+      <a href="aktualnosci.html">Aktualności</a>
+      <span class="breadcrumb-sep" aria-hidden="true">›</span>
+      <span class="breadcrumb-current" aria-current="page">Uroczyste zakończenie roku szkolnego 2025/2026</span>
+    </nav>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<main id="main-content">
+  <div class="article-wrap">
+    <div class="container">
+      <div class="article-layout">
+
+        <!-- ARTICLE MAIN -->
+        <article class="article-main">
+
+          <header class="article-header">
+            <div class="article-meta">
+              <span class="news-chip chip-szkolne">Szkolne</span>
+              <span class="article-meta-dot" aria-hidden="true"></span>
+              <time class="article-date" datetime="2026-06-27">27 czerwca 2026</time>
+              <span class="article-meta-dot" aria-hidden="true"></span>
+              <span class="article-reading-time">ok. 3 min czytania</span>
+            </div>
+            <h1 class="article-title">Uroczyste zakończenie roku szkolnego 2025/2026</h1>
+            <p class="article-lead">W piątek 27 czerwca pożegnaliśmy kończący się rok szkolny 2025/2026. Uroczystość zgromadziła uczniów, nauczycieli i rodziców na szkolnym boisku.</p>
+          </header>
+
+          <div class="article-hero" aria-hidden="true">ZDJĘCIE GŁÓWNE</div>
+          <p class="article-hero-caption">Uczniowie i nauczyciele podczas uroczystości zakończenia roku szkolnego. Fot. [autor zdjęcia]</p>
+
+          <div class="article-body">
+            <p>Rok szkolny 2025/2026 dobiegł końca. O godzinie 10:00 na boisku szkolnym zebrała się cała społeczność SP32 — uczniowie, nauczyciele, pracownicy szkoły oraz licznie przybyłi rodzice i dziadkowie.</p>
+
+            <h2>Podsumowanie roku</h2>
+            <p>W swoim przemówieniu <strong>pani dyrektor</strong> podsumowała mijający rok szkolny — podkreśliła zaangażowanie uczniów w projekty ogólnopolskie, wybitne wyniki sportowe oraz aktywność wolontariacką. Szkoła w tym roku świętuje również swoją <strong>90. rocznicę</strong>.</p>
+
+            <p>Uczniowie, którzy wyróżnili się szczególnymi osiągnięciami — w olimpiadach przedmiotowych, konkursach artystycznych i działalności wolontariackiej — otrzymali nagrody i dyplomy. Gratulujemy wszystkim laureatom!</p>
+
+            <h2>Szczególne wyróżnienia</h2>
+            <ul>
+              <li>Nagroda Dyrektora — wyróżnienie dla uczniów z najwyższą średnią</li>
+              <li>Puchar za wybitne osiągnięcia sportowe</li>
+              <li>Dyplom wolontariusza roku — Szkolne Koło Wolontariatu</li>
+              <li>Nagroda za aktywność w Szkolnym Klubie Europejskim</li>
+            </ul>
+
+            <div class="article-inline-img" aria-hidden="true">ZDJĘCIE — WRĘCZENIE NAGRÓD</div>
+            <p class="article-img-caption">Wręczenie nagród najlepszym uczniom roku szkolnego 2025/2026.</p>
+
+            <h2>Żegnamy ósmą klasę</h2>
+            <p>Szczególnym momentem było pożegnanie uczniów klas ósmych, którzy po ośmiu latach opuścili mury SP32. Absolwenci usłyszeli słowa podziękowania i otrzymali pamiątkowe dyplomy. Życzymy im powodzenia w szkołach ponadpodstawowych!</p>
+
+            <blockquote>
+              „Szkoła to nie tylko miejsce nauki — to przestrzeń, w której kształtujemy przyjaźnie, rozwijamy pasje i uczymy się, kim jesteśmy."<br><strong>— pani dyrektor</strong>
+            </blockquote>
+
+            <h2>Co przed nami?</h2>
+            <p>Rok szkolny 2026/2027 rozpoczniemy <strong>2 września 2026 r.</strong> Harmonogram tygodnia adaptacyjnego oraz lista podręczników zostanie opublikowana do końca lipca. Prosimy śledzić aktualności na tej stronie.</p>
+
+            <p>Wszystkim uczniom, rodzicom i nauczycielom życzymy <strong>udanych, słonecznych wakacji!</strong></p>
+          </div>
+
+          <div class="article-tags">
+            <span class="article-tags-label">Tagi:</span>
+            <a href="#" class="tag">zakończenie roku</a>
+            <a href="#" class="tag">wyróżnienia</a>
+            <a href="#" class="tag">klasy ósme</a>
+            <a href="#" class="tag">2025/2026</a>
+          </div>
+
+          <div class="article-share">
+            <span class="article-share-label">Udostępnij:</span>
+            <button class="share-btn" aria-label="Udostępnij na Facebook">Facebook</button>
+            <button class="share-btn" aria-label="Kopiuj link do artykułu">Kopiuj link</button>
+          </div>
+
+          <nav class="article-nav" aria-label="Poprzedni i następny artykuł">
+            <a href="artykul.html" class="article-nav-btn">
+              <span class="article-nav-label">← Wcześniej</span>
+              <span class="article-nav-title">Klasy IV w Kopalni Soli w Wieliczce</span>
+            </a>
+            <a href="artykul.html" class="article-nav-btn next">
+              <span class="article-nav-label">Później →</span>
+              <span class="article-nav-title">Wakacyjne kursy w świetlicy szkolnej — zapisy</span>
+            </a>
+          </nav>
+
+          <a href="aktualnosci.html" class="article-back">← Wróć do aktualności</a>
+
+        </article>
+
+        <!-- SIDEBAR -->
+        <aside class="article-sidebar" aria-label="Spis treści i informacje">
+          <div class="sidebar-widget">
+            <p class="sidebar-title">Spis treści</p>
+            <nav class="sidebar-toc" aria-label="Spis treści artykułu">
+              <a href="#" class="toc-link active">Podsumowanie roku</a>
+              <a href="#" class="toc-link">Szczególne wyróżnienia</a>
+              <a href="#" class="toc-link">Żegnamy ósmą klasę</a>
+              <a href="#" class="toc-link">Co przed nami?</a>
+            </nav>
+          </div>
+          <div class="sidebar-widget">
+            <p class="sidebar-title">Informacje</p>
+            <div class="sidebar-meta-row">
+              <div class="sidebar-meta-item">
+                <span class="sidebar-meta-label">Data</span>
+                <span class="sidebar-meta-val">27 czerwca 2026</span>
+              </div>
+              <div class="sidebar-meta-item">
+                <span class="sidebar-meta-label">Kategoria</span>
+                <span class="sidebar-meta-val">Szkolne</span>
+              </div>
+              <div class="sidebar-meta-item">
+                <span class="sidebar-meta-label">Czas czytania</span>
+                <span class="sidebar-meta-val">ok. 3 minuty</span>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- RELATED ARTICLES -->
+  <section class="related-section" aria-labelledby="related-heading">
+    <div class="container">
+      <div class="related-header">
+        <h2 class="related-title" id="related-heading">Podobne aktualności</h2>
+        <a href="aktualnosci.html" class="related-all">Wszystkie aktualności →</a>
+      </div>
+      <div class="related-grid">
+
+        <article class="related-card">
+          <div class="related-card-img" aria-hidden="true">ZDJĘCIE</div>
+          <div class="related-card-body">
+            <div class="related-card-meta">
+              <time class="related-card-date" datetime="2026-06-15">15 maja 2026</time>
+              <span class="news-chip chip-szkolne">Szkolne</span>
+            </div>
+            <a href="artykul.html" class="related-card-title">Klasy IV w Kopalni Soli w Wieliczce</a>
+          </div>
+        </article>
+
+        <article class="related-card">
+          <div class="related-card-img" aria-hidden="true">ZDJĘCIE</div>
+          <div class="related-card-body">
+            <div class="related-card-meta">
+              <time class="related-card-date" datetime="2026-04-10">10 kwietnia 2026</time>
+              <span class="news-chip chip-szkolne">Szkolne</span>
+            </div>
+            <a href="artykul.html" class="related-card-title">Rekrutacja do klasy I — wyniki i listy przyjętych</a>
+          </div>
+        </article>
+
+        <article class="related-card">
+          <div class="related-card-img" aria-hidden="true">ZDJĘCIE</div>
+          <div class="related-card-body">
+            <div class="related-card-meta">
+              <time class="related-card-date" datetime="2026-03-22">22 marca 2026</time>
+              <span class="news-chip chip-projekty">Projekty</span>
+            </div>
+            <a href="artykul.html" class="related-card-title">Projekt „Czytamy razem" — podsumowanie etapu</a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- FOOTER -->
+<footer class="site-footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-top">
+      <a href="index.html" class="footer-logo" aria-label="Szkoła Podstawowa nr 32 — strona główna">
+        <img src="grafiki-ai/tarcza-zielen.png" alt="" class="footer-logo-img" width="36" height="36" aria-hidden="true">
+        <div class="footer-school-name">Szkoła Podstawowa nr 32<br>im. L. Kruczkowskiego w Sosnowcu</div>
+      </a>
+      <div class="footer-ext">
+        <a href="https://sp32sosnowiec.edupage.org" class="footer-ext-link" target="_blank" rel="noopener">E-Dziennik ↗</a>
+        <a href="#" class="footer-ext-link">BIP ↗</a>
+        <a href="#" class="footer-ext-link">Facebook ↗</a>
+        <a href="https://www.gov.pl/web/edukacja" class="footer-ext-link" target="_blank" rel="noopener">MEN.gov.pl ↗</a>
+        <a href="https://www.sosnowiec.pl" class="footer-ext-link" target="_blank" rel="noopener">Sosnowiec.pl ↗</a>
+      </div>
+    </div>
+    <div class="footer-info">
+      <div class="footer-info-card">
+        <p class="footer-info-label">Adres</p>
+        <address>ul. [adres szkoły]<br>41-200 Sosnowiec<br>woj. śląskie</address>
+        <a href="https://maps.google.com" target="_blank" rel="noopener">Otwórz w Mapach →</a>
+      </div>
+      <div class="footer-info-card">
+        <p class="footer-info-label">Kontakt</p>
+        <p><a href="tel:+48XXXXXXXXX">+48 XX XXX XX XX</a></p>
+        <p><a href="mailto:sp32@sosnowiec.edu.pl">sp32@sosnowiec.edu.pl</a></p>
+        <p class="footer-note">Sekretariat: pon–pt 7:30–15:30</p>
+      </div>
+      <div class="footer-info-card">
+        <p class="footer-info-label">Godziny pracy</p>
+        <p>Szkoła: 7:00–17:00</p>
+        <p>Świetlica: 6:30–17:00</p>
+        <p class="footer-note">W dni nauki szkolnej</p>
+      </div>
+    </div>
+    <nav class="footer-nav" aria-label="Mapa strony">
+      <a href="aktualnosci.html" class="footer-chip">Aktualności</a>
+      <a href="#" class="footer-chip">Historia szkoły</a>
+      <a href="#" class="footer-chip">Galeria</a>
+      <a href="#" class="footer-chip">Projekty</a>
+      <a href="#" class="footer-chip">Rada Rodziców</a>
+      <a href="#" class="footer-chip">Rekrutacja</a>
+      <a href="#" class="footer-chip">Jadłospis</a>
+      <a href="#" class="footer-chip">Pedagog</a>
+      <a href="#" class="footer-chip">Psycholog</a>
+      <a href="#" class="footer-chip">Kontakt</a>
+    </nav>
+    <div class="footer-bottom">
+      <p class="footer-legal">© 2026 Szkoła Podstawowa nr 32 im. L. Kruczkowskiego w Sosnowcu</p>
+      <a href="#" class="footer-a11y-link">Deklaracja Dostępności WCAG 2.1 AA →</a>
+    </div>
+  </div>
+</footer>
+
+<button id="back-top" aria-label="Wróć na górę strony" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+  const bar = document.getElementById('scroll-bar');
+  const btn = document.getElementById('back-top');
+  window.addEventListener('scroll', () => {
+    const pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+    bar.style.width = Math.min(pct, 100) + '%';
+    btn.classList.toggle('visible', window.scrollY > 400);
+    /* Highlight active TOC item on scroll */
+    const headings = document.querySelectorAll('.article-body h2');
+    const links = document.querySelectorAll('.toc-link');
+    let current = 0;
+    headings.forEach((h, i) => { if (window.scrollY + 120 > h.offsetTop) current = i; });
+    links.forEach((l, i) => l.classList.toggle('active', i === current));
+  }, { passive: true });
+  document.querySelectorAll('.has-dropdown > a').forEach(toggle => {
+    toggle.addEventListener('click', e => {
+      e.preventDefault();
+      const li = toggle.parentElement;
+      const isOpen = li.classList.contains('open');
+      document.querySelectorAll('.has-dropdown.open').forEach(el => { el.classList.remove('open'); el.querySelector('a').setAttribute('aria-expanded','false'); });
+      if (!isOpen) { li.classList.add('open'); toggle.setAttribute('aria-expanded','true'); }
+    });
+  });
+  document.addEventListener('click', e => { if (!e.target.closest('.has-dropdown')) document.querySelectorAll('.has-dropdown.open').forEach(el => { el.classList.remove('open'); el.querySelector('a').setAttribute('aria-expanded','false'); }); });
+  document.addEventListener('keydown', e => { if (e.key==='Escape') document.querySelectorAll('.has-dropdown.open').forEach(el => { el.classList.remove('open'); el.querySelector('a').setAttribute('aria-expanded','false'); }); });
+  const hamburger=document.getElementById('nav-hamburger'), overlay=document.getElementById('mob-overlay'), drawer=document.getElementById('mob-drawer'), mobClose=document.getElementById('mob-close');
+  function openMob(){hamburger.setAttribute('aria-expanded','true');overlay.classList.add('open');overlay.removeAttribute('aria-hidden');drawer.classList.add('open');drawer.removeAttribute('aria-hidden');document.body.style.overflow='hidden';mobClose.focus();}
+  function closeMob(){hamburger.setAttribute('aria-expanded','false');overlay.classList.remove('open');overlay.setAttribute('aria-hidden','true');drawer.classList.remove('open');drawer.setAttribute('aria-hidden','true');document.body.style.overflow='';hamburger.focus();}
+  hamburger?.addEventListener('click',openMob);overlay?.addEventListener('click',closeMob);mobClose?.addEventListener('click',closeMob);drawer?.addEventListener('keydown',e=>{if(e.key==='Escape')closeMob();});
+  document.querySelector('.share-btn[aria-label*="Kopiuj"]')?.addEventListener('click', () => {
+    navigator.clipboard.writeText(location.href).then(() => { const btn = document.querySelector('.share-btn[aria-label*="Kopiuj"]'); btn.textContent = 'Skopiowano!'; setTimeout(() => btn.textContent = 'Kopiuj link', 2000); });
+  });
+</script>
