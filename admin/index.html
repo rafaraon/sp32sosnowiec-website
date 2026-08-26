@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SP32 Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" rel="stylesheet">
+<style>
+/* ── TOKENS (spójne ze stroną) ── */
+:root {
+  --cp:#1F4B3C; --cp-d:#12251E; --cp-l:#2D6B57;
+  --ca:#D4756A; --ca-d:#BE5D52;
+  --clv:#D9D0EE; --clv-l:#EDE8F8;
+  --bg:#F0EEF8; --sf:#FFFFFF;
+  --tx:#12251E; --tx-m:#4A6358;
+  --bd:#D4CDE8;
+  --font-d:'Bricolage Grotesque',system-ui,sans-serif;
+  --font-b:'Atkinson Hyperlegible',system-ui,sans-serif;
+  --r:12px; --r-s:8px;
+  --sh:0 2px 12px rgba(31,75,60,.09);
+  --sh-m:0 4px 24px rgba(31,75,60,.14);
+  --tr:.18s ease;
+  --danger:#DC2626; --success:#16A34A; --warning:#CA8A04;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0D1A14; --sf:#15261D; --tx:#DFF0E8; --tx-m:#7BA890;
+  --bd:#253D30; --clv:#1E1A35; --clv-l:#18152A;
+  --sh:0 2px 12px rgba(0,0,0,.3); --sh-m:0 4px 24px rgba(0,0,0,.4);
+}}
+:root[data-theme="dark"]{
+  --bg:#0D1A14; --sf:#15261D; --tx:#DFF0E8; --tx-m:#7BA890;
+  --bd:#253D30; --clv:#1E1A35; --clv-l:#18152A;
+  --sh:0 2px 12px rgba(0,0,0,.3); --sh-m:0 4px 24px rgba(0,0,0,.4);
+}
+
+/* ── RESET ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-b);background:var(--bg);color:var(--tx);line-height:1.6;min-height:100dvh}
+a{text-decoration:none;color:inherit}
+img{max-width:100%;display:block}
+ul{list-style:none}
+button{cursor:pointer;font-family:inherit;border:none;background:none}
+input,select,textarea{font-family:inherit;font-size:1rem;color:var(--tx)}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.5rem 1.1rem;border-radius:var(--r-s);font-family:var(--font-d);font-weight:600;font-size:.875rem;transition:all var(--tr);white-space:nowrap}
+.btn-primary{background:var(--cp);color:#fff}
+.btn-primary:hover{background:var(--cp-l)}
+.btn-ghost{border:1.5px solid var(--bd);color:var(--tx-m)}
+.btn-ghost:hover{border-color:var(--cp);color:var(--cp)}
+.btn-danger{color:var(--danger);border-color:var(--danger)}
+.btn-danger:hover{background:rgba(220,38,38,.08)}
+.btn-sm{padding:.35rem .75rem;font-size:.8rem}
+.btn-full{width:100%;justify-content:center}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* ── ADMIN HEADER ── */
+.admin-header{background:var(--cp);position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(0,0,0,.2)}
+.admin-header-inner{max-width:1280px;margin-inline:auto;padding:.75rem 1.5rem;display:flex;align-items:center;gap:1rem}
+.admin-logo{display:flex;align-items:baseline;gap:.4rem;flex-shrink:0}
+.logo-mark{font-family:var(--font-d);font-weight:800;font-size:1.15rem;color:#fff;letter-spacing:-.02em}
+.logo-sub{font-family:var(--font-d);font-size:.75rem;font-weight:600;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.08em}
+.admin-tabs{display:flex;gap:.25rem;flex:1;margin-inline:1rem}
+.tab-btn{padding:.45rem 1rem;border-radius:20px;font-family:var(--font-d);font-weight:600;font-size:.85rem;color:rgba(255,255,255,.65);transition:all var(--tr)}
+.tab-btn:hover{color:#fff;background:rgba(255,255,255,.1)}
+.tab-btn.active{color:#fff;background:rgba(255,255,255,.18)}
+.admin-header-actions{display:flex;gap:.5rem;margin-left:auto;flex-shrink:0}
+.admin-header-actions .btn-ghost{border-color:rgba(255,255,255,.3);color:rgba(255,255,255,.75)}
+.admin-header-actions .btn-ghost:hover{border-color:#fff;color:#fff}
+
+/* ── MAIN ── */
+.admin-main{max-width:1280px;margin-inline:auto;padding:2rem 1.5rem}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+/* ── PANEL HEADER ── */
+.panel-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap}
+.panel-header h2{font-family:var(--font-d);font-size:1.4rem;font-weight:700;flex:1}
+
+/* ── STATUS FILTER PILLS ── */
+.status-filter{display:flex;gap:.3rem;flex-wrap:wrap}
+.filter-pill{padding:.3rem .8rem;border:1.5px solid var(--bd);border-radius:20px;font-family:var(--font-d);font-size:.78rem;font-weight:600;color:var(--tx-m);transition:all var(--tr)}
+.filter-pill:hover{border-color:var(--cp);color:var(--cp)}
+.filter-pill.active{background:var(--cp);color:#fff;border-color:var(--cp)}
+
+/* ── TABLE ── */
+.table-wrap{overflow-x:auto;border-radius:var(--r);border:1px solid var(--bd);background:var(--sf);box-shadow:var(--sh)}
+.data-table{width:100%;border-collapse:collapse}
+.data-table th{font-family:var(--font-d);font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--tx-m);padding:.75rem 1rem;text-align:left;border-bottom:1px solid var(--bd);background:var(--clv-l)}
+.data-table td{padding:.85rem 1rem;border-bottom:1px solid var(--bd);font-size:.9rem;vertical-align:middle}
+.data-table tr:last-child td{border-bottom:none}
+.data-table tbody tr:hover{background:var(--clv-l)}
+.empty-row{text-align:center;color:var(--tx-m);padding:2rem;font-style:italic}
+.td-title{font-family:var(--font-d);font-weight:600;max-width:300px}
+.td-title small{display:block;font-weight:400;color:var(--tx-m);font-size:.8rem;margin-top:.1rem;font-family:var(--font-b)}
+.td-actions{display:flex;gap:.4rem;white-space:nowrap}
+
+/* ── STATUS BADGES ── */
+.badge{display:inline-flex;align-items:center;gap:.3rem;padding:.2rem .55rem;border-radius:20px;font-family:var(--font-d);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.badge::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.7}
+.badge-published{background:rgba(22,163,74,.12);color:var(--success)}
+.badge-draft{background:rgba(107,114,128,.12);color:var(--tx-m)}
+.badge-szkolne{background:rgba(31,75,60,.1);color:var(--cp)}
+.badge-projekty{background:rgba(155,140,196,.2);color:#5B4F9A}
+.badge-ogloszenia{background:rgba(212,117,106,.15);color:var(--ca-d)}
+
+/* ── EDITOR LAYOUT ── */
+.editor-layout{display:grid;grid-template-columns:1fr 300px;gap:1.5rem;align-items:start}
+@media(max-width:900px){.editor-layout{grid-template-columns:1fr}}
+.editor-main{display:flex;flex-direction:column;gap:1rem}
+.editor-side{display:flex;flex-direction:column;gap:1rem}
+
+/* ── SIDE CARDS ── */
+.side-card{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:1.25rem;box-shadow:var(--sh)}
+.side-card h3{font-family:var(--font-d);font-size:.85rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--tx-m);margin-bottom:1rem}
+
+/* ── FORM FIELDS ── */
+.field-group{display:flex;flex-direction:column;gap:.35rem}
+.field-group label{font-family:var(--font-d);font-size:.8rem;font-weight:600;color:var(--tx-m)}
+.field-group input,.field-group select,.field-group textarea{
+  padding:.55rem .75rem;border:1.5px solid var(--bd);border-radius:var(--r-s);
+  background:var(--bg);color:var(--tx);transition:border-color var(--tr);
+  resize:vertical
+}
+.field-group input:focus,.field-group select:focus,.field-group textarea:focus{
+  outline:none;border-color:var(--cp);background:var(--sf)
+}
+.input-lg{font-size:1.05rem;padding:.65rem .85rem}
+.checkbox-label{display:flex;align-items:center;gap:.5rem;font-family:var(--font-d);font-size:.85rem;font-weight:600;color:var(--tx);cursor:pointer}
+.checkbox-label input[type="checkbox"]{width:16px;height:16px;accent-color:var(--cp)}
+.form-actions{display:flex;flex-direction:column;gap:.5rem}
+
+/* ── QUILL OVERRIDE ── */
+.ql-toolbar.ql-snow{border:1.5px solid var(--bd)!important;border-radius:var(--r-s) var(--r-s) 0 0!important;background:var(--sf)!important}
+.ql-container.ql-snow{border:1.5px solid var(--bd)!important;border-top:none!important;border-radius:0 0 var(--r-s) var(--r-s)!important;background:var(--sf)!important;font-family:var(--font-b)!important;font-size:1rem!important;min-height:280px}
+.ql-editor{min-height:260px;line-height:1.7;color:var(--tx)!important}
+.ql-editor.ql-blank::before{color:var(--tx-m)!important;font-style:italic}
+.ql-snow .ql-stroke{stroke:var(--tx-m)!important}
+.ql-snow .ql-fill{fill:var(--tx-m)!important}
+.ql-snow .ql-picker{color:var(--tx-m)!important}
+.ql-snow.ql-toolbar button:hover .ql-stroke,.ql-snow .ql-toolbar button:hover .ql-stroke{stroke:var(--cp)!important}
+.ql-snow.ql-toolbar button.ql-active .ql-stroke{stroke:var(--cp)!important}
+
+/* ── IMAGE UPLOAD ZONE ── */
+.img-upload-zone{border:2px dashed var(--bd);border-radius:var(--r-s);padding:1.25rem;text-align:center;cursor:pointer;transition:all var(--tr);background:var(--bg)}
+.img-upload-zone:hover,.img-upload-zone.drag-over{border-color:var(--cp);background:rgba(31,75,60,.05)}
+.img-upload-zone span{display:block;font-family:var(--font-d);font-size:.85rem;color:var(--tx-m)}
+.upload-hint{font-size:.75rem!important;margin-top:.25rem;opacity:.7}
+.img-upload-zone img{width:100%;border-radius:var(--r-s);margin-bottom:.5rem;max-height:200px;object-fit:cover}
+.img-upload-zone[data-has-image] span{display:none}
+.upload-loading{display:flex;align-items:center;justify-content:center;gap:.5rem;color:var(--tx-m);font-size:.85rem}
+
+/* ── GALLERY THUMBS ── */
+.gallery-thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:.5rem;margin-top:1rem}
+.gallery-thumb{position:relative;aspect-ratio:1;border-radius:var(--r-s);overflow:hidden;background:var(--bd)}
+.gallery-thumb img{width:100%;height:100%;object-fit:cover}
+.gallery-thumb-del{position:absolute;top:.25rem;right:.25rem;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.75rem;opacity:0;transition:opacity var(--tr)}
+.gallery-thumb:hover .gallery-thumb-del{opacity:1}
+.gallery-editor-layout{display:grid;grid-template-columns:350px 1fr;gap:1.5rem;align-items:start}
+@media(max-width:900px){.gallery-editor-layout{grid-template-columns:1fr}}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:1000;padding:1rem}
+.modal-overlay[hidden]{display:none}
+.modal-box{background:var(--sf);border-radius:var(--r);padding:2rem;width:100%;max-width:400px;box-shadow:var(--sh-m)}
+.modal-logo{font-family:var(--font-d);font-weight:800;font-size:2rem;color:var(--cp);margin-bottom:.5rem}
+.modal-box h1{font-family:var(--font-d);font-size:1.3rem;font-weight:700;margin-bottom:.25rem}
+.modal-box p{color:var(--tx-m);font-size:.9rem;margin-bottom:1.25rem}
+.error-msg{background:rgba(220,38,38,.1);color:var(--danger);padding:.5rem .75rem;border-radius:var(--r-s);font-size:.85rem;margin-bottom:.75rem}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--cp-d);color:#fff;padding:.75rem 1.25rem;border-radius:var(--r-s);font-family:var(--font-d);font-size:.875rem;font-weight:600;box-shadow:var(--sh-m);z-index:2000;max-width:360px;transition:all .2s}
+.toast[hidden]{opacity:0;transform:translateY(8px)}
+.toast.error{background:var(--danger)}
+.toast.success{background:var(--success)}
+
+/* ── SPINNER ── */
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner{width:18px;height:18px;border:2px solid var(--bd);border-top-color:var(--cp);border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
+</style>
+</head>
+<body>
+
+<!-- KEY MODAL -->
+<div id="keyModal" class="modal-overlay" role="dialog" aria-labelledby="modalTitle" aria-modal="true">
+  <div class="modal-box">
+    <div class="modal-logo">SP32</div>
+    <h1 id="modalTitle">Panel Admina</h1>
+    <p>Wprowadź klucz dostępu, żeby zarządzać treścią strony.</p>
+    <form id="keyForm">
+      <div class="field-group" style="margin-bottom:.75rem">
+        <label for="keyInput">Klucz dostępu</label>
+        <input type="password" id="keyInput" autocomplete="current-password" required placeholder="••••••••••••••">
+      </div>
+      <div id="keyError" class="error-msg" hidden></div>
+      <button type="submit" class="btn btn-primary btn-full" id="keySubmit">Zaloguj się</button>
+    </form>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" hidden>
+
+  <!-- Header -->
+  <header class="admin-header">
+    <div class="admin-header-inner">
+      <div class="admin-logo">
+        <span class="logo-mark">SP32</span>
+        <span class="logo-sub">Admin</span>
+      </div>
+      <nav class="admin-tabs" role="tablist">
+        <button class="tab-btn active" data-tab="articles" role="tab" aria-selected="true">📰 Artykuły</button>
+        <button class="tab-btn" data-tab="galleries" role="tab" aria-selected="false">🖼 Galerie</button>
+      </nav>
+      <div class="admin-header-actions">
+        <a href="/" class="btn btn-ghost btn-sm">← Strona</a>
+        <button class="btn btn-ghost btn-sm" id="logoutBtn">Wyloguj</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="admin-main">
+
+    <!-- ARTICLES TAB -->
+    <div id="articlesTab" class="tab-panel active" role="tabpanel">
+
+      <!-- Articles List -->
+      <div id="articlesList">
+        <div class="panel-header">
+          <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;flex:1">
+            <h2>Artykuły</h2>
+            <div class="status-filter" id="articleStatusFilter">
+              <button class="filter-pill active" data-status="all">Wszystkie</button>
+              <button class="filter-pill" data-status="published">Opublikowane</button>
+              <button class="filter-pill" data-status="draft">Szkice</button>
+            </div>
+          </div>
+          <button class="btn btn-primary" id="newArticleBtn">+ Nowy artykuł</button>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Tytuł</th>
+                <th>Kategoria</th>
+                <th>Status</th>
+                <th>Data</th>
+                <th>Akcje</th>
+              </tr>
+            </thead>
+            <tbody id="articlesBody">
+              <tr><td colspan="5" class="empty-row">Ładowanie...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Article Form -->
+      <div id="articleForm" hidden>
+        <div class="panel-header">
+          <button class="btn btn-ghost btn-sm" id="backToArticles">← Lista artykułów</button>
+          <h2 id="articleFormTitle">Nowy artykuł</h2>
+        </div>
+        <form id="articleFormEl" class="editor-layout">
+          <div class="editor-main">
+            <div class="field-group">
+              <label for="artTitle">Tytuł artykułu *</label>
+              <input type="text" id="artTitle" required placeholder="Wpisz tytuł..." class="input-lg">
+            </div>
+            <div class="field-group">
+              <label for="artLead">Lead (zajawka — 1–2 zdania)</label>
+              <textarea id="artLead" rows="2" placeholder="Krótki opis zachęcający do czytania..."></textarea>
+            </div>
+            <div class="field-group">
+              <label>Treść artykułu</label>
+              <div id="quillEditor"></div>
+            </div>
+          </div>
+          <aside class="editor-side">
+            <div class="side-card">
+              <h3>Publikacja</h3>
+              <div class="field-group" style="margin-bottom:.75rem">
+                <label for="artStatus">Status</label>
+                <select id="artStatus">
+                  <option value="draft">Szkic (niewidoczny na stronie)</option>
+                  <option value="published">Opublikowany</option>
+                </select>
+              </div>
+              <div class="field-group" style="margin-bottom:.75rem">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="artFeatured">
+                  Wyróżniony (na górze listy)
+                </label>
+              </div>
+              <div class="field-group" style="margin-bottom:.75rem">
+                <label for="artCategory">Kategoria</label>
+                <select id="artCategory">
+                  <option value="szkolne">Szkolne</option>
+                  <option value="projekty">Projekty</option>
+                  <option value="ogloszenia">Ogłoszenia</option>
+                </select>
+              </div>
+              <div class="field-group" style="margin-bottom:.75rem">
+                <label for="artAuthor">Autor</label>
+                <input type="text" id="artAuthor" value="Redakcja">
+              </div>
+              <div class="field-group">
+                <label for="artTags">Tagi (po przecinku)</label>
+                <input type="text" id="artTags" placeholder="np. sport, konkurs, wycieczka">
+              </div>
+            </div>
+            <div class="side-card">
+              <h3>Zdjęcie główne</h3>
+              <div class="img-upload-zone" id="coverUploadZone" tabindex="0" role="button" aria-label="Wgraj zdjęcie główne">
+                <img id="coverPreviewImg" alt="Podgląd zdjęcia" hidden>
+                <span>Kliknij lub przeciągnij zdjęcie</span>
+                <span class="upload-hint">JPG, PNG, WebP · maks. 10 MB</span>
+                <input type="file" id="coverFile" accept="image/*" hidden>
+              </div>
+              <input type="hidden" id="artCoverUrl">
+              <button type="button" class="btn btn-ghost btn-sm btn-danger" id="removeCoverBtn" hidden style="margin-top:.5rem;width:100%;justify-content:center">Usuń zdjęcie</button>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary btn-full" id="saveArticleBtn">Zapisz</button>
+              <button type="button" class="btn btn-ghost btn-full" id="cancelArticleBtn">Anuluj</button>
+            </div>
+          </aside>
+        </form>
+      </div>
+
+    </div>
+
+    <!-- GALLERIES TAB -->
+    <div id="galleriesTab" class="tab-panel" role="tabpanel">
+
+      <!-- Galleries List -->
+      <div id="galleriesList">
+        <div class="panel-header">
+          <h2>Galerie</h2>
+          <button class="btn btn-primary" id="newGalleryBtn">+ Nowa galeria</button>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Tytuł</th>
+                <th>Zdjęcia</th>
+                <th>Status</th>
+                <th>Data</th>
+                <th>Akcje</th>
+              </tr>
+            </thead>
+            <tbody id="galleriesBody">
+              <tr><td colspan="5" class="empty-row">Ładowanie...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Gallery Form -->
+      <div id="galleryForm" hidden>
+        <div class="panel-header">
+          <button class="btn btn-ghost btn-sm" id="backToGalleries">← Lista galerii</button>
+          <h2 id="galleryFormTitle">Nowa galeria</h2>
+        </div>
+        <div class="gallery-editor-layout">
+          <div class="side-card">
+            <form id="galleryFormEl">
+              <div class="field-group" style="margin-bottom:.75rem">
+                <label for="galTitle">Tytuł galerii *</label>
+                <input type="text" id="galTitle" required placeholder="np. Dzień Ziemi 2024" class="input-lg">
+              </div>
+              <div class="field-group" style="margin-bottom:.75rem">
+                <label for="galDesc">Opis (opcjonalnie)</label>
+                <textarea id="galDesc" rows="3" placeholder="Krótki opis galerii..."></textarea>
+              </div>
+              <div class="field-group" style="margin-bottom:1.25rem">
+                <label for="galStatus">Status</label>
+                <select id="galStatus">
+                  <option value="draft">Szkic</option>
+                  <option value="published">Opublikowana</option>
+                </select>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-full">Zapisz galerię</button>
+                <button type="button" class="btn btn-ghost btn-full" id="cancelGalleryBtn">Anuluj</button>
+              </div>
+            </form>
+          </div>
+          <div id="galleryImagesPanel" hidden>
+            <div class="side-card">
+              <h3>Zdjęcia w galerii</h3>
+              <div class="img-upload-zone" id="galleryImgZone" tabindex="0" role="button" aria-label="Wgraj zdjęcia do galerii">
+                <span>Kliknij lub przeciągnij zdjęcia</span>
+                <span class="upload-hint">Możesz wybrać wiele plików naraz</span>
+                <input type="file" id="galleryImageFiles" accept="image/*" multiple hidden>
+              </div>
+              <div id="galleryImagesGrid" class="gallery-thumbs"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="toast" role="alert" aria-live="polite" hidden></div>
+
+<script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js"></script>
+<script>
+/* ── STATE ── */
+const S = {
+  key: sessionStorage.getItem('sp32AdminKey') || '',
+  editingArticleId: null,
+  editingGalleryId: null,
+  articleStatusFilter: 'all',
+  quill: null,
+};
+
+/* ── API ── */
+const api = {
+  headers(json = false) {
+    const h = { 'X-Admin-Key': S.key };
+    if (json) h['Content-Type'] = 'application/json';
+    return h;
+  },
+  async get(path) {
+    const r = await fetch(path, { headers: this.headers() });
+    return r.json();
+  },
+  async post(path, data) {
+    const r = await fetch(path, { method: 'POST', headers: this.headers(true), body: JSON.stringify(data) });
+    return r.json();
+  },
+  async put(path, data) {
+    const r = await fetch(path, { method: 'PUT', headers: this.headers(true), body: JSON.stringify(data) });
+    return r.json();
+  },
+  async del(path) {
+    const r = await fetch(path, { method: 'DELETE', headers: this.headers() });
+    return r.json();
+  },
+  async upload(file) {
+    const fd = new FormData();
+    fd.append('file', file);
+    const r = await fetch('/api/media/upload', { method: 'POST', headers: { 'X-Admin-Key': S.key }, body: fd });
+    return r.json();
+  },
+};
+
+/* ── TOAST ── */
+let toastTimer;
+function toast(msg, type = '') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast' + (type ? ` ${type}` : '');
+  el.hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.hidden = true; }, 3500);
+}
+
+/* ── FORMAT DATE ── */
+function fmtDate(iso) {
+  if (!iso) return '—';
+  return new Date(iso).toLocaleDateString('pl-PL', { day: '2-digit', month: '2-digit', year: 'numeric' });
+}
+
+/* ── CATEGORY BADGE ── */
+const catLabel = { szkolne: 'Szkolne', projekty: 'Projekty', ogloszenia: 'Ogłoszenia' };
+function categoryBadge(cat) {
+  return `<span class="badge badge-${cat}">${catLabel[cat] || cat}</span>`;
+}
+function statusBadge(status) {
+  return `<span class="badge badge-${status}">${status === 'published' ? 'Opublikowany' : 'Szkic'}</span>`;
+}
+
+/* ══════════════════════════════════
+   AUTH
+══════════════════════════════════ */
+async function testKey(key) {
+  try {
+    const r = await fetch('/api/articles?status=all&limit=1', { headers: { 'X-Admin-Key': key } });
+    return r.ok;
+  } catch { return false; }
+}
+
+document.getElementById('keyForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const key = document.getElementById('keyInput').value.trim();
+  const btn = document.getElementById('keySubmit');
+  const errEl = document.getElementById('keyError');
+  btn.disabled = true;
+  btn.textContent = 'Sprawdzam...';
+  errEl.hidden = true;
+
+  const ok = await testKey(key);
+  if (ok) {
+    S.key = key;
+    sessionStorage.setItem('sp32AdminKey', key);
+    document.getElementById('keyModal').hidden = true;
+    document.getElementById('app').hidden = false;
+    initApp();
+  } else {
+    errEl.textContent = 'Nieprawidłowy klucz dostępu.';
+    errEl.hidden = false;
+    btn.disabled = false;
+    btn.textContent = 'Zaloguj się';
+  }
+});
+
+document.getElementById('logoutBtn').addEventListener('click', () => {
+  sessionStorage.removeItem('sp32AdminKey');
+  S.key = '';
+  document.getElementById('app').hidden = true;
+  document.getElementById('keyModal').hidden = false;
+  document.getElementById('keyInput').value = '';
+});
+
+/* ══════════════════════════════════
+   TABS
+══════════════════════════════════ */
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const tab = btn.dataset.tab;
+    document.querySelectorAll('.tab-btn').forEach(b => {
+      b.classList.toggle('active', b === btn);
+      b.setAttribute('aria-selected', b === btn ? 'true' : 'false');
+    });
+    document.getElementById('articlesTab').classList.toggle('active', tab === 'articles');
+    document.getElementById('galleriesTab').classList.toggle('active', tab === 'galleries');
+    if (tab === 'galleries') loadGalleries();
+  });
+});
+
+/* ══════════════════════════════════
+   ARTICLES
+══════════════════════════════════ */
+async function loadArticles() {
+  const status = S.articleStatusFilter;
+  const q = status === 'all' ? 'status=all' : `status=${status}`;
+  const data = await api.get(`/api/articles?${q}&limit=100`);
+  renderArticlesTable(data.articles || []);
+}
+
+function renderArticlesTable(articles) {
+  const body = document.getElementById('articlesBody');
+  if (!articles.length) {
+    body.innerHTML = '<tr><td colspan="5" class="empty-row">Brak artykułów.</td></tr>';
+    return;
+  }
+  body.innerHTML = articles.map(a => `
+    <tr>
+      <td class="td-title">
+        ${a.title}
+        ${a.featured ? '<small>⭐ Wyróżniony</small>' : ''}
+      </td>
+      <td>${categoryBadge(a.category)}</td>
+      <td>${statusBadge(a.status)}</td>
+      <td>${fmtDate(a.published_at || a.created_at)}</td>
+      <td class="td-actions">
+        <button class="btn btn-ghost btn-sm" onclick="editArticle(${a.id})">Edytuj</button>
+        <button class="btn btn-ghost btn-sm btn-danger" onclick="deleteArticle(${a.id}, '${a.title.replace(/'/g, "\\'")}')">Usuń</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+/* Status filter pills */
+document.getElementById('articleStatusFilter').addEventListener('click', e => {
+  const pill = e.target.closest('.filter-pill');
+  if (!pill) return;
+  document.querySelectorAll('#articleStatusFilter .filter-pill').forEach(p => p.classList.remove('active'));
+  pill.classList.add('active');
+  S.articleStatusFilter = pill.dataset.status;
+  loadArticles();
+});
+
+/* New article */
+document.getElementById('newArticleBtn').addEventListener('click', () => showArticleForm());
+document.getElementById('backToArticles').addEventListener('click', () => closeArticleForm());
+document.getElementById('cancelArticleBtn').addEventListener('click', () => closeArticleForm());
+
+function showArticleForm(article = null) {
+  S.editingArticleId = article?.id || null;
+  document.getElementById('articleFormTitle').textContent = article ? 'Edytuj artykuł' : 'Nowy artykuł';
+  document.getElementById('articlesList').hidden = true;
+  document.getElementById('articleForm').hidden = false;
+
+  // Populate or reset fields
+  document.getElementById('artTitle').value   = article?.title   || '';
+  document.getElementById('artLead').value    = article?.lead    || '';
+  document.getElementById('artAuthor').value  = article?.author  || 'Redakcja';
+  document.getElementById('artTags').value    = article?.tags    || '';
+  document.getElementById('artStatus').value  = article?.status  || 'draft';
+  document.getElementById('artCategory').value = article?.category || 'szkolne';
+  document.getElementById('artFeatured').checked = !!article?.featured;
+  document.getElementById('artCoverUrl').value = article?.cover_url || '';
+  setCoverPreview(article?.cover_url || null);
+
+  // Quill init / set content
+  if (!S.quill) {
+    S.quill = new Quill('#quillEditor', {
+      theme: 'snow',
+      placeholder: 'Napisz treść artykułu...',
+      modules: {
+        toolbar: [
+          [{ header: [2, 3, false] }],
+          ['bold', 'italic', 'underline'],
+          [{ list: 'ordered' }, { list: 'bullet' }],
+          ['blockquote', 'link'],
+          ['clean']
+        ]
+      }
+    });
+  }
+  if (article?.body) {
+    S.quill.clipboard.dangerouslyPasteHTML(article.body);
+  } else {
+    S.quill.setContents([]);
+  }
+
+  document.getElementById('artTitle').focus();
+}
+
+function closeArticleForm() {
+  document.getElementById('articleForm').hidden = true;
+  document.getElementById('articlesList').hidden = false;
+  S.editingArticleId = null;
+  loadArticles();
+}
+
+async function editArticle(id) {
+  const data = await api.get(`/api/articles/${id}`);
+  showArticleForm(data);
+}
+
+async function deleteArticle(id, title) {
+  if (!confirm(`Usunąć artykuł „${title}"?\n\nTej operacji nie można cofnąć.`)) return;
+  const r = await api.del(`/api/articles/${id}`);
+  if (r.ok) { toast('Artykuł usunięty.', 'success'); loadArticles(); }
+  else toast('Błąd podczas usuwania.', 'error');
+}
+
+document.getElementById('articleFormEl').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = document.getElementById('saveArticleBtn');
+  btn.disabled = true;
+  btn.textContent = 'Zapisuję...';
+
+  const payload = {
+    title:        document.getElementById('artTitle').value.trim(),
+    lead:         document.getElementById('artLead').value.trim() || null,
+    body:         S.quill ? S.quill.root.innerHTML : null,
+    author:       document.getElementById('artAuthor').value.trim() || 'Redakcja',
+    tags:         document.getElementById('artTags').value.trim() || null,
+    status:       document.getElementById('artStatus').value,
+    category:     document.getElementById('artCategory').value,
+    featured:     document.getElementById('artFeatured').checked,
+    cover_url:    document.getElementById('artCoverUrl').value || null,
+  };
+
+  try {
+    let r;
+    if (S.editingArticleId) {
+      r = await api.put(`/api/articles/${S.editingArticleId}`, payload);
+    } else {
+      r = await api.post('/api/articles', payload);
+    }
+    if (r.error) { toast(r.error, 'error'); }
+    else { toast('Artykuł zapisany!', 'success'); closeArticleForm(); }
+  } catch (err) {
+    toast('Błąd połączenia.', 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Zapisz';
+  }
+});
+
+/* ── Cover image upload ── */
+const coverZone = document.getElementById('coverUploadZone');
+const coverFileInput = document.getElementById('coverFile');
+
+coverZone.addEventListener('click', (e) => {
+  if (e.target === document.getElementById('removeCoverBtn')) return;
+  coverFileInput.click();
+});
+coverZone.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') coverFileInput.click(); });
+coverFileInput.addEventListener('change', () => { if (coverFileInput.files[0]) uploadCover(coverFileInput.files[0]); });
+
+coverZone.addEventListener('dragover', e => { e.preventDefault(); coverZone.classList.add('drag-over'); });
+coverZone.addEventListener('dragleave', () => coverZone.classList.remove('drag-over'));
+coverZone.addEventListener('drop', e => {
+  e.preventDefault();
+  coverZone.classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file?.type.startsWith('image/')) uploadCover(file);
+});
+
+document.getElementById('removeCoverBtn').addEventListener('click', () => {
+  document.getElementById('artCoverUrl').value = '';
+  setCoverPreview(null);
+});
+
+async function uploadCover(file) {
+  const zone = document.getElementById('coverUploadZone');
+  zone.innerHTML = '<div class="upload-loading"><span class="spinner"></span> Wgrywam...</div>';
+
+  try {
+    const r = await api.upload(file);
+    if (r.url) {
+      document.getElementById('artCoverUrl').value = r.url;
+      setCoverPreview(r.url);
+      toast('Zdjęcie wgrane!', 'success');
+    } else {
+      toast(r.error || 'Błąd wgrywania.', 'error');
+      setCoverPreview(null);
+    }
+  } catch { toast('Błąd połączenia.', 'error'); setCoverPreview(null); }
+}
+
+function setCoverPreview(url) {
+  const zone = document.getElementById('coverUploadZone');
+  const img  = document.getElementById('coverPreviewImg');
+  const removeBtn = document.getElementById('removeCoverBtn');
+
+  if (url) {
+    img.src = url;
+    img.hidden = false;
+    removeBtn.hidden = false;
+    zone.querySelector('span:not(.upload-hint)').textContent = '';
+    zone.querySelector('.upload-hint').textContent = '';
+  } else {
+    img.hidden = true;
+    img.src = '';
+    removeBtn.hidden = true;
+    zone.innerHTML = `
+      <span>Kliknij lub przeciągnij zdjęcie</span>
+      <span class="upload-hint">JPG, PNG, WebP · maks. 10 MB</span>
+      <input type="file" id="coverFile" accept="image/*" hidden>
+    `;
+    document.getElementById('coverFile').addEventListener('change', () => {
+      const f = document.getElementById('coverFile').files[0];
+      if (f) uploadCover(f);
+    });
+  }
+}
+
+/* ══════════════════════════════════
+   GALLERIES
+══════════════════════════════════ */
+async function loadGalleries() {
+  const data = await api.get('/api/galleries?status=all&limit=100');
+  renderGalleriesTable(data.galleries || []);
+}
+
+function renderGalleriesTable(galleries) {
+  const body = document.getElementById('galleriesBody');
+  if (!galleries.length) {
+    body.innerHTML = '<tr><td colspan="5" class="empty-row">Brak galerii.</td></tr>';
+    return;
+  }
+  body.innerHTML = galleries.map(g => `
+    <tr>
+      <td class="td-title">${g.title}</td>
+      <td>${g.image_count ?? 0} zdjęć</td>
+      <td>${statusBadge(g.status)}</td>
+      <td>${fmtDate(g.published_at || g.created_at)}</td>
+      <td class="td-actions">
+        <button class="btn btn-ghost btn-sm" onclick="editGallery(${g.id})">Edytuj</button>
+        <button class="btn btn-ghost btn-sm btn-danger" onclick="deleteGallery(${g.id}, '${g.title.replace(/'/g, "\\'")}')">Usuń</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+document.getElementById('newGalleryBtn').addEventListener('click', () => showGalleryForm());
+document.getElementById('backToGalleries').addEventListener('click', () => closeGalleryForm());
+document.getElementById('cancelGalleryBtn').addEventListener('click', () => closeGalleryForm());
+
+function showGalleryForm(gallery = null) {
+  S.editingGalleryId = gallery?.id || null;
+  document.getElementById('galleryFormTitle').textContent = gallery ? 'Edytuj galerię' : 'Nowa galeria';
+  document.getElementById('galleriesList').hidden = true;
+  document.getElementById('galleryForm').hidden = false;
+
+  document.getElementById('galTitle').value  = gallery?.title       || '';
+  document.getElementById('galDesc').value   = gallery?.description || '';
+  document.getElementById('galStatus').value = gallery?.status      || 'draft';
+
+  if (gallery?.id) {
+    document.getElementById('galleryImagesPanel').hidden = false;
+    loadGalleryImages(gallery.id);
+  } else {
+    document.getElementById('galleryImagesPanel').hidden = true;
+    document.getElementById('galleryImagesGrid').innerHTML = '';
+  }
+
+  document.getElementById('galTitle').focus();
+}
+
+function closeGalleryForm() {
+  document.getElementById('galleryForm').hidden = true;
+  document.getElementById('galleriesList').hidden = false;
+  S.editingGalleryId = null;
+  loadGalleries();
+}
+
+async function editGallery(id) {
+  const data = await api.get(`/api/galleries/${id}`);
+  showGalleryForm(data);
+}
+
+async function deleteGallery(id, title) {
+  if (!confirm(`Usunąć galerię „${title}" wraz ze wszystkimi zdjęciami?\n\nTej operacji nie można cofnąć.`)) return;
+  const r = await api.del(`/api/galleries/${id}`);
+  if (r.ok) { toast('Galeria usunięta.', 'success'); loadGalleries(); }
+  else toast('Błąd podczas usuwania.', 'error');
+}
+
+document.getElementById('galleryFormEl').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = document.getElementById('galleryFormEl').querySelector('[type=submit]');
+  btn.disabled = true;
+  btn.textContent = 'Zapisuję...';
+
+  const payload = {
+    title:       document.getElementById('galTitle').value.trim(),
+    description: document.getElementById('galDesc').value.trim() || null,
+    status:      document.getElementById('galStatus').value,
+  };
+
+  try {
+    let r;
+    if (S.editingGalleryId) {
+      r = await api.put(`/api/galleries/${S.editingGalleryId}`, payload);
+      toast('Galeria zapisana!', 'success');
+    } else {
+      r = await api.post('/api/galleries', payload);
+      if (r.id) {
+        S.editingGalleryId = r.id;
+        document.getElementById('galleryFormTitle').textContent = 'Edytuj galerię';
+        document.getElementById('galleryImagesPanel').hidden = false;
+        toast('Galeria utworzona! Możesz teraz dodać zdjęcia.', 'success');
+      }
+    }
+    if (r.error) toast(r.error, 'error');
+  } catch { toast('Błąd połączenia.', 'error'); }
+
+  btn.disabled = false;
+  btn.textContent = 'Zapisz galerię';
+});
+
+/* ── Gallery images ── */
+async function loadGalleryImages(galleryId) {
+  const data = await api.get(`/api/galleries/${galleryId}/images`);
+  renderGalleryImages(data.images || []);
+}
+
+function renderGalleryImages(images) {
+  const grid = document.getElementById('galleryImagesGrid');
+  if (!images.length) { grid.innerHTML = '<p style="color:var(--tx-m);font-size:.85rem;margin-top:.5rem">Brak zdjęć. Wgraj pierwsze!</p>'; return; }
+  grid.innerHTML = images.map(img => `
+    <div class="gallery-thumb" data-img-id="${img.id}">
+      <img src="${img.url}" alt="${img.caption || ''}">
+      <button class="gallery-thumb-del" onclick="deleteGalleryImage(${img.id})" title="Usuń zdjęcie">✕</button>
+    </div>
+  `).join('');
+}
+
+async function deleteGalleryImage(imageId) {
+  if (!confirm('Usunąć to zdjęcie z galerii?')) return;
+  const r = await api.del(`/api/galleries/${S.editingGalleryId}/images?imageId=${imageId}`);
+  if (r.ok) { loadGalleryImages(S.editingGalleryId); toast('Zdjęcie usunięte.', 'success'); }
+  else toast('Błąd podczas usuwania.', 'error');
+}
+
+/* Gallery image upload zone */
+const galImgZone = document.getElementById('galleryImgZone');
+const galImgInput = document.getElementById('galleryImageFiles');
+
+galImgZone.addEventListener('click', () => galImgInput.click());
+galImgZone.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') galImgInput.click(); });
+galImgInput.addEventListener('change', () => uploadGalleryImages([...galImgInput.files]));
+
+galImgZone.addEventListener('dragover', e => { e.preventDefault(); galImgZone.classList.add('drag-over'); });
+galImgZone.addEventListener('dragleave', () => galImgZone.classList.remove('drag-over'));
+galImgZone.addEventListener('drop', e => {
+  e.preventDefault();
+  galImgZone.classList.remove('drag-over');
+  const files = [...e.dataTransfer.files].filter(f => f.type.startsWith('image/'));
+  if (files.length) uploadGalleryImages(files);
+});
+
+async function uploadGalleryImages(files) {
+  if (!S.editingGalleryId) { toast('Najpierw zapisz galerię.', 'error'); return; }
+  toast(`Wgrywam ${files.length} zdjęcie(a)...`);
+  for (const file of files) {
+    try {
+      const r = await api.upload(file);
+      if (r.url) {
+        await api.post(`/api/galleries/${S.editingGalleryId}/images`, { url: r.url });
+      }
+    } catch { toast(`Błąd wgrywania: ${file.name}`, 'error'); }
+  }
+  loadGalleryImages(S.editingGalleryId);
+  toast('Zdjęcia wgrane!', 'success');
+  galImgInput.value = '';
+}
+
+/* ══════════════════════════════════
+   INIT
+══════════════════════════════════ */
+async function initApp() {
+  loadArticles();
+}
+
+// Auto-login if key already in sessionStorage
+(async () => {
+  if (S.key) {
+    const ok = await testKey(S.key);
+    if (ok) {
+      document.getElementById('keyModal').hidden = true;
+      document.getElementById('app').hidden = false;
+      initApp();
+    } else {
+      sessionStorage.removeItem('sp32AdminKey');
+      S.key = '';
+    }
+  }
+})();
+</script>
+</body>
+</html>

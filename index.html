@@ -461,21 +461,60 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
 /* ════════════════════════
    FOOTER
 ════════════════════════ */
-.site-footer { background: var(--cp-d); color: rgba(255,255,255,.8); padding: 3rem 0 1.5rem; }
-.footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 3rem; margin-bottom: 2.5rem; }
-.footer-logo { display: flex; align-items: center; gap: .65rem; margin-bottom: 1rem; }
+.site-footer { background: var(--cp-d); color: rgba(255,255,255,.8); padding: 0; }
+.footer-top {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; padding: 1.5rem 0;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.footer-logo { display: flex; align-items: center; gap: .65rem; flex-shrink: 0; }
 .footer-logo-img { width: 36px; height: 36px; object-fit: contain; opacity: .9; }
 .footer-school-name { font-family: var(--font-d); font-size: .82rem; font-weight: 700; color: #fff; line-height: 1.3; }
-.footer-address { font-size: .82rem; line-height: 1.7; color: rgba(255,255,255,.6); margin-bottom: 1rem; }
-.footer-contact a { display: flex; align-items: center; gap: .4rem; font-size: .82rem; color: rgba(255,255,255,.65); margin-bottom: .3rem; transition: color var(--tr); }
-.footer-contact a:hover { color: var(--ca); }
-.footer-h { font-family: var(--font-d); font-size: .72rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.4); margin-bottom: .85rem; }
-.footer-links li { margin-bottom: .45rem; }
-.footer-links a { font-size: .82rem; color: rgba(255,255,255,.65); transition: color var(--tr); }
-.footer-links a:hover { color: var(--ca); }
-.footer-bottom { padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,.1); display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
-.footer-legal { font-size: .75rem; color: rgba(255,255,255,.35); line-height: 1.6; }
-.footer-a11y-link { font-size: .75rem; color: rgba(255,255,255,.45); font-family: var(--font-d); font-weight: 600; transition: color var(--tr); }
+.footer-ext { display: flex; align-items: center; gap: .4rem; flex-wrap: wrap; }
+.footer-ext-link {
+  font-family: var(--font-d); font-size: .7rem; font-weight: 700;
+  color: rgba(255,255,255,.45); padding: .3rem .6rem;
+  border: 1px solid rgba(255,255,255,.1); border-radius: 6px;
+  transition: all var(--tr);
+}
+.footer-ext-link:hover { color: #fff; border-color: rgba(255,255,255,.3); background: rgba(255,255,255,.06); }
+.footer-info {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 1px; background: rgba(255,255,255,.06);
+  border-radius: var(--r); overflow: hidden; margin: 1.75rem 0;
+}
+.footer-info-card {
+  background: rgba(255,255,255,.03); padding: 1.1rem 1.25rem;
+  display: flex; flex-direction: column; gap: .3rem;
+}
+.footer-info-label {
+  font-family: var(--font-d); font-size: .65rem; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ca); margin-bottom: .2rem;
+}
+.footer-info-card p, .footer-info-card address {
+  font-size: .82rem; color: rgba(255,255,255,.6); line-height: 1.6; font-style: normal;
+}
+.footer-info-card a { color: rgba(255,255,255,.6); transition: color var(--tr); }
+.footer-info-card a:hover { color: var(--ca); }
+.footer-info-card .footer-note { font-size: .72rem; color: rgba(255,255,255,.3); margin-top: .2rem; }
+.footer-nav {
+  display: flex; flex-wrap: wrap; gap: .4rem;
+  padding-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.footer-chip {
+  font-family: var(--font-d); font-size: .72rem; font-weight: 600;
+  color: rgba(255,255,255,.5); padding: .28rem .65rem;
+  background: rgba(255,255,255,.05); border-radius: 20px;
+  border: 1px solid rgba(255,255,255,.08); transition: all var(--tr);
+}
+.footer-chip:hover { color: #fff; background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.2); }
+.footer-bottom {
+  padding: 1.25rem 0;
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+}
+.footer-legal { font-size: .72rem; color: rgba(255,255,255,.3); line-height: 1.6; }
+.footer-a11y-link { font-size: .72rem; color: rgba(255,255,255,.4); font-family: var(--font-d); font-weight: 600; transition: color var(--tr); }
 .footer-a11y-link:hover { color: var(--ca); }
 
 /* ── BACK TO TOP ── */
@@ -500,7 +539,8 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   .news-grid { grid-template-columns: 1fr; }
   .about-grid { grid-template-columns: 1fr; gap: 2rem; }
   .gallery-grid { grid-template-columns: repeat(2, 1fr); }
-  .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .footer-top { flex-direction: column; align-items: flex-start; gap: 1rem; }
+  .footer-info { grid-template-columns: 1fr; }
 }
 /* Tablet: foldable-unfolded, iPad mini — menu może być widoczny ale sprawdzamy */
 @media (min-width: 768px) and (max-width: 900px) {
@@ -852,52 +892,70 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
 ══════════════════════════════════ -->
 <footer class="site-footer" role="contentinfo">
   <div class="container">
-    <div class="footer-grid">
-      <div>
-        <div class="footer-logo">
-          <img src="grafiki-ai/tarcza-zielen.png" alt="" class="footer-logo-img" width="36" height="36" aria-hidden="true">
-          <div class="footer-school-name">Szkoła Podstawowa nr 32<br>im. L. Kruczkowskiego w Sosnowcu</div>
-        </div>
-        <address class="footer-address" style="font-style:normal">
-          ul. [adres szkoły]<br>41-200 Sosnowiec<br>woj. śląskie
-        </address>
-        <div class="footer-contact">
-          <a href="tel:+48XXXXXXXXX">📞 +48 XX XXX XX XX</a>
-          <a href="mailto:sp32@sosnowiec.edu.pl">✉ sp32@sosnowiec.edu.pl</a>
-        </div>
-      </div>
-      <div>
-        <p class="footer-h">Szybkie linki</p>
-        <ul class="footer-links">
-          <li><a href="#">Aktualności</a></li>
-          <li><a href="#">Historia szkoły</a></li>
-          <li><a href="#">Galeria</a></li>
-          <li><a href="#">Projekty</a></li>
-          <li><a href="#">Rekrutacja</a></li>
-          <li><a href="#">Kontakt</a></li>
-        </ul>
-      </div>
-      <div>
-        <p class="footer-h">Dla rodziców</p>
-        <ul class="footer-links">
-          <li><a href="https://sp32sosnowiec.edupage.org" target="_blank" rel="noopener">E-Dziennik ↗</a></li>
-          <li><a href="#">Rada Rodziców</a></li>
-          <li><a href="#">Dokumenty szkolne</a></li>
-          <li><a href="#">Stołówka</a></li>
-          <li><a href="#">Pedagog i psycholog</a></li>
-        </ul>
-        <p class="footer-h" style="margin-top:1.25rem">Informacje prawne</p>
-        <ul class="footer-links">
-          <li><a href="#">Deklaracja Dostępności</a></li>
-          <li><a href="#">Polityka prywatności</a></li>
-          <li><a href="#">RODO</a></li>
-        </ul>
+
+    <div class="footer-top">
+      <a href="index.html" class="footer-logo" aria-label="Szkoła Podstawowa nr 32 — strona główna">
+        <img src="grafiki-ai/tarcza-zielen.png" alt="" class="footer-logo-img" width="36" height="36" aria-hidden="true">
+        <div class="footer-school-name">Szkoła Podstawowa nr 32<br>im. L. Kruczkowskiego w Sosnowcu</div>
+      </a>
+      <div class="footer-ext" aria-label="Serwisy zewnętrzne">
+        <a href="https://sp32sosnowiec.edupage.org" class="footer-ext-link" target="_blank" rel="noopener">E-Dziennik ↗</a>
+        <a href="#" class="footer-ext-link">BIP ↗</a>
+        <a href="#" class="footer-ext-link">Facebook ↗</a>
+        <a href="https://www.gov.pl/web/edukacja" class="footer-ext-link" target="_blank" rel="noopener">MEN.gov.pl ↗</a>
+        <a href="https://www.sosnowiec.pl" class="footer-ext-link" target="_blank" rel="noopener">Sosnowiec.pl ↗</a>
       </div>
     </div>
+
+    <div class="footer-info" role="group" aria-label="Dane kontaktowe szkoły">
+      <div class="footer-info-card">
+        <p class="footer-info-label">Adres</p>
+        <address>ul. [adres szkoły]<br>41-200 Sosnowiec<br>woj. śląskie</address>
+        <a href="https://maps.google.com" target="_blank" rel="noopener">Otwórz w Mapach →</a>
+      </div>
+      <div class="footer-info-card">
+        <p class="footer-info-label">Kontakt</p>
+        <p><a href="tel:+48XXXXXXXXX">+48 XX XXX XX XX</a></p>
+        <p><a href="mailto:sp32@sosnowiec.edu.pl">sp32@sosnowiec.edu.pl</a></p>
+        <p class="footer-note">Sekretariat: pon–pt 7:30–15:30</p>
+      </div>
+      <div class="footer-info-card">
+        <p class="footer-info-label">Godziny pracy</p>
+        <p>Szkoła: 7:00–17:00</p>
+        <p>Świetlica: 6:30–17:00</p>
+        <p class="footer-note">W dni nauki szkolnej</p>
+      </div>
+    </div>
+
+    <nav class="footer-nav" aria-label="Mapa strony">
+      <a href="aktualnosci.html" class="footer-chip">Aktualności</a>
+      <a href="#" class="footer-chip">Historia szkoły</a>
+      <a href="#" class="footer-chip">Profil szkoły</a>
+      <a href="#" class="footer-chip">Dyrekcja i kadra</a>
+      <a href="#" class="footer-chip">Sukcesy</a>
+      <a href="#" class="footer-chip">Galeria</a>
+      <a href="#" class="footer-chip">Projekty</a>
+      <a href="#" class="footer-chip">Biblioteka</a>
+      <a href="#" class="footer-chip">Świetlica</a>
+      <a href="#" class="footer-chip">Wolontariat</a>
+      <a href="#" class="footer-chip">Rada Rodziców</a>
+      <a href="#" class="footer-chip">Kalendarz szkolny</a>
+      <a href="#" class="footer-chip">Rekrutacja klasa 0</a>
+      <a href="#" class="footer-chip">Rekrutacja klasa I</a>
+      <a href="#" class="footer-chip">Jadłospis</a>
+      <a href="#" class="footer-chip">Pedagog</a>
+      <a href="#" class="footer-chip">Psycholog</a>
+      <a href="#" class="footer-chip">Doradca zawodowy</a>
+      <a href="#" class="footer-chip">Pielęgniarka</a>
+      <a href="#" class="footer-chip">ZFŚS</a>
+      <a href="#" class="footer-chip">Kontakt</a>
+    </nav>
+
     <div class="footer-bottom">
-      <p class="footer-legal">© 2026 Szkoła Podstawowa nr 32 im. L. Kruczkowskiego w Sosnowcu<br>NIP: XX XXX XXX XX · REGON: XXXXXXXXX</p>
-      <a href="#" class="footer-a11y-link">Deklaracja Dostępności WCAG 2.1 AA</a>
+      <p class="footer-legal">© 2026 Szkoła Podstawowa nr 32 im. L. Kruczkowskiego w Sosnowcu &nbsp;·&nbsp; NIP: XX XXX XXX XX &nbsp;·&nbsp; REGON: XXXXXXXXX</p>
+      <a href="#" class="footer-a11y-link">Deklaracja Dostępności WCAG 2.1 AA →</a>
     </div>
+
   </div>
 </footer>
 
