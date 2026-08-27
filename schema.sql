@@ -32,6 +32,8 @@ CREATE TABLE IF NOT EXISTS galleries (
   description  TEXT,
   cover_url    TEXT,
   status       TEXT    NOT NULL DEFAULT 'draft',
+  cohort_year  INTEGER,          -- rok ukończenia szkoły przez klasę (RODO: retencja)
+  consent_id   TEXT,             -- nr papierowej zgody rodzica (np. ZG/2026/042)
   published_at TEXT,
   created_at   TEXT    NOT NULL DEFAULT (datetime('now')),
   updated_at   TEXT    NOT NULL DEFAULT (datetime('now'))
