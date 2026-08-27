@@ -401,12 +401,25 @@ input,select,textarea{font-family:inherit;font-size:1rem;color:var(--tx)}
                   <label for="galDesc">Opis (opcjonalnie)</label>
                   <textarea id="galDesc" rows="3" placeholder="Krótki opis galerii..."></textarea>
                 </div>
-                <div class="field-group" style="margin-bottom:1.25rem">
+                <div class="field-group" style="margin-bottom:.75rem">
                   <label for="galStatus">Status</label>
                   <select id="galStatus">
                     <option value="draft">Szkic</option>
                     <option value="published">Opublikowana</option>
                   </select>
+                </div>
+                <div style="border-top:1px solid var(--bd);margin:.5rem 0 .75rem;padding-top:.75rem">
+                  <p style="font-family:var(--font-d);font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--ca-d);margin-bottom:.75rem">RODO / Retencja danych</p>
+                  <div class="field-group" style="margin-bottom:.75rem">
+                    <label for="galCohortYear">Rok ukończenia szkoły przez klasę</label>
+                    <input type="number" id="galCohortYear" min="2024" max="2045" placeholder="np. 2031" style="width:100%">
+                    <span style="font-size:.75rem;color:var(--tx-m);margin-top:.15rem">Podstawa automatycznej retencji — zdjęcia klasy są przetwarzane do końca tego roku szkolnego.</span>
+                  </div>
+                  <div class="field-group" style="margin-bottom:.75rem">
+                    <label for="galConsentId">Nr zgody RODO (teczka w sekretariacie)</label>
+                    <input type="text" id="galConsentId" placeholder="np. ZG/2026/042">
+                    <span style="font-size:.75rem;color:var(--tx-m);margin-top:.15rem">Powiązanie z papierową zgodą rodzica/opiekuna.</span>
+                  </div>
                 </div>
                 <div class="form-actions">
                   <button type="submit" class="btn btn-primary btn-full">Zapisz galerię</button>
@@ -847,10 +860,12 @@ function showGalleryForm(gallery = null) {
   document.getElementById('galleriesList').hidden = true;
   document.getElementById('galleryForm').hidden = false;
 
-  document.getElementById('galTitle').value  = gallery?.title       || '';
-  document.getElementById('galDesc').value   = gallery?.description || '';
-  document.getElementById('galStatus').value = gallery?.status      || 'draft';
-  document.getElementById('galNoCover').checked = false;
+  document.getElementById('galTitle').value      = gallery?.title        || '';
+  document.getElementById('galDesc').value       = gallery?.description  || '';
+  document.getElementById('galStatus').value     = gallery?.status       || 'draft';
+  document.getElementById('galCohortYear').value = gallery?.cohort_year  || '';
+  document.getElementById('galConsentId').value  = gallery?.consent_id   || '';
+  document.getElementById('galNoCover').checked  = false;
   setGalCoverPreview(gallery?.cover_url || null);
 
   if (gallery?.id) {
@@ -914,11 +929,14 @@ document.getElementById('galleryFormEl').addEventListener('submit', async e => {
   btn.textContent = 'Zapisuję...';
 
   const noCover = document.getElementById('galNoCover').checked;
+  const cohortRaw = document.getElementById('galCohortYear').value;
   const payload = {
-    title:       document.getElementById('galTitle').value.trim(),
-    description: document.getElementById('galDesc').value.trim() || null,
-    status:      document.getElementById('galStatus').value,
-    cover_url:   noCover ? null : (S.galCoverUrl || null),
+    title:        document.getElementById('galTitle').value.trim(),
+    description:  document.getElementById('galDesc').value.trim() || null,
+    status:       document.getElementById('galStatus').value,
+    cover_url:    noCover ? null : (S.galCoverUrl || null),
+    cohort_year:  cohortRaw ? parseInt(cohortRaw, 10) : null,
+    consent_id:   document.getElementById('galConsentId').value.trim() || null,
   };
 
   try {
