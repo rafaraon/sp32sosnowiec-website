@@ -310,7 +310,7 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   width: 80px; height: 80px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
-  transition: transform .22s ease, box-shadow .22s ease;
+  transition: transform .32s cubic-bezier(.25,.8,.25,1), box-shadow .32s cubic-bezier(.25,.8,.25,1);
 }
 .ql-icon-circle img {
   width: 58px; height: 58px; object-fit: contain; display: block;
@@ -592,17 +592,18 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   -webkit-backdrop-filter: blur(18px);
 }
 
-/* News card image subtle zoom */
-.news-card-img { transition: transform .45s cubic-bezier(.22,.61,.36,1); }
-.news-card:hover .news-card-img { transform: scale(1.04); }
+/* News card image zoom — bardziej widoczny */
+.news-card-img { transition: transform .5s cubic-bezier(.22,.61,.36,1), filter .5s ease; overflow: hidden; }
+.news-card:hover .news-card-img { transform: scale(1.09); filter: brightness(1.07); }
 
-/* Album thumb subtle zoom */
-.album-thumb { transition: transform .45s cubic-bezier(.22,.61,.36,1); overflow: hidden; }
-.album-card:hover .album-thumb { transform: scale(1.04); }
+/* Album thumb zoom */
+.album-thumb { transition: transform .5s cubic-bezier(.22,.61,.36,1); overflow: hidden; }
+.album-card:hover .album-thumb { transform: scale(1.09); }
 
-/* QL card accent ring on focus/hover */
-.ql-card { transition: transform var(--tr), box-shadow var(--tr), border-color var(--tr); }
-.ql-card:hover { box-shadow: 0 8px 32px rgba(31,75,60,.15); }
+/* QL card — płynny lift synchronizowany z ikoną i kreską */
+.ql-card { transition: transform .32s cubic-bezier(.25,.8,.25,1), box-shadow .32s cubic-bezier(.25,.8,.25,1), border-color .2s; }
+.ql-card::after { transition: transform .32s cubic-bezier(.25,.8,.25,1); }
+.ql-card:hover { transform: translateY(-5px); box-shadow: 0 14px 42px rgba(31,75,60,.22); }
 </style>
 
 <div id="scroll-bar" aria-hidden="true"></div>
