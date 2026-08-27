@@ -1,0 +1,66 @@
+name: Backup R2 → Google Drive (co ~10 tygodni)
+
+on:
+  schedule:
+    # Uruchamia się co poniedziałek o 03:00 UTC;
+    # krok "check-week" pomija uruchomienie jeśli numer tygodnia % 10 ≠ 0
+    - cron: '0 3 * * 1'
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Wymuś sync niezależnie od tygodnia'
+        type: boolean
+        default: false
+
+jobs:
+  backup:
+    name: rclone sync R2 → Google Drive
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Sprawdź numer tygodnia
+        id: week-check
+        run: |
+          WEEK=$(date +%W | sed 's/^0*//')
+          WEEK=${WEEK:-0}
+          echo "week=$WEEK" >> $GITHUB_OUTPUT
+          if [ "${{ github.event.inputs.force }}" = "true" ]; then
+            echo "skip=false" >> $GITHUB_OUTPUT
+          elif [ $((WEEK % 10)) -eq 0 ]; then
+            echo "skip=false" >> $GITHUB_OUTPUT
+          else
+            echo "skip=true" >> $GITHUB_OUTPUT
+            echo "Tydzień $WEEK — nie jest tygodniem backupu R2 (robimy co 10 tygodni). Pomijam."
+          fi
+
+      - name: Zainstaluj rclone
+        if: steps.week-check.outputs.skip == 'false'
+        run: |
+          curl -fsSL https://rclone.org/install.sh | sudo bash
+          rclone version
+
+      - name: Skonfiguruj rclone z sekretów
+        if: steps.week-check.outputs.skip == 'false'
+        run: |
+          mkdir -p ~/.config/rclone
+          # Secret RCLONE_CONFIG to zawartość rclone.conf (base64 lub plain)
+          echo "${{ secrets.RCLONE_CONFIG }}" | base64 -d > ~/.config/rclone/rclone.conf
+          rclone listremotes
+
+      - name: Sync R2 → Google Drive
+        if: steps.week-check.outputs.skip == 'false'
+        run: |
+          # Kopiuje r2:sp32-media/ → gdrive:SP32-Backup/media/
+          # --backup-dir tworzy kopię usuniętych plików zamiast kasować
+          rclone sync \
+            r2:sp32-media \
+            "gdrive:SP32-Backup/media" \
+            --backup-dir "gdrive:SP32-Backup/deleted/$(date +%Y%m%d)" \
+            --transfers 8 \
+            --checkers 16 \
+            --progress \
+            --stats-one-line \
+            --log-level INFO
+          echo "Sync zakończony: $(date)"

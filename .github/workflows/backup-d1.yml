@@ -1,0 +1,66 @@
+name: Backup D1 (co ~5 tygodni)
+
+on:
+  schedule:
+    # Uruchamia się co poniedziałek o 02:00 UTC;
+    # krok "check-week" pomija uruchomienie jeśli numer tygodnia % 5 ≠ 0
+    - cron: '0 2 * * 1'
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Wymuś backup niezależnie od tygodnia'
+        type: boolean
+        default: false
+
+jobs:
+  backup:
+    name: Export D1 → Artifact
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Sprawdź numer tygodnia
+        id: week-check
+        run: |
+          WEEK=$(date +%W | sed 's/^0*//')
+          WEEK=${WEEK:-0}
+          echo "week=$WEEK" >> $GITHUB_OUTPUT
+          if [ "${{ github.event.inputs.force }}" = "true" ]; then
+            echo "skip=false" >> $GITHUB_OUTPUT
+          elif [ $((WEEK % 5)) -eq 0 ]; then
+            echo "skip=false" >> $GITHUB_OUTPUT
+          else
+            echo "skip=true" >> $GITHUB_OUTPUT
+            echo "Tydzień $WEEK — nie jest tygodniem backupu (robimy co 5 tygodni). Pomijam."
+          fi
+
+      - name: Checkout (potrzebny dla wrangler.toml)
+        if: steps.week-check.outputs.skip == 'false'
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        if: steps.week-check.outputs.skip == 'false'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Eksportuj D1 do SQL
+        if: steps.week-check.outputs.skip == 'false'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+        run: |
+          FILENAME="sp32-cms-$(date +%Y%m%d).sql"
+          npx --yes wrangler@latest d1 export sp32-cms --output "$FILENAME"
+          echo "backup_file=$FILENAME" >> $GITHUB_ENV
+          echo "Rozmiar pliku: $(du -sh $FILENAME | cut -f1)"
+
+      - name: Upload jako GitHub Artifact
+        if: steps.week-check.outputs.skip == 'false'
+        uses: actions/upload-artifact@v4
+        with:
+          name: d1-backup-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ env.backup_file }}
+          retention-days: 365
+          if-no-files-found: error
