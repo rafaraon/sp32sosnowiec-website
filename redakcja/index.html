@@ -548,6 +548,26 @@ document.getElementById('logoutBtn').addEventListener('click', () => {
   document.getElementById('keyInput').value = '';
 });
 
+/* Auto-init: jeśli klucz jest w sessionStorage, pomiń modal */
+(async () => {
+  if (S.key) {
+    const btn = document.getElementById('keySubmit');
+    btn.disabled = true;
+    btn.textContent = 'Łączę...';
+    const ok = await testKey(S.key);
+    if (ok) {
+      document.getElementById('keyModal').hidden = true;
+      document.getElementById('app').hidden = false;
+      initApp();
+    } else {
+      sessionStorage.removeItem('sp32AdminKey');
+      S.key = '';
+      btn.disabled = false;
+      btn.textContent = 'Zaloguj się';
+    }
+  }
+})();
+
 /* ══════════════════════════════════
    TABS
 ══════════════════════════════════ */

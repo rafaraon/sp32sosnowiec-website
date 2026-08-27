@@ -157,9 +157,11 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
 .album-viewer{display:none;margin-top:2rem;background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);box-shadow:var(--sh-m);overflow:hidden}
 .album-viewer.open{display:block}
 .viewer-header{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1.25rem 1.5rem;border-bottom:1px solid var(--bd);flex-wrap:wrap}
-.viewer-title{font-family:var(--font-d);font-size:1.1rem;font-weight:700;color:var(--tx)}
-.viewer-close{display:flex;align-items:center;gap:.35rem;font-family:var(--font-d);font-size:.82rem;font-weight:700;color:var(--tx-m);padding:.4rem .75rem;border:1.5px solid var(--bd);border-radius:var(--r-s);transition:all var(--tr)}
+.viewer-title{font-family:var(--font-d);font-size:1.1rem;font-weight:700;color:var(--tx);flex:1;min-width:0}
+.viewer-close{display:flex;align-items:center;gap:.35rem;font-family:var(--font-d);font-size:.82rem;font-weight:700;color:var(--tx-m);padding:.4rem .75rem;border:1.5px solid var(--bd);border-radius:var(--r-s);transition:all var(--tr);flex-shrink:0}
 .viewer-close:hover{border-color:var(--ca);color:var(--ca)}
+.viewer-desc-section{padding:.9rem 1.5rem;border-bottom:1px solid var(--bd);background:var(--clv-l)}
+.viewer-desc{font-size:.9rem;color:var(--tx-m);line-height:1.65;margin:0}
 .viewer-body{padding:1.25rem 1.5rem}
 .photos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.75rem}
 .photo-item{aspect-ratio:1;border-radius:var(--r-s);overflow:hidden;cursor:pointer;background:var(--clv-l);position:relative}
@@ -280,7 +282,7 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
 <header class="site-header" role="banner">
   <div class="container header-inner">
     <a href="index.html" class="logo" aria-label="Szkoła Podstawowa nr 32 — strona główna">
-      <img src="grafiki-ai/tarcza-zielen.png" alt="" class="logo-img" width="44" height="44" aria-hidden="true">
+      <img src="grafiki-ai/logo-sp32.png" alt="" class="logo-img" width="44" height="44" aria-hidden="true">
       <div>
         <span class="logo-name" style="display:block">Szkoła Podstawowa nr 32</span>
         <span class="logo-patron">im. L. Kruczkowskiego · Sosnowiec</span>
@@ -376,6 +378,9 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
         <span class="viewer-title" id="viewerTitle"></span>
         <button class="viewer-close" id="viewerClose">✕ Zamknij album</button>
       </div>
+      <div class="viewer-desc-section" id="viewerDescSection" hidden>
+        <p class="viewer-desc" id="viewerDesc"></p>
+      </div>
       <div class="viewer-body">
         <div class="photos-grid" id="photosGrid"></div>
       </div>
@@ -434,7 +439,7 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
   <div class="container">
     <div class="footer-top">
       <a href="index.html" class="footer-logo" aria-label="Szkoła Podstawowa nr 32 — strona główna">
-        <img src="grafiki-ai/tarcza-zielen.png" alt="" class="footer-logo-img" width="36" height="36" aria-hidden="true">
+        <img src="grafiki-ai/logo-sp32.png" alt="" class="footer-logo-img" width="36" height="36" aria-hidden="true">
         <div class="footer-school-name">Szkoła Podstawowa nr 32<br>im. L. Kruczkowskiego w Sosnowcu</div>
       </a>
       <div class="footer-ext">
@@ -632,7 +637,7 @@ async function loadAlbums() {
       const bgStyle = g.cover_url
         ? `<div class="album-thumb-bg" style="background-image:url('${g.cover_url}')"></div><div class="album-thumb-overlay"></div>`
         : '';
-      return `<div class="album-card reveal" data-id="${g.id}" data-title="${g.title.replace(/"/g,'&quot;')}" role="button" tabindex="0" aria-label="Otwórz album: ${g.title}, ${count} zdjęć">
+      return `<div class="album-card reveal" data-id="${g.id}" data-title="${g.title.replace(/"/g,'&quot;')}" data-desc="${(g.description||'').replace(/"/g,'&quot;')}" role="button" tabindex="0" aria-label="Otwórz album: ${g.title}, ${count} zdjęć">
         <div class="album-thumb">
           ${bgStyle}
           <span class="album-count-badge">${count} zdjęć</span>
@@ -649,7 +654,7 @@ async function loadAlbums() {
 
     grid.addEventListener('click', e => {
       const card = e.target.closest('.album-card');
-      if (card) openAlbum(card.dataset.id, card.dataset.title);
+      if (card) openAlbum(card.dataset.id, card.dataset.title, card.dataset.desc);
     });
     grid.addEventListener('keydown', e => {
       if (e.key === 'Enter' || e.key === ' ') {
@@ -662,10 +667,12 @@ async function loadAlbums() {
   }
 }
 
-async function openAlbum(id, title) {
+async function openAlbum(id, title, desc = '') {
   const viewer = document.getElementById('albumViewer');
   const photosGrid = document.getElementById('photosGrid');
   const viewerTitle = document.getElementById('viewerTitle');
+  const viewerDescSection = document.getElementById('viewerDescSection');
+  const viewerDesc = document.getElementById('viewerDesc');
 
   // Toggle — click same album again to close
   if (activeAlbumId === id && viewer.classList.contains('open')) {
@@ -677,6 +684,8 @@ async function openAlbum(id, title) {
   document.querySelectorAll('.album-card').forEach(c => c.classList.toggle('active', c.dataset.id === id));
 
   viewerTitle.textContent = title;
+  viewerDesc.textContent = desc;
+  viewerDescSection.hidden = !desc;
   photosGrid.innerHTML = Array(6).fill('<div class="photo-item"><div class="photo-item-loading"></div></div>').join('');
   viewer.classList.add('open');
   viewer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -725,7 +734,7 @@ document.getElementById('viewerClose').addEventListener('click', closeAlbum);
   const autoId = new URLSearchParams(location.search).get('album');
   if (autoId) {
     const card = document.querySelector(`[data-id="${autoId}"]`);
-    if (card) openAlbum(autoId, card.dataset.title);
+    if (card) openAlbum(autoId, card.dataset.title, card.dataset.desc);
   }
 })();
 </script>

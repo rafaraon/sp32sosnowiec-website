@@ -81,7 +81,7 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
 .logo { display: flex; align-items: center; gap: .65rem; flex-shrink: 0; }
 .logo-img {
   width: 44px; height: 44px; object-fit: contain; flex-shrink: 0;
-  filter: drop-shadow(0 1px 4px rgba(0,0,0,.3));
+  border-radius: 50%;
   transition: transform var(--tr);
 }
 .logo:hover .logo-img { transform: scale(1.07); }
@@ -542,23 +542,25 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   .footer-top { flex-direction: column; align-items: flex-start; gap: 1rem; }
   .footer-info { grid-template-columns: 1fr; }
 }
-/* Tablet: foldable-unfolded, iPad mini — menu może być widoczny ale sprawdzamy */
-@media (min-width: 768px) and (max-width: 900px) {
-  .logo-patron { display: none; }
-}
 @media (max-width: 600px) {
   .quicklinks .container { grid-template-columns: repeat(2, 1fr); }
   .gallery-grid { grid-template-columns: 1fr 1fr; }
   .stats-grid { grid-template-columns: 1fr 1fr; }
-  .hero { min-height: 480px; }
+  .hero { min-height: 440px; }
+  .hero-content { padding: 2.5rem 0; }
+  .hero-title { font-size: clamp(2rem, 7vw, 2.6rem); }
+  .hero-sub { font-size: .95rem; margin-bottom: 1.5rem; }
   .ql-icon-circle { width: 68px; height: 68px; }
   .ql-icon-circle img { width: 48px; height: 48px; }
+  .section-heading { font-size: 1.5rem; }
 }
-/* iPhone Ultra / Pro Max / large foldable unfolded */
-@media (max-width: 430px) {
-  .header-inner { gap: .5rem; }
+/* Telefony ≤ 480px (iPhone Mini, SE, Plus/Pro Max) */
+@media (max-width: 480px) {
+  .header-inner { gap: .4rem; }
   .a11y-controls { display: none; }
   .logo-name { font-size: .78rem; }
+  .btn-edupage { font-size: .72rem; padding: .4rem .7rem; }
+  .footer-nav { gap: .3rem; }
 }
 
 :focus-visible { outline: 2px solid var(--ca); outline-offset: 3px; border-radius: 4px; }
@@ -675,7 +677,7 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   <div class="container header-inner">
 
     <a href="#" class="logo" aria-label="Szkoła Podstawowa nr 32 — strona główna">
-      <img src="grafiki-ai/tarcza-zielen.png" alt="" class="logo-img" width="44" height="44" aria-hidden="true">
+      <img src="grafiki-ai/logo-sp32.png" alt="" class="logo-img" width="44" height="44" aria-hidden="true">
       <div class="logo-text">
         <span class="logo-name">Szkoła Podstawowa nr 32</span>
         <span class="logo-patron">im. L. Kruczkowskiego · Sosnowiec</span>
@@ -940,7 +942,7 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
 
     <div class="footer-top">
       <a href="index.html" class="footer-logo" aria-label="Szkoła Podstawowa nr 32 — strona główna">
-        <img src="grafiki-ai/tarcza-zielen.png" alt="" class="footer-logo-img" width="36" height="36" aria-hidden="true">
+        <img src="grafiki-ai/logo-sp32.png" alt="" class="footer-logo-img" width="36" height="36" aria-hidden="true">
         <div class="footer-school-name">Szkoła Podstawowa nr 32<br>im. L. Kruczkowskiego w Sosnowcu</div>
       </a>
       <div class="footer-ext" aria-label="Serwisy zewnętrzne">
