@@ -289,6 +289,32 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   .news-grid { grid-template-columns: 1fr; }
   .a11y-controls { display: none; }
 }
+.contact-overlay{position:fixed;inset:0;z-index:500;background:rgba(10,30,20,.58);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;padding:1.5rem;opacity:0;visibility:hidden;transition:opacity .25s ease,visibility .25s}
+.contact-overlay.open{opacity:1;visibility:visible}
+.contact-modal{background:var(--sf);border-radius:16px;box-shadow:0 32px 80px rgba(0,0,0,.32),0 0 0 1px var(--bd);width:min(480px,100%);max-height:90vh;overflow-y:auto;transform:translateY(14px) scale(.97);transition:transform .3s cubic-bezier(.25,.8,.25,1)}
+.contact-overlay.open .contact-modal{transform:translateY(0) scale(1)}
+.contact-modal-head{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.5rem;border-bottom:1px solid var(--bd)}
+.contact-modal-title{font-family:var(--font-d);font-size:1.1rem;font-weight:700}
+.contact-modal-close{width:36px;height:36px;border-radius:50%;background:var(--cl-l,#EDE8F8);color:var(--tx-m);font-size:1rem;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--bd);transition:all .18s ease;cursor:pointer}
+.contact-modal-close:hover{background:var(--bd);color:var(--tx)}
+.contact-modal-body{padding:1.5rem;display:flex;flex-direction:column;gap:1.25rem}
+.contact-school-name{font-family:var(--font-d);font-weight:700;font-size:.88rem;color:var(--tx-m);line-height:1.55}
+.contact-ctas{display:flex;flex-direction:column;gap:.6rem}
+.contact-cta{display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;border-radius:8px;border:1.5px solid var(--bd);transition:all .22s ease;color:var(--tx);text-decoration:none}
+.contact-cta-phone:hover{background:rgba(31,75,60,.06);border-color:var(--cp)}.contact-cta-email:hover{background:rgba(212,117,106,.06);border-color:var(--ca)}
+.contact-cta-icon{width:44px;height:44px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.15rem}
+.contact-cta-phone .contact-cta-icon{background:rgba(31,75,60,.1);color:var(--cp)}.contact-cta-email .contact-cta-icon{background:rgba(212,117,106,.1);color:#BE5D52}
+.contact-cta-label{font-size:.68rem;font-family:var(--font-d);font-weight:600;color:var(--tx-m);text-transform:uppercase;letter-spacing:.07em;display:block}
+.contact-cta-value{font-family:var(--font-d);font-weight:700;font-size:1rem;display:block;color:var(--tx)}
+.contact-divider{border:none;border-top:1px solid var(--bd)}
+.contact-info-row{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem}
+@media(max-width:400px){.contact-info-row{grid-template-columns:1fr}}
+.contact-info-block{display:flex;flex-direction:column;gap:.3rem}
+.contact-info-lbl{font-family:var(--font-d);font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#D4756A;margin-bottom:.15rem}
+.contact-info-block address,.contact-info-block p{font-size:.88rem;color:var(--tx);line-height:1.65;font-style:normal}
+.contact-info-block .contact-note{font-size:.78rem;color:var(--tx-m);margin-top:.15rem}
+.contact-map-link{font-family:var(--font-d);font-size:.8rem;font-weight:700;color:var(--cp);transition:color .18s ease;display:inline-block;margin-top:.25rem}
+.contact-map-link:hover{color:#D4756A}
 </style>
 
 <div id="scroll-bar" aria-hidden="true"></div>
@@ -310,11 +336,11 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
         <li class="has-dropdown">
           <a href="#" aria-haspopup="true" aria-expanded="false">Nasza Szkoła <span class="nav-caret" aria-hidden="true">▾</span></a>
           <ul class="dropdown" role="menu">
-            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-nasza-szkola-historia.png" srcset="grafiki-ai/nav-nasza-szkola-historia@2x.png 2x" alt="" width="18" height="18" aria-hidden="true"></span>Historia szkoły</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-nasza-szkola-profil.png" srcset="grafiki-ai/nav-nasza-szkola-profil@2x.png 2x" alt="" width="18" height="18" aria-hidden="true"></span>Profil szkoły</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-nasza-szkola-dyrekcja.png" srcset="grafiki-ai/nav-nasza-szkola-dyrekcja@2x.png 2x" alt="" width="18" height="18" aria-hidden="true"></span>Dyrekcja i kadra</a></li>
+            <li><a href="historia.html" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-nasza-szkola-historia.png" srcset="grafiki-ai/nav-nasza-szkola-historia@2x.png 2x" alt="" width="18" height="18" aria-hidden="true"></span>Historia szkoły</a></li>
+            <li><a href="profil.html" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-nasza-szkola-profil.png" srcset="grafiki-ai/nav-nasza-szkola-profil@2x.png 2x" alt="" width="18" height="18" aria-hidden="true"></span>Profil szkoły</a></li>
+            <li><a href="dyrekcja.html" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-nasza-szkola-dyrekcja.png" srcset="grafiki-ai/nav-nasza-szkola-dyrekcja@2x.png 2x" alt="" width="18" height="18" aria-hidden="true"></span>Dyrekcja i kadra</a></li>
             <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-nasza-szkola-sukcesy.png" srcset="grafiki-ai/nav-nasza-szkola-sukcesy@2x.png 2x" alt="" width="18" height="18" aria-hidden="true"></span>Sukcesy</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-nasza-szkola-galeria.png" srcset="grafiki-ai/nav-nasza-szkola-galeria@2x.png 2x" alt="" width="18" height="18" aria-hidden="true"></span>Galeria</a></li>
+            <li><a href="galeria.html" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-nasza-szkola-galeria.png" srcset="grafiki-ai/nav-nasza-szkola-galeria@2x.png 2x" alt="" width="18" height="18" aria-hidden="true"></span>Galeria</a></li>
             <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-nasza-szkola-rocznica.png" srcset="grafiki-ai/nav-nasza-szkola-rocznica@2x.png 2x" alt="" width="18" height="18" aria-hidden="true"></span>90. rocznica szkoły</a></li>
           </ul>
         </li>
@@ -377,11 +403,11 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
     <a href="#" class="mob-link"><img src="grafiki-ai/nav-mobile-kontakt.png" srcset="grafiki-ai/nav-mobile-kontakt@2x.png 2x" alt="" width="22" height="22" aria-hidden="true">Kontakt</a>
     <hr class="mob-divider">
     <p class="mob-section-title">Nasza Szkoła</p>
-    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-nasza-szkola-historia.png" srcset="grafiki-ai/nav-nasza-szkola-historia@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Historia szkoły</a>
-    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-nasza-szkola-profil.png" srcset="grafiki-ai/nav-nasza-szkola-profil@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Profil szkoły</a>
-    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-nasza-szkola-dyrekcja.png" srcset="grafiki-ai/nav-nasza-szkola-dyrekcja@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Dyrekcja i kadra</a>
+    <a href="historia.html" class="mob-sub"><img src="grafiki-ai/nav-nasza-szkola-historia.png" srcset="grafiki-ai/nav-nasza-szkola-historia@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Historia szkoły</a>
+    <a href="profil.html" class="mob-sub"><img src="grafiki-ai/nav-nasza-szkola-profil.png" srcset="grafiki-ai/nav-nasza-szkola-profil@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Profil szkoły</a>
+    <a href="dyrekcja.html" class="mob-sub"><img src="grafiki-ai/nav-nasza-szkola-dyrekcja.png" srcset="grafiki-ai/nav-nasza-szkola-dyrekcja@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Dyrekcja i kadra</a>
     <a href="#" class="mob-sub"><img src="grafiki-ai/nav-nasza-szkola-sukcesy.png" srcset="grafiki-ai/nav-nasza-szkola-sukcesy@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Sukcesy</a>
-    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-nasza-szkola-galeria.png" srcset="grafiki-ai/nav-nasza-szkola-galeria@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Galeria</a>
+    <a href="galeria.html" class="mob-sub"><img src="grafiki-ai/nav-nasza-szkola-galeria.png" srcset="grafiki-ai/nav-nasza-szkola-galeria@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Galeria</a>
   </div>
 </nav>
 
@@ -461,15 +487,17 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
     </div>
     <nav class="footer-nav" aria-label="Mapa strony">
       <a href="aktualnosci.html" class="footer-chip">Aktualności</a>
-      <a href="#" class="footer-chip">Historia szkoły</a>
-      <a href="#" class="footer-chip">Galeria</a>
-      <a href="#" class="footer-chip">Projekty</a>
+      <a href="historia.html" class="footer-chip">Historia szkoły</a>
+      <a href="profil.html" class="footer-chip">Profil szkoły</a>
+      <a href="dyrekcja.html" class="footer-chip">Dyrekcja i kadra</a>
+      <a href="galeria.html" class="footer-chip">Galeria</a>
+      <a href="projekty.html" class="footer-chip">Projekty</a>
       <a href="#" class="footer-chip">Rada Rodziców</a>
       <a href="#" class="footer-chip">Rekrutacja</a>
       <a href="#" class="footer-chip">Jadłospis</a>
       <a href="#" class="footer-chip">Pedagog</a>
       <a href="#" class="footer-chip">Psycholog</a>
-      <a href="#" class="footer-chip">Kontakt</a>
+      <a href="#" class="footer-chip" data-open-contact>Kontakt</a>
     </nav>
     <div class="footer-bottom">
       <p class="footer-legal">© 2026 Szkoła Podstawowa nr 32 im. L. Kruczkowskiego w Sosnowcu &nbsp;·&nbsp; NIP: 644-30-91-938 &nbsp;·&nbsp; REGON: 000738792</p>
@@ -479,6 +507,27 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
 </footer>
 
 <button id="back-top" aria-label="Wróć na górę strony" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<div class="contact-overlay" id="contactOverlay" role="dialog" aria-modal="true" aria-labelledby="contactModalTitle" aria-hidden="true">
+  <div class="contact-modal">
+    <div class="contact-modal-head">
+      <h2 class="contact-modal-title" id="contactModalTitle">Kontakt</h2>
+      <button class="contact-modal-close" id="contactModalClose" aria-label="Zamknij okno kontaktowe">✕</button>
+    </div>
+    <div class="contact-modal-body">
+      <p class="contact-school-name">Szkoła Podstawowa nr 32<br>im. Leona Kruczkowskiego w Sosnowcu</p>
+      <div class="contact-ctas">
+        <a href="tel:+48322634301" class="contact-cta contact-cta-phone"><span class="contact-cta-icon">☎</span><span><span class="contact-cta-label">Telefon sekretariatu</span><span class="contact-cta-value">32 263-43-01</span></span></a>
+        <a href="mailto:sp32@sosnowiec.edu.pl" class="contact-cta contact-cta-email"><span class="contact-cta-icon">@</span><span><span class="contact-cta-label">E-mail</span><span class="contact-cta-value">sp32@sosnowiec.edu.pl</span></span></a>
+      </div>
+      <hr class="contact-divider">
+      <div class="contact-info-row">
+        <div class="contact-info-block"><p class="contact-info-lbl">Adres</p><address>ul. Armii Krajowej 93<br>41-215 Sosnowiec<br>woj. śląskie</address><a href="https://maps.google.com/?q=ul.+Armii+Krajowej+93,+41-215+Sosnowiec" target="_blank" rel="noopener" class="contact-map-link">Pokaż na mapie →</a></div>
+        <div class="contact-info-block"><p class="contact-info-lbl">Godziny pracy</p><p>Sekretariat:<br>pon–pt 7:00–15:00</p><p class="contact-note">Szkoła: 8:00–16:25<br>Świetlica: 6:30–17:00</p></div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
   const bar = document.getElementById('scroll-bar');
@@ -614,4 +663,12 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   });
 
   loadArticles();
+
+  /* ── CONTACT MODAL ── */
+  function openContact(){ const ov=document.getElementById('contactOverlay'); ov.removeAttribute('aria-hidden'); ov.classList.add('open'); document.body.style.overflow='hidden'; setTimeout(()=>document.getElementById('contactModalClose')?.focus(),40); }
+  function closeContact(){ const ov=document.getElementById('contactOverlay'); ov.setAttribute('aria-hidden','true'); ov.classList.remove('open'); document.body.style.overflow=''; }
+  document.getElementById('contactModalClose')?.addEventListener('click', closeContact);
+  document.getElementById('contactOverlay')?.addEventListener('click', e => { if(e.target.id==='contactOverlay') closeContact(); });
+  document.addEventListener('keydown', e => { if(e.key==='Escape') closeContact(); });
+  document.querySelectorAll('[data-open-contact]').forEach(el => el.addEventListener('click', e => { e.preventDefault(); openContact(); }));
 </script>
