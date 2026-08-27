@@ -43,7 +43,7 @@ jobs:
         if: steps.week-check.outputs.skip == 'false'
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: Eksportuj D1 do SQL
         if: steps.week-check.outputs.skip == 'false'
