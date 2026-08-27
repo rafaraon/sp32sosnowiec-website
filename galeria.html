@@ -167,17 +167,56 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
 .photo-item:hover img{transform:scale(1.06)}
 .photo-item-loading{width:100%;height:100%;background:linear-gradient(90deg,var(--clv-l) 25%,var(--bd) 50%,var(--clv-l) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite}
 
-/* ════ LIGHTBOX ════ */
-.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:1000;display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;visibility:hidden;transition:opacity .2s,visibility .2s}
+/* ════ LIGHTBOX — smooth slide ════ */
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.93);z-index:1000;display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;visibility:hidden;transition:opacity .22s,visibility .22s}
 .lightbox.open{opacity:1;visibility:visible}
-.lightbox-img{max-width:90vw;max-height:88vh;border-radius:var(--r-s);box-shadow:0 8px 64px rgba(0,0,0,.8);object-fit:contain;display:block}
-.lightbox-close{position:absolute;top:1rem;right:1rem;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.12);color:#fff;font-size:1.3rem;display:flex;align-items:center;justify-content:center;transition:background var(--tr)}
-.lightbox-close:hover{background:rgba(255,255,255,.22)}
-.lightbox-nav{position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.12);color:#fff;font-size:1.4rem;display:flex;align-items:center;justify-content:center;transition:background var(--tr)}
-.lightbox-nav:hover{background:rgba(255,255,255,.22)}
+.lightbox-stage{position:relative;display:flex;align-items:center;justify-content:center;width:90vw;max-height:88vh;overflow:hidden}
+.lightbox-img{max-width:90vw;max-height:88vh;border-radius:var(--r-s);box-shadow:0 8px 64px rgba(0,0,0,.8);object-fit:contain;display:block;transition:transform .28s cubic-bezier(.25,.8,.25,1),opacity .22s ease;user-select:none}
+.lightbox-img.lb-exit-l{transform:translateX(-60px);opacity:0}
+.lightbox-img.lb-exit-r{transform:translateX(60px);opacity:0}
+.lightbox-img.lb-enter-l{animation:lbEnterL .28s cubic-bezier(.25,.8,.25,1) forwards}
+.lightbox-img.lb-enter-r{animation:lbEnterR .28s cubic-bezier(.25,.8,.25,1) forwards}
+@keyframes lbEnterL{from{transform:translateX(60px);opacity:0}to{transform:none;opacity:1}}
+@keyframes lbEnterR{from{transform:translateX(-60px);opacity:0}to{transform:none;opacity:1}}
+.lightbox-close{position:absolute;top:1rem;right:1rem;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.12);color:#fff;font-size:1.3rem;display:flex;align-items:center;justify-content:center;transition:background .2s;z-index:10}
+.lightbox-close:hover{background:rgba(255,255,255,.24)}
+.lightbox-nav{position:absolute;top:50%;transform:translateY(-50%);width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.15);color:#fff;font-size:1.5rem;display:flex;align-items:center;justify-content:center;transition:background .2s,border-color .2s;z-index:10}
+.lightbox-nav:hover{background:rgba(255,255,255,.22);border-color:rgba(255,255,255,.35)}
 .lightbox-prev{left:1rem}
 .lightbox-next{right:1rem}
-.lightbox-counter{position:absolute;bottom:1.25rem;left:50%;transform:translateX(-50%);font-family:var(--font-d);font-size:.8rem;font-weight:700;color:rgba(255,255,255,.55);letter-spacing:.08em}
+.lightbox-counter{position:absolute;bottom:1.25rem;left:50%;transform:translateX(-50%);font-family:var(--font-d);font-size:.78rem;font-weight:700;color:rgba(255,255,255,.5);letter-spacing:.1em;background:rgba(0,0,0,.4);padding:.3rem .75rem;border-radius:20px}
+
+/* ════ CONTACT MODAL ════ */
+.contact-overlay{position:fixed;inset:0;z-index:500;background:rgba(10,30,20,.58);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;padding:1.5rem;opacity:0;visibility:hidden;transition:opacity .25s ease,visibility .25s}
+.contact-overlay.open{opacity:1;visibility:visible}
+.contact-modal{background:var(--sf);border-radius:16px;box-shadow:0 32px 80px rgba(0,0,0,.32),0 0 0 1px var(--bd);width:min(480px,100%);max-height:90vh;overflow-y:auto;transform:translateY(14px) scale(.97);transition:transform .3s cubic-bezier(.25,.8,.25,1)}
+.contact-overlay.open .contact-modal{transform:translateY(0) scale(1)}
+.contact-modal-head{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.5rem;border-bottom:1px solid var(--bd)}
+.contact-modal-title{font-family:var(--font-d);font-size:1.1rem;font-weight:700}
+.contact-modal-close{width:36px;height:36px;border-radius:50%;background:var(--clv-l);color:var(--tx-m);font-size:1rem;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--bd);transition:all var(--tr);cursor:pointer}
+.contact-modal-close:hover{background:var(--bd);color:var(--tx)}
+.contact-modal-body{padding:1.5rem;display:flex;flex-direction:column;gap:1.25rem}
+.contact-school-name{font-family:var(--font-d);font-weight:700;font-size:.88rem;color:var(--tx-m);line-height:1.55}
+.contact-ctas{display:flex;flex-direction:column;gap:.6rem}
+.contact-cta{display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;border-radius:var(--r-s);border:1.5px solid var(--bd);transition:all .22s ease;color:var(--tx);text-decoration:none}
+.contact-cta-phone{border-color:rgba(31,75,60,.3)}
+.contact-cta-email{border-color:var(--bd)}
+.contact-cta-phone:hover{background:rgba(31,75,60,.06);border-color:var(--cp)}
+.contact-cta-email:hover{background:rgba(212,117,106,.06);border-color:var(--ca)}
+.contact-cta-icon{width:44px;height:44px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.15rem;font-family:var(--font-d)}
+.contact-cta-phone .contact-cta-icon{background:rgba(31,75,60,.1);color:var(--cp)}
+.contact-cta-email .contact-cta-icon{background:rgba(212,117,106,.1);color:var(--ca-d)}
+.contact-cta-label{font-size:.68rem;font-family:var(--font-d);font-weight:600;color:var(--tx-m);text-transform:uppercase;letter-spacing:.07em;display:block}
+.contact-cta-value{font-family:var(--font-d);font-weight:700;font-size:1rem;display:block;color:var(--tx)}
+.contact-divider{border:none;border-top:1px solid var(--bd)}
+.contact-info-row{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem}
+@media(max-width:400px){.contact-info-row{grid-template-columns:1fr}}
+.contact-info-block{display:flex;flex-direction:column;gap:.3rem}
+.contact-info-lbl{font-family:var(--font-d);font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ca);margin-bottom:.15rem}
+.contact-info-block address,.contact-info-block p{font-size:.88rem;color:var(--tx);line-height:1.65;font-style:normal}
+.contact-info-block .contact-note{font-size:.78rem;color:var(--tx-m);margin-top:.15rem}
+.contact-map-link{font-family:var(--font-d);font-size:.8rem;font-weight:700;color:var(--cp);transition:color var(--tr);display:inline-block;margin-top:.25rem}
+.contact-map-link:hover{color:var(--ca)}
 
 /* ════ FOOTER ════ */
 .site-footer{background:var(--cp-d);color:rgba(255,255,255,.8);padding:0}
@@ -262,7 +301,7 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
         <li><a href="#" >Uczniowie</a></li>
         <li><a href="#">Rodzice</a></li>
         <li><a href="#">Projekty</a></li>
-        <li><a href="#">Kontakt</a></li>
+        <li><a href="#" data-open-contact>Kontakt</a></li>
       </ul>
     </nav>
     <div class="header-controls">
@@ -289,7 +328,7 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
   <div class="mob-body">
     <a href="aktualnosci.html" class="mob-link"><img src="grafiki-ai/nav-mobile-aktualnosci.png" alt="" width="22" height="22" aria-hidden="true">Aktualności</a>
     <a href="galeria.html" class="mob-link"><img src="grafiki-ai/nav-nasza-szkola-galeria.png" alt="" width="22" height="22" aria-hidden="true">Galeria</a>
-    <a href="#" class="mob-link"><img src="grafiki-ai/nav-mobile-kontakt.png" alt="" width="22" height="22" aria-hidden="true">Kontakt</a>
+    <a href="#" class="mob-link" data-open-contact><img src="grafiki-ai/nav-mobile-kontakt.png" alt="" width="22" height="22" aria-hidden="true">Kontakt</a>
   </div>
 </nav>
 
@@ -349,9 +388,45 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
 <div class="lightbox" id="lightbox" role="dialog" aria-label="Podgląd zdjęcia" aria-modal="true">
   <button class="lightbox-close" id="lbClose" aria-label="Zamknij podgląd">✕</button>
   <button class="lightbox-nav lightbox-prev" id="lbPrev" aria-label="Poprzednie zdjęcie">‹</button>
-  <img class="lightbox-img" id="lbImg" src="" alt="">
+  <div class="lightbox-stage"><img class="lightbox-img" id="lbImg" src="" alt="" draggable="false"></div>
   <button class="lightbox-nav lightbox-next" id="lbNext" aria-label="Następne zdjęcie">›</button>
   <span class="lightbox-counter" id="lbCounter"></span>
+</div>
+
+<!-- CONTACT MODAL -->
+<div class="contact-overlay" id="contactOverlay" role="dialog" aria-modal="true" aria-labelledby="contactModalTitle" aria-hidden="true">
+  <div class="contact-modal">
+    <div class="contact-modal-head">
+      <h2 class="contact-modal-title" id="contactModalTitle">Kontakt</h2>
+      <button class="contact-modal-close" id="contactModalClose" aria-label="Zamknij okno kontaktowe">✕</button>
+    </div>
+    <div class="contact-modal-body">
+      <p class="contact-school-name">Szkoła Podstawowa nr 32<br>im. Leona Kruczkowskiego w Sosnowcu</p>
+      <div class="contact-ctas">
+        <a href="tel:+48322634301" class="contact-cta contact-cta-phone">
+          <span class="contact-cta-icon">☎</span>
+          <span><span class="contact-cta-label">Telefon sekretariatu</span><span class="contact-cta-value">32 263-43-01</span></span>
+        </a>
+        <a href="mailto:sp32@sosnowiec.edu.pl" class="contact-cta contact-cta-email">
+          <span class="contact-cta-icon">@</span>
+          <span><span class="contact-cta-label">E-mail</span><span class="contact-cta-value">sp32@sosnowiec.edu.pl</span></span>
+        </a>
+      </div>
+      <hr class="contact-divider">
+      <div class="contact-info-row">
+        <div class="contact-info-block">
+          <p class="contact-info-lbl">Adres</p>
+          <address>ul. Armii Krajowej 93<br>41-215 Sosnowiec<br>woj. śląskie</address>
+          <a href="https://maps.google.com/?q=ul.+Armii+Krajowej+93,+41-215+Sosnowiec" target="_blank" rel="noopener" class="contact-map-link">Pokaż na mapie →</a>
+        </div>
+        <div class="contact-info-block">
+          <p class="contact-info-lbl">Godziny pracy</p>
+          <p>Sekretariat:<br>pon–pt 7:00–15:00</p>
+          <p class="contact-note">Szkoła: 8:00–16:25<br>Świetlica: 6:30–17:00</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- FOOTER -->
@@ -399,7 +474,7 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
       <a href="#" class="footer-chip">Rekrutacja</a>
       <a href="#" class="footer-chip">Jadłospis</a>
       <a href="#" class="footer-chip">Pedagog</a>
-      <a href="#" class="footer-chip">Kontakt</a>
+      <a href="#" class="footer-chip" data-open-contact>Kontakt</a>
     </nav>
     <div class="footer-bottom">
       <p class="footer-legal">© 2026 Szkoła Podstawowa nr 32 im. L. Kruczkowskiego w Sosnowcu &nbsp;·&nbsp; NIP: 644-30-91-938 &nbsp;·&nbsp; REGON: 000738792</p>
@@ -458,10 +533,10 @@ const io = new IntersectionObserver((es) => {
 function revealAll() { document.querySelectorAll('.reveal:not(.visible)').forEach(el => io.observe(el)); }
 revealAll();
 
-/* ── LIGHTBOX ── */
-let lbImages = [], lbIndex = 0;
+/* ── LIGHTBOX — slide + swipe ── */
+let lbImages = [], lbIndex = 0, lbAnimating = false;
 const lightbox = document.getElementById('lightbox');
-const lbImg = document.getElementById('lbImg');
+const lbImg    = document.getElementById('lbImg');
 const lbCounter = document.getElementById('lbCounter');
 
 function openLightbox(images, idx) {
@@ -469,6 +544,7 @@ function openLightbox(images, idx) {
   lbImg.src = lbImages[lbIndex];
   lbImg.alt = `Zdjęcie ${lbIndex + 1} z ${lbImages.length}`;
   lbCounter.textContent = `${lbIndex + 1} / ${lbImages.length}`;
+  lbImg.className = 'lightbox-img';
   lightbox.classList.add('open');
   document.body.style.overflow = 'hidden';
 }
@@ -477,21 +553,57 @@ function closeLightbox() {
   document.body.style.overflow = '';
 }
 function lbStep(dir) {
-  lbIndex = (lbIndex + dir + lbImages.length) % lbImages.length;
-  lbImg.src = lbImages[lbIndex];
-  lbImg.alt = `Zdjęcie ${lbIndex + 1} z ${lbImages.length}`;
-  lbCounter.textContent = `${lbIndex + 1} / ${lbImages.length}`;
+  if (lbAnimating || lbImages.length < 2) return;
+  lbAnimating = true;
+  const exitCls = dir > 0 ? 'lb-exit-l' : 'lb-exit-r';
+  const enterCls = dir > 0 ? 'lb-enter-l' : 'lb-enter-r';
+  lbImg.classList.add(exitCls);
+  setTimeout(() => {
+    lbIndex = (lbIndex + dir + lbImages.length) % lbImages.length;
+    lbImg.src = lbImages[lbIndex];
+    lbImg.alt = `Zdjęcie ${lbIndex + 1} z ${lbImages.length}`;
+    lbCounter.textContent = `${lbIndex + 1} / ${lbImages.length}`;
+    lbImg.className = 'lightbox-img ' + enterCls;
+    setTimeout(() => { lbImg.className = 'lightbox-img'; lbAnimating = false; }, 300);
+  }, 230);
 }
 document.getElementById('lbClose').addEventListener('click', closeLightbox);
 document.getElementById('lbPrev').addEventListener('click', () => lbStep(-1));
 document.getElementById('lbNext').addEventListener('click', () => lbStep(1));
-lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+lightbox.addEventListener('click', e => { if (e.target === lightbox || e.target.classList.contains('lightbox-stage')) closeLightbox(); });
+
+/* Touch swipe */
+let lbTouchX = 0;
+lightbox.addEventListener('touchstart', e => { lbTouchX = e.touches[0].clientX; }, { passive: true });
+lightbox.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - lbTouchX;
+  if (Math.abs(dx) > 45) lbStep(dx < 0 ? 1 : -1);
+}, { passive: true });
+
 document.addEventListener('keydown', e => {
   if (!lightbox.classList.contains('open')) return;
-  if (e.key === 'ArrowLeft') lbStep(-1);
+  if (e.key === 'ArrowLeft')  lbStep(-1);
   if (e.key === 'ArrowRight') lbStep(1);
-  if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'Escape')     closeLightbox();
 });
+
+/* ── CONTACT MODAL ── */
+function openContact() {
+  const ov = document.getElementById('contactOverlay');
+  if (!ov) return;
+  ov.removeAttribute('aria-hidden'); ov.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => document.getElementById('contactModalClose')?.focus(), 40);
+}
+function closeContact() {
+  const ov = document.getElementById('contactOverlay');
+  if (!ov) return;
+  ov.setAttribute('aria-hidden', 'true'); ov.classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('contactModalClose')?.addEventListener('click', closeContact);
+document.getElementById('contactOverlay')?.addEventListener('click', e => { if (e.target.id === 'contactOverlay') closeContact(); });
+document.querySelectorAll('[data-open-contact]').forEach(el => { el.addEventListener('click', e => { e.preventDefault(); openContact(); }); });
 
 /* ── GALERIE Z API ── */
 const MONTHS = ['stycznia','lutego','marca','kwietnia','maja','czerwca','lipca','sierpnia','września','października','listopada','grudnia'];
@@ -608,5 +720,12 @@ function closeAlbum() {
 
 document.getElementById('viewerClose').addEventListener('click', closeAlbum);
 
-loadAlbums();
+(async () => {
+  await loadAlbums();
+  const autoId = new URLSearchParams(location.search).get('album');
+  if (autoId) {
+    const card = document.querySelector(`[data-id="${autoId}"]`);
+    if (card) openAlbum(autoId, card.dataset.title);
+  }
+})();
 </script>

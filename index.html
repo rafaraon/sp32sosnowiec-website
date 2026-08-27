@@ -563,6 +563,64 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
 
 :focus-visible { outline: 2px solid var(--ca); outline-offset: 3px; border-radius: 4px; }
 
+/* ── CONTACT MODAL ── */
+.contact-overlay {
+  position: fixed; inset: 0; z-index: 500;
+  background: rgba(10,30,20,.58);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  display: flex; align-items: center; justify-content: center; padding: 1.5rem;
+  opacity: 0; visibility: hidden; transition: opacity .25s ease, visibility .25s;
+}
+.contact-overlay.open { opacity: 1; visibility: visible; }
+.contact-modal {
+  background: var(--sf); border-radius: 16px;
+  box-shadow: 0 32px 80px rgba(0,0,0,.32), 0 0 0 1px var(--bd);
+  width: min(480px, 100%); max-height: 90vh; overflow-y: auto;
+  transform: translateY(14px) scale(.97);
+  transition: transform .3s cubic-bezier(.25,.8,.25,1);
+}
+.contact-overlay.open .contact-modal { transform: translateY(0) scale(1); }
+.contact-modal-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--bd);
+}
+.contact-modal-title { font-family: var(--font-d); font-size: 1.1rem; font-weight: 700; }
+.contact-modal-close {
+  width: 36px; height: 36px; border-radius: 50%; background: var(--clv-l);
+  color: var(--tx-m); font-size: 1rem; display: flex; align-items: center; justify-content: center;
+  border: 1.5px solid var(--bd); transition: all var(--tr); cursor: pointer;
+}
+.contact-modal-close:hover { background: var(--bd); color: var(--tx); }
+.contact-modal-body { padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem; }
+.contact-school-name { font-family: var(--font-d); font-weight: 700; font-size: .88rem; color: var(--tx-m); line-height: 1.55; }
+.contact-ctas { display: flex; flex-direction: column; gap: .6rem; }
+.contact-cta {
+  display: flex; align-items: center; gap: 1rem; padding: 1rem 1.25rem;
+  border-radius: var(--r-s); border: 1.5px solid var(--bd);
+  transition: all .22s ease; color: var(--tx); text-decoration: none;
+}
+.contact-cta-phone { border-color: rgba(31,75,60,.3); }
+.contact-cta-email { border-color: var(--bd); }
+.contact-cta-phone:hover { background: rgba(31,75,60,.06); border-color: var(--cp); }
+.contact-cta-email:hover { background: rgba(212,117,106,.06); border-color: var(--ca); }
+.contact-cta-icon {
+  width: 44px; height: 44px; border-radius: 10px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; font-size: 1.15rem; font-family: var(--font-d);
+}
+.contact-cta-phone .contact-cta-icon { background: rgba(31,75,60,.1); color: var(--cp); }
+.contact-cta-email .contact-cta-icon { background: rgba(212,117,106,.1); color: var(--ca-d); }
+.contact-cta-label { font-size: .68rem; font-family: var(--font-d); font-weight: 600; color: var(--tx-m); text-transform: uppercase; letter-spacing: .07em; display: block; }
+.contact-cta-value { font-family: var(--font-d); font-weight: 700; font-size: 1rem; display: block; color: var(--tx); }
+.contact-divider { border: none; border-top: 1px solid var(--bd); }
+.contact-info-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
+@media (max-width: 400px) { .contact-info-row { grid-template-columns: 1fr; } }
+.contact-info-block { display: flex; flex-direction: column; gap: .3rem; }
+.contact-info-lbl { font-family: var(--font-d); font-size: .65rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ca); margin-bottom: .15rem; }
+.contact-info-block address, .contact-info-block p { font-size: .88rem; color: var(--tx); line-height: 1.65; font-style: normal; }
+.contact-info-block .contact-note { font-size: .78rem; color: var(--tx-m); margin-top: .15rem; }
+.contact-map-link { font-family: var(--font-d); font-size: .8rem; font-weight: 700; color: var(--cp); transition: color var(--tr); display: inline-block; margin-top: .25rem; }
+.contact-map-link:hover { color: var(--ca); }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; }
   html { scroll-behavior: auto; }
@@ -671,7 +729,7 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
         </li>
 
         <li><a href="#">Projekty</a></li>
-        <li><a href="#">Kontakt</a></li>
+        <li><a href="#" data-open-contact>Kontakt</a></li>
       </ul>
     </nav>
 
@@ -706,7 +764,7 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   <div class="mob-body">
     <a href="#" class="mob-link"><img src="grafiki-ai/nav-mobile-aktualnosci.png" srcset="grafiki-ai/nav-mobile-aktualnosci@2x.png 2x" alt="" width="22" height="22" aria-hidden="true">Aktualności</a>
     <a href="#" class="mob-link"><img src="grafiki-ai/nav-mobile-projekty.png" srcset="grafiki-ai/nav-mobile-projekty@2x.png 2x" alt="" width="22" height="22" aria-hidden="true">Projekty</a>
-    <a href="#" class="mob-link"><img src="grafiki-ai/nav-mobile-kontakt.png" srcset="grafiki-ai/nav-mobile-kontakt@2x.png 2x" alt="" width="22" height="22" aria-hidden="true">Kontakt</a>
+    <a href="#" class="mob-link" data-open-contact><img src="grafiki-ai/nav-mobile-kontakt.png" srcset="grafiki-ai/nav-mobile-kontakt@2x.png 2x" alt="" width="22" height="22" aria-hidden="true">Kontakt</a>
 
     <hr class="mob-divider">
     <p class="mob-section-title"><img src="grafiki-ai/nav-mobile-nasza-szkola.png" srcset="grafiki-ai/nav-mobile-nasza-szkola@2x.png 2x" alt="" width="16" height="16" aria-hidden="true" style="display:inline;vertical-align:middle;margin-right:.4rem">Nasza Szkoła</p>
@@ -854,23 +912,8 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
       </div>
       <a href="galeria.html" class="section-link">Wszystkie albumy →</a>
     </div>
-    <div class="gallery-grid">
-      <a href="#" class="album-card" aria-label="Album: Dzień Sportu 2026, 48 zdjęć">
-        <div class="album-thumb at-green"><span class="album-count">48 zdjęć</span></div>
-        <div class="album-info"><div class="album-meta"><span class="chip chip-new">Nowe</span></div><p class="album-name">Dzień Sportu 2026</p></div>
-      </a>
-      <a href="#" class="album-card" aria-label="Album: Wycieczka do Wieliczki, 112 zdjęć">
-        <div class="album-thumb at-coral"><span class="album-count">112 zdjęć</span></div>
-        <div class="album-info"><div class="album-meta"><span class="chip chip-new">Nowe</span></div><p class="album-name">Wycieczka do Wieliczki — kl. IV</p></div>
-      </a>
-      <a href="https://sp32sosnowiec.edupage.org" class="album-card" target="_blank" rel="noopener" aria-label="Album: Jasełka 2023 — archiwum EduPage">
-        <div class="album-thumb at-gold"><span class="album-count">67 zdjęć</span></div>
-        <div class="album-info"><div class="album-meta"><span class="chip chip-archive">↗ Archiwum EduPage</span></div><p class="album-name">Jasełka 2023</p></div>
-      </a>
-      <a href="https://sp32sosnowiec.edupage.org" class="album-card" target="_blank" rel="noopener" aria-label="Album: Konkurs plastyczny 2022 — archiwum EduPage">
-        <div class="album-thumb at-lav"><span class="album-count">34 zdjęcia</span></div>
-        <div class="album-info"><div class="album-meta"><span class="chip chip-archive">↗ Archiwum EduPage</span></div><p class="album-name">Konkurs plastyczny 2022</p></div>
-      </a>
+    <div class="gallery-grid stagger" id="home-gallery-grid">
+      <div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--tx-m)">Ładowanie galerii…</div>
     </div>
   </div>
 </section>
@@ -950,7 +993,7 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
       <a href="#" class="footer-chip">Doradca zawodowy</a>
       <a href="#" class="footer-chip">Pielęgniarka</a>
       <a href="#" class="footer-chip">ZFŚS</a>
-      <a href="#" class="footer-chip">Kontakt</a>
+      <a href="#" class="footer-chip" data-open-contact>Kontakt</a>
     </nav>
 
     <div class="footer-bottom">
@@ -962,6 +1005,42 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
 </footer>
 
 <button id="back-top" aria-label="Wróć na górę strony" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<!-- ── CONTACT MODAL ── -->
+<div class="contact-overlay" id="contactOverlay" role="dialog" aria-modal="true" aria-labelledby="contactModalTitle" aria-hidden="true">
+  <div class="contact-modal">
+    <div class="contact-modal-head">
+      <h2 class="contact-modal-title" id="contactModalTitle">Kontakt</h2>
+      <button class="contact-modal-close" id="contactModalClose" aria-label="Zamknij okno kontaktowe">✕</button>
+    </div>
+    <div class="contact-modal-body">
+      <p class="contact-school-name">Szkoła Podstawowa nr 32<br>im. Leona Kruczkowskiego w Sosnowcu</p>
+      <div class="contact-ctas">
+        <a href="tel:+48322634301" class="contact-cta contact-cta-phone">
+          <span class="contact-cta-icon">☎</span>
+          <span><span class="contact-cta-label">Telefon sekretariatu</span><span class="contact-cta-value">32 263-43-01</span></span>
+        </a>
+        <a href="mailto:sp32@sosnowiec.edu.pl" class="contact-cta contact-cta-email">
+          <span class="contact-cta-icon">@</span>
+          <span><span class="contact-cta-label">E-mail</span><span class="contact-cta-value">sp32@sosnowiec.edu.pl</span></span>
+        </a>
+      </div>
+      <hr class="contact-divider">
+      <div class="contact-info-row">
+        <div class="contact-info-block">
+          <p class="contact-info-lbl">Adres</p>
+          <address>ul. Armii Krajowej 93<br>41-215 Sosnowiec<br>woj. śląskie</address>
+          <a href="https://maps.google.com/?q=ul.+Armii+Krajowej+93,+41-215+Sosnowiec" target="_blank" rel="noopener" class="contact-map-link">Pokaż na mapie →</a>
+        </div>
+        <div class="contact-info-block">
+          <p class="contact-info-lbl">Godziny pracy</p>
+          <p>Sekretariat:<br>pon–pt 7:00–15:00</p>
+          <p class="contact-note">Szkoła: 8:00–16:25<br>Świetlica: 6:30–17:00</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
   /* Scroll bar + back-to-top */
@@ -1089,4 +1168,57 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
       grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--tx-m)">Nie udało się załadować aktualności.</p>';
     }
   })();
+
+  /* ── GALERIA PREVIEW Z API ── */
+  (async () => {
+    const COLORS = ['at-green', 'at-coral', 'at-gold', 'at-lav'];
+    const grid = document.getElementById('home-gallery-grid');
+    if (!grid) return;
+    try {
+      const { galleries = [] } = await fetch('/api/galleries?status=published&limit=4').then(r => r.json());
+      if (!galleries.length) {
+        grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--tx-m)">Brak galerii. Dodaj pierwszą w panelu redakcji.</p>';
+        return;
+      }
+      grid.innerHTML = galleries.map((g, i) => {
+        const count = g.image_count ?? 0;
+        const isNew = (Date.now() - new Date(g.published_at || g.created_at)) < 30 * 864e5;
+        const thumbBg = g.cover_url ? ` style="background:url('${g.cover_url}') center/cover no-repeat"` : '';
+        const thumbCls = g.cover_url ? '' : COLORS[i % 4];
+        return `<a href="galeria.html" class="album-card reveal" aria-label="Album: ${g.title}, ${count} zdjęć">
+          <div class="album-thumb ${thumbCls}"${thumbBg}><span class="album-count">${count} zdjęć</span></div>
+          <div class="album-info">
+            <div class="album-meta">${isNew ? '<span class="chip chip-new">Nowe</span>' : ''}</div>
+            <p class="album-name">${g.title}</p>
+          </div>
+        </a>`;
+      }).join('');
+      revealAll();
+    } catch { /* galeria preview niekrytyczna */ }
+  })();
+
+  /* ── CONTACT MODAL ── */
+  function openContact() {
+    const ov = document.getElementById('contactOverlay');
+    if (!ov) return;
+    ov.removeAttribute('aria-hidden');
+    ov.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => document.getElementById('contactModalClose')?.focus(), 40);
+  }
+  function closeContact() {
+    const ov = document.getElementById('contactOverlay');
+    if (!ov) return;
+    ov.setAttribute('aria-hidden', 'true');
+    ov.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('contactModalClose')?.addEventListener('click', closeContact);
+  document.getElementById('contactOverlay')?.addEventListener('click', e => {
+    if (e.target.id === 'contactOverlay') closeContact();
+  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeContact(); } });
+  document.querySelectorAll('[data-open-contact]').forEach(el => {
+    el.addEventListener('click', e => { e.preventDefault(); openContact(); });
+  });
 </script>

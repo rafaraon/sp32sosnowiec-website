@@ -371,28 +371,49 @@ input,select,textarea{font-family:inherit;font-size:1rem;color:var(--tx)}
           <h2 id="galleryFormTitle">Nowa galeria</h2>
         </div>
         <div class="gallery-editor-layout">
-          <div class="side-card">
-            <form id="galleryFormEl">
-              <div class="field-group" style="margin-bottom:.75rem">
-                <label for="galTitle">Tytuł galerii *</label>
-                <input type="text" id="galTitle" required placeholder="np. Dzień Ziemi 2024" class="input-lg">
+          <div style="display:flex;flex-direction:column;gap:1rem">
+            <!-- Cover image -->
+            <div class="side-card">
+              <h3>Zdjęcie wyróżniające</h3>
+              <div class="img-upload-zone" id="galCoverZone" tabindex="0" role="button" aria-label="Wgraj zdjęcie wyróżniające galerii">
+                <img id="galCoverPreviewImg" alt="Podgląd okładki" hidden>
+                <div id="galCoverZoneContent">
+                  <span>Kliknij lub przeciągnij zdjęcie</span>
+                  <span class="upload-hint">JPG, PNG, WebP · maks. 10 MB</span>
+                </div>
+                <input type="file" id="galCoverFile" accept="image/*" hidden>
               </div>
-              <div class="field-group" style="margin-bottom:.75rem">
-                <label for="galDesc">Opis (opcjonalnie)</label>
-                <textarea id="galDesc" rows="3" placeholder="Krótki opis galerii..."></textarea>
+              <div style="margin-top:.75rem;display:flex;align-items:center;gap:.5rem">
+                <input type="checkbox" id="galNoCover" style="width:16px;height:16px;cursor:pointer;accent-color:var(--cp)">
+                <label for="galNoCover" style="font-size:.82rem;color:var(--tx-m);cursor:pointer">Galeria bez zdjęcia wyróżniającego</label>
               </div>
-              <div class="field-group" style="margin-bottom:1.25rem">
-                <label for="galStatus">Status</label>
-                <select id="galStatus">
-                  <option value="draft">Szkic</option>
-                  <option value="published">Opublikowana</option>
-                </select>
-              </div>
-              <div class="form-actions">
-                <button type="submit" class="btn btn-primary btn-full">Zapisz galerię</button>
-                <button type="button" class="btn btn-ghost btn-full" id="cancelGalleryBtn">Anuluj</button>
-              </div>
-            </form>
+              <button type="button" class="btn btn-ghost btn-sm" id="galRemoveCoverBtn" style="margin-top:.5rem;display:none" onclick="setGalCoverPreview(null)">Usuń okładkę</button>
+            </div>
+
+            <!-- Form fields -->
+            <div class="side-card">
+              <form id="galleryFormEl">
+                <div class="field-group" style="margin-bottom:.75rem">
+                  <label for="galTitle">Tytuł galerii *</label>
+                  <input type="text" id="galTitle" required placeholder="np. Dzień Ziemi 2024" class="input-lg">
+                </div>
+                <div class="field-group" style="margin-bottom:.75rem">
+                  <label for="galDesc">Opis (opcjonalnie)</label>
+                  <textarea id="galDesc" rows="3" placeholder="Krótki opis galerii..."></textarea>
+                </div>
+                <div class="field-group" style="margin-bottom:1.25rem">
+                  <label for="galStatus">Status</label>
+                  <select id="galStatus">
+                    <option value="draft">Szkic</option>
+                    <option value="published">Opublikowana</option>
+                  </select>
+                </div>
+                <div class="form-actions">
+                  <button type="submit" class="btn btn-primary btn-full">Zapisz galerię</button>
+                  <button type="button" class="btn btn-ghost btn-full" id="cancelGalleryBtn">Anuluj</button>
+                </div>
+              </form>
+            </div>
           </div>
           <div id="galleryImagesPanel" hidden>
             <div class="side-card">
@@ -423,6 +444,7 @@ const S = {
   key: sessionStorage.getItem('sp32AdminKey') || '',
   editingArticleId: null,
   editingGalleryId: null,
+  galCoverUrl: null,
   articleStatusFilter: 'all',
   quill: null,
 };
@@ -786,6 +808,7 @@ function renderGalleriesTable(galleries) {
       <td>${statusBadge(g.status)}</td>
       <td>${fmtDate(g.published_at || g.created_at)}</td>
       <td class="td-actions">
+        ${g.status === 'published' ? `<a class="btn btn-ghost btn-sm" href="/galeria.html?album=${g.id}" target="_blank" rel="noopener">Podgląd ↗</a>` : ''}
         <button class="btn btn-ghost btn-sm" onclick="editGallery(${g.id})">Edytuj</button>
         <button class="btn btn-ghost btn-sm btn-danger" onclick="deleteGallery(${g.id}, '${g.title.replace(/'/g, "\\'")}')">Usuń</button>
       </td>
@@ -799,6 +822,7 @@ document.getElementById('cancelGalleryBtn').addEventListener('click', () => clos
 
 function showGalleryForm(gallery = null) {
   S.editingGalleryId = gallery?.id || null;
+  S.galCoverUrl = gallery?.cover_url || null;
   document.getElementById('galleryFormTitle').textContent = gallery ? 'Edytuj galerię' : 'Nowa galeria';
   document.getElementById('galleriesList').hidden = true;
   document.getElementById('galleryForm').hidden = false;
@@ -806,6 +830,8 @@ function showGalleryForm(gallery = null) {
   document.getElementById('galTitle').value  = gallery?.title       || '';
   document.getElementById('galDesc').value   = gallery?.description || '';
   document.getElementById('galStatus').value = gallery?.status      || 'draft';
+  document.getElementById('galNoCover').checked = false;
+  setGalCoverPreview(gallery?.cover_url || null);
 
   if (gallery?.id) {
     document.getElementById('galleryImagesPanel').hidden = false;
@@ -816,6 +842,30 @@ function showGalleryForm(gallery = null) {
   }
 
   document.getElementById('galTitle').focus();
+}
+
+function setGalCoverPreview(url) {
+  const img = document.getElementById('galCoverPreviewImg');
+  const removeBtn = document.getElementById('galRemoveCoverBtn');
+  const content = document.getElementById('galCoverZoneContent');
+  S.galCoverUrl = url;
+  if (url) {
+    img.src = url; img.hidden = false; removeBtn.style.display = '';
+    content.innerHTML = '';
+  } else {
+    img.hidden = true; img.src = ''; removeBtn.style.display = 'none';
+    content.innerHTML = '<span>Kliknij lub przeciągnij zdjęcie</span><span class="upload-hint">JPG, PNG, WebP · maks. 10 MB</span>';
+  }
+}
+
+async function uploadGalCover(file) {
+  document.getElementById('galCoverZoneContent').innerHTML = '<div class="upload-loading"><span class="spinner"></span> Kompresuję i wgrywam...</div>';
+  try {
+    const compressed = await compressImage(file, 1400, 0.82);
+    const r = await api.upload(compressed);
+    if (r.url) setGalCoverPreview(r.url);
+    else { toast('Błąd wgrywania okładki.', 'error'); setGalCoverPreview(null); }
+  } catch { toast('Błąd wgrywania okładki.', 'error'); setGalCoverPreview(null); }
 }
 
 function closeGalleryForm() {
@@ -843,10 +893,12 @@ document.getElementById('galleryFormEl').addEventListener('submit', async e => {
   btn.disabled = true;
   btn.textContent = 'Zapisuję...';
 
+  const noCover = document.getElementById('galNoCover').checked;
   const payload = {
     title:       document.getElementById('galTitle').value.trim(),
     description: document.getElementById('galDesc').value.trim() || null,
     status:      document.getElementById('galStatus').value,
+    cover_url:   noCover ? null : (S.galCoverUrl || null),
   };
 
   try {
@@ -893,6 +945,23 @@ async function deleteGalleryImage(imageId) {
   if (r.ok) { loadGalleryImages(S.editingGalleryId); toast('Zdjęcie usunięte.', 'success'); }
   else toast('Błąd podczas usuwania.', 'error');
 }
+
+/* Gallery COVER upload zone */
+const galCoverZone  = document.getElementById('galCoverZone');
+const galCoverInput = document.getElementById('galCoverFile');
+galCoverZone.addEventListener('click', () => galCoverInput.click());
+galCoverZone.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') galCoverInput.click(); });
+galCoverInput.addEventListener('change', () => { if (galCoverInput.files[0]) uploadGalCover(galCoverInput.files[0]); galCoverInput.value = ''; });
+galCoverZone.addEventListener('dragover', e => { e.preventDefault(); galCoverZone.classList.add('drag-over'); });
+galCoverZone.addEventListener('dragleave', () => galCoverZone.classList.remove('drag-over'));
+galCoverZone.addEventListener('drop', e => {
+  e.preventDefault(); galCoverZone.classList.remove('drag-over');
+  const f = [...e.dataTransfer.files].find(f => f.type.startsWith('image/'));
+  if (f) uploadGalCover(f);
+});
+document.getElementById('galNoCover').addEventListener('change', e => {
+  if (e.target.checked) setGalCoverPreview(null);
+});
 
 /* Gallery image upload zone */
 const galImgZone = document.getElementById('galleryImgZone');
