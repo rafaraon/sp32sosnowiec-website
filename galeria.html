@@ -243,6 +243,10 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
 .footer-legal{font-size:.72rem;color:rgba(255,255,255,.3);line-height:1.6}
 .footer-a11y-link{font-size:.72rem;color:rgba(255,255,255,.4);font-family:var(--font-d);font-weight:600;transition:color var(--tr)}
 .footer-a11y-link:hover{color:var(--ca)}
+.footer-rodo{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:.9rem 0;border-top:1px solid rgba(255,255,255,.06);margin-bottom:.25rem}
+.footer-rodo-text{font-size:.72rem;color:rgba(255,255,255,.35);line-height:1.5}
+.footer-rodo-link{font-family:var(--font-d);font-size:.72rem;font-weight:600;color:rgba(255,255,255,.4);white-space:nowrap;border:1px solid rgba(255,255,255,.12);padding:.25rem .65rem;border-radius:20px;transition:all var(--tr)}
+.footer-rodo-link:hover{color:#fff;border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.06)}
 
 /* ── BACK TO TOP ── */
 #back-top{position:fixed;bottom:1.5rem;right:1.5rem;width:44px;height:44px;background:var(--ca);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;box-shadow:0 4px 16px rgba(212,117,106,.4);opacity:0;transform:translateY(10px);transition:all .25s;z-index:50;cursor:pointer}
@@ -482,8 +486,12 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
       <a href="polityka-prywatnosci.html" class="footer-chip">Polityka prywatności</a>
       <a href="#" class="footer-chip" data-open-contact>Kontakt</a>
     </nav>
+    <div class="footer-rodo">
+      <p class="footer-rodo-text">Zdjęcia w galerii publikowane są wyłącznie za zgodą rodziców/opiekunów prawnych uczniów (RODO art. 6 ust. 1 lit. a). Masz prawo wycofać zgodę w dowolnym momencie.</p>
+      <a href="mailto:sp32@sosnowiec.edu.pl?subject=Wycofanie%20zgody%20RODO%20%E2%80%94%20wizerunek" class="footer-rodo-link">Wycofaj zgodę →</a>
+    </div>
     <div class="footer-bottom">
-      <p class="footer-legal">© 2026 Szkoła Podstawowa nr 32 im. L. Kruczkowskiego w Sosnowcu &nbsp;·&nbsp; NIP: 644-30-91-938 &nbsp;·&nbsp; REGON: 000738792</p>
+      <p class="footer-legal">© 2026 Szkoła Podstawowa nr 32 im. L. Kruczkowskiego w Sosnowiec &nbsp;·&nbsp; NIP: 644-30-91-938 &nbsp;·&nbsp; REGON: 000738792</p>
       <a href="#" class="footer-a11y-link">Deklaracja Dostępności WCAG 2.1 AA →</a>
     </div>
   </div>
