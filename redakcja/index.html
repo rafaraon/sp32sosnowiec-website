@@ -215,6 +215,8 @@ input,select,textarea{font-family:inherit;font-size:1rem;color:var(--tx)}
       <nav class="admin-tabs" role="tablist">
         <button class="tab-btn active" data-tab="articles" role="tab" aria-selected="true">📰 Artykuły</button>
         <button class="tab-btn" data-tab="galleries" role="tab" aria-selected="false">🖼 Galerie</button>
+        <button class="tab-btn" data-tab="jadlospis" role="tab" aria-selected="false">🍽 Jadłospis</button>
+        <button class="tab-btn" data-tab="dokumenty" role="tab" aria-selected="false">📄 Dokumenty</button>
       </nav>
       <div class="admin-header-actions">
         <a href="/" class="btn btn-ghost btn-sm">← Strona</a>
@@ -444,6 +446,75 @@ input,select,textarea{font-family:inherit;font-size:1rem;color:var(--tx)}
 
     </div>
 
+    <!-- JADŁOSPIS TAB -->
+    <div id="jadlospisTab" class="tab-panel" role="tabpanel">
+      <div class="panel-header">
+        <div>
+          <h2>Jadłospis</h2>
+          <div id="jadWeekRange" style="font-family:var(--font-d);font-size:.82rem;color:var(--tx-m);margin-top:.15rem"></div>
+        </div>
+        <div style="display:flex;gap:.5rem;align-items:center">
+          <button class="btn btn-ghost btn-sm" id="jadPrev">← Poprzedni</button>
+          <button class="btn btn-ghost btn-sm" id="jadToday" style="background:var(--cp);color:#fff;border-color:var(--cp)">Bieżący</button>
+          <button class="btn btn-ghost btn-sm" id="jadNext">Następny →</button>
+        </div>
+        <button class="btn btn-primary" id="jadSaveBtn">Zapisz jadłospis</button>
+      </div>
+
+      <div style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh)">
+        <div style="display:grid;grid-template-columns:100px 1fr 1fr 1fr 1fr;gap:0;background:var(--clv-l);border-bottom:1px solid var(--bd)">
+          <div style="padding:.6rem 1rem;font-family:var(--font-d);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--tx-m)">Dzień</div>
+          <div style="padding:.6rem 1rem;font-family:var(--font-d);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--tx-m);border-left:1px solid var(--bd)">🍜 Zupa</div>
+          <div style="padding:.6rem 1rem;font-family:var(--font-d);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--tx-m);border-left:1px solid var(--bd)">🍽 Drugie danie</div>
+          <div style="padding:.6rem 1rem;font-family:var(--font-d);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--tx-m);border-left:1px solid var(--bd)">🥤 Kompot</div>
+          <div style="padding:.6rem 1rem;font-family:var(--font-d);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--tx-m);border-left:1px solid var(--bd)">ℹ Uwagi</div>
+        </div>
+        <div id="jadGrid"></div>
+      </div>
+    </div>
+
+    <!-- DOKUMENTY TAB -->
+    <div id="dokumentyTab" class="tab-panel" role="tabpanel">
+      <div class="panel-header">
+        <h2>Dokumenty szkoły</h2>
+        <button class="btn btn-primary" id="docUploadBtn">+ Wgraj dokument</button>
+      </div>
+
+      <div id="docUploadZone" hidden style="background:var(--sf);border:2px dashed var(--bd);border-radius:var(--r);padding:2rem;text-align:center;margin-bottom:1.5rem;cursor:pointer;transition:all var(--tr)">
+        <div style="font-size:2rem;margin-bottom:.5rem">📄</div>
+        <p style="font-family:var(--font-d);font-weight:600;color:var(--tx);margin-bottom:.25rem">Kliknij lub przeciągnij plik</p>
+        <p style="font-size:.82rem;color:var(--tx-m)">PDF, Word, Excel · maks. 50 MB</p>
+        <input type="file" id="docFileInput" accept=".pdf,.doc,.docx,.xls,.xlsx" hidden>
+        <div id="docUploadProgress" hidden style="margin-top:.75rem;font-family:var(--font-d);font-size:.85rem;color:var(--cp)">Wgrywanie…</div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Nazwa pliku</th>
+              <th>Typ</th>
+              <th>Rozmiar</th>
+              <th>Data</th>
+              <th>URL (kliknij by skopiować)</th>
+              <th>Akcje</th>
+            </tr>
+          </thead>
+          <tbody id="docsList">
+            <tr><td colspan="6" class="empty-row">Ładowanie…</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="margin-top:1rem;background:rgba(31,75,60,.06);border:1px solid var(--bd);border-radius:var(--r-s);padding:.85rem 1rem">
+        <p style="font-family:var(--font-d);font-size:.78rem;font-weight:600;color:var(--tx-m)">
+          💡 Zasada: <strong style="color:var(--tx)">wszystkie dokumenty szkoły (Standardy, Statut, regulaminy) powinny być wgrane tutaj</strong>,
+          nie linkowane z EduPage, Dysku Google ani innych zewnętrznych serwisów.
+          R2 jest własnością szkoły — dokumenty będą dostępne niezależnie od dostawców.
+        </p>
+      </div>
+    </div>
+
   </main>
 </div>
 
@@ -593,9 +664,181 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     });
     document.getElementById('articlesTab').classList.toggle('active', tab === 'articles');
     document.getElementById('galleriesTab').classList.toggle('active', tab === 'galleries');
+    document.getElementById('jadlospisTab').classList.toggle('active', tab === 'jadlospis');
+    document.getElementById('dokumentyTab').classList.toggle('active', tab === 'dokumenty');
     if (tab === 'galleries') loadGalleries();
+    if (tab === 'jadlospis') loadJadlospis();
+    if (tab === 'dokumenty') loadDokumenty();
   });
 });
+
+/* ══════════════════════════════════
+   JADŁOSPIS
+══════════════════════════════════ */
+const JAD_DAYS = ['Poniedziałek','Wtorek','Środa','Czwartek','Piątek'];
+const JAD_MONTHS = ['sty','lut','mar','kwi','maj','cze','lip','sie','wrz','paź','lis','gru'];
+
+function jadWeekStart(date) {
+  const d = new Date(date);
+  const day = d.getDay();
+  const diff = (day === 0 ? -6 : 1 - day);
+  d.setDate(d.getDate() + diff);
+  return d.toISOString().slice(0, 10);
+}
+
+let jadCurrentWeek = jadWeekStart(new Date());
+const jadTodayWeek = jadCurrentWeek;
+
+function jadAddWeeks(iso, n) {
+  const d = new Date(iso + 'T00:00:00');
+  d.setDate(d.getDate() + n * 7);
+  return jadWeekStart(d);
+}
+
+function jadFormatDate(d) {
+  return `${d.getDate()} ${JAD_MONTHS[d.getMonth()]}`;
+}
+
+function jadUpdateHeader() {
+  const mon = new Date(jadCurrentWeek + 'T00:00:00');
+  const fri = new Date(mon); fri.setDate(fri.getDate() + 4);
+  document.getElementById('jadWeekRange').textContent =
+    `Tydzień: ${jadFormatDate(mon)} – ${jadFormatDate(fri)} ${fri.getFullYear()}`;
+  document.getElementById('jadToday').disabled = (jadCurrentWeek === jadTodayWeek);
+}
+
+function jadRenderGrid(entries) {
+  const byDay = {};
+  (entries || []).forEach(e => { byDay[e.day_num] = e; });
+
+  const rows = [1,2,3,4,5].map(n => {
+    const e = byDay[n] || {};
+    const mon = new Date(jadCurrentWeek + 'T00:00:00');
+    mon.setDate(mon.getDate() + n - 1);
+    const isToday = jadWeekStart(new Date()) === jadCurrentWeek &&
+      new Date().toDateString() === mon.toDateString();
+    const rowBg = isToday ? 'background:rgba(31,75,60,.05)' : '';
+    return `<div style="display:grid;grid-template-columns:100px 1fr 1fr 1fr 1fr;border-top:1px solid var(--bd);${rowBg}">
+      <div style="padding:.65rem 1rem;display:flex;flex-direction:column;gap:.1rem">
+        <span style="font-family:var(--font-d);font-size:.82rem;font-weight:700;color:var(--tx)">${JAD_DAYS[n-1].slice(0,3)}</span>
+        <span style="font-family:var(--font-d);font-size:.7rem;color:var(--tx-m)">${jadFormatDate(mon)}</span>
+        ${isToday ? '<span style="font-family:var(--font-d);font-size:.6rem;font-weight:700;color:var(--cp);background:rgba(31,75,60,.1);padding:.05rem .3rem;border-radius:20px;display:inline-block">Dziś</span>' : ''}
+      </div>
+      <div style="border-left:1px solid var(--bd);padding:.4rem .6rem"><input type="text" class="jad-field" data-day="${n}" data-field="zupa" value="${esc(e.zupa||'')}" placeholder="np. Żurek" style="width:100%;padding:.4rem .5rem;border:1.5px solid var(--bd);border-radius:var(--r-s);background:var(--bg);color:var(--tx);font-size:.85rem"></div>
+      <div style="border-left:1px solid var(--bd);padding:.4rem .6rem"><input type="text" class="jad-field" data-day="${n}" data-field="drugie" value="${esc(e.drugie||'')}" placeholder="np. Kotlet + ziemniaki" style="width:100%;padding:.4rem .5rem;border:1.5px solid var(--bd);border-radius:var(--r-s);background:var(--bg);color:var(--tx);font-size:.85rem"></div>
+      <div style="border-left:1px solid var(--bd);padding:.4rem .6rem"><input type="text" class="jad-field" data-day="${n}" data-field="kompot" value="${esc(e.kompot||'')}" placeholder="np. Kompot wiśniowy" style="width:100%;padding:.4rem .5rem;border:1.5px solid var(--bd);border-radius:var(--r-s);background:var(--bg);color:var(--tx);font-size:.85rem"></div>
+      <div style="border-left:1px solid var(--bd);padding:.4rem .6rem"><input type="text" class="jad-field" data-day="${n}" data-field="uwagi" value="${esc(e.uwagi||'')}" placeholder="np. Danie wegetariańskie" style="width:100%;padding:.4rem .5rem;border:1.5px solid var(--bd);border-radius:var(--r-s);background:var(--bg);color:var(--tx);font-size:.85rem"></div>
+    </div>`;
+  });
+
+  document.getElementById('jadGrid').innerHTML = rows.join('');
+}
+
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+async function loadJadlospis() {
+  jadUpdateHeader();
+  document.getElementById('jadGrid').innerHTML = '<div style="padding:2rem;text-align:center;color:var(--tx-m)">Ładowanie…</div>';
+  try {
+    const data = await api.get(`/api/jadlospis?week=${jadCurrentWeek}`);
+    jadRenderGrid(data.entries || []);
+  } catch { jadRenderGrid([]); }
+}
+
+document.getElementById('jadPrev').addEventListener('click', () => { jadCurrentWeek = jadAddWeeks(jadCurrentWeek, -1); loadJadlospis(); });
+document.getElementById('jadNext').addEventListener('click', () => { jadCurrentWeek = jadAddWeeks(jadCurrentWeek, 1); loadJadlospis(); });
+document.getElementById('jadToday').addEventListener('click', () => { jadCurrentWeek = jadTodayWeek; loadJadlospis(); });
+
+document.getElementById('jadSaveBtn').addEventListener('click', async () => {
+  const entries = [1,2,3,4,5].map(n => {
+    const get = f => document.querySelector(`.jad-field[data-day="${n}"][data-field="${f}"]`)?.value.trim() || null;
+    return { day_num: n, zupa: get('zupa'), drugie: get('drugie'), kompot: get('kompot'), uwagi: get('uwagi') };
+  });
+  try {
+    await api.post('/api/jadlospis', { week_start: jadCurrentWeek, entries });
+    toast('Jadłospis zapisany!', 'success');
+  } catch { toast('Błąd zapisu jadłospisu.', 'error'); }
+});
+
+/* ══════════════════════════════════
+   DOKUMENTY
+══════════════════════════════════ */
+const EXT_ICONS = { 'application/pdf': '📕', 'application/msword': '📝', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document': '📝', 'application/vnd.ms-excel': '📊', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': '📊' };
+const EXT_LABELS = { 'application/pdf': 'PDF', 'application/msword': 'Word', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'Word', 'application/vnd.ms-excel': 'Excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'Excel' };
+
+function fmtBytes(b) { return b > 1024*1024 ? (b/1024/1024).toFixed(1)+' MB' : Math.round(b/1024)+' KB'; }
+function fmtDate(s) { return s ? new Date(s).toLocaleDateString('pl-PL') : '—'; }
+
+async function loadDokumenty() {
+  document.getElementById('docsList').innerHTML = '<tr><td colspan="6" class="empty-row">Ładowanie…</td></tr>';
+  try {
+    const data = await api.get('/api/media?type=docs');
+    renderDocsList(data.files || []);
+  } catch { document.getElementById('docsList').innerHTML = '<tr><td colspan="6" class="empty-row">Błąd ładowania dokumentów.</td></tr>'; }
+}
+
+function renderDocsList(files) {
+  const body = document.getElementById('docsList');
+  if (!files.length) { body.innerHTML = '<tr><td colspan="6" class="empty-row">Brak dokumentów. Wgraj pierwszy plik.</td></tr>'; return; }
+  body.innerHTML = files.map(f => `
+    <tr>
+      <td class="td-title">${EXT_ICONS[f.mime_type]||'📄'} ${f.filename}</td>
+      <td><span class="badge badge-draft">${EXT_LABELS[f.mime_type]||'Dok.'}</span></td>
+      <td style="font-variant-numeric:tabular-nums;color:var(--tx-m);font-size:.82rem">${fmtBytes(f.size_bytes)}</td>
+      <td style="color:var(--tx-m);font-size:.82rem">${fmtDate(f.uploaded_at)}</td>
+      <td>
+        <button class="btn btn-ghost btn-sm" onclick="copyDocUrl('${f.url.replace(/'/g,'\\'')}',this)" style="max-width:320px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--font-b);font-size:.75rem">
+          ${f.url.replace(location.origin,'')}</button>
+      </td>
+      <td class="td-actions">
+        <a href="${f.url}" class="btn btn-ghost btn-sm" target="_blank" rel="noopener">Otwórz</a>
+        <button class="btn btn-ghost btn-sm btn-danger" onclick="deleteDoc(${f.id})">Usuń</button>
+      </td>
+    </tr>`).join('');
+}
+
+async function copyDocUrl(url, btn) {
+  try { await navigator.clipboard.writeText(url); btn.textContent = '✓ Skopiowano!'; setTimeout(() => btn.textContent = url.replace(location.origin,''), 2000); }
+  catch { toast('Nie udało się skopiować URL', 'error'); }
+}
+
+async function deleteDoc(id) {
+  if (!confirm('Usunąć ten dokument? Operacja jest nieodwracalna.')) return;
+  try {
+    const r = await fetch('/api/media', { method: 'DELETE', headers: { 'Content-Type': 'application/json', 'X-Admin-Key': S.adminKey }, body: JSON.stringify({ id }) });
+    if (!r.ok) throw new Error();
+    toast('Dokument usunięty.', 'success'); loadDokumenty();
+  } catch { toast('Błąd usuwania.', 'error'); }
+}
+
+/* Upload zone */
+const docUploadBtn = document.getElementById('docUploadBtn');
+const docUploadZone = document.getElementById('docUploadZone');
+const docFileInput = document.getElementById('docFileInput');
+
+docUploadBtn.addEventListener('click', () => {
+  docUploadZone.hidden = !docUploadZone.hidden;
+  if (!docUploadZone.hidden) docUploadZone.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+});
+docUploadZone.addEventListener('click', e => { if (e.target !== docFileInput) docFileInput.click(); });
+docUploadZone.addEventListener('dragover', e => { e.preventDefault(); docUploadZone.style.borderColor = 'var(--cp)'; });
+docUploadZone.addEventListener('dragleave', () => { docUploadZone.style.borderColor = ''; });
+docUploadZone.addEventListener('drop', e => { e.preventDefault(); docUploadZone.style.borderColor = ''; uploadDoc(e.dataTransfer.files[0]); });
+docFileInput.addEventListener('change', () => { if (docFileInput.files[0]) uploadDoc(docFileInput.files[0]); });
+
+async function uploadDoc(file) {
+  const prog = document.getElementById('docUploadProgress');
+  prog.hidden = false; prog.textContent = `Wgrywanie: ${file.name}…`;
+  const form = new FormData(); form.append('file', file);
+  try {
+    const r = await fetch('/api/media/upload-doc', { method: 'POST', headers: { 'X-Admin-Key': S.adminKey }, body: form });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error || 'Błąd');
+    prog.textContent = `✓ Wgrano: ${d.filename}`;
+    setTimeout(() => { prog.hidden = true; docUploadZone.hidden = true; docFileInput.value = ''; loadDokumenty(); }, 1500);
+    toast('Dokument wgrany!', 'success');
+  } catch(e) { prog.textContent = `Błąd: ${e.message}`; toast(e.message || 'Błąd wgrywania.', 'error'); }
+}
 
 /* ══════════════════════════════════
    ARTICLES
