@@ -69,6 +69,20 @@ a{text-decoration:none;color:inherit}img{max-width:100%;display:block}ul{list-st
 .breadcrumb a:hover{color:var(--ca)}
 .breadcrumb-sep{opacity:.4;font-size:.7rem}
 .page-hero{background:linear-gradient(135deg,var(--cp-d) 0%,var(--cp) 60%,rgba(212,117,106,.2) 100%);padding:3rem 0 2.5rem}
+.filter-bar{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:2rem}
+.filter-btn{font-family:var(--font-d);font-size:.8rem;font-weight:600;padding:.4rem .9rem;border-radius:20px;border:1.5px solid var(--bd);color:var(--tx-m);background:var(--sf);transition:all var(--tr);cursor:pointer}
+.filter-btn:hover{border-color:var(--cp);color:var(--cp)}
+.filter-btn.active{background:var(--cp);color:#fff;border-color:var(--cp)}
+.filter-count{font-size:.72rem;opacity:.75;margin-left:.2rem}
+.proj-loading{grid-column:1/-1;text-align:center;padding:3rem;color:var(--tx-m);font-family:var(--font-d)}
+.proj-empty{grid-column:1/-1;text-align:center;padding:3rem;color:var(--tx-m)}
+.kat-badge{display:inline-block;font-family:var(--font-d);font-size:.68rem;font-weight:700;padding:.15rem .55rem;border-radius:10px;letter-spacing:.04em;text-transform:uppercase}
+.kat-europejski{background:#dbeafe;color:#1d4ed8}.kat-ministerialny{background:#dcfce7;color:#166534}.kat-cyfrowy{background:#ede9fe;color:#6d28d9}.kat-sportowy{background:#ffedd5;color:#c2410c}.kat-patriotyczny{background:#fee2e2;color:#b91c1c}.kat-profilaktyczny{background:#ccfbf1;color:#0f766e}.kat-spoleczny{background:#fef9c3;color:#a16207}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .kat-europejski{background:#1e3a5f;color:#93c5fd}:root:not([data-theme="light"]) .kat-ministerialny{background:#14532d;color:#86efac}:root:not([data-theme="light"]) .kat-cyfrowy{background:#2e1065;color:#c4b5fd}:root:not([data-theme="light"]) .kat-sportowy{background:#431407;color:#fdba74}:root:not([data-theme="light"]) .kat-patriotyczny{background:#450a0a;color:#fca5a5}:root:not([data-theme="light"]) .kat-profilaktyczny{background:#042f2e;color:#5eead4}:root:not([data-theme="light"]) .kat-spoleczny{background:#422006;color:#fde047}}
+:root[data-theme="dark"] .kat-europejski{background:#1e3a5f;color:#93c5fd}:root[data-theme="dark"] .kat-ministerialny{background:#14532d;color:#86efac}:root[data-theme="dark"] .kat-cyfrowy{background:#2e1065;color:#c4b5fd}:root[data-theme="dark"] .kat-sportowy{background:#431407;color:#fdba74}:root[data-theme="dark"] .kat-patriotyczny{background:#450a0a;color:#fca5a5}:root[data-theme="dark"] .kat-profilaktyczny{background:#042f2e;color:#5eead4}:root[data-theme="dark"] .kat-spoleczny{background:#422006;color:#fde047}
+.proj-year{font-family:var(--font-d);font-size:.7rem;font-weight:600;color:var(--tx-m);margin-top:.4rem}
+.project-link-btn{display:inline-flex;align-items:center;gap:.3rem;margin-top:.75rem;font-family:var(--font-d);font-size:.78rem;font-weight:700;color:var(--cp);transition:color var(--tr)}
+.project-link-btn:hover{color:var(--ca)}
 .page-hero-eyebrow{font-family:var(--font-d);font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ca);margin-bottom:.4rem}
 .page-hero-title{font-family:var(--font-d);font-size:clamp(2rem,5vw,3rem);font-weight:800;color:#fff;letter-spacing:-.03em;line-height:1.1}
 .page-hero-sub{font-size:1rem;color:rgba(255,255,255,.7);margin-top:.75rem;max-width:520px;line-height:1.65}
@@ -217,38 +231,19 @@ a{text-decoration:none;color:inherit}img{max-width:100%;display:block}ul{list-st
 <main id="main-content" class="page-main">
   <div class="container">
 
-    <h2 class="section-title">Bieżące i zakończone projekty</h2>
-    <p class="section-sub">Poniżej wybrane inicjatywy, w których uczestniczyliśmy lub uczestniczymy. Pełna lista jest w przygotowaniu — wkrótce każdy projekt otrzyma własną stronę z opisem i galerią.</p>
+    <div class="filter-bar" role="group" aria-label="Filtruj projekty według kategorii">
+      <button class="filter-btn active" data-kat="wszystkie">Wszystkie <span class="filter-count" id="cnt-wszystkie"></span></button>
+      <button class="filter-btn" data-kat="europejski">🌍 Europejskie</button>
+      <button class="filter-btn" data-kat="ministerialny">📋 Ministerialne</button>
+      <button class="filter-btn" data-kat="cyfrowy">💻 Cyfrowe</button>
+      <button class="filter-btn" data-kat="sportowy">⚽ Sportowe</button>
+      <button class="filter-btn" data-kat="patriotyczny">🏛️ Patriotyczne</button>
+      <button class="filter-btn" data-kat="profilaktyczny">🧠 Profilaktyczne</button>
+      <button class="filter-btn" data-kat="spoleczny">🤝 Społeczne</button>
+    </div>
 
-    <div class="project-grid">
-      <div class="project-card">
-        <span class="project-tag">Wolontariat</span>
-        <p class="project-title">Szkolny Klub Wolontariusza</p>
-        <p class="project-desc">Uczniowie angażują się w akcje charytatywne na rzecz lokalnej społeczności, seniorów i potrzebujących. Działania integrują szkołę z otoczeniem i kształtują postawy empatii.</p>
-        <p class="project-status"><span class="project-status-dot"></span>Aktywny</p>
-      </div>
-      <div class="project-card">
-        <span class="project-tag">Europa</span>
-        <p class="project-title">Klub Europejski</p>
-        <p class="project-desc">Popularyzacja wiedzy o Unii Europejskiej, krajach członkowskich i możliwościach, jakie otwiera zjednoczona Europa. Udział w konkursach i projektach o tematyce europejskiej.</p>
-        <p class="project-status"><span class="project-status-dot"></span>Aktywny</p>
-      </div>
-      <div class="project-card">
-        <span class="project-tag">Patriotyzm</span>
-        <p class="project-title">Klub Armii Krajowej</p>
-        <p class="project-desc">Kultywowanie pamięci historycznej i wartości patriotycznych. Udział w uroczystościach i inicjatywach upamiętniających bohaterów historii Polski.</p>
-        <p class="project-status"><span class="project-status-dot"></span>Aktywny</p>
-      </div>
-      <div class="project-card">
-        <span class="project-tag">Ekologia</span>
-        <p class="project-title">Zielona Szkoła</p>
-        <p class="project-desc">Działania proekologiczne: segregacja odpadów, edukacja środowiskowa, opieka nad zielenią szkolną i udział w ogólnopolskich akcjach ekologicznych.</p>
-        <p class="project-status"><span class="project-status-dot"></span>Aktywny</p>
-      </div>
-      <div class="project-card" style="border-style:dashed;border-color:var(--bd);background:transparent">
-        <p class="project-title" style="color:var(--tx-m)">Więcej projektów wkrótce</p>
-        <p class="project-desc">Opisujemy kolejne programy, w których uczestniczymy. Jeśli prowadzisz projekt i chcesz go tu umieścić — skontaktuj się z redakcją szkolnej strony.</p>
-      </div>
+    <div class="project-grid" id="projectGrid" aria-live="polite" aria-label="Lista projektów">
+      <div class="proj-loading">Ładowanie projektów…</div>
     </div>
 
   </div>
@@ -278,7 +273,6 @@ a{text-decoration:none;color:inherit}img{max-width:100%;display:block}ul{list-st
       <a href="dyrekcja.html" class="footer-chip">Dyrekcja i kadra</a>
       <a href="projekty.html" class="footer-chip">Projekty</a>
       <a href="standardy-ochrony-maloletnich.html" class="footer-chip">Standardy Ochrony Małoletnich</a>
-      <a href="#" class="footer-chip">Jadłospis</a>
       <a href="polityka-prywatnosci.html" class="footer-chip">Polityka prywatności</a>
       <a href="#" class="footer-chip" data-open-contact>Kontakt</a>
     </nav>
@@ -313,6 +307,56 @@ a{text-decoration:none;color:inherit}img{max-width:100%;display:block}ul{list-st
 </div>
 
 <script>
+// Projekty
+const KAT_LABELS = {europejski:'Europejski',ministerialny:'Ministerialny',cyfrowy:'Cyfrowy',sportowy:'Sportowy',patriotyczny:'Patriotyczny',profilaktyczny:'Profilaktyczny',spoleczny:'Społeczny',ogolny:'Ogólny'};
+let allProjects = [];
+let currentKat = 'wszystkie';
+
+async function loadProjects() {
+  try {
+    const r = await fetch('/api/projekty');
+    const data = await r.json();
+    allProjects = data.projekty || [];
+    document.getElementById('cnt-wszystkie').textContent = `(${allProjects.length})`;
+    renderProjects();
+  } catch(e) {
+    document.getElementById('projectGrid').innerHTML = '<div class="proj-loading">Nie udało się załadować projektów.</div>';
+  }
+}
+
+function renderProjects() {
+  const grid = document.getElementById('projectGrid');
+  const list = currentKat === 'wszystkie' ? allProjects : allProjects.filter(p => p.kategoria === currentKat);
+  if (!list.length) { grid.innerHTML = '<div class="proj-empty">Brak projektów w tej kategorii.</div>'; return; }
+  grid.innerHTML = list.map(p => {
+    const kat = p.kategoria || 'ogolny';
+    const years = p.rok_od ? (p.rok_do ? `${p.rok_od}–${p.rok_do}` : `od ${p.rok_od}`) : '';
+    const link = p.link ? `<a href="${p.link}" class="project-link-btn" target="_blank" rel="noopener">Więcej info →</a>` : '';
+    return `<div class="project-card">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem;margin-bottom:.6rem">
+        <span style="font-size:1.8rem;line-height:1">${p.icon||'📌'}</span>
+        <span class="kat-badge kat-${kat}">${KAT_LABELS[kat]||kat}</span>
+      </div>
+      <p class="project-title">${p.tytul}</p>
+      ${p.opis ? `<p class="project-desc">${p.opis}</p>` : ''}
+      ${years ? `<p class="proj-year">${years}</p>` : ''}
+      <p class="project-status"><span class="project-status-dot" ${p.rok_do ? 'style="background:#aaa"' : ''}></span>${p.rok_do ? 'Zakończony' : 'Aktywny'}</p>
+      ${link}
+    </div>`;
+  }).join('');
+}
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentKat = btn.dataset.kat;
+    renderProjects();
+  });
+});
+
+loadProjects();
+
 const bar = document.getElementById('scroll-bar');
 const btnTop = document.getElementById('back-top');
 window.addEventListener('scroll', () => {

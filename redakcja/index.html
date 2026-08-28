@@ -217,6 +217,7 @@ input,select,textarea{font-family:inherit;font-size:1rem;color:var(--tx)}
         <button class="tab-btn" data-tab="galleries" role="tab" aria-selected="false">🖼 Galerie</button>
         <button class="tab-btn" data-tab="jadlospis" role="tab" aria-selected="false">🍽 Jadłospis</button>
         <button class="tab-btn" data-tab="dokumenty" role="tab" aria-selected="false">📄 Dokumenty</button>
+        <button class="tab-btn" data-tab="projekty" role="tab" aria-selected="false">📌 Projekty</button>
       </nav>
       <div class="admin-header-actions">
         <a href="/" class="btn btn-ghost btn-sm">← Strona</a>
@@ -515,6 +516,53 @@ input,select,textarea{font-family:inherit;font-size:1rem;color:var(--tx)}
       </div>
     </div>
 
+    <!-- PROJEKTY TAB -->
+    <div id="projektyTab" class="tab-panel" role="tabpanel">
+      <div class="panel-header">
+        <h2>Projekty edukacyjne</h2>
+        <button class="btn btn-primary" id="projAddBtn">+ Nowy projekt</button>
+      </div>
+
+      <!-- Formularz dodawania/edycji -->
+      <div id="projForm" hidden style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:1.5rem;margin-bottom:1.5rem">
+        <h3 style="font-family:var(--font-d);font-size:1rem;font-weight:700;margin-bottom:1rem" id="projFormTitle">Nowy projekt</h3>
+        <input type="hidden" id="projId">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:.75rem">
+          <div><label class="form-label">Tytuł *</label><input type="text" id="projTytul" class="form-input" placeholder="Nazwa projektu"></div>
+          <div><label class="form-label">Kategoria</label>
+            <select id="projKategoria" class="form-input">
+              <option value="europejski">🌍 Europejski</option>
+              <option value="ministerialny">📋 Ministerialny</option>
+              <option value="cyfrowy">💻 Cyfrowy</option>
+              <option value="sportowy">⚽ Sportowy</option>
+              <option value="patriotyczny">🏛️ Patriotyczny</option>
+              <option value="profilaktyczny">🧠 Profilaktyczny</option>
+              <option value="spoleczny">🤝 Społeczny</option>
+              <option value="ogolny">📌 Ogólny</option>
+            </select>
+          </div>
+          <div><label class="form-label">Emoji ikona</label><input type="text" id="projIcon" class="form-input" placeholder="📌" maxlength="4"></div>
+          <div><label class="form-label">Link (opcjonalnie)</label><input type="url" id="projLink" class="form-input" placeholder="https://..."></div>
+          <div><label class="form-label">Rok od</label><input type="number" id="projRokOd" class="form-input" placeholder="2024" min="2000" max="2100"></div>
+          <div><label class="form-label">Rok do (puste = aktywny)</label><input type="number" id="projRokDo" class="form-input" placeholder="—" min="2000" max="2100"></div>
+          <div><label class="form-label">Kolejność</label><input type="number" id="projKolejnosc" class="form-input" value="0" min="0"></div>
+          <div style="display:flex;align-items:center;gap:.5rem;padding-top:1.5rem"><label style="display:flex;align-items:center;gap:.5rem;font-family:var(--font-d);font-size:.85rem;cursor:pointer"><input type="checkbox" id="projAktywny" checked style="width:16px;height:16px"> Aktywny (widoczny na stronie)</label></div>
+        </div>
+        <div style="margin-bottom:.75rem"><label class="form-label">Opis</label><textarea id="projOpis" class="form-input" rows="3" placeholder="Krótki opis projektu…" style="resize:vertical"></textarea></div>
+        <div style="display:flex;gap:.75rem">
+          <button class="btn btn-primary" id="projSaveBtn">Zapisz projekt</button>
+          <button class="btn" id="projCancelBtn">Anuluj</button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>Ikona</th><th>Tytuł</th><th>Kategoria</th><th>Lata</th><th>Status</th><th>Akcje</th></tr></thead>
+          <tbody id="projList"><tr><td colspan="6" class="empty-row">Ładowanie…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
   </main>
 </div>
 
@@ -666,9 +714,11 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     document.getElementById('galleriesTab').classList.toggle('active', tab === 'galleries');
     document.getElementById('jadlospisTab').classList.toggle('active', tab === 'jadlospis');
     document.getElementById('dokumentyTab').classList.toggle('active', tab === 'dokumenty');
+    document.getElementById('projektyTab').classList.toggle('active', tab === 'projekty');
     if (tab === 'galleries') loadGalleries();
     if (tab === 'jadlospis') loadJadlospis();
     if (tab === 'dokumenty') loadDokumenty();
+    if (tab === 'projekty') loadProjekty();
   });
 });
 
@@ -1299,6 +1349,108 @@ async function initApp() {
     }
   }
 })();
+
+/* ══════════════════════════════════
+   PROJEKTY
+══════════════════════════════════ */
+const KAT_NAMES = {europejski:'🌍 Europejski',ministerialny:'📋 Ministerialny',cyfrowy:'💻 Cyfrowy',sportowy:'⚽ Sportowy',patriotyczny:'🏛️ Patriotyczny',profilaktyczny:'🧠 Profilaktyczny',spoleczny:'🤝 Społeczny',ogolny:'📌 Ogólny'};
+let projEditId = null;
+
+async function loadProjekty() {
+  const r = await apiFetch('/api/projekty');
+  if (!r.ok) { toast('Błąd ładowania projektów','error'); return; }
+  const { projekty } = await r.json();
+  const tbody = document.getElementById('projList');
+  if (!projekty.length) { tbody.innerHTML = '<tr><td colspan="6" class="empty-row">Brak projektów</td></tr>'; return; }
+  tbody.innerHTML = projekty.map(p => `<tr>
+    <td style="font-size:1.4rem;text-align:center">${p.icon||'📌'}</td>
+    <td><strong style="font-family:var(--font-d)">${p.tytul}</strong>${p.opis?`<br><span style="font-size:.78rem;color:var(--tx-m)">${p.opis.slice(0,60)}…</span>`:''}</td>
+    <td><span style="font-family:var(--font-d);font-size:.78rem">${KAT_NAMES[p.kategoria]||p.kategoria}</span></td>
+    <td style="font-size:.82rem;white-space:nowrap">${p.rok_od||''}${p.rok_do?' – '+p.rok_do:p.rok_od?' →':''}</td>
+    <td><span style="font-family:var(--font-d);font-size:.75rem;padding:.15rem .5rem;border-radius:8px;background:${p.aktywny?'#dcfce7':'#fee2e2'};color:${p.aktywny?'#166534':'#b91c1c'}">${p.aktywny?'Aktywny':'Ukryty'}</span></td>
+    <td class="td-actions">
+      <button class="btn btn-ghost btn-sm" onclick="projEdit(${p.id})">Edytuj</button>
+      <button class="btn btn-ghost btn-sm btn-danger" onclick="projDelete(${p.id},'${p.tytul.replace(/'/g,"\\'")}')">Usuń</button>
+    </td>
+  </tr>`).join('');
+}
+
+function projShowForm(reset=true) {
+  document.getElementById('projForm').hidden = false;
+  if (reset) {
+    projEditId = null;
+    document.getElementById('projFormTitle').textContent = 'Nowy projekt';
+    document.getElementById('projId').value = '';
+    document.getElementById('projTytul').value = '';
+    document.getElementById('projOpis').value = '';
+    document.getElementById('projKategoria').value = 'ogolny';
+    document.getElementById('projIcon').value = '📌';
+    document.getElementById('projRokOd').value = '';
+    document.getElementById('projRokDo').value = '';
+    document.getElementById('projLink').value = '';
+    document.getElementById('projKolejnosc').value = '0';
+    document.getElementById('projAktywny').checked = true;
+  }
+  document.getElementById('projTytul').focus();
+}
+
+async function projEdit(id) {
+  const r = await apiFetch('/api/projekty');
+  const { projekty } = await r.json();
+  const p = projekty.find(x => x.id === id);
+  if (!p) return;
+  projEditId = id;
+  document.getElementById('projFormTitle').textContent = 'Edytuj projekt';
+  document.getElementById('projId').value = id;
+  document.getElementById('projTytul').value = p.tytul;
+  document.getElementById('projOpis').value = p.opis||'';
+  document.getElementById('projKategoria').value = p.kategoria||'ogolny';
+  document.getElementById('projIcon').value = p.icon||'📌';
+  document.getElementById('projRokOd').value = p.rok_od||'';
+  document.getElementById('projRokDo').value = p.rok_do||'';
+  document.getElementById('projLink').value = p.link||'';
+  document.getElementById('projKolejnosc').value = p.kolejnosc||0;
+  document.getElementById('projAktywny').checked = !!p.aktywny;
+  projShowForm(false);
+  document.getElementById('projForm').scrollIntoView({behavior:'smooth'});
+}
+
+async function projDelete(id, tytul) {
+  if (!confirm(`Usunąć projekt „${tytul}"?`)) return;
+  const r = await apiFetch('/api/projekty', { method:'DELETE', body: JSON.stringify({id}) });
+  if (r.ok) { toast('Projekt usunięty','success'); loadProjekty(); }
+  else toast('Błąd usuwania','error');
+}
+
+document.getElementById('projAddBtn').addEventListener('click', () => projShowForm(true));
+document.getElementById('projCancelBtn').addEventListener('click', () => { document.getElementById('projForm').hidden = true; projEditId = null; });
+
+document.getElementById('projSaveBtn').addEventListener('click', async () => {
+  const tytul = document.getElementById('projTytul').value.trim();
+  if (!tytul) { toast('Tytuł jest wymagany','error'); return; }
+  const body = {
+    tytul,
+    opis: document.getElementById('projOpis').value.trim()||null,
+    kategoria: document.getElementById('projKategoria').value,
+    icon: document.getElementById('projIcon').value.trim()||'📌',
+    rok_od: parseInt(document.getElementById('projRokOd').value)||null,
+    rok_do: parseInt(document.getElementById('projRokDo').value)||null,
+    link: document.getElementById('projLink').value.trim()||null,
+    kolejnosc: parseInt(document.getElementById('projKolejnosc').value)||0,
+    aktywny: document.getElementById('projAktywny').checked ? 1 : 0,
+  };
+  if (projEditId) body.id = projEditId;
+  const r = await apiFetch('/api/projekty', { method: projEditId ? 'PUT' : 'POST', body: JSON.stringify(body) });
+  if (r.ok) {
+    toast(projEditId ? 'Projekt zaktualizowany!' : 'Projekt dodany!', 'success');
+    document.getElementById('projForm').hidden = true;
+    projEditId = null;
+    loadProjekty();
+  } else {
+    const e = await r.json().catch(()=>({}));
+    toast(e.error||'Błąd zapisu','error');
+  }
+});
 </script>
 </body>
 </html>
