@@ -20,7 +20,7 @@ a{text-decoration:none;color:inherit}img{max-width:100%;display:block}ul{list-st
 .site-header.scrolled{background:rgba(18,37,30,.9);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
 .header-inner{display:flex;align-items:center;gap:1.5rem;padding:.75rem 0;min-height:64px}
 .logo{display:flex;align-items:center;gap:.65rem;flex-shrink:0}
-.logo-img{width:44px;height:44px;object-fit:contain;border-radius:50%;background:#fff;box-shadow:0 0 0 4px #fff;transition:transform var(--tr)}
+.logo-img{width:52px;height:52px;object-fit:contain;border-radius:50%;background:#fff;box-shadow:0 0 0 4px #fff;transition:transform var(--tr)}
 .logo:hover .logo-img{transform:scale(1.07)}
 .logo-name{font-family:var(--font-d);font-weight:700;font-size:.85rem;color:#fff;line-height:1.2;display:block}
 .logo-patron{font-size:.65rem;color:rgba(255,255,255,.65);line-height:1.3}
@@ -88,6 +88,7 @@ a{text-decoration:none;color:inherit}img{max-width:100%;display:block}ul{list-st
 :root[data-theme="dark"] .medal-1{background:#422006;color:#fde047}:root[data-theme="dark"] .medal-2{background:#1e293b;color:#94a3b8}:root[data-theme="dark"] .medal-3{background:#431407;color:#fdba74}:root[data-theme="dark"] .konkurs-card{background:rgba(255,255,255,.03)}
 .page-hero-eyebrow{font-family:var(--font-d);font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ca);margin-bottom:.4rem}
 .page-hero-title{font-family:var(--font-d);font-size:clamp(2rem,5vw,3rem);font-weight:800;color:#fff;letter-spacing:-.03em;line-height:1.1}
+.page-hero-sub{font-size:.95rem;color:rgba(255,255,255,.9);margin-top:.9rem;max-width:560px;line-height:1.65;padding-left:.9rem;border-left:3px solid var(--ca)}
 .page-main{padding:3rem 0 5rem}
 .staff-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.25rem;margin:2rem 0}
 .staff-card{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:1.5rem;display:flex;flex-direction:column;gap:.5rem;box-shadow:var(--sh);transition:box-shadow var(--tr),transform var(--tr)}
@@ -107,7 +108,7 @@ a{text-decoration:none;color:inherit}img{max-width:100%;display:block}ul{list-st
 .site-footer{background:var(--cp-d);color:rgba(255,255,255,.8)}
 .footer-top{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1.5rem 0;border-bottom:1px solid rgba(255,255,255,.08)}
 .footer-logo{display:flex;align-items:center;gap:.65rem;flex-shrink:0}
-.footer-logo-img{width:36px;height:36px;object-fit:contain;opacity:.9}
+.footer-logo-img{width:40px;height:40px;object-fit:contain;border-radius:50%;background:#fff;box-shadow:0 0 0 3px #fff}
 .footer-school-name{font-family:var(--font-d);font-size:.82rem;font-weight:700;color:#fff;line-height:1.3}
 .footer-ext{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap}
 .footer-ext-link{font-family:var(--font-d);font-size:.7rem;font-weight:700;color:rgba(255,255,255,.45);padding:.3rem .6rem;border:1px solid rgba(255,255,255,.1);border-radius:6px;transition:all var(--tr)}
@@ -167,7 +168,7 @@ a{text-decoration:none;color:inherit}img{max-width:100%;display:block}ul{list-st
 <header class="site-header" role="banner">
   <div class="container header-inner">
     <a href="index.html" class="logo" aria-label="SP32 Sosnowiec — strona główna">
-      <img src="grafiki-ai/logo-sp32.png" alt="" class="logo-img" width="44" height="44" aria-hidden="true">
+      <img src="grafiki-ai/logo-sp32.png" alt="" class="logo-img" width="52" height="52" aria-hidden="true">
       <div><span class="logo-name">Szkoła Podstawowa nr 32</span><span class="logo-patron">im. L. Kruczkowskiego · Sosnowiec</span></div>
     </a>
         <nav class="main-nav" aria-label="Główna nawigacja">
@@ -261,7 +262,6 @@ a{text-decoration:none;color:inherit}img{max-width:100%;display:block}ul{list-st
 <main id="main-content" class="page-main">
   <div class="container">
 
-    <!-- Accordion by school year -->
     <div class="sukcesy-list">
 
       <details class="rok-section" open>
@@ -276,63 +276,91 @@ a{text-decoration:none;color:inherit}img{max-width:100%;display:block}ul{list-st
           </div>
           <div class="konkurs-card">
             <p class="konkurs-name">II edycja Międzyszkolnego Konkursu Recytatorskiego „SIGMA – Adam Mickiewicz"</p>
-            <ul class="wyniki-list">
-              <li><span class="medal medal-1">I</span> Maria Szczepaniak</li>
-              <li><span class="medal medal-2">II</span> Wiktoria Bazgier</li>
-            </ul>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Maria Szczepaniak</li><li><span class="medal medal-2">II</span> Wiktoria Bazgier</li></ul>
           </div>
           <div class="konkurs-card">
             <p class="konkurs-name">Konkurs „KLASYKODNOWA" — filmowa interpretacja klasyki</p>
-            <ul class="wyniki-list">
-              <li><span class="medal medal-3">III</span> Maria Szczepaniak</li>
-              <li><span class="medal medal-wyr">wyróżnienie</span> Wiktoria Bazgier</li>
-            </ul>
+            <ul class="wyniki-list"><li><span class="medal medal-3">III</span> Maria Szczepaniak</li><li><span class="medal medal-wyr">wyr.</span> Wiktoria Bazgier</li></ul>
           </div>
           <div class="konkurs-card">
             <p class="konkurs-name">VIII Regionalny Konkurs Recytatorski „Świat ma wiele barw – wiosna"</p>
-            <ul class="wyniki-list">
-              <li><span class="medal medal-1">I</span> Maria Szczepaniak</li>
-              <li><span class="medal medal-wyr">wyróżnienie</span> Wiktoria Bazgier</li>
-            </ul>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Maria Szczepaniak</li><li><span class="medal medal-wyr">wyr.</span> Wiktoria Bazgier</li></ul>
           </div>
           <div class="konkurs-card">
             <p class="konkurs-name">Szkolny Konkurs Wiedzy o Unii Europejskiej (kl. 5–8)</p>
-            <ul class="wyniki-list">
-              <li><span class="medal medal-1">I</span> Oliwier Kijak — kl. 6b</li>
-              <li><span class="medal medal-2">II</span> Piotr Klimko — kl. 5a</li>
-              <li><span class="medal medal-3">III</span> Filip Szelest — kl. 6b</li>
-            </ul>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Oliwier Kijak — kl. 6b</li><li><span class="medal medal-2">II</span> Piotr Klimko — kl. 5a</li><li><span class="medal medal-3">III</span> Filip Szelest — kl. 6b</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Konkurs plastyczny „Cztery pory roku" – III edycja (Ognisko Pracy Pozaszkolnej nr 2)</p>
+            <ul class="wyniki-list"><li><span class="medal medal-3">III</span> Julia Szczepanikiewicz — kl. 1a</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Szkolny Konkurs z okazji Dnia Świętego Patryka — kat. kl. I–III</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Julia Szczepankiewicz, kl. 1a</li><li><span class="medal medal-2">II</span> Alan Łuczak, kl. 2a &amp; Wojciech Łagocki, kl. 2a (ex aequo)</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Szkolny Konkurs z okazji Dnia Świętego Patryka — kat. kl. IV–VIII</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Miłosz Szmidt, kl. 8a</li><li><span class="medal medal-2">II</span> Jakub Gorczyca, kl. 8a</li><li><span class="medal medal-3">III</span> Barbara Wypych, kl. 8a</li></ul>
           </div>
           <div class="konkurs-card">
             <p class="konkurs-name">Międzyszkolny Konkurs Recytatorski „Miłość w poezji"</p>
-            <ul class="wyniki-list">
-              <li><span class="medal medal-1">I</span> Wiktoria Bazgier</li>
-              <li><span class="medal medal-3">III</span> Maria Szczepaniak</li>
-            </ul>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Wiktoria Bazgier</li><li><span class="medal medal-3">III</span> Maria Szczepaniak</li></ul>
           </div>
           <div class="konkurs-card">
-            <p class="konkurs-name">Zimowy Przegląd Twórczości Dziecięcej — kategoria recytatorska</p>
-            <ul class="wyniki-list">
-              <li><span class="medal medal-1">I</span> Klimenti Lomako — kl. 3b</li>
-              <li><span class="medal medal-2">II</span> Marika Zapora — kl. 3b, Barbara Bochno — kl. 1b</li>
-              <li><span class="medal medal-3">III</span> Konstanti Plakhov — kl. 1b, Nina Wawrzkiewicz — kl. 1b</li>
-            </ul>
+            <p class="konkurs-name">Zimowy Przegląd Twórczości Dziecięcej — konkurs literacki</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Adam Dragon, kl. 1b</li><li><span class="medal medal-2">II</span> Roksana Goniewicz, kl. 1a</li><li><span class="medal medal-3">III</span> Wiktora Żegocka, kl. 2a</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Zimowy Przegląd Twórczości Dziecięcej — konkurs plastyczny</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Melania Prusaczyk, kl. 1b &amp; Roksana Goniewicz, kl. 1a</li><li><span class="medal medal-2">II</span> Wiktora Żegocka, kl. 2a &amp; Barbara Bochno, kl. 1b</li><li><span class="medal medal-3">III</span> Marika Zapora, kl. 3b &amp; Milena Gemza, kl. 3a</li><li><span class="medal medal-wyr">wyr.</span> Fabian Bal, Nikola Sadowska, Adam Dragon, Borys Rokita, Nina Wawrzkiewicz, Aleksander Stachura, Hanna Styczyńska</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Zimowy Przegląd Twórczości Dziecięcej — konkurs recytatorski</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Klimenti Lomako, kl. 3b</li><li><span class="medal medal-2">II</span> Marika Zapora, kl. 3b &amp; Barbara Bochno, kl. 1b</li><li><span class="medal medal-3">III</span> Konstanti Plakhov, kl. 1b &amp; Nina Wawrzkiewicz, kl. 1b</li><li><span class="medal medal-wyr">wyr.</span> Roksana Goniewicz, kl. 1a &amp; Adam Dragon, kl. 1b</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Zimowy Przegląd Twórczości Dziecięcej — konkurs wokalny</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Adam Dragon, kl. 1b</li><li><span class="medal medal-2">II</span> Lena Domagała, kl. 3b &amp; Roksana Goniewicz, kl. 1a</li><li><span class="medal medal-3">III</span> Julia Druciarek, kl. 2b</li><li><span class="medal medal-wyr">wyr.</span> Antonina Malmur, Barbara Bochno, Zuzanna Błachucka, Alicja Zapora, Nadia Kańtoch</li></ul>
           </div>
           <div class="konkurs-card">
             <p class="konkurs-name">Miejski Konkurs Recytatorski „Zimowe spotkania z poezją"</p>
-            <ul class="wyniki-list">
-              <li><span class="medal medal-2">II</span> Maria Szczepaniak</li>
-              <li><span class="medal medal-wyr">wyróżnienie</span> Wiktoria Bazgier</li>
-            </ul>
+            <ul class="wyniki-list"><li><span class="medal medal-2">II</span> Maria Szczepaniak</li><li><span class="medal medal-wyr">wyr.</span> Wiktoria Bazgier</li></ul>
           </div>
           <div class="konkurs-card">
-            <p class="konkurs-name">IV edycja Konkursu Literacko–Plastycznego „Moja Niepodległa"</p>
-            <ul class="wyniki-list">
-              <li><span class="medal medal-2">II</span> Antoni Gurdek — kl. VIb (literatura)</li>
-              <li><span class="medal medal-3">III</span> Julia Ptak, Eryk Łuński — kl. VIb (literatura)</li>
-              <li><span class="medal medal-2">II</span> Kacper Matusik — kl. VIb (plastyka)</li>
-              <li><span class="medal medal-3">III</span> Jakub Zawieruszka — kl. IVb (plastyka)</li>
-            </ul>
+            <p class="konkurs-name">Miejski Konkurs „Eko-choinka"</p>
+            <ul class="wyniki-list"><li><span class="medal medal-2">II</span> klasa 2b — wych. K. Stempniak</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Szkolny Konkurs „List do Świętego Mikołaja"</p>
+            <ul class="wyniki-list"><li><span class="medal medal-wyr">wyr.</span> Julia Krawczyk — kl. 2a</li><li><span class="medal medal-wyr">wyr.</span> Alicja Krawczyk &amp; Jakub Jabłoński — kl. 4c</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">IV edycja Konkursu Literacko-Plastycznego „Moja Niepodległa" — część literacka</p>
+            <ul class="wyniki-list"><li><span class="medal medal-2">II</span> Antoni Gurdek — kl. 6b</li><li><span class="medal medal-3">III</span> Julia Ptak, Eryk Łuński — kl. 6b</li><li><span class="medal medal-wyr">wyr.</span> Joanna Horzelska, Dawid Cichowicz, Szymon Godzic, Michał Jachym — kl. 6b</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">IV edycja Konkursu Literacko-Plastycznego „Moja Niepodległa" — część plastyczna</p>
+            <ul class="wyniki-list"><li><span class="medal medal-2">II</span> Kacper Matusik — kl. 6b</li><li><span class="medal medal-3">III</span> Jakub Zawieruszka — kl. 4b</li><li><span class="medal medal-wyr">wyr.</span> Oliwia Wadowska — kl. 6b, Mateusz Boroń — kl. 4b</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Szkolny Konkurs „Znam drzewa" — wiedza</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Antoni Gurdek, kl. 6b</li><li><span class="medal medal-2">II</span> Dominik Kosiński, kl. 7b</li><li><span class="medal medal-3">III</span> Eryk Łuński, kl. 6b &amp; Kacper Błachucki, kl. 7b</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Szkolny Konkurs „Znam drzewa" — plakat</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Blanka Kozłowska, kl. 5a</li><li><span class="medal medal-2">II</span> Jakub Jabłoński, kl. 4c</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Szkolny Konkurs Plastyczny „Wesołe Dynie"</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Julia Druciarek, kl. 2b</li><li><span class="medal medal-2">II</span> Julia Szczepankiewicz, kl. 1a &amp; Natalia Monka, kl. 1b</li><li><span class="medal medal-3">III</span> Jakub Jordan, kl. 3a &amp; Aleksander Banach, kl. 1b</li><li><span class="medal medal-wyr">wyr.</span> Kamil Wieczorek, Melania Prusaczyk, Aleksander Stachura, Nina Wawrzkiewicz, Kacper Monka</li><li><span class="medal medal-wyr">publ.</span> Julia Krawczyk, kl. 2a</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Szkolny Konkurs „Dzień Języków Obcych" — kat. kl. I–III</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> kl. 2a — Wielka Brytania &amp; kl. 2b — Grecja (ex aequo)</li><li><span class="medal medal-wyr">wyr.</span> kl. 3a — Niemcy</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Szkolny Konkurs „Dzień Języków Obcych" — kat. kl. IV–VIII</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> kl. 6b — Włochy &amp; kl. 5b — Polska (ex aequo)</li><li><span class="medal medal-2">II</span> kl. 5a — Turcja</li><li><span class="medal medal-3">III</span> kl. 6a — Francja &amp; kl. 4c — Dania (ex aequo)</li></ul>
           </div>
         </div>
       </details>
@@ -344,22 +372,339 @@ a{text-decoration:none;color:inherit}img{max-width:100%;display:block}ul{list-st
         </summary>
         <div class="rok-body">
           <div class="konkurs-card">
-            <p class="konkurs-name">Jubileuszowe Konkursy — 90-lecie SP32</p>
-            <div style="font-size:.88rem;color:var(--tx-m);line-height:1.7">
-              <p>Zorganizowano 5 konkursów szkolnych i międzyszkolnych z okazji 90-lecia szkoły, m.in. konkurs literacki, plastyczny, biologiczno-chemiczny i recytatorski. Zwycięzcy reprezentowali szkołę na uroczystości jubileuszowej 17 listopada 2023 r.</p>
-            </div>
+            <p class="konkurs-name">Międzynarodowy Konkurs Kangur Matematyczny</p>
+            <ul class="wyniki-list"><li><span class="medal medal-2">II st.</span> Antoni Gurdek — 3. m. w powiecie, 9. m. w regionie (kl. 5b)</li><li><span class="medal medal-wyr">wyr.</span> Dawid Cichowicz, kl. 5b &amp; Alicja Zapora, kl. 2a</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">VI Ogólnopolski Konkurs Multimedialny „Reklama Mojej Szkoły"</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Antoni Gurdek &amp; Eryk Łuński — kl. 5b</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Regionalny Konkurs Plastyczny „Hiszpańskie inspiracje"</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Jakub Gorczyca — kl. 7a</li><li><span class="medal medal-2">II</span> Aleksandra Szostak — kl. 7b</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">VI edycja Konkursu Recytatorskiego „Polscy poeci dzieciom"</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Maria Szczepaniak — kl. 5a</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Szkolny Konkurs Plastyczny „Plakat ekologiczny"</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Eryk Łuński, kl. 5b &amp; Maja Jagielska, kl. 5a</li><li><span class="medal medal-2">II</span> Maksymilian Drab &amp; Antoni Gurdek, kl. 5b</li><li><span class="medal medal-3">III</span> Dominik Kosiński, kl. 6b</li><li><span class="medal medal-wyr">wyr.</span> Piotr Kopera, Anastazja Kopińska, Stefania Szczepek — kl. 4b</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Szkolny Konkurs Językowo-Plastyczny „Cool as a cucumber"</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Maja Jagielska, kl. 5a</li><li><span class="medal medal-2">II</span> Eryk Łuński, kl. 5b</li><li><span class="medal medal-3">III</span> Jakub Żaba, kl. 8b</li><li><span class="medal medal-wyr">wyr.</span> Zuzanna Lankowska, kl. 8b &amp; Antoni Gurdek, Jessica Łuczak, kl. 5b</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Międzyszkolny Konkurs Czytelniczy „Z baśnią przez świat"</p>
+            <ul class="wyniki-list"><li><span class="medal medal-2">II</span> Wiktoria Bazgier &amp; Maria Szczepaniak — kl. 5a</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Konkurs Taneczny „Zatańcz z nami"</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Kornelia Kucharska, Lena Nowek, Magdalena Rokita, Gabriela Ducka, Alicja Walendzik, Amelia Styczyńska, Oliwier Otczyk, Wojciech Mróz, Oliwier Modelski, Filip Zbiżek</li><li><span class="medal medal-1">I</span> Maria Szczepaniak, Wiktoria Bazgier, Adrianna Cacała, Katarzyna Kiełtyka, Anastazja Kopińska, Róża Zub</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Szkolny Konkurs z okazji Dnia Świętego Patryka — kat. kl. I–III</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Julia Druciarek, kl. 1b</li><li><span class="medal medal-2">II</span> Oliwia Witas, kl. 1a</li><li><span class="medal medal-3">III</span> Martyna Prusaczyk, kl. 3a</li><li><span class="medal medal-wyr">wyr.</span> Kacper Tarnowski &amp; Nadia Garncarz, kl. 1b</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Szkolny Konkurs z okazji Dnia Świętego Patryka — kat. kl. IV–VIII</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Maksymilian Drab, kl. 5b</li><li><span class="medal medal-2">II</span> Bartek Tatara, kl. 5a</li><li><span class="medal medal-3">III</span> Bruno Sławczyk, kl. 5a</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">VIII Ogólnopolski Konkurs „Bezpieczny Internet – Działajmy Razem" (kl. IV–VI)</p>
+            <ul class="wyniki-list"><li><span class="medal medal-2">II</span> Antoni Gurdek — kl. 5b</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Ogólnopolski Konkurs „Stypendiada Wczesnoszkolna" — plastyczny „Plastuś"</p>
+            <ul class="wyniki-list"><li><span class="medal medal-wyr">laureat</span> Alicja Krawczyk, kl. 3c — walentynka &amp; pocztówka</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Szkolny Konkurs Plastyczny „Koty, kotki, koteczki" (kl. 1–3)</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Alicja Krawczyk, kl. 3c</li><li><span class="medal medal-2">II</span> Nadia Kańtoch, kl. 2a</li><li><span class="medal medal-3">III</span> Martyna Prusaczyk, kl. 3a</li><li><span class="medal medal-wyr">wyr.</span> Łukasz Powonska, Kacper Tarnowski, Julia Krawczyk, Miłosz Peret, Milena Mróz, Nadia Sułkowska</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Zimowy Przegląd Twórczości Dziecięcej (kl. 1–3) — plastyczny</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Hanna Paterek, kl. 1b</li><li><span class="medal medal-2">II</span> Zofia Śmietana, kl. 3c</li><li><span class="medal medal-3">III</span> Kamil Włodarski, kl. 3b</li><li><span class="medal medal-wyr">wyr.</span> Jakub Jabłoński, kl. 3c</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Zimowy Przegląd Twórczości Dziecięcej (kl. 1–3) — recytatorski</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Maria Kluska, kl. 3b &amp; Natalia Mermel, kl. 3a</li><li><span class="medal medal-2">II</span> Miłosz Peret, kl. 3a &amp; Kornelia Brzozowska, kl. 3a</li><li><span class="medal medal-3">III</span> Oliwia Kołodziejczyk, kl. 2a &amp; Magdalena Paczyńska, kl. 2a</li><li><span class="medal medal-wyr">wyr.</span> Stanisław Jankowski, kl. 3a &amp; Milena Gemza, kl. 2a</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Zimowy Przegląd Twórczości Dziecięcej (kl. 1–3) — piosenka</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Oliwia Witas, kl. 1a &amp; Antonina Malmur, kl. 1b</li><li><span class="medal medal-2">II</span> Wiktoria Cygankiewicz, kl. 3b</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Miejski Konkurs Recytatorski „Zimowe spotkania z poezją"</p>
+            <ul class="wyniki-list"><li><span class="medal medal-wyr">wyr.</span> Maria Szczepaniak — kl. 5a</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Miejski Konkurs „Eko-choinka"</p>
+            <ul class="wyniki-list"><li><span class="medal medal-2">II</span> klasa 5b — wych. I. Wąsowicz</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Szkolny Konkurs „Kartka Świąteczna"</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Igor Połętek — kl. 7a (stroik)</li><li><span class="medal medal-1">I</span> Eryk Łuński, kl. 5b &amp; Vanessa Chatys, kl. 7a</li><li><span class="medal medal-2">II</span> Miron Byczak, kl. 6c &amp; Joanna Horzelska, kl. 5b</li><li><span class="medal medal-3">III</span> Antoni Gurdek &amp; Julia Ptak, kl. 5b</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Szkolny Konkurs Recytatorski „Kochamy Tuwima"</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Noemi Morka, kl. 4a</li><li><span class="medal medal-2">II</span> Adrianna Cacała, kl. 4b</li><li><span class="medal medal-3">III</span> Jakub Jabłoński, kl. 3c &amp; Kacper Mendakiewicz, kl. 4c</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Szkolny Konkurs — Najpiękniejsza czarownica/czarownik/elf</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Alicja Krawczyk — kl. 3c</li><li><span class="medal medal-2">II</span> Martyna Prusaczyk — kl. 3a</li><li><span class="medal medal-3">III</span> Sara Herman, kl. 5b &amp; Laura Ujec, kl. 2a</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">III edycja Konkursu Literacko-Plastycznego „Moja Niepodległa"</p>
+            <ul class="wyniki-list"><li><span class="medal medal-2">II</span> Emilia Dąbrowska — kl. 7b</li><li><span class="medal medal-3">III</span> Marta Bernstock — kl. 7a</li><li><span class="medal medal-wyr">wyr.</span> Jakub Gorczyca, kl. 7a &amp; Ewa Wleciał, kl. 6c</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Konkursy z okazji 90-lecia SP32 — Międzyszkolny „Patroni sosnowieckich szkół" (lapbook)</p>
+            <div style="font-size:.86rem;color:var(--tx);line-height:1.7"><p><span class="medal medal-3">III</span> Oliwia Wadowska — SP32</p></div>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Konkursy z okazji 90-lecia SP32 — Międzyszkolny literacki „Opowiem Ci o mojej szkole"</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Maria Szczepaniak — SP32</li><li><span class="medal medal-2">II</span> Lena Giczan — SP40</li><li><span class="medal medal-3">III</span> Gabriela Medaj — SP40</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Konkursy z okazji 90-lecia SP32 — Szkolny plastyczny „Moja szkoła wczoraj, dziś i jutro"</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Miłosz Szmidt, kl. 7a &amp; Aleksandra Szewczyk, kl. 7b</li><li><span class="medal medal-2">II</span> Jakub Gorczyca, kl. 7a</li><li><span class="medal medal-3">III</span> Eryk Łuński, kl. 5b &amp; Dominik Kosiński, kl. 6b</li><li><span class="medal medal-wyr">wyr.</span> Maria Szczepaniak, Wiktoria Bazgier, Weronika Marchewka</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Konkursy z okazji 90-lecia SP32 — Szkolny fotograficzny „Cztery pory roku z moją szkołą"</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Maria Szczepaniak — kl. 5a</li><li><span class="medal medal-2">II</span> Eryk Łuński — kl. 5b</li><li><span class="medal medal-3">III</span> Wiktoria Bazgier — kl. 5a</li><li><span class="medal medal-wyr">wyr.</span> Julia Ptak — kl. 5b</li></ul>
           </div>
         </div>
       </details>
 
       <details class="rok-section">
         <summary class="rok-header">
-          <span class="rok-label">Wcześniejsze lata</span>
+          <span class="rok-label">Rok szkolny 2022/2023</span>
           <span class="rok-caret">▾</span>
         </summary>
         <div class="rok-body">
-          <div class="coming-soon-card" style="margin:0">
-            <p>Wyniki z lat 2020–2023 są w trakcie uzupełniania. Wkrótce pojawią się tu sukcesy z poprzednich lat szkolnych.</p>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Ogólnopolski Konkurs Nauk Przyrodniczych „Świetlik"</p>
+            <ul class="wyniki-list"><li><span class="medal medal-2">II</span> Michał Jachym — kl. 4b</li><li><span class="medal medal-3">III</span> Maja Jagielska — kl. 4a (wyróżnienie)</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Ogólnopolski Konkurs Przyrodniczy „Panda"</p>
+            <ul class="wyniki-list"><li><span class="medal medal-wyr">laureat</span> Maja Jagielska — kl. 4a (V m.)</li><li><span class="medal medal-wyr">laureat</span> Krzysztof Ścibich — kl. 4a (V m.)</li><li><span class="medal medal-wyr">laureat</span> Julia Śliz — kl. 4b (V m.)</li><li><span class="medal medal-wyr">wyr.</span> Gabriela Leśko, Antoni Gurdek — kl. 4b</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Miejski Konkurs na Plakat Elektroniczny nt. zmian klimatycznych</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Antoni Gurdek — kl. 4b</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">X Jubileuszowy Ogólnopolski Konkurs „Ksiądz Stanisław Konarski" — prezentacja multimedialna</p>
+            <ul class="wyniki-list"><li><span class="medal medal-2">II</span> Antoni Gurdek — kl. 4b</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Konkurs „Kram z poezją" — XXIV Wojewódzki Konkurs Polonistyczny im. prof. Jerzego Krama</p>
+            <ul class="wyniki-list"><li><span class="medal medal-2">II</span> Mateusz Mermel — kl. 8c</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">VIII Wojewódzki Konkurs Plastyczny „I … imagine, illustrate, ideate, illuminate"</p>
+            <ul class="wyniki-list"><li><span class="medal medal-2">II</span> Mateusz Mermel — kl. 8c</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Ogólnopolski Konkurs Ekologiczny „Pomysł dzieci na eko śmieci" (9–12 lat)</p>
+            <ul class="wyniki-list"><li><span class="medal medal-2">II</span> Julia Ptak — kl. 4b</li><li><span class="medal medal-wyr">wyr.</span> Eryk Łuński — kl. 4b</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Wojew. Konkurs Literacko-Plastyczny „Kości opowieści – odkryj w sobie literata"</p>
+            <ul class="wyniki-list"><li><span class="medal medal-2">II</span> Maria Szczepaniak — kl. 4a</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Szkolny Konkurs Biologiczno-Chemiczny dla kl. 8</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Mateusz Mermel — kl. 8c</li><li><span class="medal medal-2">II</span> Karol Rzepiak — kl. 8b</li><li><span class="medal medal-3">III</span> Igor Terlecki — kl. 8b</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Szkolny Konkurs Biologiczno-Chemiczny dla kl. 7</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Mikołaj Peret — kl. 7b</li><li><span class="medal medal-2">II</span> Jan Szastak — kl. 7b</li><li><span class="medal medal-3">III</span> Oskar Niezgoda — kl. 7b</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Szkolny Konkurs Plastyczny „Wstrzymał Słońce, ruszył Ziemię!" (Kopernik)</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Maja Jagielska, kl. 4a &amp; Dominik Kosiński, kl. 5b</li><li><span class="medal medal-2">II</span> Zuzanna Poznańska, Gabriela Leśko, Maria Szczepaniak, kl. 4a &amp; Antoni Gurdek, kl. 4b</li><li><span class="medal medal-wyr">wyr.</span> Karol Domagała, Julia Ptak, Bartłomiej Roman, Barbara Wypych i in.</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Szkolny Konkurs Piosenki Angielskiej</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Emilia Broda, kl. 8b</li><li><span class="medal medal-2">II</span> Wiktoria Bazgier, kl. 4a</li><li><span class="medal medal-3">III</span> Amelia Kaczmarczyk, kl. 8a</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Szkolny Walentynkowy Konkurs Muzyczny</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Aleksandra Szostak, kl. 6b</li><li><span class="medal medal-2">II</span> Joanna Horzelska, Sara Herman, kl. 4b</li><li><span class="medal medal-3">III</span> Amelia Styczyńska, kl. 5c</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">XIX Wojewódzki Konkurs Poetycki</p>
+            <ul class="wyniki-list"><li><span class="medal medal-wyr">wyr.</span> Igor Terlecki, kl. 8b — wiersz w tomiku Antologii Poezji</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">VI Ogólnopolski Konkurs z Języka Niemieckiego</p>
+            <ul class="wyniki-list"><li><span class="medal medal-wyr">laureat</span> Mateusz Mermel — kl. 8c (II etap)</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Finaliści 5. edycji konkursu programistycznego PixBlocks Programming Challenge 2023</p>
+            <ul class="wyniki-list"><li><span class="medal medal-wyr">laureat</span> Aleksandra Szostak — kl. 6b</li><li><span class="medal medal-wyr">laureat</span> Miłosz Marchewka — kl. 8b</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Szkolny Konkurs Recytatorski „Uroki zimy" (kl. 1–3)</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Miłosz Peret, kl. 2a &amp; Maria Kluska, kl. 2b</li><li><span class="medal medal-2">II</span> Lena Domagała, kl. 1b</li><li><span class="medal medal-3">III</span> Lena Wach, kl. 3a</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Szkolny Konkurs Ortograficzny (kl. 4–6)</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Aleksandra Szewczyk — kl. 6b</li><li><span class="medal medal-2">II</span> Emilia Klarecka — kl. 6b</li><li><span class="medal medal-3">III</span> Barbara Wypych &amp; Miłosz Szmidt — kl. 6a</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Miejski Konkurs „Eko-choinka"</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> klasa 4b — wych. I. Wąsowicz</li><li><span class="medal medal-2">II</span> klasa 3c — wych. K. Stempniak</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">II edycja Miejskiego Konkursu Plastycznego „Moja Niepodległa"</p>
+            <ul class="wyniki-list"><li><span class="medal medal-wyr">spec.</span> Dominik Kosiński — kl. 5b (nagroda posła RP M. Bochenka)</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Międzynarodowy Turniej Judo</p>
+            <ul class="wyniki-list"><li><span class="medal medal-3">III</span> Amelia Styczyńska — kl. 5c</li></ul>
+          </div>
+        </div>
+      </details>
+
+      <details class="rok-section">
+        <summary class="rok-header">
+          <span class="rok-label">Rok szkolny 2021/2022</span>
+          <span class="rok-caret">▾</span>
+        </summary>
+        <div class="rok-body">
+          <div class="konkurs-card">
+            <p class="konkurs-name">Szkolny Konkurs Biologiczno-Chemiczny „Walka o wariackie papiery"</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Aleksandra Gil — kl. 8d</li><li><span class="medal medal-2">II</span> Małgorzata Sidorowicz — kl. 8d</li><li><span class="medal medal-3">III</span> Wiktoria Wyroba — kl. 8d</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Szkolny Konkurs English Song</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Zuzanna Mucha — kl. 7b</li><li><span class="medal medal-2">II</span> Barbara Wypych — kl. 5a</li><li><span class="medal medal-3">III</span> Paulina Rosikoń — kl. 7a</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Międzyszkolny Konkurs „Ja i moja szkoła"</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Nikola Faracik — kl. 8b</li><li><span class="medal medal-2">II</span> Antonina Nowek — kl. 7a</li><li><span class="medal medal-wyr">wyr.</span> Nikola Chankowska — kl. 8b</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Międzyszkolny Konkurs Historyczno-Plastyczny „Zabytki sakralne Sosnowca"</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Antonina Nowek — kl. 7a (fotograficzny)</li><li><span class="medal medal-2">II</span> Amelia Kaczmarzyk, kl. 7a &amp; Miłosz Szmidt, kl. 5a (plastyczny)</li><li><span class="medal medal-3">III</span> Zuzanna Zaręba, kl. 8d</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Miejski Konkurs Geograficzno-Historyczny „Sosnowiec dawniej i dziś"</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Karol Domagała — album</li><li><span class="medal medal-2">II</span> Miłosz Szmidt — prezentacja</li><li><span class="medal medal-3">III</span> Vanessa Chatys — album</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Szkolny Konkurs „Mam Talent" — śpiew</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Mikołaj Peret, kl. 6b</li><li><span class="medal medal-2">II</span> Lena Zgrajek, kl. 2c</li><li><span class="medal medal-3">III</span> Paulina Sadowska, kl. 7a</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Szkolny Konkurs „Mam Talent" — taniec &amp; instrument</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Wiktoria Bazgier, kl. 3a (taniec) &amp; Mateusz Mermel, kl. 7c (instrument)</li><li><span class="medal medal-2">II</span> Maria Szczepaniak, kl. 3a (taniec) &amp; Hanna Wujek, kl. 2c (instrument)</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Ogólnopolski Konkurs „Stypendiada Wczesnoszkolna"</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Antek Gurdek — kl. 3b (czytelniczy)</li><li><span class="medal medal-wyr">wyr.</span> Hanna Zaręba, Lena Zgrajek, Sara Herman (plastyczny)</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Miejski Konkurs Literacko-Plastyczny „Moja Niepodległa" — literacki</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Antonina Nowek — kl. 7a (laureatka)</li><li><span class="medal medal-2">II</span> Igor Terlecki — kl. 7b</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Miejski Konkurs Literacko-Plastyczny „Moja Niepodległa" — plastyczny</p>
+            <ul class="wyniki-list"><li><span class="medal medal-wyr">wyr.</span> Ewa Wleciał, kl. 4c (+ nagroda spec. posła M. Bochenka)</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">XVIII Wojewódzki Konkurs Poetycki</p>
+            <ul class="wyniki-list"><li><span class="medal medal-2">II</span> Aleksandra Gil — kl. 8d (wiersz w tomiku Antologii Poezji)</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Ogólnopolski Konkurs Plastyczny „Wariacje na temat – zabawa z mistrzami pędzla"</p>
+            <ul class="wyniki-list"><li><span class="medal medal-3">III</span> Julia Ścibich — kl. 7c</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Szkolny Konkurs Fotograficzno-Plastyczny „Żywe obrazy"</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Lena Nowek, kl. 4c</li><li><span class="medal medal-2">II</span> Róża Zub, kl. 6a</li><li><span class="medal medal-3">III</span> Antonina Nowek, kl. 7a &amp; Zuzanna Lankowska, kl. 6b</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">SZKOL. KONKURS PLASTYCZNO-LITERACKI — Rok Stanisława Lema „Kosmiczne Fantazje"</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Wiktor Mendakiewicz, kl. 6b &amp; Dominik Kosiński, kl. 4b &amp; Sara Herman, Amelia Grabiec, kl. 3b</li><li><span class="medal medal-2">II</span> Karol Domagała, kl. 4b &amp; Miłosz Szmidt, kl. 5a &amp; Kacper Suchorski, kl. 3b</li><li><span class="medal medal-wyr">wyr.</span> Filip Zbliżek, Szymon Godzic, Emilia Dąbrowska, Natalia Smuła, Mariusz Smuła, Mateusz Mermel</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Szkolny Konkurs Recytatorski „Kto Ty jesteś! Polak mały!" — recytatorski</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Maria Szczepaniak, kl. 3a &amp; Nikola Kędzia, kl. 2b</li><li><span class="medal medal-2">II</span> Wiktoria Bazgier, kl. 3a &amp; Adrianna Cacała, kl. 2b</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Międzyszkolny Konkurs Recytatorski „Kto powiedział, że jesień jest smutna"</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Maria Szczepaniak — kl. 3a</li><li><span class="medal medal-3">III</span> Wiktoria Bazgier — kl. 3a</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Szkolny Konkurs Plastyczno-Muzyczny — Życie i twórczość Fryderyka Chopina — wiedza</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Artur Jachym &amp; Marcel Kubiczek, kl. 4a</li><li><span class="medal medal-2">II</span> Dominik Kosiński, kl. 4b</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Szkolny Konkurs „Barwy Jesieni" — plastyczny</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Lena Gąsiorek, Zofia Biernat, Emilia Broda, Julia Chytry</li><li><span class="medal medal-2">II</span> Nadia Kowalczyk, Ewa Wleciał, Zuzanna Mucha</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Szkolny Konkurs „Barwy Jesieni" — wokalny</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Aleksandra Szostak, Nadia Kowalczyk, Barbara Wypych</li><li><span class="medal medal-2">II</span> Róża Zub, Sandra Masalska, Jakub Musiał</li></ul>
+          </div>
+        </div>
+      </details>
+
+      <details class="rok-section">
+        <summary class="rok-header">
+          <span class="rok-label">Rok szkolny 2020/2021</span>
+          <span class="rok-caret">▾</span>
+        </summary>
+        <div class="rok-body">
+          <div class="konkurs-card">
+            <p class="konkurs-name">Szkolny Konkurs Plastyczny — Plakat „Dzień Górnika"</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Kasprzyk Dorian, Iwaniuk Natalia, Brzuszkiewicz Emilia, Rosikoń Natalia, Dusza Emilia</li><li><span class="medal medal-2">II</span> Dudek Maja, Rosikoń Natalia</li><li><span class="medal medal-3">III</span> Wyroba Wiktoria, Dolata Piotr</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Szkolny Konkurs Wiedzy o Górnictwie</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Helena Wrona</li><li><span class="medal medal-2">II</span> Zuzanna Zaręba</li><li><span class="medal medal-3">III</span> Laura Targosz</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Szkolny Konkurs Plastyczny „Plakat – Święto Jabłka" (kl. 4)</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Antonina Nowek, kl. 4a</li><li><span class="medal medal-2">II</span> Julia Styczyńska, kl. 4a</li><li><span class="medal medal-3">III</span> Paulina Rosikoń &amp; Amelia Kaczmarzyk, kl. 4a</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Szkolny Konkurs Plastyczny „Plakat – Święto Jabłka" (kl. 5)</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Eliza Pietrzak, kl. 5c</li><li><span class="medal medal-2">II</span> Oliwia Nieznanowska, Michał Rygalik, kl. 5a &amp; Karolina Solano-Aguilar, kl. 5c</li><li><span class="medal medal-3">III</span> Piotr Dolata, kl. 5d &amp; Dawid Knapik, kl. 5b</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Szkolny Konkurs Twórczości Własnej „Wiosenne marzenia…"</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Paulina Rosikoń, kl. 5a</li><li><span class="medal medal-2">II</span> Aleksandra Gil, kl. 6c</li><li><span class="medal medal-3">III</span> Natalia Rosikoń, kl. 6d</li><li><span class="medal medal-wyr">wyr.</span> Helena Wrona, kl. 6d</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Szkolny Konkurs „Barwy Jesieni" — fotograficzny</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Julia Ścibich, kl. 5c &amp; Wiktoria Sala, kl. 5b</li><li><span class="medal medal-2">II</span> Antonina Nowek, kl. 5a &amp; Oliwia Pałys, kl. 6b</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Szkolny Konkurs „Barwy Jesieni" — wokalny</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Hanna Garncarzyk, kl. 5b</li><li><span class="medal medal-2">II</span> Zuzanna Zaręba, kl. 6d &amp; Helena Wrona, kl. 6d</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Szkolny Konkurs „Barwy Jesieni" — recytatorski</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Aleksandra Gil, kl. 6c</li><li><span class="medal medal-2">II</span> Natalia Rosikoń, kl. 6d</li><li><span class="medal medal-3">III</span> Karolina Solano-Aguilar, kl. 6</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Konkurs „Święto Muzyki" (kl. 4–7) — strój</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Barbara Wypych, kl. 4a</li><li><span class="medal medal-2">II</span> Gabriela Góra, kl. 6a</li><li><span class="medal medal-3">III</span> Amelia Kaczmarzyk, kl. 6a</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">Konkurs „Święto Muzyki" — teledysk</p>
+            <ul class="wyniki-list"><li><span class="medal medal-1">I</span> Aleksander Zientarski, kl. 6c</li><li><span class="medal medal-2">II</span> Helena Wrona, kl. 7d &amp; Mariusz Smuła, kl. 4a</li></ul>
+          </div>
+          <div class="konkurs-card">
+            <p class="konkurs-name">I miejsce w VI edycji Międzyszkolnego Konkursu „Książkomanniacy"</p>
+            <ul class="wyniki-list"><li><span class="medal medal-wyr">laureat</span> Aleksandra Gil, Małgorzata Sidorowicz, Karolina Solano-Aguilar, kl. 5c</li></ul>
           </div>
         </div>
       </details>
@@ -372,7 +717,7 @@ a{text-decoration:none;color:inherit}img{max-width:100%;display:block}ul{list-st
 <footer class="site-footer" role="contentinfo">
   <div class="container">
     <div class="footer-top">
-      <a href="index.html" class="footer-logo"><img src="grafiki-ai/logo-sp32.png" alt="" class="footer-logo-img" width="36" height="36" aria-hidden="true"><div class="footer-school-name">Szkoła Podstawowa nr 32<br>im. L. Kruczkowskiego w Sosnowcu</div></a>
+      <a href="index.html" class="footer-logo"><img src="grafiki-ai/logo-sp32.png" alt="" class="footer-logo-img" width="40" height="40" aria-hidden="true"><div class="footer-school-name">Szkoła Podstawowa nr 32<br>im. L. Kruczkowskiego w Sosnowcu</div></a>
       <div class="footer-ext">
         <a href="https://sp32sosnowiec.edupage.org" class="footer-ext-link" target="_blank" rel="noopener">E-Dziennik ↗</a>
         <a href="https://sp_32_sosnowiec.bip.gov.pl/" class="footer-ext-link" target="_blank" rel="noopener">BIP ↗</a>
