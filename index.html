@@ -493,6 +493,14 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   background: rgba(255,255,255,.03); padding: 1.1rem 1.25rem;
   display: flex; flex-direction: column; gap: .3rem;
 }
+/* details: remove native marker */
+details.footer-info-card summary {
+  list-style: none;
+}
+details.footer-info-card summary::-webkit-details-marker,
+details.footer-info-card summary::marker { display: none; }
+.fic-chevron { display: none; }
+
 .footer-info-label {
   font-family: var(--font-d); font-size: .65rem; font-weight: 700;
   letter-spacing: .1em; text-transform: uppercase;
@@ -535,6 +543,13 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
 #back-top:hover { background: var(--ca-d); transform: translateY(-2px); }
 #back-top:focus-visible { outline: 2px solid var(--cp); outline-offset: 3px; }
 
+/* footer-info desktop: 3-column grid, content always visible */
+@media (min-width: 901px) {
+  details.footer-info-card summary { pointer-events: none; cursor: default; }
+  details.footer-info-card .fic-body { display: flex !important; flex-direction: column; gap: .3rem; }
+  .fic-chevron { display: none !important; }
+}
+
 /* ════════════════════════
    RESPONSIVE
 ════════════════════════ */
@@ -546,7 +561,37 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   .about-grid { grid-template-columns: 1fr; gap: 2rem; }
   .gallery-grid { grid-template-columns: repeat(2, 1fr); }
   .footer-top { flex-direction: column; align-items: flex-start; gap: 1rem; }
-  .footer-info { grid-template-columns: 1fr; }
+
+  /* ── footer-info mobile: accordion na pełną szerokość ── */
+  .footer-info {
+    display: flex; flex-direction: column;
+    grid-template-columns: unset;
+    background: rgba(255,255,255,.04);
+    gap: 0; border-radius: var(--r);
+    overflow: hidden;
+  }
+  details.footer-info-card {
+    padding: 0;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+  details.footer-info-card:last-child { border-bottom: none; }
+  details.footer-info-card summary {
+    pointer-events: auto; cursor: pointer;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: .9rem 1.25rem; gap: 1rem;
+  }
+  details.footer-info-card summary .footer-info-label { margin-bottom: 0; }
+  details.footer-info-card .fic-chevron {
+    display: inline-block; font-size: 1.1rem;
+    opacity: .5; flex-shrink: 0;
+    transition: transform .22s ease;
+  }
+  details.footer-info-card[open] .fic-chevron { transform: rotate(90deg); }
+  details.footer-info-card .fic-body { display: none; }
+  details.footer-info-card[open] .fic-body {
+    display: flex; flex-direction: column; gap: .3rem;
+    padding: 0 1.25rem .9rem;
+  }
 }
 @media (max-width: 600px) {
   .quicklinks .container { grid-template-columns: repeat(2, 1fr); }
@@ -961,23 +1006,29 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
     </div>
 
     <div class="footer-info" role="group" aria-label="Dane kontaktowe szkoły">
-      <div class="footer-info-card">
-        <p class="footer-info-label">Adres</p>
-        <address>ul. Armii Krajowej 93<br>41-215 Sosnowiec<br>woj. śląskie</address>
-        <a href="https://maps.google.com/?q=ul.+Armii+Krajowej+93,+41-215+Sosnowiec" target="_blank" rel="noopener">Otwórz w Mapach →</a>
-      </div>
-      <div class="footer-info-card">
-        <p class="footer-info-label">Kontakt</p>
-        <p><a href="tel:+48322634301">32 263-43-01</a></p>
-        <p><a href="mailto:sp32@sosnowiec.edu.pl">sp32@sosnowiec.edu.pl</a></p>
-        <p class="footer-note">Sekretariat: pon–pt 7:00–15:00</p>
-      </div>
-      <div class="footer-info-card">
-        <p class="footer-info-label">Godziny pracy</p>
-        <p>Szkoła: 8:00–16:25</p>
-        <p>Świetlica: 6:30–17:00</p>
-        <p class="footer-note">W dni nauki szkolnej</p>
-      </div>
+      <details class="footer-info-card">
+        <summary><p class="footer-info-label">Adres</p><span class="fic-chevron" aria-hidden="true">›</span></summary>
+        <div class="fic-body">
+          <address>ul. Armii Krajowej 93<br>41-215 Sosnowiec<br>woj. śląskie</address>
+          <a href="https://maps.google.com/?q=ul.+Armii+Krajowej+93,+41-215+Sosnowiec" target="_blank" rel="noopener">Otwórz w Mapach →</a>
+        </div>
+      </details>
+      <details class="footer-info-card">
+        <summary><p class="footer-info-label">Kontakt</p><span class="fic-chevron" aria-hidden="true">›</span></summary>
+        <div class="fic-body">
+          <p><a href="tel:+48322634301">32 263-43-01</a></p>
+          <p><a href="mailto:sp32@sosnowiec.edu.pl">sp32@sosnowiec.edu.pl</a></p>
+          <p class="footer-note">Sekretariat: pon–pt 7:00–15:00</p>
+        </div>
+      </details>
+      <details class="footer-info-card">
+        <summary><p class="footer-info-label">Godziny pracy</p><span class="fic-chevron" aria-hidden="true">›</span></summary>
+        <div class="fic-body">
+          <p>Szkoła: 8:00–16:25</p>
+          <p>Świetlica: 6:30–17:00</p>
+          <p class="footer-note">W dni nauki szkolnej</p>
+        </div>
+      </details>
     </div>
 
     <nav class="footer-nav" aria-label="Mapa strony">
