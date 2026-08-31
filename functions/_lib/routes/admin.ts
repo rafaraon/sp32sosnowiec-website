@@ -1,5 +1,5 @@
 import { Hono } from 'hono'
-import type { Env, AdminUser, NewsRow, GalleryAlbumRow, GalleryPhotoRow, DocumentRow, MenuWeekRow, SpecialistRow } from '../types'
+import type { Env, AdminUser, NewsRow, GalleryAlbumRow, GalleryPhotoRow, DocumentRow, MenuWeekRow, SpecialistRow, ConsentRequestRow } from '../types'
 import { calcGraduationYear } from '../types'
 import { adminAuth, requireAdmin } from '../auth'
 import { newsToJson, albumToJson, photoToJson, documentToJson, menuToJson, specialistToJson } from '../db'
@@ -482,4 +482,82 @@ adminRouter.delete('/menu/:id', requireAdmin, async (c) => {
   if (row.r2_key) await c.env.MEDIA.delete(row.r2_key)
   await c.env.DB.prepare('DELETE FROM menu_weeks WHERE id = ?').bind(id).run()
   return c.json({ ok: true })
+})
+
+// GET /api/admin/rodo/requests — list consent requests (optional ?status= filter)
+adminRouter.get('/rodo/requests', requireAdmin, async (c) => {
+  const status = c.req.query('status')
+  const query = status
+    ? 'SELECT * FROM consent_requests WHERE status = ? ORDER BY requested_at DESC LIMIT 100'
+    : 'SELECT * FROM consent_requests ORDER BY requested_at DESC LIMIT 100'
+  const rows = status
+    ? await c.env.DB.prepare(query).bind(status).all()
+    : await c.env.DB.prepare(query).all()
+  return c.json({ requests: rows.results ?? [] })
+})
+
+// POST /api/admin/rodo/requests — create consent request
+adminRouter.post('/rodo/requests', requireAdmin, async (c) => {
+  const body = await c.req.json<{
+    student_name?: string
+    class_label?: string
+    graduation_year?: number
+    request_type?: 'withdrawal' | 'deletion'
+    notes?: string
+  }>()
+  if (!body.student_name || !body.request_type) {
+    return c.json({ error: 'student_name and request_type required' }, 400)
+  }
+  const row = await c.env.DB.prepare(
+    `INSERT INTO consent_requests (student_name, class_label, graduation_year, request_type, notes)
+     VALUES (?, ?, ?, ?, ?) RETURNING *`
+  ).bind(
+    body.student_name,
+    body.class_label ?? null,
+    body.graduation_year ?? null,
+    body.request_type,
+    body.notes ?? null
+  ).first<ConsentRequestRow>()
+  return c.json({ request: row }, 201)
+})
+
+// PUT /api/admin/rodo/requests/:id — update status/notes
+adminRouter.put('/rodo/requests/:id', requireAdmin, async (c) => {
+  const id = Number(c.req.param('id'))
+  const body = await c.req.json<{
+    status?: 'pending' | 'in_progress' | 'resolved'
+    notes?: string
+  }>()
+  const user = c.get('user')
+
+  const sets: string[] = []; const vals: unknown[] = []
+  if ('status' in body) {
+    sets.push('status = ?'); vals.push(body.status)
+    if (body.status === 'resolved') {
+      sets.push("resolved_at = datetime('now')")
+      sets.push('resolved_by = ?'); vals.push(user.email)
+    }
+  }
+  if ('notes' in body) { sets.push('notes = ?'); vals.push(body.notes ?? null) }
+  if (!sets.length) return c.json({ error: 'No fields to update' }, 400)
+  vals.push(id)
+
+  const row = await c.env.DB.prepare(
+    `UPDATE consent_requests SET ${sets.join(', ')} WHERE id = ? RETURNING *`
+  ).bind(...vals).first<ConsentRequestRow>()
+  if (!row) return c.json({ error: 'Not found' }, 404)
+  return c.json({ request: row })
+})
+
+// GET /api/admin/rodo/audit — gallery albums requiring RODO review
+adminRouter.get('/rodo/audit', requireAdmin, async (c) => {
+  const currentYear = new Date().getFullYear()
+  const rows = await c.env.DB.prepare(
+    `SELECT id, title, slug, graduation_year,
+       CASE WHEN graduation_year + 3 <= ? THEN 'autonomy' ELSE 'retention' END as audit_type
+     FROM gallery_albums
+     WHERE graduation_year <= ?
+     ORDER BY graduation_year ASC`
+  ).bind(currentYear, currentYear).all()
+  return c.json({ albums: rows.results ?? [], current_year: currentYear })
 })

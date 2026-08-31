@@ -93,6 +93,19 @@ export interface SpecialistHour {
   to: string
 }
 
+export interface ConsentRequestRow {
+  id: number
+  student_name: string
+  class_label: string | null
+  graduation_year: number | null
+  request_type: 'withdrawal' | 'deletion'
+  requested_at: string
+  resolved_at: string | null
+  resolved_by: string | null
+  status: 'pending' | 'in_progress' | 'resolved'
+  notes: string | null
+}
+
 export function calcGraduationYear(schoolYear: string, classLabel: string | null): number {
   const endYear = parseInt(schoolYear.split('/')[1], 10)
   if (!classLabel) return endYear
