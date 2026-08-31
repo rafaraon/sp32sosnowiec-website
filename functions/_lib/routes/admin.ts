@@ -1,8 +1,8 @@
 import { Hono } from 'hono'
-import type { Env, AdminUser, NewsRow, GalleryAlbumRow, GalleryPhotoRow } from '../types'
+import type { Env, AdminUser, NewsRow, GalleryAlbumRow, GalleryPhotoRow, DocumentRow, MenuWeekRow, SpecialistRow } from '../types'
 import { calcGraduationYear } from '../types'
 import { adminAuth, requireAdmin } from '../auth'
-import { newsToJson, albumToJson, photoToJson } from '../db'
+import { newsToJson, albumToJson, photoToJson, documentToJson, menuToJson, specialistToJson } from '../db'
 import { r2Key, uploadToR2 } from '../r2'
 
 type Variables = { user: AdminUser }
@@ -351,5 +351,135 @@ adminRouter.put('/gallery/photos/:id/anonymize', async (c) => {
     .bind(id)
     .run()
 
+  return c.json({ ok: true })
+})
+
+// ── Documents ────────────────────────────────────────────────────────────────
+
+// POST /api/admin/documents — upload document
+adminRouter.post('/documents', requireAdmin, async (c) => {
+  const form = await c.req.formData()
+  const file = form.get('file') as File | null
+  const title = form.get('title') as string | null
+  const category = form.get('category') as string | null
+
+  if (!file || !title || !category) return c.json({ error: 'file, title, category required' }, 400)
+  const allowed = ['dokumenty', 'zfss', 'druki', 'rodo']
+  if (!allowed.includes(category)) return c.json({ error: 'invalid category' }, 400)
+
+  const key = r2Key(`documents/${category}`, file.name)
+  await uploadToR2(c.env, key, file)
+
+  const user = c.get('user')
+  const row = await c.env.DB.prepare(
+    `INSERT INTO documents (category, title, r2_key, file_type, file_size, uploaded_by)
+     VALUES (?, ?, ?, ?, ?, ?) RETURNING *`
+  ).bind(category, title, key,
+    file.name.split('.').pop()?.toLowerCase() ?? null,
+    file.size, user.email
+  ).first<DocumentRow>()
+
+  if (!row) return c.json({ error: 'Insert failed' }, 500)
+  return c.json({ document: documentToJson(row, c.env) }, 201)
+})
+
+// PUT /api/admin/documents/:id — update document metadata
+adminRouter.put('/documents/:id', requireAdmin, async (c) => {
+  const id = Number(c.req.param('id'))
+  const existing = await c.env.DB.prepare('SELECT id FROM documents WHERE id = ?').bind(id).first()
+  if (!existing) return c.json({ error: 'Not found' }, 404)
+
+  const body = await c.req.json<Partial<{ title: string; sort_order: number; published: boolean }>>()
+  const sets: string[] = []; const vals: unknown[] = []
+  if ('title' in body) { sets.push('title = ?'); vals.push(body.title) }
+  if ('sort_order' in body) { sets.push('sort_order = ?'); vals.push(body.sort_order) }
+  if ('published' in body) { sets.push('published = ?'); vals.push(body.published ? 1 : 0) }
+  if (!sets.length) return c.json({ error: 'No fields to update' }, 400)
+  vals.push(id)
+
+  const row = await c.env.DB.prepare(
+    `UPDATE documents SET ${sets.join(', ')} WHERE id = ? RETURNING *`
+  ).bind(...vals).first<DocumentRow>()
+  if (!row) return c.json({ error: 'Update failed' }, 500)
+  return c.json({ document: documentToJson(row, c.env) })
+})
+
+// DELETE /api/admin/documents/:id — delete document and its R2 file
+adminRouter.delete('/documents/:id', requireAdmin, async (c) => {
+  const id = Number(c.req.param('id'))
+  const row = await c.env.DB.prepare('SELECT r2_key FROM documents WHERE id = ?')
+    .bind(id).first<{ r2_key: string }>()
+  if (!row) return c.json({ error: 'Not found' }, 404)
+  await c.env.MEDIA.delete(row.r2_key)
+  await c.env.DB.prepare('DELETE FROM documents WHERE id = ?').bind(id).run()
+  return c.json({ ok: true })
+})
+
+// ── Specialists ───────────────────────────────────────────────────────────────
+
+// PUT /api/admin/specialists/:role — update specialist by role
+adminRouter.put('/specialists/:role', requireAdmin, async (c) => {
+  const role = c.req.param('role') ?? ''
+  const validRoles = ['psycholog', 'pedagog', 'doradca', 'pielegnarka']
+  if (!validRoles.includes(role)) return c.json({ error: 'Invalid role' }, 400)
+
+  const body = await c.req.json<Partial<{
+    name: string; title_prefix: string | null; room: string | null;
+    phone_ext: string | null; hours: Array<{ day: string; from: string; to: string }>; active: boolean
+  }>>()
+
+  const sets: string[] = []; const vals: unknown[] = []
+  if ('name' in body) { sets.push('name = ?'); vals.push(body.name) }
+  if ('title_prefix' in body) { sets.push('title_prefix = ?'); vals.push(body.title_prefix ?? null) }
+  if ('room' in body) { sets.push('room = ?'); vals.push(body.room ?? null) }
+  if ('phone_ext' in body) { sets.push('phone_ext = ?'); vals.push(body.phone_ext ?? null) }
+  if ('hours' in body) { sets.push('hours = ?'); vals.push(JSON.stringify(body.hours)) }
+  if ('active' in body) { sets.push('active = ?'); vals.push(body.active ? 1 : 0) }
+  if (!sets.length) return c.json({ error: 'No fields to update' }, 400)
+  sets.push("updated_at = datetime('now')")
+  vals.push(role)
+
+  const row = await c.env.DB.prepare(
+    `UPDATE specialists SET ${sets.join(', ')} WHERE role = ? RETURNING *`
+  ).bind(...vals).first<SpecialistRow>()
+  if (!row) return c.json({ error: 'Not found' }, 404)
+  return c.json({ specialist: specialistToJson(row) })
+})
+
+// ── Menu ──────────────────────────────────────────────────────────────────────
+
+// POST /api/admin/menu — upsert menu week (multipart)
+adminRouter.post('/menu', requireAdmin, async (c) => {
+  const form = await c.req.formData()
+  const file = form.get('file') as File | null
+  const week_start = form.get('week_start') as string | null
+  const notes = form.get('notes') as string | null
+
+  if (!week_start) return c.json({ error: 'week_start required (YYYY-MM-DD)' }, 400)
+
+  let menuKey: string | null = null
+  if (file) {
+    menuKey = `menu/${week_start}.pdf`
+    await uploadToR2(c.env, menuKey, file, 'application/pdf')
+  }
+
+  const row = await c.env.DB.prepare(
+    `INSERT INTO menu_weeks (week_start, r2_key, notes)
+     VALUES (?, ?, ?)
+     ON CONFLICT(week_start) DO UPDATE SET r2_key = excluded.r2_key, notes = excluded.notes
+     RETURNING *`
+  ).bind(week_start, menuKey, notes ?? null).first<MenuWeekRow>()
+  if (!row) return c.json({ error: 'Insert failed' }, 500)
+  return c.json({ menu: menuToJson(row, c.env) }, 201)
+})
+
+// DELETE /api/admin/menu/:id — delete menu week and its R2 file
+adminRouter.delete('/menu/:id', requireAdmin, async (c) => {
+  const id = Number(c.req.param('id'))
+  const row = await c.env.DB.prepare('SELECT r2_key FROM menu_weeks WHERE id = ?')
+    .bind(id).first<{ r2_key: string | null }>()
+  if (!row) return c.json({ error: 'Not found' }, 404)
+  if (row.r2_key) await c.env.MEDIA.delete(row.r2_key)
+  await c.env.DB.prepare('DELETE FROM menu_weeks WHERE id = ?').bind(id).run()
   return c.json({ ok: true })
 })
