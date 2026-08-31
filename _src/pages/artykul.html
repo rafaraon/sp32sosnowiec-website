@@ -1,0 +1,70 @@
+{% extends "_base.html" %}
+{% block page_title %}Aktualność{% endblock %}
+{% block eyebrow %}Aktualności{% endblock %}
+{% block hero_title %}&nbsp;{% endblock %}
+{% block breadcrumb_page %}Aktualność{% endblock %}
+{% block page_css %}
+<style>
+.article-cover{width:100%;max-height:400px;object-fit:cover;border-radius:var(--r);margin-bottom:2rem}
+.article-meta{font-family:var(--font-d);font-size:.75rem;font-weight:700;color:var(--ca);letter-spacing:.05em;text-transform:uppercase;margin-bottom:1rem}
+.article-title{font-family:var(--font-d);font-size:2rem;font-weight:800;color:var(--tx);letter-spacing:-.03em;margin-bottom:1.5rem;line-height:1.2;text-wrap:balance}
+.article-body{max-width:720px;font-size:1rem;color:var(--tx-m);line-height:1.8}
+.article-body h2{font-family:var(--font-d);font-size:1.35rem;font-weight:800;color:var(--tx);margin:2rem 0 .75rem}
+.article-body p{margin-bottom:1rem}
+.article-body img{max-width:100%;border-radius:var(--r-s);margin:1rem 0}
+.article-body a{color:var(--cp);font-weight:600}
+.skel-text{background:var(--clv);border-radius:4px;animation:pulse 1.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+</style>
+{% endblock %}
+{% block content %}
+<div class="container page-main">
+<div x-data="articleApp()" x-init="load()">
+  <template x-if="loading">
+    <div>
+      <div class="skel-text" style="height:2rem;width:60%;margin-bottom:1rem"></div>
+      <div class="skel-text" style="height:1rem;width:40%;margin-bottom:2rem"></div>
+      <div class="skel-text" style="height:400px;margin-bottom:2rem;border-radius:var(--r)"></div>
+    </div>
+  </template>
+  <template x-if="error">
+    <div style="text-align:center;padding:3rem">
+      <p style="color:var(--tx-m)">Nie znaleziono artykułu. <a href="aktualnosci.html" style="color:var(--cp);font-weight:700">← Wróć do aktualności</a></p>
+    </div>
+  </template>
+  <template x-if="!loading && !error && item">
+    <article>
+      <img x-show="item.cover_url" :src="item.cover_url" :alt="item.title" class="article-cover" loading="lazy">
+      <p class="article-meta" x-text="fmtDate(item.published_at)"></p>
+      <h1 class="article-title" x-text="item.title"></h1>
+      <div class="article-body" x-html="item.body_html"></div>
+    </article>
+  </template>
+</div>
+</div>
+<script>
+function articleApp(){
+  return{
+    item:null,loading:true,error:false,
+    async load(){
+      const params=new URLSearchParams(location.search);
+      const slug=params.get('slug');
+      if(!slug){this.error=true;this.loading=false;return}
+      try{
+        const r=await fetch('/api/public/news/'+encodeURIComponent(slug));
+        if(!r.ok)throw new Error();
+        const d=await r.json();
+        this.item=d.item;
+        if(this.item)document.title=this.item.title+' — SP32 Sosnowiec';
+      }catch{this.error=true}
+      finally{this.loading=false}
+    },
+    fmtDate(iso){
+      if(!iso)return'';
+      return new Date(iso).toLocaleDateString('pl-PL',{day:'numeric',month:'long',year:'numeric'});
+    }
+  }
+}
+</script>
+<script src="/alpine.min.js" defer></script>
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends "_base.html" %}
+{% block page_title %}Aktualności{% endblock %}
+{% block eyebrow %}Szkoła Podstawowa nr 32{% endblock %}
+{% block hero_title %}Aktualności{% endblock %}
+{% block breadcrumb_page %}Aktualności{% endblock %}
+{% block page_css %}
+<style>
+.news-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem;margin-top:2rem}
+.news-card{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);transition:box-shadow var(--tr),transform var(--tr);text-decoration:none;color:inherit;display:flex;flex-direction:column}
+.news-card:hover{box-shadow:var(--sh-m);transform:translateY(-2px)}
+.news-card img{width:100%;aspect-ratio:16/9;object-fit:cover;background:var(--clv)}
+.news-card-body{padding:1.25rem;flex:1;display:flex;flex-direction:column;gap:.4rem}
+.news-date{font-family:var(--font-d);font-size:.7rem;font-weight:700;color:var(--ca);letter-spacing:.05em;text-transform:uppercase}
+.news-card h2{font-family:var(--font-d);font-size:1rem;font-weight:800;color:var(--tx);line-height:1.35}
+.news-card p{font-size:.88rem;color:var(--tx-m);line-height:1.6;margin-top:.2rem}
+.skel-card{background:var(--clv);border-radius:var(--r);height:280px;animation:pulse 1.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.fetch-error{background:var(--clv-l);border:1px solid var(--bd);border-radius:var(--r);padding:2rem;text-align:center;margin-top:2rem}
+.fetch-error p{color:var(--tx-m);font-size:.95rem}
+.fetch-error a{color:var(--cp);font-weight:700}
+</style>
+{% endblock %}
+{% block content %}
+<div class="container page-main">
+<div x-data="newsApp()" x-init="load()">
+  <template x-if="loading">
+    <div class="news-grid">
+      <div class="skel-card"></div>
+      <div class="skel-card"></div>
+      <div class="skel-card"></div>
+    </div>
+  </template>
+  <template x-if="error">
+    <div class="fetch-error">
+      <p>Treść chwilowo niedostępna. <a href="" @click.prevent="load()">Spróbuj ponownie →</a></p>
+    </div>
+  </template>
+  <template x-if="!loading && !error && items.length === 0">
+    <p style="color:var(--tx-m);margin-top:2rem">Brak aktualności.</p>
+  </template>
+  <template x-if="!loading && !error && items.length > 0">
+    <div class="news-grid">
+      <template x-for="item in items" :key="item.id">
+        <a :href="'artykul.html?slug=' + item.slug" class="news-card">
+          <img x-show="item.cover_url" :src="item.cover_url" :alt="item.title" loading="lazy">
+          <div style="width:100%;aspect-ratio:16/9;background:var(--clv)" x-show="!item.cover_url"></div>
+          <div class="news-card-body">
+            <p class="news-date" x-text="fmtDate(item.published_at)"></p>
+            <h2 x-text="item.title"></h2>
+            <p x-text="item.excerpt"></p>
+          </div>
+        </a>
+      </template>
+    </div>
+  </template>
+</div>
+</div>
+<script>
+function newsApp(){
+  return{
+    items:[],loading:true,error:false,
+    async load(){
+      this.loading=true;this.error=false;
+      try{
+        const r=await fetch('/api/public/news');
+        if(!r.ok)throw new Error();
+        const d=await r.json();
+        this.items=d.items;
+      }catch{this.error=true}
+      finally{this.loading=false}
+    },
+    fmtDate(iso){
+      if(!iso)return'';
+      return new Date(iso).toLocaleDateString('pl-PL',{day:'numeric',month:'long',year:'numeric'});
+    }
+  }
+}
+</script>
+<script src="/alpine.min.js" defer></script>
+{% endblock %}
