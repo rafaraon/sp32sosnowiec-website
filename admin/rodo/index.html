@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RODO — Panel SP32</title>
+<link rel="stylesheet" href="/admin/_shared.css">
+<style>
+.section-title { font-size: .85rem; font-weight: 700; color: #444; margin-bottom: 1rem; padding-bottom: .5rem; border-bottom: 1px solid #e8e8e8 }
+.filter-bar { display: flex; gap: .5rem; margin-bottom: 1rem; flex-wrap: wrap }
+.filter-btn { padding: .3rem .75rem; font-size: .78rem; font-weight: 700; border-radius: 999px; border: 1px solid #d0d0d0; background: #fff; cursor: pointer }
+.filter-btn.active { background: #1a1a2e; color: #fff; border-color: #1a1a2e }
+</style>
+</head>
+<body x-data="rodoAdmin()" x-init="init()">
+<div id="sidebar">
+  <div class="brand"><span>SP32 Panel</span><small x-text="role === 'admin' ? 'Administrator' : 'Redaktor'"></small></div>
+  <nav>
+    <a href="/admin/index.html">📊 Dashboard</a>
+    <div class="nav-section">Treści</div>
+    <a href="/admin/news/index.html">📰 Aktualności</a>
+    <a href="/admin/gallery/index.html">🖼️ Galeria</a>
+    <template x-if="role === 'admin'">
+      <div>
+        <div class="nav-section">Admin</div>
+        <a href="/admin/documents/index.html" class="admin-only">📄 Dokumenty</a>
+        <a href="/admin/specialists/index.html" class="admin-only">👥 Specjaliści</a>
+        <a href="/admin/menu/index.html" class="admin-only">🍽️ Jadłospis</a>
+        <a href="/admin/rodo/index.html" class="active admin-only">🔐 RODO</a>
+      </div>
+    </template>
+  </nav>
+  <div class="sidebar-footer" x-text="userEmail"></div>
+</div>
+
+<div id="main">
+  <div id="topbar">
+    <h1>RODO</h1>
+    <button class="btn btn-primary" @click="openDrawer()">+ Nowy wniosek</button>
+  </div>
+  <div id="content">
+    <template x-if="role !== 'admin' && !loading">
+      <div class="alert alert-warn">Brak dostępu — tylko Administrator</div>
+    </template>
+    <template x-if="role === 'admin'">
+      <div>
+        <!-- Wnioski section -->
+        <div class="card">
+          <div class="section-title">Wnioski RODO</div>
+          <div class="filter-bar">
+            <button class="filter-btn" :class="{active: statusFilter === ''}" @click="setFilter('')">Wszystkie</button>
+            <button class="filter-btn" :class="{active: statusFilter === 'pending'}" @click="setFilter('pending')">Oczekujące</button>
+            <button class="filter-btn" :class="{active: statusFilter === 'in_progress'}" @click="setFilter('in_progress')">W toku</button>
+            <button class="filter-btn" :class="{active: statusFilter === 'resolved'}" @click="setFilter('resolved')">Rozwiązane</button>
+          </div>
+          <template x-if="loadingRequests"><div class="skel" style="height:120px;border-radius:8px"></div></template>
+          <template x-if="!loadingRequests">
+            <div style="overflow-x:auto">
+              <table class="data-table">
+                <thead>
+                  <tr><th>Uczeń</th><th>Klasa</th><th>Typ</th><th>Data</th><th>Status</th><th>Akcje</th></tr>
+                </thead>
+                <tbody>
+                  <template x-for="req in requests" :key="req.id">
+                    <tr>
+                      <td style="font-weight:600" x-text="req.student_name"></td>
+                      <td style="color:#888;font-size:.75rem" x-text="req.class_label ?? '—'"></td>
+                      <td>
+                        <span class="badge badge-gray" x-text="req.request_type === 'withdrawal' ? 'Wycofanie' : 'Usunięcie'"></span>
+                      </td>
+                      <td x-text="fmtDate(req.requested_at)"></td>
+                      <td>
+                        <span class="badge" :class="statusBadge(req.status)" x-text="statusLabel(req.status)"></span>
+                      </td>
+                      <td style="white-space:nowrap">
+                        <select class="form-input" style="width:auto;padding:.2rem .4rem;font-size:.75rem" :value="req.status" @change="changeStatus(req, $event.target.value)">
+                          <option value="pending">Oczekujący</option>
+                          <option value="in_progress">W toku</option>
+                          <option value="resolved">Rozwiązany</option>
+                        </select>
+                      </td>
+                    </tr>
+                  </template>
+                  <template x-if="requests.length === 0">
+                    <tr><td colspan="6" style="color:#999;text-align:center;padding:2rem">Brak wniosków</td></tr>
+                  </template>
+                </tbody>
+              </table>
+            </div>
+          </template>
+        </div>
+
+        <!-- Audit section -->
+        <div class="card">
+          <div class="section-title">Audit RODO — albumy wymagające przeglądu</div>
+          <template x-if="loadingAudit"><div class="skel" style="height:120px;border-radius:8px"></div></template>
+          <template x-if="!loadingAudit && auditAlbums.length === 0">
+            <p style="color:#888;font-size:.82rem">Brak albumów wymagających przeglądu w roku <strong x-text="currentYear"></strong>.</p>
+          </template>
+          <template x-if="!loadingAudit && auditAlbums.length > 0">
+            <div style="overflow-x:auto">
+              <table class="data-table">
+                <thead>
+                  <tr><th>Album</th><th>Rocznik ukończenia</th><th>Typ audytu</th><th></th></tr>
+                </thead>
+                <tbody>
+                  <template x-for="album in auditAlbums" :key="album.id">
+                    <tr>
+                      <td style="font-weight:600" x-text="album.title"></td>
+                      <td x-text="album.graduation_year"></td>
+                      <td>
+                        <span class="badge" :class="album.audit_type === 'autonomy' ? 'badge-red' : 'badge-yellow'"
+                          x-text="album.audit_type === 'autonomy' ? 'Autonomia (pełnoletni)' : 'Retencja (opuścili szkołę)'">
+                        </span>
+                      </td>
+                      <td>
+                        <a :href="'/admin/gallery/index.html'" class="btn btn-outline btn-sm" style="font-size:.72rem">Przejdź do galerii →</a>
+                      </td>
+                    </tr>
+                  </template>
+                </tbody>
+              </table>
+            </div>
+          </template>
+        </div>
+      </div>
+    </template>
+  </div>
+</div>
+
+<!-- New request drawer -->
+<div class="drawer-overlay" :class="{open: drawerOpen}" @click="closeDrawer()"></div>
+<div class="drawer" :class="{open: drawerOpen}">
+  <div class="drawer-header">
+    <h2>Nowy wniosek RODO</h2>
+    <button class="btn btn-outline btn-sm" @click="closeDrawer()">✕</button>
+  </div>
+  <div class="drawer-body">
+    <div class="form-group">
+      <label class="form-label">Imię i nazwisko ucznia *</label>
+      <input class="form-input" x-model="newReq.student_name" placeholder="Jan Kowalski">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Klasa</label>
+      <input class="form-input" x-model="newReq.class_label" placeholder="np. 8a">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Rok ukończenia</label>
+      <input class="form-input" type="number" x-model.number="newReq.graduation_year" placeholder="np. 2024" min="2000" max="2040">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Typ wniosku *</label>
+      <select class="form-input" x-model="newReq.request_type">
+        <option value="withdrawal">Wycofanie zgody</option>
+        <option value="deletion">Usunięcie danych</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Uwagi</label>
+      <textarea class="form-input" x-model="newReq.notes" rows="3" placeholder="Opcjonalne uwagi"></textarea>
+    </div>
+    <div x-show="createError" class="alert alert-error" x-text="createError"></div>
+  </div>
+  <div class="drawer-footer">
+    <button class="btn btn-outline" @click="closeDrawer()">Anuluj</button>
+    <button class="btn btn-primary" @click="createRequest()" :disabled="creating" x-text="creating ? 'Zapisywanie...' : 'Zapisz wniosek'"></button>
+  </div>
+</div>
+
+<script src="/admin/_shared.js"></script>
+<script src="/alpine.min.js" defer></script>
+<script>
+function rodoAdmin() {
+  return {
+    requests: [], auditAlbums: [], currentYear: new Date().getFullYear(),
+    loadingRequests: true, loadingAudit: true, loading: true,
+    statusFilter: '',
+    userEmail: '', role: 'editor',
+    drawerOpen: false, newReq: { student_name: '', class_label: '', graduation_year: null, request_type: 'withdrawal', notes: '' },
+    creating: false, createError: '',
+
+    async init() {
+      try { const me = await API.get('/me'); this.userEmail = me.email; this.role = me.role } catch {}
+      this.loading = false
+      await Promise.all([this.loadRequests(), this.loadAudit()])
+    },
+
+    async loadRequests() {
+      this.loadingRequests = true
+      try {
+        const path = this.statusFilter ? '/rodo/requests?status=' + this.statusFilter : '/rodo/requests'
+        const d = await API.get(path)
+        this.requests = d.requests ?? []
+      } catch {}
+      finally { this.loadingRequests = false }
+    },
+
+    async loadAudit() {
+      this.loadingAudit = true
+      try {
+        const d = await API.get('/rodo/audit')
+        this.auditAlbums = d.albums ?? []
+        this.currentYear = d.current_year ?? new Date().getFullYear()
+      } catch {}
+      finally { this.loadingAudit = false }
+    },
+
+    async setFilter(status) {
+      this.statusFilter = status
+      await this.loadRequests()
+    },
+
+    async changeStatus(req, newStatus) {
+      try {
+        await API.put('/rodo/requests/' + req.id, { status: newStatus })
+        req.status = newStatus
+        if (newStatus === 'resolved') req.resolved_at = new Date().toISOString()
+      } catch(e) { alert(e.message) }
+    },
+
+    openDrawer() {
+      this.newReq = { student_name: '', class_label: '', graduation_year: null, request_type: 'withdrawal', notes: '' }
+      this.createError = ''; this.drawerOpen = true
+    },
+    closeDrawer() { this.drawerOpen = false },
+
+    async createRequest() {
+      if (!this.newReq.student_name || !this.newReq.request_type) {
+        this.createError = 'Imię i nazwisko oraz typ wniosku są wymagane'; return
+      }
+      this.creating = true; this.createError = ''
+      try {
+        await API.post('/rodo/requests', {
+          student_name: this.newReq.student_name,
+          class_label: this.newReq.class_label || null,
+          graduation_year: this.newReq.graduation_year || null,
+          request_type: this.newReq.request_type,
+          notes: this.newReq.notes || null
+        })
+        this.closeDrawer(); await this.loadRequests()
+      } catch(e) { this.createError = e.message }
+      finally { this.creating = false }
+    },
+
+    statusLabel(s) {
+      return { pending: 'Oczekujący', in_progress: 'W toku', resolved: 'Rozwiązany' }[s] ?? s
+    },
+    statusBadge(s) {
+      return { pending: 'badge-yellow', in_progress: 'badge-gray', resolved: 'badge-green' }[s] ?? 'badge-gray'
+    },
+    fmtDate
+  }
+}
+</script>
+</body>
+</html>
