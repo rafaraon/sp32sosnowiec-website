@@ -1,6 +1,6 @@
 import { Hono } from 'hono'
 import type { Env, NewsRow, GalleryAlbumRow, GalleryPhotoRow, DocumentRow, SpecialistRow, MenuWeekRow } from '../types'
-import { newsToJson, albumToJson, photoToJson } from '../db'
+import { newsToJson, albumToJson, photoToJson, documentToJson, specialistToJson, menuToJson } from '../db'
 
 export const publicRouter = new Hono<{ Bindings: Env }>()
 
@@ -48,7 +48,38 @@ publicRouter.get('/gallery/:slug', async (c) => {
   })
 })
 
-// Stubs — will be replaced in Task 7
-publicRouter.get('/documents/:category', async (c) => c.json({ documents: [] }))
-publicRouter.get('/specialists', async (c) => c.json({ specialists: [] }))
-publicRouter.get('/menu/current', async (c) => c.json({ menu: null }))
+publicRouter.get('/documents/:category', async (c) => {
+  const category = c.req.param('category')
+  const allowed = ['dokumenty', 'zfss', 'druki', 'rodo']
+  if (!allowed.includes(category)) return c.json({ error: 'invalid category' }, 400)
+
+  if (category === 'zfss') return c.json({ error: 'forbidden' }, 403)
+
+  const rows = await c.env.DB.prepare(
+    `SELECT * FROM documents WHERE category = ? AND published = 1 ORDER BY sort_order ASC, uploaded_at DESC`
+  ).bind(category).all<DocumentRow>()
+
+  return c.json({ documents: (rows.results ?? []).map(r => documentToJson(r, c.env)) })
+})
+
+publicRouter.get('/specialists', async (c) => {
+  const rows = await c.env.DB.prepare(
+    `SELECT * FROM specialists WHERE active = 1 ORDER BY id ASC`
+  ).all<SpecialistRow>()
+
+  return c.json({ specialists: (rows.results ?? []).map(specialistToJson) })
+})
+
+publicRouter.get('/menu/current', async (c) => {
+  const today = new Date().toISOString().split('T')[0]
+  const d = new Date(today)
+  const day = d.getDay() === 0 ? 6 : d.getDay() - 1
+  d.setDate(d.getDate() - day)
+  const monday = d.toISOString().split('T')[0]
+
+  const row = await c.env.DB.prepare(
+    `SELECT * FROM menu_weeks WHERE week_start >= ? AND published = 1 ORDER BY week_start ASC LIMIT 1`
+  ).bind(monday).first<MenuWeekRow>()
+
+  return c.json({ menu: row ? menuToJson(row, c.env) : null })
+})
