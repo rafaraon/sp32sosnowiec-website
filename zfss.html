@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Wolontariat uczniowski — SP32 Sosnowiec</title>
+<title>ZFŚS — Zakładowy Fundusz Świadczeń Socjalnych — SP32 Sosnowiec</title>
 <!-- Favicon -->
 <link rel="icon" href="grafiki-ai/logo-sp32.png" type="image/png">
 <link rel="apple-touch-icon" href="grafiki-ai/logo-sp32.png">
@@ -94,6 +94,24 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
 @media(max-width:900px){.logo-patron{display:none}.main-nav{display:none}.nav-hamburger{display:flex}}
 @media(max-width:480px){.header-inner{gap:.4rem}.a11y-controls{display:none}.btn-edupage{font-size:.72rem;padding:.4rem .7rem}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
+</style>
+
+<style>
+.page-main{padding:3rem 0 5rem}
+.zfss-intro{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:1.5rem 2rem;margin-bottom:2rem;max-width:42rem}
+.zfss-intro p{color:var(--tx-m);line-height:1.7;margin:0}
+.zfss-intro strong{color:var(--tx)}
+.doc-list{display:flex;flex-direction:column;gap:.75rem}
+.doc-item{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r-s);padding:1rem 1.25rem;display:flex;align-items:center;gap:1rem;box-shadow:var(--sh);transition:box-shadow var(--tr)}
+.doc-item:hover{box-shadow:var(--sh-m)}
+.doc-icon{font-size:1.25rem;flex-shrink:0}
+.doc-title{font-family:var(--font-d);font-weight:700;font-size:.9rem;color:var(--tx);flex:1}
+.doc-meta{font-size:.75rem;color:var(--tx-m)}
+.doc-link{display:inline-flex;align-items:center;gap:.3rem;font-family:var(--font-d);font-size:.78rem;font-weight:700;color:var(--cp);flex-shrink:0;padding:.35rem .75rem;border-radius:var(--r-s);border:1px solid var(--bd);transition:color var(--tr),background var(--tr)}
+.doc-link:hover{background:var(--cp);color:#fff}
+.skel{background:var(--clv);border-radius:var(--r-s);animation:pulse 1.5s ease-in-out infinite;height:64px;margin-bottom:.75rem}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.empty-note{color:var(--tx-m);font-size:.95rem;padding:2rem 0}
 </style>
 
 <link rel="stylesheet" href="header.css">
@@ -225,68 +243,78 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
       <a href="index.html">Strona główna</a><span class="breadcrumb-sep">›</span>
       
         
-          <span>Uczniowie</span>
+          <span>Dla pracowników</span>
         
         <span class="breadcrumb-sep">›</span>
       
-      <span aria-current="page">Wolontariat</span>
+      <span aria-current="page">ZFŚS</span>
     </nav>
   </div>
 </div>
 
 <div class="page-hero">
   <div class="container">
-    <p class="page-hero-eyebrow">Uczniowie</p>
-    <h1 class="page-hero-title">Wolontariat</h1>
+    <p class="page-hero-eyebrow">Dla pracowników szkoły</p>
+    <h1 class="page-hero-title">ZFŚS</h1>
     
   </div>
 </div>
 
 <main id="main-content" class="page-main">
   
-<div class="container">
-    <div class="prose">
+<div class="container page-main" x-data="zfssApp()" x-init="load()">
 
-      <blockquote>
-        <p>Pomaganie innym to najlepszy sposób, aby pomóc samemu sobie.</p>
-        <cite>Motto Szkolnego Koła Wolontariatu SP32</cite>
-      </blockquote>
-
-      <h2>Szkolne Koło Wolontariatu</h2>
-      <p>Szkolne Koło Wolontariatu działa przy Szkole Podstawowej nr 32 w Sosnowcu od wielu lat. Zrzesza uczniów, którzy chcą aktywnie działać na rzecz innych — lokalnej społeczności, potrzebujących rówieśników, zwierząt i środowiska.</p>
-      <p>Działalność wolontariatu jest wliczana do oceny zachowania ucznia i odnotowywana w dokumentacji szkolnej.</p>
-
-      <h2>Co robimy?</h2>
-      <ul class="list">
-        <li><strong>Zbiórki</strong> — żywność, zabawki, przybory szkolne dla potrzebujących rodzin i schronisk dla zwierząt</li>
-        <li><strong>Akcje charytatywne</strong> — WOŚP, Szlachetna Paczka, Góra Grosza</li>
-        <li><strong>Pomoc rówieśnicza</strong> — uczniowie starszych klas pomagają młodszym w nauce</li>
-        <li><strong>Akcje ekologiczne</strong> — sprzątanie okolicy, sadzenie drzew, segregacja odpadów</li>
-        <li><strong>Wsparcie dla seniorów</strong> — odwiedziny w lokalnym domu opieki</li>
-      </ul>
-
-      <h2>Jak dołączyć?</h2>
-      <p>Do koła może należeć każdy uczeń klasy 4–8. Zebrania organizacyjne odbywają się raz w miesiącu. Opiekun koła jest dostępny w każdy czwartek po zajęciach.</p>
-      <p>Aby dołączyć, wystarczy zgłosić się do opiekuna koła lub do wychowawcy klasy i podpisać deklarację uczestnictwa. Formularz dostępny w sekretariacie.</p>
-
-      <h2>Ostatnie akcje</h2>
-      <div class="timeline">
-        <div class="tl-item">
-          <p class="tl-year">Styczeń 2026</p>
-          <p class="tl-text">Udział w 33. Finale Wielkiej Orkiestry Świątecznej Pomocy — uczniowie kwestowali na terenie Sosnowca, zbierając środki na sprzęt medyczny dla szpitali.</p>
-        </div>
-        <div class="tl-item">
-          <p class="tl-year">Grudzień 2025</p>
-          <p class="tl-text">Szlachetna Paczka — zebranie darów rzeczowych i przekazanie ich do koordynatora akcji. Wsparcie dla 3 rodzin z okolic Sosnowca.</p>
-        </div>
-        <div class="tl-item">
-          <p class="tl-year">Październik 2025</p>
-          <p class="tl-text">Akcja „Sprzątamy świat" — uczniowie koła sprzątnęli park przy ul. Armii Krajowej i okoliczne chodniki.</p>
-        </div>
-      </div>
-
-    </div>
+  <div class="zfss-intro">
+    <p><strong>Zakładowy Fundusz Świadczeń Socjalnych</strong> — dokumenty, regulaminy i wnioski dostępne dla pracowników Szkoły Podstawowej nr 32 w Sosnowcu. W przypadku pytań prosimy o kontakt z sekretariatem szkoły.</p>
   </div>
+
+  <template x-if="loading">
+    <div><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
+  </template>
+
+  <template x-if="!loading && items.length === 0">
+    <p class="empty-note">Brak dokumentów. Skontaktuj się z sekretariatem szkoły.</p>
+  </template>
+
+  <template x-if="!loading && items.length > 0">
+    <div class="doc-list">
+      <template x-for="doc in items" :key="doc.id">
+        <div class="doc-item">
+          <span class="doc-icon" x-text="doc.file_type === 'docx' ? '📝' : '📄'"></span>
+          <div style="flex:1;min-width:0">
+            <p class="doc-title" x-text="doc.title"></p>
+            <p class="doc-meta" x-text="doc.file_type ? doc.file_type.toUpperCase() + (doc.file_size ? ' · ' + fmtSize(doc.file_size) : '') : ''"></p>
+          </div>
+          <a :href="doc.url" target="_blank" rel="noopener" class="doc-link">Pobierz ↗</a>
+        </div>
+      </template>
+    </div>
+  </template>
+
+</div>
+<script>
+function zfssApp(){
+  return{
+    items:[],loading:true,
+    async load(){
+      this.loading=true;
+      try{
+        const r=await fetch('/api/public/documents/zfss');
+        if(!r.ok)throw new Error();
+        const d=await r.json();
+        this.items=d.documents;
+      }catch{this.items=[]}
+      finally{this.loading=false}
+    },
+    fmtSize(bytes){
+      if(bytes<1024)return bytes+'B';
+      if(bytes<1048576)return Math.round(bytes/1024)+'KB';
+      return(bytes/1048576).toFixed(1)+'MB';
+    }
+  }
+}
+</script>
+<script src="/alpine.min.js" defer></script>
 
 </main>
 

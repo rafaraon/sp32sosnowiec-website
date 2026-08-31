@@ -143,6 +143,12 @@ PAGES = [
         "active_nav": "projekty",
     }),
 
+    # ── Pracownicy ────────────────────────────────────────────────────────────
+    ("zfss.html", "zfss.html", {
+        "breadcrumb_section": "Dla pracowników",
+        "active_nav": "",
+    }),
+
     # ── Inne ──────────────────────────────────────────────────────────────────
     ("deklaracja-dostepnosci.html", "deklaracja-dostepnosci.html", {
         "breadcrumb_section": "",

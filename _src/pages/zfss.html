@@ -1,0 +1,79 @@
+{% extends "_base.html" %}
+{% block page_title %}ZFŚS — Zakładowy Fundusz Świadczeń Socjalnych{% endblock %}
+{% block eyebrow %}Dla pracowników szkoły{% endblock %}
+{% block hero_title %}ZFŚS{% endblock %}
+{% block breadcrumb_page %}ZFŚS{% endblock %}
+{% block page_css %}
+<style>
+.page-main{padding:3rem 0 5rem}
+.zfss-intro{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:1.5rem 2rem;margin-bottom:2rem;max-width:42rem}
+.zfss-intro p{color:var(--tx-m);line-height:1.7;margin:0}
+.zfss-intro strong{color:var(--tx)}
+.doc-list{display:flex;flex-direction:column;gap:.75rem}
+.doc-item{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r-s);padding:1rem 1.25rem;display:flex;align-items:center;gap:1rem;box-shadow:var(--sh);transition:box-shadow var(--tr)}
+.doc-item:hover{box-shadow:var(--sh-m)}
+.doc-icon{font-size:1.25rem;flex-shrink:0}
+.doc-title{font-family:var(--font-d);font-weight:700;font-size:.9rem;color:var(--tx);flex:1}
+.doc-meta{font-size:.75rem;color:var(--tx-m)}
+.doc-link{display:inline-flex;align-items:center;gap:.3rem;font-family:var(--font-d);font-size:.78rem;font-weight:700;color:var(--cp);flex-shrink:0;padding:.35rem .75rem;border-radius:var(--r-s);border:1px solid var(--bd);transition:color var(--tr),background var(--tr)}
+.doc-link:hover{background:var(--cp);color:#fff}
+.skel{background:var(--clv);border-radius:var(--r-s);animation:pulse 1.5s ease-in-out infinite;height:64px;margin-bottom:.75rem}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.empty-note{color:var(--tx-m);font-size:.95rem;padding:2rem 0}
+</style>
+{% endblock %}
+{% block content %}
+<div class="container page-main" x-data="zfssApp()" x-init="load()">
+
+  <div class="zfss-intro">
+    <p><strong>Zakładowy Fundusz Świadczeń Socjalnych</strong> — dokumenty, regulaminy i wnioski dostępne dla pracowników Szkoły Podstawowej nr 32 w Sosnowcu. W przypadku pytań prosimy o kontakt z sekretariatem szkoły.</p>
+  </div>
+
+  <template x-if="loading">
+    <div><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
+  </template>
+
+  <template x-if="!loading && items.length === 0">
+    <p class="empty-note">Brak dokumentów. Skontaktuj się z sekretariatem szkoły.</p>
+  </template>
+
+  <template x-if="!loading && items.length > 0">
+    <div class="doc-list">
+      <template x-for="doc in items" :key="doc.id">
+        <div class="doc-item">
+          <span class="doc-icon" x-text="doc.file_type === 'docx' ? '📝' : '📄'"></span>
+          <div style="flex:1;min-width:0">
+            <p class="doc-title" x-text="doc.title"></p>
+            <p class="doc-meta" x-text="doc.file_type ? doc.file_type.toUpperCase() + (doc.file_size ? ' · ' + fmtSize(doc.file_size) : '') : ''"></p>
+          </div>
+          <a :href="doc.url" target="_blank" rel="noopener" class="doc-link">Pobierz ↗</a>
+        </div>
+      </template>
+    </div>
+  </template>
+
+</div>
+<script>
+function zfssApp(){
+  return{
+    items:[],loading:true,
+    async load(){
+      this.loading=true;
+      try{
+        const r=await fetch('/api/public/documents/zfss');
+        if(!r.ok)throw new Error();
+        const d=await r.json();
+        this.items=d.documents;
+      }catch{this.items=[]}
+      finally{this.loading=false}
+    },
+    fmtSize(bytes){
+      if(bytes<1024)return bytes+'B';
+      if(bytes<1048576)return Math.round(bytes/1024)+'KB';
+      return(bytes/1048576).toFixed(1)+'MB';
+    }
+  }
+}
+</script>
+<script src="/alpine.min.js" defer></script>
+{% endblock %}
