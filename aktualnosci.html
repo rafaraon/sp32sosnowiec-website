@@ -110,6 +110,59 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
 .fetch-error{background:var(--clv-l);border:1px solid var(--bd);border-radius:var(--r);padding:2rem;text-align:center;margin-top:2rem}
 .fetch-error p{color:var(--tx-m);font-size:.95rem}
 .fetch-error a{color:var(--cp);font-weight:700}
+
+/* ── Pinned new-site banner ── */
+.new-site-banner{
+  position:relative;overflow:hidden;
+  background:linear-gradient(135deg,var(--cp-d) 0%,var(--cp) 45%,var(--ca) 100%);
+  border-radius:var(--r);padding:2rem 2.5rem;margin-top:2rem;
+  display:flex;align-items:center;justify-content:space-between;gap:1.5rem;
+  box-shadow:0 8px 40px rgba(195,80,15,.35);
+  animation:bannerIn .6s cubic-bezier(.22,1,.36,1) both;
+}
+@keyframes bannerIn{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:none}}
+.new-site-banner::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 80% at 80% 50%,rgba(255,255,255,.12) 0%,transparent 70%);
+  pointer-events:none;
+}
+.new-site-banner::after{
+  content:'';position:absolute;top:-50%;left:-20%;width:200%;height:200%;
+  background:conic-gradient(transparent 0deg,rgba(255,255,255,.06) 60deg,transparent 120deg);
+  animation:shimmer 4s linear infinite;pointer-events:none;
+}
+@keyframes shimmer{to{transform:rotate(360deg)}}
+.nsb-badge{
+  display:inline-flex;align-items:center;gap:.4rem;
+  background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);
+  border-radius:2rem;padding:.25rem .75rem;
+  font-family:var(--font-d);font-size:.65rem;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;color:#fff;margin-bottom:.6rem;
+  backdrop-filter:blur(6px);
+}
+.nsb-dot{width:6px;height:6px;border-radius:50%;background:#6eff9f;box-shadow:0 0 8px #6eff9f;animation:blink 1.2s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.nsb-title{font-family:var(--font-d);font-size:clamp(1.1rem,3vw,1.5rem);font-weight:900;color:#fff;line-height:1.2;letter-spacing:-.02em;text-shadow:0 2px 12px rgba(0,0,0,.2)}
+.nsb-sub{font-size:.88rem;color:rgba(255,255,255,.82);margin-top:.35rem;line-height:1.5}
+.nsb-btn{
+  flex-shrink:0;display:inline-flex;align-items:center;gap:.5rem;
+  background:#fff;color:var(--cp);font-family:var(--font-d);font-weight:800;font-size:.9rem;
+  padding:.7rem 1.4rem;border-radius:var(--r-s);white-space:nowrap;
+  box-shadow:0 4px 20px rgba(0,0,0,.18);text-decoration:none;
+  transition:transform .18s,box-shadow .18s;
+  animation:pulse-btn 2.4s ease-in-out infinite;
+}
+@keyframes pulse-btn{0%,100%{box-shadow:0 4px 20px rgba(0,0,0,.18)}50%{box-shadow:0 4px 28px rgba(255,140,60,.55),0 0 0 6px rgba(255,255,255,.08)}}
+.nsb-btn:hover{transform:translateY(-2px) scale(1.03);box-shadow:0 8px 32px rgba(0,0,0,.25)}
+.nsb-icon{font-size:1.1rem}
+@media(max-width:600px){
+  .new-site-banner{flex-direction:column;align-items:flex-start;padding:1.5rem}
+  .nsb-btn{width:100%;justify-content:center}
+}
+@media(prefers-reduced-motion:reduce){
+  .new-site-banner::after,.nsb-dot,.nsb-btn{animation:none}
+  .new-site-banner{animation:none}
+}
 </style>
 
 <link rel="stylesheet" href="header.css">
@@ -260,6 +313,18 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
 <main id="main-content" class="page-main">
   
 <div class="container page-main">
+
+<div class="new-site-banner">
+  <div>
+    <div class="nsb-badge"><span class="nsb-dot"></span> Nowe</div>
+    <p class="nsb-title">Mamy nową stronę szkoły!</p>
+    <p class="nsb-sub">Aktualne informacje, galeria, jadłospis i dokumenty — wszystko w jednym miejscu.<br>Sprawdź i zapamiętaj nowy adres: <strong style="color:#fff">sp32sosnowiec.edu.pl</strong></p>
+  </div>
+  <a href="index.html" class="nsb-btn">
+    <span class="nsb-icon">✨</span> Odkryj nową stronę
+  </a>
+</div>
+
 <div x-data="newsApp()" x-init="load()">
   <template x-if="loading">
     <div class="news-grid">
