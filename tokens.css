@@ -1,0 +1,79 @@
+/* ═══════════════════════════════════════════════════════════════════
+   SP32 Sosnowiec — Design Tokens
+   Paleta pomarańczowo-koralowa · edytuj tylko tutaj,
+   zmiany automatycznie trafiają do każdej strony serwisu.
+
+   Jak używać:
+     <link rel="stylesheet" href="tokens.css">   ← w <head> każdej strony
+     Embedded <style> nie może zawierać osobnego bloku :root z tokenami.
+═══════════════════════════════════════════════════════════════════ */
+
+/* ── Paleta podstawowa (tryb jasny) ─────────────────────────────── */
+:root {
+  /* Kolory główne */
+  --cp:    #FF9F43;            /* orange primary — nagłówek, akcenty */
+  --cp-d:  #1C0D04;            /* ciemny brąz — tło stopki */
+  --cp-l:  #FFB461;            /* jasny orange */
+  --ca:    #EE5A6F;            /* coral accent — CTA, podkreślenia */
+  --ca-d:  #D94560;            /* ciemniejszy coral */
+
+  /* Tła */
+  --clv:   #F5E8D5;            /* ciepły tint (sekcje, karty) */
+  --clv-l: #FFF5EE;            /* bardzo jasny ciepły (subtelne tła) */
+  --bg:    #FBF8F5;            /* tło strony */
+  --sf:    #FFFFFF;            /* powierzchnia kart */
+
+  /* Tekst i krawędzie */
+  --tx:    #2D1A08;            /* główny tekst */
+  --tx-m:  #7A5838;            /* tekst pomocniczy */
+  --bd:    #EAD9C8;            /* krawędzie, linie podziału */
+
+  /* Quick-links (neonowe okręgi) */
+  --ql1:   #D62839;            /* karmazyn */
+  --ql2:   #F08000;            /* bursztynowy orange */
+  --ql3:   #EE5A6F;            /* coral */
+  --ql4:   #F9C22E;            /* ciepłe złoto */
+
+  /* Typografia */
+  --font-d: 'Bricolage Grotesque', system-ui, sans-serif;
+  --font-b: 'Atkinson Hyperlegible', system-ui, sans-serif;
+
+  /* Geometria */
+  --r:     12px;               /* border-radius duży */
+  --r-s:   8px;                /* border-radius mały */
+
+  /* Cienie */
+  --sh:    0 2px 12px rgba(45,26,8,.08);
+  --sh-m:  0 4px 24px rgba(45,26,8,.13);
+
+  /* Przejścia animacji */
+  --tr:    .18s ease;
+}
+
+/* ── Tryb ciemny — preferencja systemu ──────────────────────────── */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:    #1A0D04;
+    --sf:    #271608;
+    --tx:    #F0E8DC;
+    --tx-m:  #A89070;
+    --bd:    #3D2510;
+    --clv:   #2A1508;
+    --clv-l: #1F1005;
+    --sh:    0 2px 12px rgba(0,0,0,.28);
+    --sh-m:  0 4px 24px rgba(0,0,0,.38);
+  }
+}
+
+/* ── Tryb ciemny — ręczny przełącznik ───────────────────────────── */
+:root[data-theme="dark"] {
+  --bg:    #1A0D04;
+  --sf:    #271608;
+  --tx:    #F0E8DC;
+  --tx-m:  #A89070;
+  --bd:    #3D2510;
+  --clv:   #2A1508;
+  --clv-l: #1F1005;
+  --sh:    0 2px 12px rgba(0,0,0,.28);
+  --sh-m:  0 4px 24px rgba(0,0,0,.38);
+}

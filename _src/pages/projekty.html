@@ -1,0 +1,43 @@
+{% extends "_base.html" %}
+{% block page_title %}Projekty edukacyjne{% endblock %}
+{% block eyebrow %}SP32 w działaniu{% endblock %}
+{% block hero_title %}Projekty edukacyjne{% endblock %}
+{% block hero_sub %}Angażujemy się w programy krajowe i europejskie, które rozwijają umiejętności, otwierają horyzonty i budują postawę obywatelską naszych uczniów.{% endblock %}
+{% block breadcrumb_page %}Projekty edukacyjne{% endblock %}
+{% block page_css %}
+<style>
+.page-main{padding:3rem 0 5rem}
+.project-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.25rem;margin:2rem 0}
+.project-card{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:1.5rem;box-shadow:var(--sh);display:flex;flex-direction:column;gap:.6rem;transition:box-shadow var(--tr),transform var(--tr)}
+.project-card:hover{box-shadow:var(--sh-m);transform:translateY(-2px)}
+.project-tag{display:inline-flex;font-family:var(--font-d);font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:var(--clv-l);color:var(--cp);border-radius:4px;padding:.2rem .5rem;align-self:flex-start}
+.project-title{font-family:var(--font-d);font-size:1rem;font-weight:700;color:var(--tx);line-height:1.35}
+.project-desc{font-size:.88rem;color:var(--tx-m);line-height:1.6;flex:1}
+.project-status{font-family:var(--font-d);font-size:.72rem;font-weight:600;color:var(--cp);margin-top:.25rem}
+.project-status-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--cp);margin-right:.35rem;vertical-align:middle}
+.section-title{font-family:var(--font-d);font-size:1.4rem;font-weight:800;letter-spacing:-.02em;color:var(--tx);margin-bottom:.75rem}
+.section-sub{font-size:.95rem;color:var(--tx-m);margin-bottom:1.5rem;max-width:640px;line-height:1.7}
+.coming-soon-card{background:var(--clv-l);border:1px dashed var(--bd);border-radius:var(--r);padding:2rem;text-align:center;margin-top:2rem}
+.coming-soon-card p{font-family:var(--font-d);font-size:.95rem;color:var(--tx-m)}
+</style>
+{% endblock %}
+{% block content %}
+<div class="container">
+
+    <div class="filter-bar" role="group" aria-label="Filtruj projekty według kategorii">
+      <button class="filter-btn active" data-kat="wszystkie">Wszystkie <span class="filter-count" id="cnt-wszystkie"></span></button>
+      <button class="filter-btn" data-kat="europejski">🌍 Europejskie</button>
+      <button class="filter-btn" data-kat="ministerialny">📋 Ministerialne</button>
+      <button class="filter-btn" data-kat="cyfrowy">💻 Cyfrowe</button>
+      <button class="filter-btn" data-kat="sportowy">⚽ Sportowe</button>
+      <button class="filter-btn" data-kat="patriotyczny">🏛️ Patriotyczne</button>
+      <button class="filter-btn" data-kat="profilaktyczny">🧠 Profilaktyczne</button>
+      <button class="filter-btn" data-kat="spoleczny">🤝 Społeczne</button>
+    </div>
+
+    <div class="project-grid" id="projectGrid" aria-live="polite" aria-label="Lista projektów">
+      <div class="proj-loading">Ładowanie projektów…</div>
+    </div>
+
+  </div>
+{% endblock %}

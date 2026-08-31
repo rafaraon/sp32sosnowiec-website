@@ -1,0 +1,99 @@
+{% extends "_base.html" %}
+{% block page_title %}Deklaracja dostępności{% endblock %}
+{% block eyebrow %}Wymóg prawny · WCAG 2.1{% endblock %}
+{% block hero_title %}Deklaracja dostępności{% endblock %}
+{% block breadcrumb_page %}Deklaracja dostępności{% endblock %}
+{% block page_css %}
+<style>
+.page-main{padding:3rem 0 5rem}
+.decl-section{margin:2.5rem 0}
+.decl-section h2{font-family:var(--font-d);font-size:1.2rem;font-weight:800;color:var(--tx);letter-spacing:-.01em;margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:2px solid var(--bd)}
+.decl-section p,.decl-section li{font-size:.95rem;color:var(--tx-m);line-height:1.75;margin-bottom:.6rem}
+.decl-section ul{list-style:disc;padding-left:1.5rem}
+.decl-section a{color:var(--cp);font-weight:600}
+.decl-section a:hover{color:var(--ca)}
+.decl-section strong{color:var(--tx);font-weight:700}
+.status-badge{display:inline-flex;align-items:center;gap:.4rem;font-family:var(--font-d);font-size:.75rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:.35rem .9rem;border-radius:20px;margin-bottom:1.25rem}
+.status-partial{background:rgba(255,159,67,.12);color:#c07a00;border:1px solid rgba(255,159,67,.35)}
+@media(prefers-color-scheme:dark){.status-partial{color:#ffb347}}
+:root[data-theme="dark"] .status-partial{color:#ffb347}
+</style>
+{% endblock %}
+{% block content %}
+<div class="container">
+<div class="prose" style="max-width:760px">
+
+  <p style="font-size:.88rem;color:var(--tx-m)">Szkoła Podstawowa nr 32 im. Leona Kruczkowskiego w Sosnowcu zobowiązuje się zapewnić dostępność swojej strony internetowej zgodnie z przepisami ustawy z dnia 4 kwietnia 2019 r. o dostępności cyfrowej stron internetowych i aplikacji mobilnych podmiotów publicznych.</p>
+
+  <div class="decl-section">
+    <h2>Status zgodności z ustawą</h2>
+    <span class="status-badge status-partial">⚠ Częściowo zgodna</span>
+    <p>Strona internetowa <strong>sp32sosnowiec.pl</strong> jest <strong>częściowo zgodna</strong> z ustawą o dostępności cyfrowej stron internetowych i aplikacji mobilnych podmiotów publicznych z powodu niezgodności wymienionych poniżej.</p>
+  </div>
+
+  <div class="decl-section">
+    <h2>Treści niedostępne</h2>
+    <ul>
+      <li>Część plików PDF (dokumenty szkolne, regulaminy) może nie być w pełni dostępna dla czytników ekranu — brak warstwy tekstowej lub tagowania.</li>
+      <li>Część starszych zdjęć w galerii może nie posiadać opisów alternatywnych (<code>alt</code>).</li>
+      <li>Jadłospis jest publikowany w formie graficznej — brak wersji tekstowej.</li>
+    </ul>
+    <p>Wyżej wymienione niedostępności wynikają z braku odpowiednich zasobów lub z charakteru treści (dokumenty sporządzone przez organy zewnętrzne).</p>
+  </div>
+
+  <div class="decl-section">
+    <h2>Przygotowanie deklaracji</h2>
+    <p>Deklarację sporządzono dnia: <strong>2026-08-30</strong>.</p>
+    <p>Deklarację sporządzono na podstawie <strong>samooceny</strong> przeprowadzonej przez podmiot publiczny.</p>
+    <p>Data ostatniego przeglądu deklaracji: <strong>2026-08-30</strong>.</p>
+  </div>
+
+  <div class="decl-section">
+    <h2>Informacje zwrotne i dane kontaktowe</h2>
+    <p>W przypadku problemów z dostępnością strony internetowej prosimy o kontakt:</p>
+    <ul>
+      <li><strong>Osoba odpowiedzialna:</strong> Sekretariat Szkoły Podstawowej nr 32</li>
+      <li><strong>E-mail:</strong> <a href="mailto:sp32@sosnowiec.edu.pl">sp32@sosnowiec.edu.pl</a></li>
+      <li><strong>Telefon:</strong> <a href="tel:+48322634301">32 263-43-01</a></li>
+    </ul>
+    <p>Tą samą drogą można składać wnioski o udostępnienie informacji niedostępnej oraz składać żądania zapewnienia dostępności.</p>
+  </div>
+
+  <div class="decl-section">
+    <h2>Obsługa wniosków i skarg</h2>
+    <p>Każdy ma prawo do wystąpienia z żądaniem zapewnienia dostępności cyfrowej strony internetowej, aplikacji mobilnej lub jakiegoś ich elementu. Można także zażądać udostępnienia informacji w formach alternatywnych, na przykład odczytanie niedostępnego cyfrowo dokumentu, opisania zawartości filmu bez audiodeskrypcji itp.</p>
+    <p>Żądanie powinno zawierać:</p>
+    <ul>
+      <li>dane osoby zgłaszającej żądanie,</li>
+      <li>wskazanie, o którą stronę internetową lub aplikację mobilną chodzi,</li>
+      <li>sposób kontaktu,</li>
+      <li>jeżeli osoba żądająca zgłasza potrzebę otrzymania informacji w formie alternatywnej — wskazanie formy.</li>
+    </ul>
+    <p>Podmiot publiczny realizuje żądanie niezwłocznie i nie później niż w ciągu <strong>7 dni</strong>. Jeżeli dotrzymanie tego terminu nie jest możliwe, podmiot publiczny niezwłocznie informuje o tym wnoszącego żądanie, kiedy realizacja żądania będzie możliwa, przy czym termin ten nie może być dłuższy niż <strong>2 miesiące</strong> od dnia wystąpienia z żądaniem.</p>
+    <p>Jeżeli zapewnienie dostępności nie jest możliwe, podmiot publiczny może zaproponować alternatywny sposób dostępu do informacji.</p>
+    <p>W przypadku, gdy podmiot odmówi realizacji żądania zapewnienia dostępności lub alternatywnego dostępu do informacji, wnoszący żądanie może złożyć skargę w sprawie zapewniania dostępności cyfrowej strony internetowej lub elementu strony internetowej.</p>
+  </div>
+
+  <div class="decl-section">
+    <h2>Organ nadzorujący</h2>
+    <p>Po wyczerpaniu wskazanej wyżej procedury można złożyć wniosek do <strong>Rzecznika Praw Obywatelskich</strong>.</p>
+    <p><a href="https://www.rpo.gov.pl/" target="_blank" rel="noopener noreferrer">www.rpo.gov.pl →</a></p>
+  </div>
+
+  <div class="decl-section">
+    <h2>Dostępność architektoniczna</h2>
+    <p><strong>Szkoła Podstawowa nr 32 im. L. Kruczkowskiego w Sosnowcu</strong><br>ul. Armii Krajowej 93, 41-215 Sosnowiec</p>
+    <ul>
+      <li>Budynek szkoły posiada wejście główne dostępne od strony ulicy Armii Krajowej.</li>
+      <li>Do wejścia prowadzi chodnik. Przy wejściu brak podjazdu dla wózków — osoby z niepełnosprawnością ruchową proszone są o kontakt z sekretariatem pod nr <a href="tel:+48322634301">32 263-43-01</a> w celu ustalenia formy obsługi.</li>
+      <li>Brak windy wewnętrznej — sekretariat mieści się na parterze budynku.</li>
+      <li>Na terenie szkoły brak wyznaczonych miejsc parkingowych dla osób z niepełnosprawnościami.</li>
+      <li>Do budynku i pomieszczeń można wejść z psem asystującym i psem przewodnikiem.</li>
+      <li>Brak pętli indukcyjnych.</li>
+      <li>Brak możliwości skorzystania z tłumacza języka migowego na miejscu.</li>
+    </ul>
+  </div>
+
+</div>
+</div>
+{% endblock %}

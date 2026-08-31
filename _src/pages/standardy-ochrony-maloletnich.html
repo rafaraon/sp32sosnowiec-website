@@ -1,0 +1,108 @@
+{% extends "_base.html" %}
+{% block page_title %}Standardy Ochrony Małoletnich{% endblock %}
+{% block eyebrow %}Bezpieczeństwo dzieci · Ustawa Kamilkowa{% endblock %}
+{% block hero_title %}Standardy Ochrony<br>Małoletnich{% endblock %}
+{% block hero_sub %}Szkoła Podstawowa nr 32 im. L. Kruczkowskiego w Sosnowcu<br>Wdrożone na podstawie art. 22b ustawy z 13 maja 2016 r.{% endblock %}
+{% block breadcrumb_page %}Standardy Ochrony Małoletnich{% endblock %}
+{% block page_css %}
+<style>
+.page-main{padding:3rem 0 5rem}
+.prose{max-width:780px}
+.prose h2{font-family:var(--font-d);font-size:1.35rem;font-weight:800;color:var(--tx);letter-spacing:-.02em;margin:2.5rem 0 .65rem;padding-top:.5rem;border-top:1px solid var(--bd)}
+.prose h2:first-of-type{border-top:none;margin-top:0}
+.prose p{font-size:.975rem;color:var(--tx-m);line-height:1.8;margin-bottom:.85rem}
+.prose p:last-child{margin-bottom:0}
+.prose strong{color:var(--tx);font-weight:700}
+.prose ul{margin:.5rem 0 .85rem 1.25rem;list-style:disc}
+.prose ul li{font-size:.975rem;color:var(--tx-m);line-height:1.75;margin-bottom:.25rem;padding-left:.25rem}
+.prose a{color:var(--cp);font-weight:600;text-decoration:underline;text-underline-offset:3px;transition:color var(--tr)}
+.prose a:hover{color:var(--ca)}
+
+/* Document cards */
+.doc-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin:1.5rem 0}
+@media(max-width:600px){.doc-grid{grid-template-columns:1fr}}
+.doc-card{background:var(--sf);border:1.5px solid var(--bd);border-radius:var(--r);padding:1.5rem 1.5rem 1.25rem;display:flex;flex-direction:column;gap:.75rem;transition:border-color var(--tr),box-shadow var(--tr)}
+.doc-card:hover{border-color:var(--cp-l);box-shadow:var(--sh-m)}
+.doc-badge{font-family:var(--font-d);font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .55rem;border-radius:20px;display:inline-block;width:fit-content}
+.doc-badge-full{background:rgba(31,75,60,.1);color:var(--cp)}
+.doc-badge-short{background:rgba(212,117,106,.1);color:var(--ca-d)}
+.doc-icon{font-size:2rem;line-height:1}
+.doc-title{font-family:var(--font-d);font-size:1.05rem;font-weight:700;color:var(--tx);line-height:1.3}
+.doc-desc{font-size:.88rem;color:var(--tx-m);line-height:1.6}
+.doc-btn{display:inline-flex;align-items:center;gap:.4rem;margin-top:.25rem;font-family:var(--font-d);font-size:.8rem;font-weight:700;padding:.5rem 1rem;border-radius:var(--r-s);border:1.5px solid var(--cp);color:var(--cp);transition:all var(--tr)}
+.doc-btn:hover{background:var(--cp);color:#fff;text-decoration:none}
+
+/* Requirements grid */
+.req-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin:1rem 0}
+@media(max-width:600px){.req-grid{grid-template-columns:1fr}}
+.req-item{display:flex;align-items:flex-start;gap:.6rem;background:var(--sf);border:1px solid var(--bd);border-radius:var(--r-s);padding:.7rem .85rem;font-size:.88rem;color:var(--tx-m);line-height:1.5}
+.req-num{font-family:var(--font-d);font-size:.7rem;font-weight:700;color:var(--ca);flex-shrink:0;width:20px}
+
+/* Notice box */
+.notice{background:rgba(212,117,106,.07);border:1.5px solid rgba(212,117,106,.25);border-radius:var(--r);padding:1.1rem 1.25rem;margin:1.5rem 0;display:flex;gap:.85rem;align-items:flex-start}
+.notice-icon{font-size:1.2rem;flex-shrink:0;margin-top:.1rem}
+.notice p{font-size:.9rem;color:var(--tx);margin:0;line-height:1.65}
+.notice strong{color:var(--ca-d)}
+
+/* FOOTER */
+</style>
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="prose">
+
+      <p>Standardy Ochrony Małoletnich to zestaw zasad i procedur, które mają na celu ochronę uczniów przed krzywdzeniem. Obowiązek ich opracowania i wdrożenia wynika z <strong>art. 22b ustawy z dnia 13 maja 2016 r. o przeciwdziałaniu zagrożeniom przestępczością na tle seksualnym i ochronie małoletnich</strong> (tzw. „ustawa Kamilkowa").</p>
+
+      <div class="notice">
+        <span class="notice-icon">📌</span>
+        <p>Poniższe dokumenty są publicznie dostępne zgodnie z wymogami ustawy. Wersja skrócona dla uczniów wywieszona jest również w widocznym miejscu w budynku szkoły.</p>
+      </div>
+
+      <h2>Dokumenty do pobrania</h2>
+
+      <div class="doc-grid">
+        <div class="doc-card">
+          <span class="doc-badge doc-badge-full">Wersja pełna</span>
+          <span class="doc-icon">📋</span>
+          <p class="doc-title">Standardy Ochrony Małoletnich w SP nr 32 w Sosnowcu</p>
+          <p class="doc-desc">Pełny dokument zawierający wszystkie zasady, procedury interwencji oraz plan wsparcia małoletnich. Przeznaczony dla pracowników szkoły i rodziców.</p>
+          <a href="/media/dokumenty/standardy-ochrony-maloletnich-pelna.pdf" class="doc-btn" target="_blank" rel="noopener">Pobierz PDF →</a>
+        </div>
+        <div class="doc-card">
+          <span class="doc-badge doc-badge-short">Wersja skrócona dla uczniów</span>
+          <span class="doc-icon">🧒</span>
+          <p class="doc-title">Standardy Ochrony Małoletnich — prezentacja dla dzieci</p>
+          <p class="doc-desc">Uproszczona wersja zasad bezpieczeństwa napisana językiem przystępnym dla uczniów. Wymagana przez ustawę odrębna wersja dla małoletnich.</p>
+          <a href="/media/dokumenty/standardy-ochrony-maloletnich-skrocona.pdf" class="doc-btn" target="_blank" rel="noopener">Pobierz PDF →</a>
+        </div>
+      </div>
+
+      <h2>Co zawierają Standardy?</h2>
+      <p>Zgodnie z wymogami ustawy, Standardy Ochrony Małoletnich w naszej szkole regulują:</p>
+      <div class="req-grid">
+        <div class="req-item"><span class="req-num">01</span>Zasady bezpiecznych relacji między personelem a uczniami — zakazane zachowania</div>
+        <div class="req-item"><span class="req-num">02</span>Zasady bezpiecznych relacji między uczniami — zakazane zachowania</div>
+        <div class="req-item"><span class="req-num">03</span>Zasady korzystania z urządzeń elektronicznych i internetu w szkole</div>
+        <div class="req-item"><span class="req-num">04</span>Procedury ochrony przed szkodliwymi treściami w sieci</div>
+        <div class="req-item"><span class="req-num">05</span>Procedury interwencji w przypadku podejrzenia krzywdzenia ucznia (w tym Niebieska Karta)</div>
+        <div class="req-item"><span class="req-num">06</span>Plan wsparcia małoletniego po ujawnieniu krzywdzenia</div>
+        <div class="req-item"><span class="req-num">07</span>Kryteria doboru personelu pracującego z dziećmi</div>
+        <div class="req-item"><span class="req-num">08</span>Wymagania szkoleń personelu i procedury przeglądu standardów</div>
+      </div>
+
+      <h2>Osoba odpowiedzialna za ochronę małoletnich</h2>
+      <p>W sprawie wszelkich kwestii związanych ze stosowaniem Standardów Ochrony Małoletnich w szkole należy kontaktować się z sekretariatem szkoły lub bezpośrednio z wychowawcą klasy.</p>
+      <p>Kontakt do sekretariatu: <a href="tel:+48322634301">32 263-43-01</a> · <a href="mailto:sp32@sosnowiec.edu.pl">sp32@sosnowiec.edu.pl</a></p>
+
+      <h2>Zgłaszanie przypadków krzywdzenia</h2>
+      <p>Każdy pracownik szkoły, uczeń lub rodzic może zgłosić podejrzenie krzywdzenia dziecka. Zgłoszenie można złożyć:</p>
+      <ul>
+        <li>bezpośrednio do wychowawcy klasy lub pedagoga szkolnego,</li>
+        <li>do sekretariatu szkoły — telefonicznie lub osobiście,</li>
+        <li>na adres e-mail szkoły: <a href="mailto:sp32@sosnowiec.edu.pl">sp32@sosnowiec.edu.pl</a>,</li>
+        <li>anonimowo — przez Ogólnopolski Telefon Zaufania dla Dzieci i Młodzieży: <strong>116 111</strong> (czynny całą dobę, bezpłatny).</li>
+      </ul>
+
+    </div>
+  </div>
+{% endblock %}

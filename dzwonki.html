@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Historia szkoły — SP32 Sosnowiec</title>
+<title>Lekcje i przerwy — SP32 Sosnowiec</title>
 <!-- Favicon -->
 <link rel="icon" href="grafiki-ai/logo-sp32.png" type="image/png">
 <link rel="apple-touch-icon" href="grafiki-ai/logo-sp32.png">
@@ -97,21 +97,56 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
 </style>
 
 <style>
-.page-main{padding:3rem 0 5rem}
-.prose{max-width:700px}
-.prose h2{font-family:var(--font-d);font-size:1.5rem;font-weight:800;color:var(--tx);letter-spacing:-.02em;margin:2rem 0 .75rem}
-.prose h3{font-family:var(--font-d);font-size:1.1rem;font-weight:700;color:var(--tx);margin:1.5rem 0 .5rem}
-.prose p{font-size:1rem;color:var(--tx-m);line-height:1.75;margin-bottom:1rem}
-.prose blockquote{border-left:3px solid var(--ca);padding:.75rem 1.25rem;background:var(--clv-l);border-radius:0 var(--r-s) var(--r-s) 0;margin:1.5rem 0}
-.prose blockquote p{color:var(--tx);font-style:italic;margin:0}
-.prose blockquote cite{display:block;font-family:var(--font-d);font-size:.78rem;font-weight:600;color:var(--tx-m);margin-top:.4rem;font-style:normal}
-.timeline{border-left:2px solid var(--bd);padding-left:1.5rem;margin:2rem 0;display:flex;flex-direction:column;gap:1.25rem}
-.tl-item{position:relative}
-.tl-item::before{content:'';position:absolute;left:-1.85rem;top:.35rem;width:10px;height:10px;border-radius:50%;background:var(--ca);border:2px solid var(--sf)}
-.tl-year{font-family:var(--font-d);font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ca);margin-bottom:.2rem}
-.tl-text{font-size:.92rem;color:var(--tx);line-height:1.6}
-.coming-soon-card{background:var(--clv-l);border:1px dashed var(--bd);border-radius:var(--r);padding:2rem;text-align:center;margin-top:2rem}
-.coming-soon-card p{font-family:var(--font-d);font-size:.95rem;color:var(--tx-m)}
+/* ── Schedule grid ───────────────────────────────────────────────── */
+.schedule-wrap{max-width:680px;margin:0 auto}
+
+.schedule-grid{display:flex;flex-direction:column;gap:0;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh)}
+
+.lesson-row{display:grid;grid-template-columns:3rem 1fr auto;align-items:stretch;background:var(--sf);border-bottom:1px solid var(--bd);transition:background var(--tr)}
+.lesson-row:last-child{border-bottom:none}
+.lesson-row:hover{background:var(--clv-l)}
+
+.lesson-num{display:flex;align-items:center;justify-content:center;font-family:var(--font-d);font-size:.72rem;font-weight:800;color:var(--sf);background:var(--cp);padding:.8rem .5rem;letter-spacing:.04em;min-width:3rem}
+
+.lesson-body{padding:.85rem 1rem;display:flex;flex-direction:column;gap:.1rem}
+.lesson-time{font-family:var(--font-d);font-size:1.25rem;font-weight:800;color:var(--tx);letter-spacing:-.02em;line-height:1}
+.lesson-label{font-size:.78rem;color:var(--tx-m);margin-top:.25rem}
+
+.lesson-dur{display:flex;align-items:center;padding:.85rem 1.1rem;font-family:var(--font-d);font-size:.72rem;font-weight:700;color:var(--tx-m);letter-spacing:.04em;white-space:nowrap}
+
+/* ── Break row ────────────────────────────────────────────────────── */
+.break-row{display:grid;grid-template-columns:3rem 1fr auto;align-items:center;background:var(--bg);border-bottom:1px solid var(--bd)}
+.break-row:last-child{border-bottom:none}
+
+.break-indent{background:var(--bg);display:flex;align-items:center;justify-content:center;padding:.5rem;align-self:stretch}
+.break-dash{width:1px;height:1.2rem;background:var(--bd);margin:auto}
+
+.break-body{padding:.45rem 1rem;display:flex;align-items:center;gap:.6rem}
+.break-icon{font-size:.85rem;opacity:.6}
+.break-text{font-size:.78rem;color:var(--tx-m)}
+
+.break-len{padding:.45rem 1.1rem;font-family:var(--font-d);font-size:.7rem;font-weight:700;color:var(--tx-m);white-space:nowrap}
+
+/* Long break highlight */
+.break-row.break-long{background:rgba(255,159,67,.06)}
+.break-row.break-long .break-text{color:var(--cp);font-weight:700}
+.break-row.break-long .break-len{color:var(--cp)}
+
+/* ── Info strip ───────────────────────────────────────────────────── */
+.schedule-note{margin-top:1.5rem;display:flex;align-items:flex-start;gap:.75rem;background:var(--sf);border:1px solid var(--bd);border-radius:var(--r-s);padding:1rem 1.1rem;font-size:.85rem;color:var(--tx-m);line-height:1.55}
+.schedule-note strong{color:var(--tx);font-weight:700}
+
+/* ── Header info ──────────────────────────────────────────────────── */
+.schedule-meta{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1.5rem}
+.meta-pill{font-family:var(--font-d);font-size:.72rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:.3rem .75rem;border-radius:20px;background:var(--clv-l);border:1px solid var(--bd);color:var(--tx-m)}
+.meta-pill span{color:var(--tx)}
+
+@media(max-width:480px){
+  .lesson-time{font-size:1.05rem}
+  .lesson-num{font-size:.65rem}
+  .lesson-body{padding:.7rem .85rem}
+  .lesson-dur,.break-len{padding-right:.75rem}
+}
 </style>
 
 <link rel="stylesheet" href="header.css">
@@ -243,61 +278,191 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
       <a href="index.html">Strona główna</a><span class="breadcrumb-sep">›</span>
       
         
-          <span>Nasza Szkoła</span>
+          <span>Uczniowie</span>
         
         <span class="breadcrumb-sep">›</span>
       
-      <span aria-current="page">Historia szkoły</span>
+      <span aria-current="page">Lekcje i przerwy</span>
     </nav>
   </div>
 </div>
 
 <div class="page-hero">
   <div class="container">
-    <p class="page-hero-eyebrow">Nasza Szkoła</p>
-    <h1 class="page-hero-title">Historia szkoły</h1>
+    <p class="page-hero-eyebrow">Uczniowie</p>
+    <h1 class="page-hero-title">Plan dzwonków</h1>
     
   </div>
 </div>
 
 <main id="main-content" class="page-main">
   
-<div class="container">
-    <div class="prose">
+<div class="container page-main">
+  <div class="schedule-wrap">
 
-      <blockquote>
-        <p>Przeszłość zachowana w pamięci, staje się częścią teraźniejszości.</p>
-        <cite>Tadeusz Kotarbiński — motto SP 32</cite>
-      </blockquote>
-
-      <h2>Początki — 1933 rok</h2>
-      <p>Szkoła Podstawowa nr 32 im. Leona Kruczkowskiego w Sosnowcu została założona <strong>11 listopada 1933 roku</strong> w Kazimierzu Górniczym, w symboliczną rocznicę odzyskania przez Polskę niepodległości. Od samego początku szkoła była częścią lokalnej społeczności i odzwierciedlała wartości, na których budowano odrodzoną Polskę.</p>
-
-      <h2>Patron szkoły — Leon Kruczkowski</h2>
-      <p>Szkoła nosi imię <strong>Leona Kruczkowskiego</strong> (1900–1962) — pisarza, dramaturga i działacza społecznego urodzonego w Krakowie. Autor takich dzieł jak „Niemcy" czy „Juliusz i Ethel" znany był z zaangażowania społecznego i humanistycznych wartości, które do dziś stanowią fundament wychowania w naszej szkole.</p>
-
-      <h2>Oś czasu</h2>
-      <div class="timeline">
-        <div class="tl-item">
-          <p class="tl-year">11 listopada 1933</p>
-          <p class="tl-text">Założenie szkoły w Kazimierzu Górniczym — w 15. rocznicę odzyskania niepodległości przez Polskę.</p>
-        </div>
-        <div class="tl-item">
-          <p class="tl-year">2023</p>
-          <p class="tl-text">Obchody <strong>90. rocznicy szkoły</strong> — uroczyste wydarzenie z udziałem społeczności szkolnej, absolwentów i zaproszonych gości. Z okazji jubileuszu wydana została monografia szkoły obejmująca lata 1933–2023.</p>
-        </div>
-        <div class="tl-item">
-          <p class="tl-year">17 listopada 2023</p>
-          <p class="tl-text">Główne uroczystości jubileuszowe 90-lecia pod kierunkiem dyrekcji i grona pedagogicznego.</p>
-        </div>
-      </div>
-
-      <div class="coming-soon-card">
-        <p>Pełna historia szkoły jest w przygotowaniu. Wkrótce pojawią się tu archiwalne fotografie, wspomnienia absolwentów i szczegółowa kronika lat 1933–2026.</p>
-      </div>
-
+    <div class="schedule-meta">
+      <div class="meta-pill">Godzina lekcyjna: <span>45 min</span></div>
+      <div class="meta-pill">Lekcja 1: <span>8:00</span></div>
+      <div class="meta-pill">Koniec 9. lekcji: <span>16:20</span></div>
     </div>
+
+    <div class="schedule-grid" role="table" aria-label="Plan lekcji i przerw">
+
+      <!-- Lekcja 1 -->
+      <div class="lesson-row" role="row">
+        <div class="lesson-num" role="rowheader" aria-label="Lekcja 1">1</div>
+        <div class="lesson-body" role="cell">
+          <div class="lesson-time">8:00 – 8:45</div>
+          <div class="lesson-label">Lekcja pierwsza</div>
+        </div>
+        <div class="lesson-dur" role="cell" aria-label="Czas trwania">45 min</div>
+      </div>
+
+      <!-- Przerwa 10 min -->
+      <div class="break-row" role="row" aria-label="Przerwa 10 minut">
+        <div class="break-indent" aria-hidden="true"><div class="break-dash"></div></div>
+        <div class="break-body" role="cell"><span class="break-icon" aria-hidden="true">☕</span><span class="break-text">Przerwa · 8:45–8:55</span></div>
+        <div class="break-len" role="cell">10 min</div>
+      </div>
+
+      <!-- Lekcja 2 -->
+      <div class="lesson-row" role="row">
+        <div class="lesson-num" role="rowheader" aria-label="Lekcja 2">2</div>
+        <div class="lesson-body" role="cell">
+          <div class="lesson-time">8:55 – 9:40</div>
+          <div class="lesson-label">Lekcja druga</div>
+        </div>
+        <div class="lesson-dur" role="cell">45 min</div>
+      </div>
+
+      <!-- Przerwa 10 min -->
+      <div class="break-row" role="row" aria-label="Przerwa 10 minut">
+        <div class="break-indent" aria-hidden="true"><div class="break-dash"></div></div>
+        <div class="break-body" role="cell"><span class="break-icon" aria-hidden="true">☕</span><span class="break-text">Przerwa · 9:40–9:50</span></div>
+        <div class="break-len" role="cell">10 min</div>
+      </div>
+
+      <!-- Lekcja 3 -->
+      <div class="lesson-row" role="row">
+        <div class="lesson-num" role="rowheader" aria-label="Lekcja 3">3</div>
+        <div class="lesson-body" role="cell">
+          <div class="lesson-time">9:50 – 10:35</div>
+          <div class="lesson-label">Lekcja trzecia</div>
+        </div>
+        <div class="lesson-dur" role="cell">45 min</div>
+      </div>
+
+      <!-- Długa przerwa 20 min -->
+      <div class="break-row break-long" role="row" aria-label="Długa przerwa 20 minut">
+        <div class="break-indent" aria-hidden="true"><div class="break-dash"></div></div>
+        <div class="break-body" role="cell"><span class="break-icon" aria-hidden="true">🍎</span><span class="break-text">Długa przerwa · 10:35–10:55</span></div>
+        <div class="break-len" role="cell">20 min</div>
+      </div>
+
+      <!-- Lekcja 4 -->
+      <div class="lesson-row" role="row">
+        <div class="lesson-num" role="rowheader" aria-label="Lekcja 4">4</div>
+        <div class="lesson-body" role="cell">
+          <div class="lesson-time">10:55 – 11:40</div>
+          <div class="lesson-label">Lekcja czwarta</div>
+        </div>
+        <div class="lesson-dur" role="cell">45 min</div>
+      </div>
+
+      <!-- Przerwa 10 min -->
+      <div class="break-row" role="row" aria-label="Przerwa 10 minut">
+        <div class="break-indent" aria-hidden="true"><div class="break-dash"></div></div>
+        <div class="break-body" role="cell"><span class="break-icon" aria-hidden="true">☕</span><span class="break-text">Przerwa · 11:40–11:50</span></div>
+        <div class="break-len" role="cell">10 min</div>
+      </div>
+
+      <!-- Lekcja 5 -->
+      <div class="lesson-row" role="row">
+        <div class="lesson-num" role="rowheader" aria-label="Lekcja 5">5</div>
+        <div class="lesson-body" role="cell">
+          <div class="lesson-time">11:50 – 12:35</div>
+          <div class="lesson-label">Lekcja piąta</div>
+        </div>
+        <div class="lesson-dur" role="cell">45 min</div>
+      </div>
+
+      <!-- Przerwa obiadowa 15 min -->
+      <div class="break-row break-long" role="row" aria-label="Przerwa obiadowa 15 minut">
+        <div class="break-indent" aria-hidden="true"><div class="break-dash"></div></div>
+        <div class="break-body" role="cell"><span class="break-icon" aria-hidden="true">🍽️</span><span class="break-text">Przerwa obiadowa · 12:35–12:50</span></div>
+        <div class="break-len" role="cell">15 min</div>
+      </div>
+
+      <!-- Lekcja 6 -->
+      <div class="lesson-row" role="row">
+        <div class="lesson-num" role="rowheader" aria-label="Lekcja 6">6</div>
+        <div class="lesson-body" role="cell">
+          <div class="lesson-time">12:50 – 13:35</div>
+          <div class="lesson-label">Lekcja szósta</div>
+        </div>
+        <div class="lesson-dur" role="cell">45 min</div>
+      </div>
+
+      <!-- Przerwa 10 min -->
+      <div class="break-row" role="row" aria-label="Przerwa 10 minut">
+        <div class="break-indent" aria-hidden="true"><div class="break-dash"></div></div>
+        <div class="break-body" role="cell"><span class="break-icon" aria-hidden="true">☕</span><span class="break-text">Przerwa · 13:35–13:45</span></div>
+        <div class="break-len" role="cell">10 min</div>
+      </div>
+
+      <!-- Lekcja 7 -->
+      <div class="lesson-row" role="row">
+        <div class="lesson-num" role="rowheader" aria-label="Lekcja 7">7</div>
+        <div class="lesson-body" role="cell">
+          <div class="lesson-time">13:45 – 14:30</div>
+          <div class="lesson-label">Lekcja siódma</div>
+        </div>
+        <div class="lesson-dur" role="cell">45 min</div>
+      </div>
+
+      <!-- Przerwa 10 min -->
+      <div class="break-row" role="row" aria-label="Przerwa 10 minut">
+        <div class="break-indent" aria-hidden="true"><div class="break-dash"></div></div>
+        <div class="break-body" role="cell"><span class="break-icon" aria-hidden="true">☕</span><span class="break-text">Przerwa · 14:30–14:40</span></div>
+        <div class="break-len" role="cell">10 min</div>
+      </div>
+
+      <!-- Lekcja 8 -->
+      <div class="lesson-row" role="row">
+        <div class="lesson-num" role="rowheader" aria-label="Lekcja 8">8</div>
+        <div class="lesson-body" role="cell">
+          <div class="lesson-time">14:40 – 15:25</div>
+          <div class="lesson-label">Lekcja ósma</div>
+        </div>
+        <div class="lesson-dur" role="cell">45 min</div>
+      </div>
+
+      <!-- Przerwa 10 min -->
+      <div class="break-row" role="row" aria-label="Przerwa 10 minut">
+        <div class="break-indent" aria-hidden="true"><div class="break-dash"></div></div>
+        <div class="break-body" role="cell"><span class="break-icon" aria-hidden="true">☕</span><span class="break-text">Przerwa · 15:25–15:35</span></div>
+        <div class="break-len" role="cell">10 min</div>
+      </div>
+
+      <!-- Lekcja 9 -->
+      <div class="lesson-row" role="row">
+        <div class="lesson-num" role="rowheader" aria-label="Lekcja 9">9</div>
+        <div class="lesson-body" role="cell">
+          <div class="lesson-time">15:35 – 16:20</div>
+          <div class="lesson-label">Lekcja dziewiąta</div>
+        </div>
+        <div class="lesson-dur" role="cell">45 min</div>
+      </div>
+
+    </div><!-- /schedule-grid -->
+
+    <div class="schedule-note">
+      <span aria-hidden="true" style="font-size:1.1rem;flex-shrink:0">ℹ️</span>
+      <span><strong>Długa przerwa</strong> (10:35–10:55) i <strong>przerwa obiadowa</strong> (12:35–12:50) — uczniowie mogą w tym czasie skorzystać ze stołówki. Plan dzwonków obowiązuje w roku szkolnym 2024/2025.</span>
+    </div>
+
   </div>
+</div>
 
 </main>
 

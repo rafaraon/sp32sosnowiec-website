@@ -1,0 +1,73 @@
+{% extends "_base.html" %}
+{% block page_title %}Dyrekcja i kadra{% endblock %}
+{% block eyebrow %}Nasza Szkoła{% endblock %}
+{% block hero_title %}Dyrekcja i kadra{% endblock %}
+{% block breadcrumb_section %}Nasza Szkoła{% endblock %}
+{% block breadcrumb_page %}Dyrekcja i kadra{% endblock %}
+{% block page_css %}
+<style>
+.page-main{padding:3rem 0 5rem}
+.staff-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.25rem;margin:2rem 0}
+.staff-card{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:1.5rem;display:flex;flex-direction:column;gap:.5rem;box-shadow:var(--sh);transition:box-shadow var(--tr),transform var(--tr)}
+.staff-card:hover{box-shadow:var(--sh-m);transform:translateY(-2px)}
+.staff-role{font-family:var(--font-d);font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ca)}
+.staff-name{font-family:var(--font-d);font-size:1.1rem;font-weight:700;color:var(--tx)}
+.staff-note{font-size:.85rem;color:var(--tx-m);line-height:1.55}
+.staff-card-accent{border-left:3px solid var(--ca)}
+.section-title{font-family:var(--font-d);font-size:1.4rem;font-weight:800;letter-spacing:-.02em;color:var(--tx);margin-bottom:1rem}
+.section-sub{font-size:.95rem;color:var(--tx-m);margin-bottom:1.5rem;max-width:640px;line-height:1.7}
+.coming-soon-card{background:var(--clv-l);border:1px dashed var(--bd);border-radius:var(--r);padding:2rem;text-align:center;margin-top:2rem}
+.coming-soon-card p{font-family:var(--font-d);font-size:.95rem;color:var(--tx-m)}
+.contact-cta-strip{background:var(--cp);border-radius:var(--r);padding:1.5rem 2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-top:2.5rem}
+.contact-cta-strip p{font-family:var(--font-d);font-size:.95rem;color:rgba(255,255,255,.8)}
+.contact-cta-strip a{font-family:var(--font-d);font-size:.9rem;font-weight:700;color:var(--ca);transition:color var(--tr)}
+.contact-cta-strip a:hover{color:#fff}
+</style>
+{% endblock %}
+{% block content %}
+<div class="container">
+
+    <h2 class="section-title">Dyrekcja</h2>
+    <p class="section-sub">Szkołą kieruje doświadczona dyrekcja, dbająca o wysoki poziom nauczania i przyjazne środowisko dla uczniów, rodziców i pracowników.</p>
+
+    <div class="staff-grid">
+      <div class="staff-card staff-card-accent">
+        <p class="staff-role">Dyrektor szkoły</p>
+        <p class="staff-name">mgr Agnieszka Knol</p>
+        <p class="staff-note">Dyrektor Szkoły Podstawowej nr 32 im. Leona Kruczkowskiego w Sosnowcu.</p>
+      </div>
+      <div class="staff-card">
+        <p class="staff-role">Wicedyrektor</p>
+        <p class="staff-name">—</p>
+        <p class="staff-note">Informacja w przygotowaniu.</p>
+      </div>
+    </div>
+
+    <h2 class="section-title" style="margin-top:2.5rem">Pedagog szkolny</h2>
+
+    <div class="staff-grid">
+      <div class="staff-card">
+        <p class="staff-role">Pedagog szkolny</p>
+        <p class="staff-name">mgr Edyta Kołton</p>
+        <p class="staff-note">Pedagog szkolny — wsparcie uczniów i rodzin. Gabinet pedagoga dostępny w godzinach pracy szkoły.</p>
+      </div>
+    </div>
+
+    <h2 class="section-title" style="margin-top:2.5rem">Kadra nauczycielska</h2>
+    <p class="section-sub">Nasza szkoła zatrudnia wykwalifikowanych nauczycieli i specjalistów tworzących przyjazną atmosferę sprzyjającą nauce i rozwojowi każdego dziecka.</p>
+
+    <div class="coming-soon-card">
+      <p>Pełna lista kadry pedagogicznej jest w przygotowaniu. Wkrótce pojawią się tu profile nauczycieli i specjalistów.</p>
+    </div>
+
+    <div class="contact-cta-strip">
+      <p>Masz pytania do dyrekcji lub sekretariatu szkoły?</p>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap">
+        <a href="tel:+48322634301">32 263-43-01</a>
+        <a href="mailto:sp32@sosnowiec.edu.pl">sp32@sosnowiec.edu.pl</a>
+        <a href="#" data-open-contact>Więcej danych kontaktowych →</a>
+      </div>
+    </div>
+
+  </div>
+{% endblock %}

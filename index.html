@@ -1,49 +1,22 @@
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SP32 Sosnowiec — Strona Główna</title>
+<link rel="icon" href="grafiki-ai/logo-sp32.png" type="image/png">
+<link rel="apple-touch-icon" href="grafiki-ai/logo-sp32.png">
+<meta name="description" content="Szkoła Podstawowa nr 32 im. L. Kruczkowskiego w Sosnowcu — aktualności, informacje dla uczniów i rodziców.">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="SP32 Sosnowiec">
+<meta property="og:title" content="SP32 Sosnowiec — Szkoła Podstawowa nr 32 im. L. Kruczkowskiego">
+<meta property="og:description" content="Szkoła Podstawowa nr 32 im. L. Kruczkowskiego w Sosnowcu — aktualności, informacje dla uczniów i rodziców.">
+<meta property="og:url" content="https://sp32sosnowiec.pl/">
+<meta property="og:image" content="https://sp32sosnowiec.pl/grafiki-ai/logo-sp32.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
 
 <style>
-/* ── TOKENS ── */
-:root {
-  --cp: #FF9F43;
-  --cp-d: #1C0D04;
-  --cp-l: #FFB461;
-  --ca: #EE5A6F;
-  --ca-d: #D94560;
-  --clv: #F5E8D5;
-  --clv-l: #FFF5EE;
-  --bg: #FBF8F5;
-  --sf: #FFFFFF;
-  --tx: #2D1A08;
-  --tx-m: #7A5838;
-  --bd: #EAD9C8;
-  --ql1: #D62839;
-  --ql2: #F08000;
-  --ql3: #EE5A6F;
-  --ql4: #F9C22E;
-  --font-d: 'Bricolage Grotesque', system-ui, sans-serif;
-  --font-b: 'Atkinson Hyperlegible', system-ui, sans-serif;
-  --r: 12px;
-  --r-s: 8px;
-  --sh: 0 2px 12px rgba(45,26,8,.08);
-  --sh-m: 0 4px 24px rgba(45,26,8,.13);
-  --tr: .18s ease;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #1A0D04; --sf: #271608; --tx: #F0E8DC; --tx-m: #A89070;
-    --bd: #3D2510; --clv: #2A1508; --clv-l: #1F1005;
-    --sh: 0 2px 12px rgba(0,0,0,.28); --sh-m: 0 4px 24px rgba(0,0,0,.38);
-  }
-}
-:root[data-theme="dark"] {
-  --bg: #1A0D04; --sf: #271608; --tx: #F0E8DC; --tx-m: #A89070;
-  --bd: #3D2510; --clv: #2A1508; --clv-l: #1F1005;
-  --sh: 0 2px 12px rgba(0,0,0,.28); --sh-m: 0 4px 24px rgba(0,0,0,.38);
-}
 
 /* ── RESET ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -461,8 +434,8 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
 .projekty-inner { display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; }
 .projekty-text h3 { font-family: var(--font-d); font-size: 1.3rem; font-weight: 800; color: #fff; margin-bottom: .25rem; }
 .projekty-text p { font-size: .9rem; color: rgba(255,255,255,.7); }
-.projekty-count { font-family: var(--font-d); font-size: 3rem; font-weight: 800; color: var(--ca); letter-spacing: -.04em; line-height: 1; flex-shrink: 0; }
-.projekty-count span { font-size: 1rem; color: rgba(255,255,255,.6); font-weight: 600; }
+.projekty-count { font-family: var(--font-d); font-size: 3rem; font-weight: 800; color: rgba(255,255,255,.95); letter-spacing: -.04em; line-height: 1.1; flex-shrink: 0; }
+.projekty-count span { font-size: .85rem; color: rgba(255,255,255,.65); font-weight: 600; display: block; text-transform: uppercase; letter-spacing: .06em; }
 
 /* ════════════════════════
    FOOTER
@@ -619,7 +592,7 @@ details.footer-info-card summary::marker { display: none; }
 /* ── CONTACT MODAL ── */
 .contact-overlay {
   position: fixed; inset: 0; z-index: 500;
-  background: rgba(10,30,20,.58);
+  background: rgba(28,13,4,.65);
   backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
   display: flex; align-items: center; justify-content: center; padding: 1.5rem;
   opacity: 0; visibility: hidden; transition: opacity .25s ease, visibility .25s;
@@ -695,6 +668,17 @@ details.footer-info-card summary::marker { display: none; }
   .stagger .reveal:nth-child(5) { transition-delay: .36s; }
 }
 
+/* ── Utility bar ── */
+.util-bar{background:var(--cp-d);color:rgba(255,255,255,.65);font-size:.7rem;font-family:var(--font-d);font-weight:500;letter-spacing:.02em}
+.util-bar-inner{display:flex;align-items:center;justify-content:space-between;gap:1rem;height:30px}
+.util-bar-tagline{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.util-bar-links{display:flex;align-items:center;gap:.05rem;flex-shrink:0}
+.util-bar-link{display:inline-flex;align-items:center;gap:.25rem;color:rgba(255,255,255,.75);font-weight:700;padding:.2rem .65rem;border-radius:3px;transition:color .2s,background .2s;white-space:nowrap;font-size:.68rem;letter-spacing:.05em}
+.util-bar-link:hover{color:#fff;background:rgba(255,255,255,.1)}
+.util-bar-sep{width:1px;height:12px;background:rgba(255,255,255,.15);margin:0 .1rem}
+@media(max-width:768px){.util-bar-tagline{display:none}.util-bar-inner{justify-content:flex-end}}
+@media(max-width:400px){.util-bar{display:none}}
+
 /* Header frosted glass on scroll */
 .site-header { transition: background .3s ease, backdrop-filter .3s ease; }
 .site-header.scrolled {
@@ -720,6 +704,27 @@ details.footer-info-card summary::marker { display: none; }
 <div id="scroll-bar" aria-hidden="true"></div>
 <a href="#main-content" class="skip-link">Przejdź do treści</a>
 
+<div class="util-bar" role="navigation" aria-label="Linki zewnętrzne">
+  <div class="container util-bar-inner">
+    <span class="util-bar-tagline">Szkoła Podstawowa nr 32 im. L. Kruczkowskiego · Sosnowiec</span>
+    <div class="util-bar-links">
+      <a href="https://sp_32_sosnowiec.bip.gov.pl/" class="util-bar-link" target="_blank" rel="noopener noreferrer">
+        <svg width="11" height="11" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><rect x="1" y="1" width="10" height="10" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="4" y1="6" x2="8" y2="6" stroke="currentColor" stroke-width="1.2"/><line x1="4" y1="4" x2="8" y2="4" stroke="currentColor" stroke-width="1.2"/><line x1="4" y1="8" x2="6.5" y2="8" stroke="currentColor" stroke-width="1.2"/></svg>
+        BIP
+      </a>
+      <div class="util-bar-sep" aria-hidden="true"></div>
+      <a href="https://sp32sosnowiec.edupage.org" class="util-bar-link" target="_blank" rel="noopener noreferrer">
+        <svg width="11" height="11" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M2 10V5l4-3 4 3v5H7.5V7.5h-3V10H2z"/></svg>
+        E-Dziennik
+      </a>
+      <div class="util-bar-sep" aria-hidden="true"></div>
+      <a href="https://www.facebook.com/SP32Sosnowiec" class="util-bar-link" target="_blank" rel="noopener noreferrer">
+        <svg width="11" height="11" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M6.5 12V6.5H8l.3-1.8H6.5V3.7c0-.5.2-.9.9-.9H8.4V1.1S7.8 1 7 1C5.4 1 4.4 1.9 4.4 3.5v1.2H3V6.5h1.4V12h2.1z"/></svg>
+        Facebook
+      </a>
+    </div>
+  </div>
+</div>
 
 <!-- ══════════════════════════════════
      HEADER
@@ -754,30 +759,22 @@ details.footer-info-card summary::marker { display: none; }
         <li class="has-dropdown">
           <a href="#" aria-haspopup="true" aria-expanded="false">Uczniowie <span class="nav-caret" aria-hidden="true">▾</span></a>
           <ul class="dropdown" role="menu">
-            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-uczniowie-biblioteka.png" srcset="grafiki-ai/nav-uczniowie-biblioteka@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Biblioteka</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-uczniowie-swietlica.png" srcset="grafiki-ai/nav-uczniowie-swietlica@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Świetlica</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-uczniowie-wolontariat.png" srcset="grafiki-ai/nav-uczniowie-wolontariat@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Wolontariat</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-uczniowie-klub-ak.png" srcset="grafiki-ai/nav-uczniowie-klub-ak@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Klub AK</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-uczniowie-klub-europejski.png" srcset="grafiki-ai/nav-uczniowie-klub-europejski@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Klub Europejski</a></li>
+            <li><a href="biblioteka.html" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-uczniowie-biblioteka.png" srcset="grafiki-ai/nav-uczniowie-biblioteka@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Biblioteka</a></li>
+            <li><a href="swietlica.html" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-uczniowie-swietlica.png" srcset="grafiki-ai/nav-uczniowie-swietlica@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Świetlica</a></li>
+            <li><a href="wolontariat.html" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-uczniowie-wolontariat.png" srcset="grafiki-ai/nav-uczniowie-wolontariat@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Wolontariat</a></li>
+            <li><a href="dzwonki.html" class="dropdown-item" role="menuitem"><span class="di-icon" style="font-size:1rem;display:flex;align-items:center;justify-content:center">🔔</span>Lekcje i przerwy</a></li>
           </ul>
         </li>
 
         <li class="has-dropdown">
           <a href="#" aria-haspopup="true" aria-expanded="false">Rodzice <span class="nav-caret" aria-hidden="true">▾</span></a>
           <ul class="dropdown dropdown-wide" role="menu">
-            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-informacje.png" srcset="grafiki-ai/nav-rodzice-informacje@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Informacje dla rodziców</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-rada-rodzicow.png" srcset="grafiki-ai/nav-rodzice-rada-rodzicow@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Rada Rodziców</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-kalendarz.png" srcset="grafiki-ai/nav-rodzice-kalendarz@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Kalendarz roku szkolnego</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-zebrania.png" srcset="grafiki-ai/nav-rodzice-zebrania@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Zebrania i konsultacje</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-stypendia.png" srcset="grafiki-ai/nav-rodzice-stypendia@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Stypendia szkolne</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-zfss.png" srcset="grafiki-ai/nav-rodzice-zfss@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>ZFŚS</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-rekrutacja-0.png" srcset="grafiki-ai/nav-rodzice-rekrutacja-0@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Rekrutacja — klasa 0</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-rekrutacja-1.png" srcset="grafiki-ai/nav-rodzice-rekrutacja-1@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Rekrutacja — klasa I</a></li>
+            <li><a href="rekrutacja.html" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-informacje.png" srcset="grafiki-ai/nav-rodzice-informacje@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Rekrutacja</a></li>
+            <li><a href="kalendarz.html" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-informacje.png" srcset="grafiki-ai/nav-rodzice-informacje@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Kalendarz szkolny</a></li>
+            <li><a href="rada-rodzicow.html" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-informacje.png" srcset="grafiki-ai/nav-rodzice-informacje@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Rada Rodziców</a></li>
             <li><a href="jadlospis.html" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-jadlospis.png" srcset="grafiki-ai/nav-rodzice-jadlospis@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Jadłospis / Stołówka</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-pedagog.png" srcset="grafiki-ai/nav-rodzice-pedagog@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Pedagog szkolny</a></li>
             <li><a href="psycholog.html" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-psycholog.png" srcset="grafiki-ai/nav-rodzice-psycholog@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Psycholog szkolny</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-doradca.png" srcset="grafiki-ai/nav-rodzice-doradca@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Doradca zawodowy</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-pielegnarka.png" srcset="grafiki-ai/nav-rodzice-pielegnarka@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Pielęgniarka</a></li>
+            <li><a href="standardy-ochrony-maloletnich.html" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-informacje.png" srcset="grafiki-ai/nav-rodzice-informacje@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Standardy Ochrony Małoletnich</a></li>
           </ul>
         </li>
 
@@ -830,26 +827,19 @@ details.footer-info-card summary::marker { display: none; }
 
     <hr class="mob-divider">
     <p class="mob-section-title"><img src="grafiki-ai/nav-mobile-uczniowie.png" srcset="grafiki-ai/nav-mobile-uczniowie@2x.png 2x" alt="" width="16" height="16" aria-hidden="true" style="display:inline;vertical-align:middle;margin-right:.4rem">Uczniowie</p>
-    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-uczniowie-biblioteka.png" srcset="grafiki-ai/nav-uczniowie-biblioteka@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Biblioteka</a>
-    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-uczniowie-swietlica.png" srcset="grafiki-ai/nav-uczniowie-swietlica@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Świetlica</a>
-    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-uczniowie-wolontariat.png" srcset="grafiki-ai/nav-uczniowie-wolontariat@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Wolontariat</a>
-    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-uczniowie-klub-ak.png" srcset="grafiki-ai/nav-uczniowie-klub-ak@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Klub AK</a>
-    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-uczniowie-klub-europejski.png" srcset="grafiki-ai/nav-uczniowie-klub-europejski@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Klub Europejski</a>
+    <a href="biblioteka.html" class="mob-sub"><img src="grafiki-ai/nav-uczniowie-biblioteka.png" srcset="grafiki-ai/nav-uczniowie-biblioteka@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Biblioteka</a>
+    <a href="swietlica.html" class="mob-sub"><img src="grafiki-ai/nav-uczniowie-swietlica.png" srcset="grafiki-ai/nav-uczniowie-swietlica@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Świetlica</a>
+    <a href="wolontariat.html" class="mob-sub"><img src="grafiki-ai/nav-uczniowie-wolontariat.png" srcset="grafiki-ai/nav-uczniowie-wolontariat@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Wolontariat</a>
+    <a href="dzwonki.html" class="mob-sub" style="gap:.5rem">🔔 Lekcje i przerwy</a>
 
     <hr class="mob-divider">
     <p class="mob-section-title"><img src="grafiki-ai/nav-mobile-rodzice.png" srcset="grafiki-ai/nav-mobile-rodzice@2x.png 2x" alt="" width="16" height="16" aria-hidden="true" style="display:inline;vertical-align:middle;margin-right:.4rem">Rodzice</p>
-    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-rodzice-informacje.png" srcset="grafiki-ai/nav-rodzice-informacje@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Informacje dla rodziców</a>
-    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-rodzice-rada-rodzicow.png" srcset="grafiki-ai/nav-rodzice-rada-rodzicow@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Rada Rodziców</a>
-    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-rodzice-kalendarz.png" srcset="grafiki-ai/nav-rodzice-kalendarz@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Kalendarz roku szkolnego</a>
-    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-rodzice-zebrania.png" srcset="grafiki-ai/nav-rodzice-zebrania@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Zebrania i konsultacje</a>
-    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-rodzice-stypendia.png" srcset="grafiki-ai/nav-rodzice-stypendia@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Stypendia szkolne</a>
-    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-rodzice-zfss.png" srcset="grafiki-ai/nav-rodzice-zfss@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">ZFŚS</a>
-    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-rodzice-rekrutacja-0.png" srcset="grafiki-ai/nav-rodzice-rekrutacja-0@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Rekrutacja — klasa 0</a>
-    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-rodzice-rekrutacja-1.png" srcset="grafiki-ai/nav-rodzice-rekrutacja-1@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Rekrutacja — klasa I</a>
+    <a href="rekrutacja.html" class="mob-sub"><img src="grafiki-ai/nav-rodzice-informacje.png" srcset="grafiki-ai/nav-rodzice-informacje@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Rekrutacja</a>
+    <a href="kalendarz.html" class="mob-sub"><img src="grafiki-ai/nav-rodzice-informacje.png" srcset="grafiki-ai/nav-rodzice-informacje@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Kalendarz szkolny</a>
+    <a href="rada-rodzicow.html" class="mob-sub"><img src="grafiki-ai/nav-rodzice-informacje.png" srcset="grafiki-ai/nav-rodzice-informacje@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Rada Rodziców</a>
     <a href="jadlospis.html" class="mob-sub"><img src="grafiki-ai/nav-rodzice-jadlospis.png" srcset="grafiki-ai/nav-rodzice-jadlospis@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Jadłospis / Stołówka</a>
-    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-rodzice-pedagog.png" srcset="grafiki-ai/nav-rodzice-pedagog@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Pedagog szkolny</a>
     <a href="psycholog.html" class="mob-sub"><img src="grafiki-ai/nav-rodzice-psycholog.png" srcset="grafiki-ai/nav-rodzice-psycholog@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Psycholog szkolny</a>
-    <a href="#" class="mob-sub"><img src="grafiki-ai/nav-rodzice-doradca.png" srcset="grafiki-ai/nav-rodzice-doradca@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Doradca zawodowy</a>
+    <a href="standardy-ochrony-maloletnich.html" class="mob-sub"><img src="grafiki-ai/nav-rodzice-informacje.png" srcset="grafiki-ai/nav-rodzice-informacje@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Standardy Ochrony Małoletnich</a>
     <a href="#" class="mob-sub"><img src="grafiki-ai/nav-rodzice-pielegnarka.png" srcset="grafiki-ai/nav-rodzice-pielegnarka@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Pielęgniarka</a>
   </div>
 </nav>
@@ -1006,14 +996,14 @@ details.footer-info-card summary::marker { display: none; }
     </div>
 
     <div class="footer-info" role="group" aria-label="Dane kontaktowe szkoły">
-      <details class="footer-info-card">
+      <details class="footer-info-card" open>
         <summary><p class="footer-info-label">Adres</p><span class="fic-chevron" aria-hidden="true">›</span></summary>
         <div class="fic-body">
           <address>ul. Armii Krajowej 93<br>41-215 Sosnowiec<br>woj. śląskie</address>
           <a href="https://maps.google.com/?q=ul.+Armii+Krajowej+93,+41-215+Sosnowiec" target="_blank" rel="noopener">Otwórz w Mapach →</a>
         </div>
       </details>
-      <details class="footer-info-card">
+      <details class="footer-info-card" open>
         <summary><p class="footer-info-label">Kontakt</p><span class="fic-chevron" aria-hidden="true">›</span></summary>
         <div class="fic-body">
           <p><a href="tel:+48322634301">32 263-43-01</a></p>
@@ -1021,7 +1011,7 @@ details.footer-info-card summary::marker { display: none; }
           <p class="footer-note">Sekretariat: pon–pt 7:00–15:00</p>
         </div>
       </details>
-      <details class="footer-info-card">
+      <details class="footer-info-card" open>
         <summary><p class="footer-info-label">Godziny pracy</p><span class="fic-chevron" aria-hidden="true">›</span></summary>
         <div class="fic-body">
           <p>Szkoła: 8:00–16:25</p>
@@ -1284,4 +1274,17 @@ details.footer-info-card summary::marker { display: none; }
   document.querySelectorAll('[data-open-contact]').forEach(el => {
     el.addEventListener('click', e => { e.preventDefault(); openContact(); });
   });
+
+  /* ── FOOTER ACCORDION (desktop open / mobile closed) ── */
+  (function() {
+    function syncFooterAccordion() {
+      const isMobile = window.innerWidth <= 900;
+      document.querySelectorAll('details.footer-info-card').forEach(d => {
+        if (isMobile) { d.removeAttribute('open'); }
+        else { d.setAttribute('open', ''); }
+      });
+    }
+    syncFooterAccordion();
+    window.addEventListener('resize', syncFooterAccordion, {passive: true});
+  })();
 </script>
