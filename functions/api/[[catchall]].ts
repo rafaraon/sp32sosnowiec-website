@@ -26,4 +26,4 @@ app.get('/api/health', (c) => c.json({ ok: true, ts: new Date().toISOString() })
 app.notFound((c) => c.json({ error: 'not found' }, 404))
 
 export const onRequest: PagesFunction<Env> = (context) =>
-  app.fetch(context.request, context.env, context)
+  app.fetch(context.request, context.env, context as any)
