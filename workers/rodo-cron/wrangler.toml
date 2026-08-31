@@ -1,0 +1,15 @@
+name = "sp32-rodo-cron"
+main = "index.ts"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "sp32-db"
+database_id = "6d53c13a-f432-4deb-aa98-fe7186261c9c"
+
+[triggers]
+crons = ["0 8 1 9 *"]
+
+[vars]
+ADMIN_EMAIL = "sp32.tech@gmail.com"
