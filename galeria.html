@@ -1,298 +1,158 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Galeria — SP32 Sosnowiec</title>
+<!-- Favicon -->
+<link rel="icon" href="grafiki-ai/logo-sp32.png" type="image/png">
+<link rel="apple-touch-icon" href="grafiki-ai/logo-sp32.png">
+<!-- SEO -->
+<meta name="description" content="Szkoła Podstawowa nr 32 im. L. Kruczkowskiego w Sosnowcu — aktualności, informacje dla uczniów i rodziców.">
+<meta name="robots" content="index, follow">
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="SP32 Sosnowiec">
+<meta property="og:title" content=" — SP32 Sosnowiec">
+<meta property="og:description" content="Szkoła Podstawowa nr 32 im. L. Kruczkowskiego w Sosnowcu.">
+<meta property="og:url" content="https://sp32sosnowiec.pl/">
+<meta property="og:image" content="https://sp32sosnowiec.pl/grafiki-ai/logo-sp32.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-
+<link rel="stylesheet" href="tokens.css">
 <style>
-/* ── TOKENS ── */
-:root {
-  --cp:#1F4B3C; --cp-d:#12251E; --cp-l:#2D6B57;
-  --ca:#D4756A; --ca-d:#BE5D52;
-  --clv:#D9D0EE; --clv-l:#EDE8F8;
-  --bg:#F6F3FB; --sf:#FFFFFF;
-  --tx:#12251E; --tx-m:#4A6358; --bd:#D4CDE8;
-  --font-d:'Bricolage Grotesque',system-ui,sans-serif;
-  --font-b:'Atkinson Hyperlegible',system-ui,sans-serif;
-  --r:12px; --r-s:8px;
-  --sh:0 2px 12px rgba(31,75,60,.09); --sh-m:0 4px 24px rgba(31,75,60,.14);
-  --tr:.18s ease;
-}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#0D1A14; --sf:#15261D; --tx:#DFF0E8; --tx-m:#7BA890;
-  --bd:#253D30; --clv:#1E1A35; --clv-l:#18152A;
-  --sh:0 2px 12px rgba(0,0,0,.25); --sh-m:0 4px 24px rgba(0,0,0,.35);
-}}
-:root[data-theme="dark"]{
-  --bg:#0D1A14; --sf:#15261D; --tx:#DFF0E8; --tx-m:#7BA890;
-  --bd:#253D30; --clv:#1E1A35; --clv-l:#18152A;
-  --sh:0 2px 12px rgba(0,0,0,.25); --sh-m:0 4px 24px rgba(0,0,0,.35);
-}
-
-/* ── RESET ── */
+/* ── Shared page CSS (all inner pages) ─────────────────────────────── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:var(--font-b);background:var(--bg);color:var(--tx);line-height:1.6;overflow-x:hidden}
-a{text-decoration:none;color:inherit}
-img{max-width:100%;display:block}
-ul{list-style:none}
+a{text-decoration:none;color:inherit}img{max-width:100%;display:block}ul{list-style:none}
 button{cursor:pointer;font-family:inherit;border:none;background:none}
-.container{width:min(1120px,100% - 3rem);margin-inline:auto}
 :focus-visible{outline:2px solid var(--ca);outline-offset:3px;border-radius:4px}
+.container{width:min(1120px,100% - 3rem);margin-inline:auto}
 
-/* ── SKIP LINK ── */
-.skip-link{position:absolute;top:-100px;left:1rem;background:var(--ca);color:#fff;padding:.5rem 1rem;border-radius:0 0 var(--r-s) var(--r-s);font-family:var(--font-d);font-weight:700;font-size:.9rem;z-index:9999;transition:top .2s}
-.skip-link:focus{top:0}
+/* ── Page layout ── */
+.page-main{padding:3rem 0 5rem}
+.prose{max-width:700px}
+.prose h2{font-family:var(--font-d);font-size:1.5rem;font-weight:800;color:var(--tx);letter-spacing:-.02em;margin:2rem 0 .75rem}
+.prose h3{font-family:var(--font-d);font-size:1.1rem;font-weight:700;color:var(--tx);margin:1.5rem 0 .5rem}
+.prose p{font-size:1rem;color:var(--tx-m);line-height:1.75;margin-bottom:1rem}
+.prose strong{color:var(--tx);font-weight:700}
+.prose blockquote{border-left:3px solid var(--ca);padding:.75rem 1.25rem;background:var(--clv-l);border-radius:0 var(--r-s) var(--r-s) 0;margin:1.5rem 0}
+.prose blockquote p{color:var(--tx);font-style:italic;margin:0}
+.prose blockquote cite{display:block;font-family:var(--font-d);font-size:.78rem;font-weight:600;color:var(--tx-m);margin-top:.4rem;font-style:normal}
+.prose ul.list{list-style:disc;padding-left:1.5rem;color:var(--tx-m);font-size:1rem;line-height:1.75;margin-bottom:1rem}
+.prose ul.list li{margin-bottom:.35rem}
+.prose table{width:100%;border-collapse:collapse;font-size:.9rem;margin:1.25rem 0;overflow-x:auto;display:block}
+.prose th{font-family:var(--font-d);font-weight:700;text-align:left;padding:.6rem .8rem;background:var(--clv);color:var(--tx);border-bottom:2px solid var(--bd)}
+.prose td{padding:.55rem .8rem;border-bottom:1px solid var(--bd);color:var(--tx-m);vertical-align:top}
+.prose tr:last-child td{border-bottom:none}
+.prose a{color:var(--cp);font-weight:600}
+.prose a:hover{color:var(--ca)}
 
-/* ── SCROLL BAR ── */
-#scroll-bar{position:fixed;top:0;left:0;height:3px;width:0%;background:linear-gradient(90deg,var(--ca) 0%,#e8a89e 100%);z-index:10000;transition:width .1s linear}
+/* ── Info cards ── */
+.info-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin:1.5rem 0}
+.info-card{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:1.25rem;display:flex;flex-direction:column;gap:.35rem}
+.info-card-label{font-family:var(--font-d);font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ca)}
+.info-card-value{font-family:var(--font-d);font-size:1.15rem;font-weight:800;color:var(--tx)}
+.info-card p{font-size:.88rem;color:var(--tx-m);line-height:1.55;margin:0}
 
-/* ════ HEADER ════ */
-.site-header{position:sticky;top:0;z-index:100;background:var(--cp);box-shadow:0 2px 16px rgba(0,0,0,.2);transition:background .3s ease,backdrop-filter .3s ease}
-.site-header.scrolled{background:rgba(18,37,30,.9);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
-.header-inner{display:flex;align-items:center;gap:1.5rem;padding:.75rem 0;min-height:64px}
-.logo{display:flex;align-items:center;gap:.65rem;flex-shrink:0}
-.logo-img{width:52px;height:52px;object-fit:contain;flex-shrink:0;border-radius:50%;background:#fff;box-shadow:0 0 0 4px #fff;transition:transform var(--tr)}
-.logo:hover .logo-img{transform:scale(1.07)}
-.logo-name{font-family:var(--font-d);font-weight:700;font-size:.85rem;color:#fff;line-height:1.2}
-.logo-patron{font-size:.65rem;color:rgba(255,255,255,.65);line-height:1.3}
-.main-nav{flex:1}
-.main-nav>ul{display:flex;gap:.25rem;align-items:center}
-.main-nav>ul>li>a{font-family:var(--font-d);font-size:.82rem;font-weight:600;color:rgba(255,255,255,.82);padding:.45rem .7rem;border-radius:var(--r-s);transition:background var(--tr),color var(--tr);white-space:nowrap;display:flex;align-items:center;gap:.2rem}
-.main-nav>ul>li>a:hover,.main-nav>ul>li>a.active{background:rgba(255,255,255,.12);color:#fff}
-.main-nav>ul>li>a.active{color:var(--ca)}
-.nav-caret{font-size:.65rem;opacity:.7;transition:transform .16s}
-.has-dropdown:hover .nav-caret,.has-dropdown.open .nav-caret{transform:rotate(180deg)}
-.has-dropdown{position:relative}
-.dropdown{position:absolute;top:100%;left:0;min-width:212px;background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);box-shadow:var(--sh-m);padding:.4rem;padding-top:.6rem;list-style:none;opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .16s ease,transform .16s ease,visibility .16s;z-index:200}
-.dropdown::before{content:'';position:absolute;top:-8px;left:0;right:0;height:8px}
-.has-dropdown:hover .dropdown,.has-dropdown.open .dropdown{opacity:1;visibility:visible;transform:translateY(0)}
-.dropdown-item{display:flex;align-items:center;gap:.65rem;padding:.45rem .6rem;border-radius:var(--r-s);color:var(--tx);font-family:var(--font-d);font-size:.82rem;font-weight:600;transition:background var(--tr),color var(--tr);white-space:nowrap}
-.dropdown-item:hover{background:var(--clv-l);color:var(--cp)}
-.di-icon{width:30px;height:30px;border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:rgba(31,75,60,.1)}
-.di-icon img{width:18px;height:18px;object-fit:contain;mix-blend-mode:multiply}
-@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .di-icon img{mix-blend-mode:normal;filter:invert(1) brightness(1.4)}}
-:root[data-theme="dark"] .di-icon img{mix-blend-mode:normal;filter:invert(1) brightness(1.4)}
-.header-controls{display:flex;align-items:center;gap:.5rem;flex-shrink:0}
-.a11y-controls{display:flex;align-items:center;gap:.2rem}
-.a11y-btn{width:32px;height:32px;border-radius:var(--r-s);border:1.5px solid rgba(255,255,255,.25);color:rgba(255,255,255,.7);font-size:.75rem;font-family:var(--font-d);font-weight:700;transition:all var(--tr)}
-.a11y-btn:hover{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.4)}
-.nav-hamburger{display:none;width:40px;height:40px;border-radius:var(--r-s);border:1.5px solid rgba(255,255,255,.3);color:#fff;flex-direction:column;align-items:center;justify-content:center;gap:5px;transition:background var(--tr)}
-.nav-hamburger:hover{background:rgba(255,255,255,.12)}
-.hamburger-line{width:18px;height:2px;background:currentColor;border-radius:1px;pointer-events:none;transition:transform .2s,opacity .2s}
-.nav-hamburger[aria-expanded="true"] .hamburger-line:nth-child(1){transform:translateY(7px) rotate(45deg)}
-.nav-hamburger[aria-expanded="true"] .hamburger-line:nth-child(2){opacity:0}
-.nav-hamburger[aria-expanded="true"] .hamburger-line:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
-.btn-edupage{background:var(--ca);color:#fff;font-family:var(--font-d);font-size:.78rem;font-weight:700;padding:.45rem .9rem;border-radius:var(--r-s);white-space:nowrap;transition:background var(--tr)}
-.btn-edupage:hover{background:var(--ca-d)}
+/* ── Timeline ── */
+.timeline{border-left:2px solid var(--bd);padding-left:1.5rem;margin:2rem 0;display:flex;flex-direction:column;gap:1.25rem}
+.tl-item{position:relative}
+.tl-item::before{content:'';position:absolute;left:-1.85rem;top:.35rem;width:10px;height:10px;border-radius:50%;background:var(--ca);border:2px solid var(--sf)}
+.tl-year{font-family:var(--font-d);font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ca);margin-bottom:.2rem}
+.tl-text{font-size:.92rem;color:var(--tx);line-height:1.6}
 
-/* ════ MOBILE NAV ════ */
-.mob-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:149;opacity:0;visibility:hidden;transition:opacity .2s,visibility .2s}
-.mob-overlay.open{opacity:1;visibility:visible}
-.mob-drawer{position:fixed;top:0;right:0;width:min(340px,100vw);height:100%;background:var(--sf);z-index:150;overflow-y:auto;transform:translateX(100%);transition:transform .25s ease;padding-bottom:2rem}
-.mob-drawer.open{transform:translateX(0)}
-.mob-head{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;padding:.85rem 1.25rem;background:var(--cp);border-bottom:1px solid rgba(255,255,255,.1)}
-.mob-head-name{font-family:var(--font-d);font-size:.82rem;font-weight:700;color:#fff}
-.mob-close{width:36px;height:36px;border-radius:var(--r-s);background:rgba(255,255,255,.15);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.1rem;transition:background var(--tr)}
-.mob-close:hover{background:rgba(255,255,255,.25)}
-.mob-body{padding:.75rem .75rem 0}
-.mob-link{display:flex;align-items:center;gap:.85rem;padding:.85rem .75rem;border-radius:var(--r-s);font-family:var(--font-d);font-weight:700;font-size:.95rem;color:var(--tx);transition:background var(--tr),color var(--tr);min-height:52px}
-.mob-link:hover{background:var(--clv-l);color:var(--cp)}
-.mob-link img{width:22px;height:22px;object-fit:contain;flex-shrink:0}
-.mob-divider{border:none;border-top:1px solid var(--bd);margin:.5rem 0}
-.mob-section-title{font-family:var(--font-d);font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--tx-m);padding:.5rem .75rem .25rem}
-.mob-sub{display:flex;align-items:center;gap:.75rem;padding:.65rem .75rem;border-radius:var(--r-s);font-size:.88rem;font-family:var(--font-d);font-weight:600;color:var(--tx);transition:background var(--tr),color var(--tr);min-height:44px}
-.mob-sub:hover{background:var(--clv-l);color:var(--cp)}
-.mob-sub img{width:18px;height:18px;object-fit:contain;flex-shrink:0}
+/* ── Coming soon ── */
+.coming-soon-card{background:var(--clv-l);border:1px dashed var(--bd);border-radius:var(--r);padding:2rem;text-align:center;margin-top:2rem}
+.coming-soon-card p{font-family:var(--font-d);font-size:.95rem;color:var(--tx-m)}
 
-/* ════ BREADCRUMB ════ */
-.breadcrumb-wrap{background:var(--sf);border-bottom:1px solid var(--bd)}
-.breadcrumb{display:flex;align-items:center;gap:.35rem;padding:.65rem 0;font-size:.78rem;color:var(--tx-m);font-family:var(--font-d);flex-wrap:wrap}
-.breadcrumb a{color:var(--cp);font-weight:600;transition:color var(--tr)}
-.breadcrumb a:hover{color:var(--ca)}
-.breadcrumb-sep{opacity:.4;font-size:.7rem}
+/* ── CTA button ── */
+.cta-btn{display:inline-flex;align-items:center;gap:.4rem;font-family:var(--font-d);font-weight:700;font-size:.95rem;padding:.75rem 1.5rem;border-radius:var(--r-s);background:var(--cp);color:#fff;transition:background var(--tr),transform var(--tr)}
+.cta-btn:hover{background:var(--ca);transform:translateY(-1px)}
 
-/* ════ HERO ════ */
-.gallery-hero{background:linear-gradient(135deg,var(--cp-d) 0%,var(--cp) 60%,rgba(212,117,106,.25) 100%);padding:3rem 0 2.5rem}
-.gallery-hero-inner{display:flex;align-items:flex-end;justify-content:space-between;gap:1.5rem;flex-wrap:wrap}
-.gallery-hero p.eyebrow{font-family:var(--font-d);font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ca);margin-bottom:.4rem}
-.gallery-hero h1{font-family:var(--font-d);font-size:clamp(2rem,5vw,3rem);font-weight:800;color:#fff;letter-spacing:-.03em;line-height:1.1}
-.gallery-hero-desc{font-size:.95rem;color:rgba(255,255,255,.6);margin-top:.6rem;max-width:42ch}
-.gallery-count-badge{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:var(--r);padding:.85rem 1.25rem;text-align:center;flex-shrink:0}
-.gallery-count-badge strong{display:block;font-family:var(--font-d);font-size:2rem;font-weight:800;color:#fff;letter-spacing:-.03em;line-height:1}
-.gallery-count-badge span{font-size:.75rem;color:rgba(255,255,255,.55);font-family:var(--font-d);font-weight:600;text-transform:uppercase;letter-spacing:.08em}
+/* ── Section titles (dyrekcja, sukcesy, etc.) ── */
+.section-title{font-family:var(--font-d);font-size:1.4rem;font-weight:800;color:var(--tx);letter-spacing:-.02em;margin:2rem 0 .4rem}
+.section-sub{font-size:.95rem;color:var(--tx-m);margin-bottom:1.5rem;max-width:600px}
+.updated-note{display:inline-block;font-family:var(--font-d);font-size:.75rem;font-weight:600;color:var(--tx-m);background:var(--clv-l);border:1px solid var(--bd);padding:.3rem .75rem;border-radius:20px;margin-bottom:1.5rem}
 
-/* ════ MAIN CONTENT ════ */
-.gallery-main{padding:2.5rem 0 4rem}
+/* ── Utility bar ── */
+.util-bar{background:var(--cp-d);color:rgba(255,255,255,.65);font-size:.7rem;font-family:var(--font-d);font-weight:500;letter-spacing:.02em}
+.util-bar-inner{display:flex;align-items:center;justify-content:space-between;gap:1rem;height:30px}
+.util-bar-tagline{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.util-bar-links{display:flex;align-items:center;gap:.05rem;flex-shrink:0}
+.util-bar-link{display:inline-flex;align-items:center;gap:.25rem;color:rgba(255,255,255,.75);font-weight:700;padding:.2rem .65rem;border-radius:3px;transition:color var(--tr),background var(--tr);white-space:nowrap;font-size:.68rem;letter-spacing:.05em}
+.util-bar-link:hover{color:#fff;background:rgba(255,255,255,.1)}
+.util-bar-link svg{flex-shrink:0;opacity:.7}
+.util-bar-sep{width:1px;height:12px;background:rgba(255,255,255,.15);margin:0 .1rem}
 
-/* Albums grid */
-.albums-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.25rem}
-.album-card{border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);background:var(--sf);border:1px solid var(--bd);cursor:pointer;transition:transform var(--tr),box-shadow var(--tr)}
-.album-card:hover{transform:translateY(-4px);box-shadow:var(--sh-m)}
-.album-card.active{border-color:var(--cp);box-shadow:0 0 0 2px var(--cp),var(--sh-m)}
-.album-thumb{height:180px;background:linear-gradient(135deg,var(--cp) 0%,var(--cp-l) 100%);display:flex;align-items:flex-end;padding:.85rem;overflow:hidden;position:relative;transition:none}
-.album-thumb-bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .45s cubic-bezier(.22,.61,.36,1)}
-.album-card:hover .album-thumb-bg{transform:scale(1.05)}
-.album-thumb-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.5) 0%,transparent 60%)}
-.album-count-badge{position:relative;z-index:1;background:rgba(0,0,0,.45);color:rgba(255,255,255,.9);font-family:var(--font-d);font-size:.68rem;font-weight:700;padding:.25rem .5rem;border-radius:6px;letter-spacing:.04em}
-.album-body{padding:.9rem 1rem 1rem}
-.album-title{font-family:var(--font-d);font-size:.95rem;font-weight:700;color:var(--tx);line-height:1.3;margin-bottom:.25rem}
-.album-meta-row{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
-.album-date{font-size:.72rem;color:var(--tx-m);font-family:var(--font-d)}
-.album-desc{font-size:.82rem;color:var(--tx-m);line-height:1.5;margin-top:.35rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+@media(max-width:768px){.util-bar-tagline{display:none}.util-bar-inner{justify-content:flex-end}}
+@media(max-width:400px){.util-bar{display:none}}
 
-/* Empty state */
-.empty-state{text-align:center;padding:4rem 1rem;color:var(--tx-m)}
-.empty-state p{font-size:1.05rem;margin-top:.5rem}
-
-/* Loading skeleton */
-.album-skeleton{border-radius:var(--r);overflow:hidden;background:var(--sf);border:1px solid var(--bd)}
-.skel-thumb{height:180px;background:linear-gradient(90deg,var(--clv-l) 25%,var(--bd) 50%,var(--clv-l) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite}
-.skel-body{padding:.9rem 1rem 1rem;display:flex;flex-direction:column;gap:.5rem}
-.skel-line{height:.7rem;border-radius:4px;background:linear-gradient(90deg,var(--clv-l) 25%,var(--bd) 50%,var(--clv-l) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite}
-.skel-line.short{width:60%}
-@keyframes shimmer{to{background-position:-200% 0}}
-
-/* ════ ALBUM VIEWER (inline panel) ════ */
-.album-viewer{display:none;margin-top:2rem;background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);box-shadow:var(--sh-m);overflow:hidden}
-.album-viewer.open{display:block}
-.viewer-header{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1.25rem 1.5rem;border-bottom:1px solid var(--bd);flex-wrap:wrap}
-.viewer-title{font-family:var(--font-d);font-size:1.1rem;font-weight:700;color:var(--tx);flex:1;min-width:0}
-.viewer-close{display:flex;align-items:center;gap:.35rem;font-family:var(--font-d);font-size:.82rem;font-weight:700;color:var(--tx-m);padding:.4rem .75rem;border:1.5px solid var(--bd);border-radius:var(--r-s);transition:all var(--tr);flex-shrink:0}
-.viewer-close:hover{border-color:var(--ca);color:var(--ca)}
-.viewer-desc-section{padding:.9rem 1.5rem;border-bottom:1px solid var(--bd);background:var(--clv-l)}
-.viewer-desc{font-size:.9rem;color:var(--tx-m);line-height:1.65;margin:0}
-.viewer-body{padding:1.25rem 1.5rem}
-.photos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.75rem}
-.photo-item{aspect-ratio:1;border-radius:var(--r-s);overflow:hidden;cursor:pointer;background:var(--clv-l);position:relative}
-.photo-item img{width:100%;height:100%;object-fit:cover;transition:transform .4s cubic-bezier(.22,.61,.36,1)}
-.photo-item:hover img{transform:scale(1.06)}
-.photo-item-loading{width:100%;height:100%;background:linear-gradient(90deg,var(--clv-l) 25%,var(--bd) 50%,var(--clv-l) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite}
-
-/* ════ LIGHTBOX — smooth slide ════ */
-.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.93);z-index:1000;display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;visibility:hidden;transition:opacity .22s,visibility .22s}
-.lightbox.open{opacity:1;visibility:visible}
-.lightbox-stage{position:relative;display:flex;align-items:center;justify-content:center;width:90vw;max-height:88vh;overflow:hidden}
-.lightbox-img{max-width:90vw;max-height:88vh;border-radius:var(--r-s);box-shadow:0 8px 64px rgba(0,0,0,.8);object-fit:contain;display:block;transition:transform .28s cubic-bezier(.25,.8,.25,1),opacity .22s ease;user-select:none}
-.lightbox-img.lb-exit-l{transform:translateX(-60px);opacity:0}
-.lightbox-img.lb-exit-r{transform:translateX(60px);opacity:0}
-.lightbox-img.lb-enter-l{animation:lbEnterL .28s cubic-bezier(.25,.8,.25,1) forwards}
-.lightbox-img.lb-enter-r{animation:lbEnterR .28s cubic-bezier(.25,.8,.25,1) forwards}
-@keyframes lbEnterL{from{transform:translateX(60px);opacity:0}to{transform:none;opacity:1}}
-@keyframes lbEnterR{from{transform:translateX(-60px);opacity:0}to{transform:none;opacity:1}}
-.lightbox-close{position:absolute;top:1rem;right:1rem;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.12);color:#fff;font-size:1.3rem;display:flex;align-items:center;justify-content:center;transition:background .2s;z-index:10}
-.lightbox-close:hover{background:rgba(255,255,255,.24)}
-.lightbox-nav{position:absolute;top:50%;transform:translateY(-50%);width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.15);color:#fff;font-size:1.5rem;display:flex;align-items:center;justify-content:center;transition:background .2s,border-color .2s;z-index:10}
-.lightbox-nav:hover{background:rgba(255,255,255,.22);border-color:rgba(255,255,255,.35)}
-.lightbox-prev{left:1rem}
-.lightbox-next{right:1rem}
-.lightbox-counter{position:absolute;bottom:1.25rem;left:50%;transform:translateX(-50%);font-family:var(--font-d);font-size:.78rem;font-weight:700;color:rgba(255,255,255,.5);letter-spacing:.1em;background:rgba(0,0,0,.4);padding:.3rem .75rem;border-radius:20px}
-
-/* ════ CONTACT MODAL ════ */
-.contact-overlay{position:fixed;inset:0;z-index:500;background:rgba(10,30,20,.58);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;padding:1.5rem;opacity:0;visibility:hidden;transition:opacity .25s ease,visibility .25s}
-.contact-overlay.open{opacity:1;visibility:visible}
-.contact-modal{background:var(--sf);border-radius:16px;box-shadow:0 32px 80px rgba(0,0,0,.32),0 0 0 1px var(--bd);width:min(480px,100%);max-height:90vh;overflow-y:auto;transform:translateY(14px) scale(.97);transition:transform .3s cubic-bezier(.25,.8,.25,1)}
-.contact-overlay.open .contact-modal{transform:translateY(0) scale(1)}
-.contact-modal-head{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.5rem;border-bottom:1px solid var(--bd)}
-.contact-modal-title{font-family:var(--font-d);font-size:1.1rem;font-weight:700}
-.contact-modal-close{width:36px;height:36px;border-radius:50%;background:var(--clv-l);color:var(--tx-m);font-size:1rem;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--bd);transition:all var(--tr);cursor:pointer}
-.contact-modal-close:hover{background:var(--bd);color:var(--tx)}
-.contact-modal-body{padding:1.5rem;display:flex;flex-direction:column;gap:1.25rem}
-.contact-school-name{font-family:var(--font-d);font-weight:700;font-size:.88rem;color:var(--tx-m);line-height:1.55}
-.contact-ctas{display:flex;flex-direction:column;gap:.6rem}
-.contact-cta{display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;border-radius:var(--r-s);border:1.5px solid var(--bd);transition:all .22s ease;color:var(--tx);text-decoration:none}
-.contact-cta-phone{border-color:rgba(31,75,60,.3)}
-.contact-cta-email{border-color:var(--bd)}
-.contact-cta-phone:hover{background:rgba(31,75,60,.06);border-color:var(--cp)}
-.contact-cta-email:hover{background:rgba(212,117,106,.06);border-color:var(--ca)}
-.contact-cta-icon{width:44px;height:44px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.15rem;font-family:var(--font-d)}
-.contact-cta-phone .contact-cta-icon{background:rgba(31,75,60,.1);color:var(--cp)}
-.contact-cta-email .contact-cta-icon{background:rgba(212,117,106,.1);color:var(--ca-d)}
-.contact-cta-label{font-size:.68rem;font-family:var(--font-d);font-weight:600;color:var(--tx-m);text-transform:uppercase;letter-spacing:.07em;display:block}
-.contact-cta-value{font-family:var(--font-d);font-weight:700;font-size:1rem;display:block;color:var(--tx)}
-.contact-divider{border:none;border-top:1px solid var(--bd)}
-.contact-info-row{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem}
-@media(max-width:400px){.contact-info-row{grid-template-columns:1fr}}
-.contact-info-block{display:flex;flex-direction:column;gap:.3rem}
-.contact-info-lbl{font-family:var(--font-d);font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ca);margin-bottom:.15rem}
-.contact-info-block address,.contact-info-block p{font-size:.88rem;color:var(--tx);line-height:1.65;font-style:normal}
-.contact-info-block .contact-note{font-size:.78rem;color:var(--tx-m);margin-top:.15rem}
-.contact-map-link{font-family:var(--font-d);font-size:.8rem;font-weight:700;color:var(--cp);transition:color var(--tr);display:inline-block;margin-top:.25rem}
-.contact-map-link:hover{color:var(--ca)}
-
-/* ════ FOOTER ════ */
-.site-footer{background:var(--cp-d);color:rgba(255,255,255,.8);padding:0}
-.footer-top{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1.5rem 0;border-bottom:1px solid rgba(255,255,255,.08)}
-.footer-logo{display:flex;align-items:center;gap:.65rem;flex-shrink:0}
-.footer-logo-img{width:40px;height:40px;object-fit:contain;border-radius:50%;background:#fff;box-shadow:0 0 0 3px #fff}
-.footer-school-name{font-family:var(--font-d);font-size:.82rem;font-weight:700;color:#fff;line-height:1.3}
-.footer-ext{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap}
-.footer-ext-link{font-family:var(--font-d);font-size:.7rem;font-weight:700;color:rgba(255,255,255,.45);padding:.3rem .6rem;border:1px solid rgba(255,255,255,.1);border-radius:6px;transition:all var(--tr)}
-.footer-ext-link:hover{color:#fff;border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.06)}
-.footer-info{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:rgba(255,255,255,.06);border-radius:var(--r);overflow:hidden;margin:1.75rem 0}
-.footer-info-card{background:rgba(255,255,255,.03);padding:1.1rem 1.25rem;display:flex;flex-direction:column;gap:.3rem}
-.footer-info-label{font-family:var(--font-d);font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ca);margin-bottom:.2rem}
-.footer-info-card p,.footer-info-card address{font-size:.82rem;color:rgba(255,255,255,.6);line-height:1.6;font-style:normal}
-.footer-info-card a{color:rgba(255,255,255,.6);transition:color var(--tr)}
-.footer-info-card a:hover{color:var(--ca)}
-.footer-info-card .footer-note{font-size:.72rem;color:rgba(255,255,255,.3);margin-top:.2rem}
-.footer-nav{display:flex;flex-wrap:wrap;gap:.4rem;padding-bottom:1.5rem;border-bottom:1px solid rgba(255,255,255,.08)}
-.footer-chip{font-family:var(--font-d);font-size:.72rem;font-weight:600;color:rgba(255,255,255,.5);padding:.28rem .65rem;background:rgba(255,255,255,.05);border-radius:20px;border:1px solid rgba(255,255,255,.08);transition:all var(--tr)}
-.footer-chip:hover{color:#fff;background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2)}
-.footer-bottom{padding:1.25rem 0;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
-.footer-legal{font-size:.72rem;color:rgba(255,255,255,.3);line-height:1.6}
-.footer-a11y-link{font-size:.72rem;color:rgba(255,255,255,.4);font-family:var(--font-d);font-weight:600;transition:color var(--tr)}
-.footer-a11y-link:hover{color:var(--ca)}
-.footer-rodo{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:.9rem 0;border-top:1px solid rgba(255,255,255,.06);margin-bottom:.25rem}
-.footer-rodo-text{font-size:.72rem;color:rgba(255,255,255,.35);line-height:1.5}
-.footer-rodo-link{font-family:var(--font-d);font-size:.72rem;font-weight:600;color:rgba(255,255,255,.4);white-space:nowrap;border:1px solid rgba(255,255,255,.12);padding:.25rem .65rem;border-radius:20px;transition:all var(--tr)}
-.footer-rodo-link:hover{color:#fff;border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.06)}
-
-/* ── BACK TO TOP ── */
-#back-top{position:fixed;bottom:1.5rem;right:1.5rem;width:44px;height:44px;background:var(--ca);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;box-shadow:0 4px 16px rgba(212,117,106,.4);opacity:0;transform:translateY(10px);transition:all .25s;z-index:50;cursor:pointer}
-#back-top.visible{opacity:1;transform:translateY(0)}
-#back-top:hover{background:var(--ca-d);transform:translateY(-2px)}
-
-/* ════ SCROLL REVEAL ════ */
-@media(prefers-reduced-motion:no-preference){
-  .reveal{opacity:0;transform:translateY(20px);transition:opacity .6s cubic-bezier(.22,.61,.36,1),transform .6s cubic-bezier(.22,.61,.36,1)}
-  .reveal.visible{opacity:1;transform:none}
-  .stagger .reveal:nth-child(2){transition-delay:.09s}
-  .stagger .reveal:nth-child(3){transition-delay:.18s}
-  .stagger .reveal:nth-child(4){transition-delay:.27s}
-  .stagger .reveal:nth-child(5){transition-delay:.36s}
-}
-
-/* ════ RESPONSIVE ════ */
-@media(max-width:900px){
-  .logo-patron{display:none}
-  .main-nav{display:none}
-  .nav-hamburger{display:flex}
-  .footer-top{flex-direction:column;align-items:flex-start;gap:1rem}
-  .footer-info{grid-template-columns:1fr}
-  .gallery-hero h1{font-size:2rem}
-}
-@media(max-width:600px){
-  .a11y-controls{display:none}
-  .photos-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
-}
+/* ── Responsive ── */
+@media(max-width:900px){.logo-patron{display:none}.main-nav{display:none}.nav-hamburger{display:flex}}
+@media(max-width:480px){.header-inner{gap:.4rem}.a11y-controls{display:none}.btn-edupage{font-size:.72rem;padding:.4rem .7rem}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
 </style>
+
+<style>
+.album-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.25rem;margin-top:2rem}
+.album-card{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);transition:box-shadow var(--tr),transform var(--tr);text-decoration:none;color:inherit;display:flex;flex-direction:column;cursor:pointer}
+.album-card:hover{box-shadow:var(--sh-m);transform:translateY(-2px)}
+.album-thumb{width:100%;aspect-ratio:4/3;object-fit:cover;background:var(--clv)}
+.album-thumb-placeholder{width:100%;aspect-ratio:4/3;background:var(--clv);display:flex;align-items:center;justify-content:center;font-size:2.5rem}
+.album-body{padding:1rem;flex:1}
+.album-meta{font-family:var(--font-d);font-size:.65rem;font-weight:700;color:var(--ca);letter-spacing:.05em;text-transform:uppercase;margin-bottom:.3rem}
+.album-title{font-family:var(--font-d);font-size:.95rem;font-weight:800;color:var(--tx)}
+.skel-card{background:var(--clv);border-radius:var(--r);height:220px;animation:pulse 1.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.75rem;margin-top:1.5rem}
+.photo-thumb{width:100%;aspect-ratio:1;object-fit:cover;border-radius:var(--r-s);cursor:zoom-in;transition:opacity var(--tr)}
+.photo-thumb:hover{opacity:.85}
+</style>
+
+<link rel="stylesheet" href="header.css">
+<link rel="stylesheet" href="footer.css">
+</head>
+<body>
 
 <div id="scroll-bar" aria-hidden="true"></div>
 <a href="#main-content" class="skip-link">Przejdź do treści</a>
 
-<!-- HEADER -->
+<div class="util-bar" role="navigation" aria-label="Linki zewnętrzne">
+  <div class="container util-bar-inner">
+    <span class="util-bar-tagline">Szkoła Podstawowa nr 32 im. L. Kruczkowskiego · Sosnowiec</span>
+    <div class="util-bar-links">
+      <a href="https://sp_32_sosnowiec.bip.gov.pl/" class="util-bar-link" target="_blank" rel="noopener noreferrer">
+        <svg width="11" height="11" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><rect x="1" y="1" width="10" height="10" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="4" y1="6" x2="8" y2="6" stroke="currentColor" stroke-width="1.2"/><line x1="4" y1="4" x2="8" y2="4" stroke="currentColor" stroke-width="1.2"/><line x1="4" y1="8" x2="6.5" y2="8" stroke="currentColor" stroke-width="1.2"/></svg>
+        BIP
+      </a>
+      <div class="util-bar-sep" aria-hidden="true"></div>
+      <a href="https://sp32sosnowiec.edupage.org" class="util-bar-link" target="_blank" rel="noopener noreferrer">
+        <svg width="11" height="11" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M2 10V5l4-3 4 3v5H7.5V7.5h-3V10H2z"/></svg>
+        E-Dziennik
+      </a>
+      <div class="util-bar-sep" aria-hidden="true"></div>
+      <a href="https://www.facebook.com/SP32Sosnowiec" class="util-bar-link" target="_blank" rel="noopener noreferrer">
+        <svg width="11" height="11" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M6.5 12V6.5H8l.3-1.8H6.5V3.7c0-.5.2-.9.9-.9H8.4V1.1S7.8 1 7 1C5.4 1 4.4 1.9 4.4 3.5v1.2H3V6.5h1.4V12h2.1z"/></svg>
+        Facebook
+      </a>
+    </div>
+  </div>
+</div>
+
 <header class="site-header" role="banner">
   <div class="container header-inner">
-    <a href="index.html" class="logo" aria-label="Szkoła Podstawowa nr 32 — strona główna">
-      <img src="grafiki-ai/logo-sp32.png" alt="" class="logo-img" width="52" height="52" aria-hidden="true">
-      <div>
-        <span class="logo-name" style="display:block">Szkoła Podstawowa nr 32</span>
+    <a href="index.html" class="logo" aria-label="SP32 Sosnowiec — strona główna">
+      <img src="grafiki-ai/logo-sp32.png" alt="" class="logo-img" width="60" height="60" aria-hidden="true">
+      <div class="logo-text">
+        <span class="logo-name">Szkoła Podstawowa nr 32</span>
         <span class="logo-patron">im. L. Kruczkowskiego · Sosnowiec</span>
       </div>
     </a>
-        <nav class="main-nav" aria-label="Główna nawigacja">
+
+    <nav class="main-nav" aria-label="Główna nawigacja">
       <ul>
         <li><a href="aktualnosci.html">Aktualności</a></li>
         <li class="has-dropdown">
@@ -308,28 +168,31 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
         <li class="has-dropdown">
           <a href="#" aria-haspopup="true" aria-expanded="false">Uczniowie <span class="nav-caret" aria-hidden="true">▾</span></a>
           <ul class="dropdown" role="menu">
-            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-uczniowie-biblioteka.png" alt="" width="18" height="18" aria-hidden="true"></span>Biblioteka</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-uczniowie-swietlica.png" alt="" width="18" height="18" aria-hidden="true"></span>Świetlica</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-uczniowie-wolontariat.png" alt="" width="18" height="18" aria-hidden="true"></span>Wolontariat</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-uczniowie-klub-ak.png" alt="" width="18" height="18" aria-hidden="true"></span>Klub AK</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-uczniowie-klub-europejski.png" alt="" width="18" height="18" aria-hidden="true"></span>Klub Europejski</a></li>
+            <li><a href="biblioteka.html" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-uczniowie-biblioteka.png" alt="" width="18" height="18" aria-hidden="true"></span>Biblioteka</a></li>
+            <li><a href="swietlica.html" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-uczniowie-swietlica.png" alt="" width="18" height="18" aria-hidden="true"></span>Świetlica</a></li>
+            <li><a href="wolontariat.html" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-uczniowie-wolontariat.png" alt="" width="18" height="18" aria-hidden="true"></span>Wolontariat</a></li>
+            <li><a href="dzwonki.html" class="dropdown-item" role="menuitem"><span class="di-icon" style="font-size:1rem;display:flex;align-items:center;justify-content:center">🔔</span>Lekcje i przerwy</a></li>
           </ul>
         </li>
         <li class="has-dropdown">
           <a href="#" aria-haspopup="true" aria-expanded="false">Rodzice <span class="nav-caret" aria-hidden="true">▾</span></a>
           <ul class="dropdown dropdown-wide" role="menu">
-            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-informacje.png" alt="" width="18" height="18" aria-hidden="true"></span>Informacje dla rodziców</a></li>
+            <li><a href="rekrutacja.html" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-informacje.png" alt="" width="18" height="18" aria-hidden="true"></span>Rekrutacja</a></li>
+            <li><a href="kalendarz.html" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-informacje.png" alt="" width="18" height="18" aria-hidden="true"></span>Kalendarz szkolny</a></li>
+            <li><a href="rada-rodzicow.html" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-informacje.png" alt="" width="18" height="18" aria-hidden="true"></span>Rada Rodziców</a></li>
             <li><a href="jadlospis.html" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-jadlospis.png" alt="" width="18" height="18" aria-hidden="true"></span>Jadłospis / Stołówka</a></li>
             <li><a href="psycholog.html" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-psycholog.png" alt="" width="18" height="18" aria-hidden="true"></span>Psycholog szkolny</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-pedagog.png" alt="" width="18" height="18" aria-hidden="true"></span>Pedagog szkolny</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-doradca.png" alt="" width="18" height="18" aria-hidden="true"></span>Doradca zawodowy</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-pielegnarka.png" alt="" width="18" height="18" aria-hidden="true"></span>Pielęgniarka</a></li>
+            <li><a href="pedagog.html" class="dropdown-item" role="menuitem"><span class="di-icon" style="font-size:1rem;display:flex;align-items:center;justify-content:center">🧩</span>Pedagog szkolny</a></li>
+            <li><a href="doradca.html" class="dropdown-item" role="menuitem"><span class="di-icon" style="font-size:1rem;display:flex;align-items:center;justify-content:center">🗺️</span>Doradca zawodowy</a></li>
+            <li><a href="pielegnarka.html" class="dropdown-item" role="menuitem"><span class="di-icon" style="font-size:1rem;display:flex;align-items:center;justify-content:center">🩺</span>Pielęgniarka szkolna</a></li>
+            <li><a href="standardy-ochrony-maloletnich.html" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-informacje.png" alt="" width="18" height="18" aria-hidden="true"></span>Standardy Ochrony Małoletnich</a></li>
           </ul>
         </li>
         <li><a href="projekty.html">Projekty</a></li>
         <li><a href="#" data-open-contact>Kontakt</a></li>
       </ul>
     </nav>
+
     <div class="header-controls">
       <div class="a11y-controls" aria-label="Narzędzia dostępności" role="group">
         <button class="a11y-btn" aria-label="Zwiększ czcionkę">A+</button>
@@ -344,14 +207,10 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
   </div>
 </header>
 
-<!-- MOBILE NAV -->
 <div class="mob-overlay" id="mob-overlay" aria-hidden="true"></div>
 <nav class="mob-drawer" id="mob-drawer" aria-label="Menu mobilne" aria-hidden="true">
-  <div class="mob-head">
-    <span class="mob-head-name">SP32 Sosnowiec</span>
-    <button class="mob-close" id="mob-close" aria-label="Zamknij menu">✕</button>
-  </div>
-    <div class="mob-body">
+  <div class="mob-head"><span class="mob-head-name">SP32 Sosnowiec</span><button class="mob-close" id="mob-close" aria-label="Zamknij menu">✕</button></div>
+  <div class="mob-body">
     <a href="aktualnosci.html" class="mob-link">Aktualności</a>
     <a href="galeria.html" class="mob-link">Galeria</a>
     <a href="projekty.html" class="mob-link">Projekty</a>
@@ -359,119 +218,136 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
     <hr class="mob-divider">
     <a href="historia.html" class="mob-link" style="font-size:.88rem">Historia szkoły</a>
     <a href="profil.html" class="mob-link" style="font-size:.88rem">Profil szkoły</a>
-    <a href="dyrekcja.html" class="mob-link" style="font-size:.88rem">Dyrekcja i kadra</a>
-    <a href="sukcesy.html" class="mob-link" style="font-size:.88rem">Sukcesy uczniów</a>
-    <a href="psycholog.html" class="mob-link" style="font-size:.88rem">Psycholog szkolny</a>
+    <a href="biblioteka.html" class="mob-link" style="font-size:.88rem">Biblioteka</a>
+    <a href="swietlica.html" class="mob-link" style="font-size:.88rem">Świetlica</a>
+    <a href="wolontariat.html" class="mob-link" style="font-size:.88rem">Wolontariat</a>
+    <a href="dzwonki.html" class="mob-link" style="font-size:.88rem">Lekcje i przerwy</a>
+    <a href="rada-rodzicow.html" class="mob-link" style="font-size:.88rem">Rada Rodziców</a>
+    <a href="rekrutacja.html" class="mob-link" style="font-size:.88rem">Rekrutacja</a>
+    <a href="kalendarz.html" class="mob-link" style="font-size:.88rem">Kalendarz szkolny</a>
     <a href="jadlospis.html" class="mob-link" style="font-size:.88rem">Jadłospis</a>
-    <a href="standardy-ochrony-maloletnich.html" class="mob-link" style="font-size:.88rem">Standardy Ochrony Małoletnich</a>
+    <a href="psycholog.html" class="mob-link" style="font-size:.88rem">Psycholog szkolny</a>
+    <a href="pedagog.html" class="mob-link" style="font-size:.88rem">Pedagog szkolny</a>
+    <a href="doradca.html" class="mob-link" style="font-size:.88rem">Doradca zawodowy</a>
+    <a href="pielegnarka.html" class="mob-link" style="font-size:.88rem">Pielęgniarka szkolna</a>
   </div>
 </nav>
 
-<!-- BREADCRUMB -->
 <div class="breadcrumb-wrap">
   <div class="container">
     <nav class="breadcrumb" aria-label="Jesteś tutaj">
-      <a href="index.html">Strona główna</a>
-      <span class="breadcrumb-sep" aria-hidden="true">›</span>
+      <a href="index.html">Strona główna</a><span class="breadcrumb-sep">›</span>
+      
       <span aria-current="page">Galeria</span>
     </nav>
   </div>
 </div>
 
-<!-- HERO -->
-<div class="gallery-hero">
-  <div class="container gallery-hero-inner">
-    <div>
-      <p class="eyebrow">Zdjęcia ze szkoły</p>
-      <h1>Galeria</h1>
-      <p class="gallery-hero-desc">Wspomnienia z wydarzeń, wycieczek i codziennego życia szkoły.</p>
-    </div>
-    <div class="gallery-count-badge" id="albumCountBadge" aria-live="polite">
-      <strong id="albumCountNum">…</strong>
-      <span>albumów</span>
-    </div>
+<div class="page-hero">
+  <div class="container">
+    <p class="page-hero-eyebrow">Szkoła Podstawowa nr 32</p>
+    <h1 class="page-hero-title">Galeria</h1>
+    
   </div>
 </div>
 
-<!-- MAIN -->
-<main id="main-content" class="gallery-main">
-  <div class="container">
+<main id="main-content" class="page-main">
+  
+<div class="container page-main">
+<div x-data="galleryApp()" x-init="load()">
 
-    <!-- Albums grid -->
-    <div class="albums-grid stagger" id="albumsGrid" aria-label="Lista albumów">
-      <!-- Skeletons -->
-      <div class="album-skeleton reveal"><div class="skel-thumb"></div><div class="skel-body"><div class="skel-line"></div><div class="skel-line short"></div></div></div>
-      <div class="album-skeleton reveal"><div class="skel-thumb"></div><div class="skel-body"><div class="skel-line"></div><div class="skel-line short"></div></div></div>
-      <div class="album-skeleton reveal"><div class="skel-thumb"></div><div class="skel-body"><div class="skel-line"></div><div class="skel-line short"></div></div></div>
+  <template x-if="!currentAlbum">
+    <div>
+      <template x-if="loading">
+        <div class="album-grid">
+          <div class="skel-card"></div><div class="skel-card"></div><div class="skel-card"></div>
+        </div>
+      </template>
+      <template x-if="!loading && albums.length === 0">
+        <p style="color:var(--tx-m);margin-top:2rem">Brak albumów w galerii.</p>
+      </template>
+      <template x-if="!loading && albums.length > 0">
+        <div class="album-grid">
+          <template x-for="album in albums" :key="album.id">
+            <a href="#" @click.prevent="openAlbum(album.slug)" class="album-card">
+              <img x-show="album.cover_url" :src="album.cover_url" :alt="album.title" class="album-thumb" loading="lazy">
+              <div class="album-thumb-placeholder" x-show="!album.cover_url">🖼️</div>
+              <div class="album-body">
+                <p class="album-meta" x-text="album.school_year + (album.class_label ? ' · kl. '+album.class_label : '')"></p>
+                <p class="album-title" x-text="album.title"></p>
+              </div>
+            </a>
+          </template>
+        </div>
+      </template>
     </div>
+  </template>
 
-    <!-- Album viewer (inline) -->
-    <div class="album-viewer" id="albumViewer" role="region" aria-label="Zdjęcia z albumu">
-      <div class="viewer-header">
-        <span class="viewer-title" id="viewerTitle"></span>
-        <button class="viewer-close" id="viewerClose">✕ Zamknij album</button>
-      </div>
-      <div class="viewer-desc-section" id="viewerDescSection" hidden>
-        <p class="viewer-desc" id="viewerDesc"></p>
-      </div>
-      <div class="viewer-body">
-        <div class="photos-grid" id="photosGrid"></div>
-      </div>
+  <template x-if="currentAlbum">
+    <div>
+      <button @click="currentAlbum=null;currentPhotos=[]" style="font-family:var(--font-d);font-size:.85rem;font-weight:700;color:var(--cp);margin-bottom:1.5rem;cursor:pointer;background:none;border:none;padding:0">← Wróć do galerii</button>
+      <h2 style="font-family:var(--font-d);font-size:1.5rem;font-weight:800;color:var(--tx);margin-bottom:.5rem" x-text="currentAlbum.title"></h2>
+      <p style="font-size:.85rem;color:var(--tx-m);margin-bottom:1.5rem" x-text="currentAlbum.school_year + (currentAlbum.class_label ? ' · klasa '+currentAlbum.class_label : '') + (currentAlbum.event_date ? ' · '+fmtDate(currentAlbum.event_date) : '')"></p>
+      <template x-if="photosLoading">
+        <div class="photo-grid">
+          <template x-for="i in 9" :key="i">
+            <div style="aspect-ratio:1;background:var(--clv);border-radius:var(--r-s);animation:pulse 1.5s ease-in-out infinite"></div>
+          </template>
+        </div>
+      </template>
+      <template x-if="!photosLoading">
+        <div class="photo-grid">
+          <template x-for="photo in currentPhotos" :key="photo.id">
+            <img :src="photo.thumb_url" :alt="currentAlbum.title" class="photo-thumb" loading="lazy"
+                 @click="window.open(photo.url,'_blank')">
+          </template>
+        </div>
+      </template>
     </div>
+  </template>
 
-  </div>
+</div>
+</div>
+<script>
+function galleryApp(){
+  return{
+    albums:[],loading:true,
+    currentAlbum:null,currentPhotos:[],photosLoading:false,
+    async load(){
+      try{
+        const r=await fetch('/api/public/gallery');
+        if(!r.ok)throw new Error();
+        const d=await r.json();
+        this.albums=d.albums;
+      }catch{}
+      finally{this.loading=false}
+    },
+    async openAlbum(slug){
+      this.photosLoading=true;
+      try{
+        const r=await fetch('/api/public/gallery/'+slug);
+        if(!r.ok)throw new Error();
+        const d=await r.json();
+        this.currentAlbum=d.album;
+        this.currentPhotos=d.photos;
+      }catch{}
+      finally{this.photosLoading=false}
+    },
+    fmtDate(iso){
+      if(!iso)return'';
+      return new Date(iso).toLocaleDateString('pl-PL',{day:'numeric',month:'long',year:'numeric'});
+    }
+  }
+}
+</script>
+<script src="/alpine.min.js" defer></script>
+
 </main>
 
-<!-- LIGHTBOX -->
-<div class="lightbox" id="lightbox" role="dialog" aria-label="Podgląd zdjęcia" aria-modal="true">
-  <button class="lightbox-close" id="lbClose" aria-label="Zamknij podgląd">✕</button>
-  <button class="lightbox-nav lightbox-prev" id="lbPrev" aria-label="Poprzednie zdjęcie">‹</button>
-  <div class="lightbox-stage"><img class="lightbox-img" id="lbImg" src="" alt="" draggable="false"></div>
-  <button class="lightbox-nav lightbox-next" id="lbNext" aria-label="Następne zdjęcie">›</button>
-  <span class="lightbox-counter" id="lbCounter"></span>
-</div>
-
-<!-- CONTACT MODAL -->
-<div class="contact-overlay" id="contactOverlay" role="dialog" aria-modal="true" aria-labelledby="contactModalTitle" aria-hidden="true">
-  <div class="contact-modal">
-    <div class="contact-modal-head">
-      <h2 class="contact-modal-title" id="contactModalTitle">Kontakt</h2>
-      <button class="contact-modal-close" id="contactModalClose" aria-label="Zamknij okno kontaktowe">✕</button>
-    </div>
-    <div class="contact-modal-body">
-      <p class="contact-school-name">Szkoła Podstawowa nr 32<br>im. Leona Kruczkowskiego w Sosnowcu</p>
-      <div class="contact-ctas">
-        <a href="tel:+48322634301" class="contact-cta contact-cta-phone">
-          <span class="contact-cta-icon">☎</span>
-          <span><span class="contact-cta-label">Telefon sekretariatu</span><span class="contact-cta-value">32 263-43-01</span></span>
-        </a>
-        <a href="mailto:sp32@sosnowiec.edu.pl" class="contact-cta contact-cta-email">
-          <span class="contact-cta-icon">@</span>
-          <span><span class="contact-cta-label">E-mail</span><span class="contact-cta-value">sp32@sosnowiec.edu.pl</span></span>
-        </a>
-      </div>
-      <hr class="contact-divider">
-      <div class="contact-info-row">
-        <div class="contact-info-block">
-          <p class="contact-info-lbl">Adres</p>
-          <address>ul. Armii Krajowej 93<br>41-215 Sosnowiec<br>woj. śląskie</address>
-          <a href="https://maps.google.com/?q=ul.+Armii+Krajowej+93,+41-215+Sosnowiec" target="_blank" rel="noopener" class="contact-map-link">Pokaż na mapie →</a>
-        </div>
-        <div class="contact-info-block">
-          <p class="contact-info-lbl">Godziny pracy</p>
-          <p>Sekretariat:<br>pon–pt 7:00–15:00</p>
-          <p class="contact-note">Szkoła: 8:00–16:25<br>Świetlica: 6:30–17:00</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- FOOTER -->
 <footer class="site-footer" role="contentinfo">
   <div class="container">
     <div class="footer-top">
-      <a href="index.html" class="footer-logo" aria-label="Szkoła Podstawowa nr 32 — strona główna">
+      <a href="index.html" class="footer-logo">
         <img src="grafiki-ai/logo-sp32.png" alt="" class="footer-logo-img" width="40" height="40" aria-hidden="true">
         <div class="footer-school-name">Szkoła Podstawowa nr 32<br>im. L. Kruczkowskiego w Sosnowcu</div>
       </a>
@@ -479,303 +355,87 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
         <a href="https://sp32sosnowiec.edupage.org" class="footer-ext-link" target="_blank" rel="noopener">E-Dziennik ↗</a>
         <a href="https://sp_32_sosnowiec.bip.gov.pl/" class="footer-ext-link" target="_blank" rel="noopener">BIP ↗</a>
         <a href="https://www.facebook.com/SP32Sosnowiec" class="footer-ext-link" target="_blank" rel="noopener">Facebook ↗</a>
-        <a href="https://www.gov.pl/web/edukacja" class="footer-ext-link" target="_blank" rel="noopener">MEN.gov.pl ↗</a>
-        <a href="https://www.sosnowiec.pl" class="footer-ext-link" target="_blank" rel="noopener">Sosnowiec.pl ↗</a>
       </div>
     </div>
     <div class="footer-info">
-      <div class="footer-info-card">
-        <p class="footer-info-label">Adres</p>
-        <address>ul. Armii Krajowej 93<br>41-215 Sosnowiec<br>woj. śląskie</address>
-        <a href="https://maps.google.com/?q=ul.+Armii+Krajowej+93,+41-215+Sosnowiec" target="_blank" rel="noopener">Otwórz w Mapach →</a>
-      </div>
-      <div class="footer-info-card">
-        <p class="footer-info-label">Kontakt</p>
-        <p><a href="tel:+48322634301">32 263-43-01</a></p>
-        <p><a href="mailto:sp32@sosnowiec.edu.pl">sp32@sosnowiec.edu.pl</a></p>
-        <p class="footer-note">Sekretariat: pon–pt 7:00–15:00</p>
-      </div>
-      <div class="footer-info-card">
-        <p class="footer-info-label">Godziny pracy</p>
-        <p>Szkoła: 8:00–16:25</p>
-        <p>Świetlica: 6:30–17:00</p>
-        <p class="footer-note">W dni nauki szkolnej</p>
-      </div>
+      <details class="footer-info-card" open>
+        <summary><p class="footer-info-label">Adres</p><span class="fic-chevron" aria-hidden="true">›</span></summary>
+        <div class="fic-body">
+          <address>ul. Armii Krajowej 93<br>41-215 Sosnowiec<br>woj. śląskie</address>
+          <a href="https://maps.google.com/?q=ul.+Armii+Krajowej+93,+41-215+Sosnowiec" target="_blank" rel="noopener">Otwórz w Mapach →</a>
+        </div>
+      </details>
+      <details class="footer-info-card" open>
+        <summary><p class="footer-info-label">Kontakt</p><span class="fic-chevron" aria-hidden="true">›</span></summary>
+        <div class="fic-body">
+          <p><a href="tel:+48322634301">32 263-43-01</a></p>
+          <p><a href="mailto:sp32@sosnowiec.edu.pl">sp32@sosnowiec.edu.pl</a></p>
+          <p class="footer-note">Sekretariat: pon–pt 7:00–15:00</p>
+        </div>
+      </details>
+      <details class="footer-info-card" open>
+        <summary><p class="footer-info-label">Godziny pracy</p><span class="fic-chevron" aria-hidden="true">›</span></summary>
+        <div class="fic-body">
+          <p>Szkoła: 8:00–16:25</p>
+          <p>Świetlica: 6:30–17:00</p>
+          <p class="footer-note">W dni nauki szkolnej</p>
+        </div>
+      </details>
     </div>
     <nav class="footer-nav" aria-label="Mapa strony">
       <a href="aktualnosci.html" class="footer-chip">Aktualności</a>
       <a href="galeria.html" class="footer-chip">Galeria</a>
       <a href="jadlospis.html" class="footer-chip">Jadłospis</a>
-      <a href="#" class="footer-chip">Historia szkoły</a>
-      <a href="#" class="footer-chip">Projekty</a>
-      <a href="#" class="footer-chip">Biblioteka</a>
-      <a href="#" class="footer-chip">Świetlica</a>
-      <a href="#" class="footer-chip">Rekrutacja</a>
-      
-      <a href="#" class="footer-chip">Pedagog</a>
+      <a href="historia.html" class="footer-chip">Historia szkoły</a>
+      <a href="profil.html" class="footer-chip">Profil szkoły</a>
+      <a href="dyrekcja.html" class="footer-chip">Dyrekcja i kadra</a>
+      <a href="projekty.html" class="footer-chip">Projekty</a>
+      <a href="biblioteka.html" class="footer-chip">Biblioteka</a>
+      <a href="swietlica.html" class="footer-chip">Świetlica</a>
+      <a href="wolontariat.html" class="footer-chip">Wolontariat</a>
+      <a href="dzwonki.html" class="footer-chip">Lekcje i przerwy</a>
+      <a href="rada-rodzicow.html" class="footer-chip">Rada Rodziców</a>
+      <a href="rekrutacja.html" class="footer-chip">Rekrutacja</a>
+      <a href="kalendarz.html" class="footer-chip">Kalendarz szkolny</a>
       <a href="sukcesy.html" class="footer-chip">Sukcesy uczniów</a>
       <a href="psycholog.html" class="footer-chip">Psycholog szkolny</a>
+      <a href="standardy-ochrony-maloletnich.html" class="footer-chip">Standardy Ochrony Małoletnich</a>
+      <a href="deklaracja-dostepnosci.html" class="footer-chip">Deklaracja dostępności</a>
       <a href="polityka-prywatnosci.html" class="footer-chip">Polityka prywatności</a>
       <a href="#" class="footer-chip" data-open-contact>Kontakt</a>
     </nav>
-    <div class="footer-rodo">
-      <p class="footer-rodo-text">Zdjęcia w galerii publikowane są wyłącznie za zgodą rodziców/opiekunów prawnych uczniów (RODO art. 6 ust. 1 lit. a). Masz prawo wycofać zgodę w dowolnym momencie.</p>
-      <a href="mailto:sp32@sosnowiec.edu.pl?subject=Wycofanie%20zgody%20RODO%20%E2%80%94%20wizerunek" class="footer-rodo-link">Wycofaj zgodę →</a>
-    </div>
     <div class="footer-bottom">
-      <p class="footer-legal">© 2026 Szkoła Podstawowa nr 32 im. L. Kruczkowskiego w Sosnowiec &nbsp;·&nbsp; NIP: 644-30-91-938 &nbsp;·&nbsp; REGON: 000738792</p>
-      <a href="#" class="footer-a11y-link">Deklaracja Dostępności WCAG 2.1 AA →</a>
+      <p class="footer-legal">© 2026 Szkoła Podstawowa nr 32 im. L. Kruczkowskiego w Sosnowcu &nbsp;·&nbsp; NIP: 644-30-91-938 &nbsp;·&nbsp; REGON: 000738792</p>
+      <a href="deklaracja-dostepnosci.html" class="footer-a11y-link">Deklaracja dostępności</a>
+      <a href="polityka-prywatnosci.html" class="footer-a11y-link">Polityka prywatności</a>
     </div>
   </div>
 </footer>
 
 <button id="back-top" aria-label="Wróć na górę strony" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
-<script>
-/* ── SCROLL PROGRESS + BACK TO TOP ── */
-const bar = document.getElementById('scroll-bar');
-const btnTop = document.getElementById('back-top');
-window.addEventListener('scroll', () => {
-  const pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
-  bar.style.width = Math.min(pct, 100) + '%';
-  btnTop.classList.toggle('visible', window.scrollY > 400);
-}, { passive: true });
-
-/* ── HEADER FROSTED ── */
-const siteHeader = document.querySelector('.site-header');
-window.addEventListener('scroll', () => {
-  siteHeader?.classList.toggle('scrolled', window.scrollY > 60);
-}, { passive: true });
-
-/* ── DROPDOWNS ── */
-document.querySelectorAll('.has-dropdown > a').forEach(toggle => {
-  toggle.addEventListener('click', e => {
-    e.preventDefault();
-    const li = toggle.parentElement;
-    const isOpen = li.classList.contains('open');
-    document.querySelectorAll('.has-dropdown.open').forEach(el => { el.classList.remove('open'); el.querySelector('a').setAttribute('aria-expanded','false'); });
-    if (!isOpen) { li.classList.add('open'); toggle.setAttribute('aria-expanded','true'); }
-  });
-});
-document.addEventListener('click', e => { if (!e.target.closest('.has-dropdown')) document.querySelectorAll('.has-dropdown.open').forEach(el => { el.classList.remove('open'); el.querySelector('a').setAttribute('aria-expanded','false'); }); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') { document.querySelectorAll('.has-dropdown.open').forEach(el => { el.classList.remove('open'); el.querySelector('a').setAttribute('aria-expanded','false'); }); closeLightbox(); } });
-
-/* ── MOBILE NAV ── */
-const hamburger = document.getElementById('nav-hamburger');
-const overlay = document.getElementById('mob-overlay');
-const drawer = document.getElementById('mob-drawer');
-const mobClose = document.getElementById('mob-close');
-function openMob() { hamburger.setAttribute('aria-expanded','true'); overlay.classList.add('open'); overlay.removeAttribute('aria-hidden'); drawer.classList.add('open'); drawer.removeAttribute('aria-hidden'); document.body.style.overflow = 'hidden'; mobClose.focus(); }
-function closeMob() { hamburger.setAttribute('aria-expanded','false'); overlay.classList.remove('open'); overlay.setAttribute('aria-hidden','true'); drawer.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); document.body.style.overflow = ''; hamburger.focus(); }
-hamburger?.addEventListener('click', openMob);
-overlay?.addEventListener('click', closeMob);
-mobClose?.addEventListener('click', closeMob);
-drawer?.addEventListener('keydown', e => { if (e.key === 'Escape') closeMob(); });
-
-/* ── SCROLL REVEAL ── */
-const io = new IntersectionObserver((es) => {
-  es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
-}, { threshold: 0.07, rootMargin: '0px 0px -32px 0px' });
-function revealAll() { document.querySelectorAll('.reveal:not(.visible)').forEach(el => io.observe(el)); }
-revealAll();
-
-/* ── LIGHTBOX — slide + swipe ── */
-let lbImages = [], lbIndex = 0, lbAnimating = false;
-const lightbox = document.getElementById('lightbox');
-const lbImg    = document.getElementById('lbImg');
-const lbCounter = document.getElementById('lbCounter');
-
-function openLightbox(images, idx) {
-  lbImages = images; lbIndex = idx;
-  lbImg.src = lbImages[lbIndex];
-  lbImg.alt = `Zdjęcie ${lbIndex + 1} z ${lbImages.length}`;
-  lbCounter.textContent = `${lbIndex + 1} / ${lbImages.length}`;
-  lbImg.className = 'lightbox-img';
-  lightbox.classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function closeLightbox() {
-  lightbox.classList.remove('open');
-  document.body.style.overflow = '';
-}
-function lbStep(dir) {
-  if (lbAnimating || lbImages.length < 2) return;
-  lbAnimating = true;
-  const exitCls = dir > 0 ? 'lb-exit-l' : 'lb-exit-r';
-  const enterCls = dir > 0 ? 'lb-enter-l' : 'lb-enter-r';
-  lbImg.classList.add(exitCls);
-  setTimeout(() => {
-    lbIndex = (lbIndex + dir + lbImages.length) % lbImages.length;
-    lbImg.src = lbImages[lbIndex];
-    lbImg.alt = `Zdjęcie ${lbIndex + 1} z ${lbImages.length}`;
-    lbCounter.textContent = `${lbIndex + 1} / ${lbImages.length}`;
-    lbImg.className = 'lightbox-img ' + enterCls;
-    setTimeout(() => { lbImg.className = 'lightbox-img'; lbAnimating = false; }, 300);
-  }, 230);
-}
-document.getElementById('lbClose').addEventListener('click', closeLightbox);
-document.getElementById('lbPrev').addEventListener('click', () => lbStep(-1));
-document.getElementById('lbNext').addEventListener('click', () => lbStep(1));
-lightbox.addEventListener('click', e => { if (e.target === lightbox || e.target.classList.contains('lightbox-stage')) closeLightbox(); });
-
-/* Touch swipe */
-let lbTouchX = 0;
-lightbox.addEventListener('touchstart', e => { lbTouchX = e.touches[0].clientX; }, { passive: true });
-lightbox.addEventListener('touchend', e => {
-  const dx = e.changedTouches[0].clientX - lbTouchX;
-  if (Math.abs(dx) > 45) lbStep(dx < 0 ? 1 : -1);
-}, { passive: true });
-
-document.addEventListener('keydown', e => {
-  if (!lightbox.classList.contains('open')) return;
-  if (e.key === 'ArrowLeft')  lbStep(-1);
-  if (e.key === 'ArrowRight') lbStep(1);
-  if (e.key === 'Escape')     closeLightbox();
-});
-
-/* ── CONTACT MODAL ── */
-function openContact() {
-  const ov = document.getElementById('contactOverlay');
-  if (!ov) return;
-  ov.removeAttribute('aria-hidden'); ov.classList.add('open');
-  document.body.style.overflow = 'hidden';
-  setTimeout(() => document.getElementById('contactModalClose')?.focus(), 40);
-}
-function closeContact() {
-  const ov = document.getElementById('contactOverlay');
-  if (!ov) return;
-  ov.setAttribute('aria-hidden', 'true'); ov.classList.remove('open');
-  document.body.style.overflow = '';
-}
-document.getElementById('contactModalClose')?.addEventListener('click', closeContact);
-document.getElementById('contactOverlay')?.addEventListener('click', e => { if (e.target.id === 'contactOverlay') closeContact(); });
-document.querySelectorAll('[data-open-contact]').forEach(el => { el.addEventListener('click', e => { e.preventDefault(); openContact(); }); });
-
-/* ── GALERIE Z API ── */
-const MONTHS = ['stycznia','lutego','marca','kwietnia','maja','czerwca','lipca','sierpnia','września','października','listopada','grudnia'];
-function fmtDate(iso) {
-  const d = new Date(iso);
-  return `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
-}
-
-let activeAlbumId = null;
-
-async function loadAlbums() {
-  const grid = document.getElementById('albumsGrid');
-  const viewer = document.getElementById('albumViewer');
-  try {
-    const { galleries = [] } = await fetch('/api/galleries?status=published&limit=50').then(r => r.json());
-    document.getElementById('albumCountNum').textContent = galleries.length;
-
-    if (!galleries.length) {
-      grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><p style="font-size:2rem">📷</p><p>Brak opublikowanych galerii.</p></div>';
-      return;
-    }
-
-    grid.innerHTML = galleries.map(g => {
-      const date = fmtDate(g.published_at || g.created_at);
-      const count = g.image_count ?? 0;
-      const bgStyle = g.cover_url
-        ? `<div class="album-thumb-bg" style="background-image:url('${g.cover_url}')"></div><div class="album-thumb-overlay"></div>`
-        : '';
-      return `<div class="album-card reveal" data-id="${g.id}" data-title="${g.title.replace(/"/g,'&quot;')}" data-desc="${(g.description||'').replace(/"/g,'&quot;')}" role="button" tabindex="0" aria-label="Otwórz album: ${g.title}, ${count} zdjęć">
-        <div class="album-thumb">
-          ${bgStyle}
-          <span class="album-count-badge">${count} zdjęć</span>
-        </div>
-        <div class="album-body">
-          <p class="album-title">${g.title}</p>
-          <div class="album-meta-row"><time class="album-date">${date}</time></div>
-          ${g.description ? `<p class="album-desc">${g.description}</p>` : ''}
-        </div>
-      </div>`;
-    }).join('');
-
-    revealAll();
-
-    grid.addEventListener('click', e => {
-      const card = e.target.closest('.album-card');
-      if (card) openAlbum(card.dataset.id, card.dataset.title, card.dataset.desc);
-    });
-    grid.addEventListener('keydown', e => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        const card = e.target.closest('.album-card');
-        if (card) { e.preventDefault(); openAlbum(card.dataset.id, card.dataset.title); }
-      }
-    });
-  } catch {
-    document.getElementById('albumsGrid').innerHTML = '<div class="empty-state" style="grid-column:1/-1"><p>Nie udało się załadować galerii.</p></div>';
-  }
-}
-
-async function openAlbum(id, title, desc = '') {
-  const viewer = document.getElementById('albumViewer');
-  const photosGrid = document.getElementById('photosGrid');
-  const viewerTitle = document.getElementById('viewerTitle');
-  const viewerDescSection = document.getElementById('viewerDescSection');
-  const viewerDesc = document.getElementById('viewerDesc');
-
-  // Toggle — click same album again to close
-  if (activeAlbumId === id && viewer.classList.contains('open')) {
-    closeAlbum(); return;
-  }
-  activeAlbumId = id;
-
-  // Mark active card
-  document.querySelectorAll('.album-card').forEach(c => c.classList.toggle('active', c.dataset.id === id));
-
-  viewerTitle.textContent = title;
-  viewerDesc.textContent = desc;
-  viewerDescSection.hidden = !desc;
-  photosGrid.innerHTML = Array(6).fill('<div class="photo-item"><div class="photo-item-loading"></div></div>').join('');
-  viewer.classList.add('open');
-  viewer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-
-  try {
-    const data = await fetch(`/api/galleries/${id}`).then(r => r.json());
-    const images = data.images || [];
-    const urls = images.map(img => img.url);
-
-    if (!images.length) {
-      photosGrid.innerHTML = '<p style="color:var(--tx-m);font-size:.9rem;grid-column:1/-1">Ten album nie ma jeszcze zdjęć.</p>';
-      return;
-    }
-
-    photosGrid.innerHTML = images.map((img, i) => `
-      <div class="photo-item" data-idx="${i}" tabindex="0" role="button" aria-label="Zdjęcie ${i+1}">
-        <img src="${img.url}" alt="${img.caption || `Zdjęcie ${i+1}`}" loading="lazy">
+<div class="contact-overlay" id="contactOverlay" role="dialog" aria-modal="true" aria-labelledby="contactModalTitle" aria-hidden="true">
+  <div class="contact-modal">
+    <div class="contact-modal-head">
+      <h2 class="contact-modal-title" id="contactModalTitle">Kontakt</h2>
+      <button class="contact-modal-close" id="contactModalClose" aria-label="Zamknij">✕</button>
+    </div>
+    <div class="contact-modal-body">
+      <p class="contact-school-name">Szkoła Podstawowa nr 32<br>im. Leona Kruczkowskiego w Sosnowcu</p>
+      <div class="contact-ctas">
+        <a href="tel:+48322634301" class="contact-cta contact-cta-phone"><span class="contact-cta-icon">☎</span><span><span class="contact-cta-label">Telefon sekretariatu</span><span class="contact-cta-value">32 263-43-01</span></span></a>
+        <a href="mailto:sp32@sosnowiec.edu.pl" class="contact-cta contact-cta-email"><span class="contact-cta-icon">@</span><span><span class="contact-cta-label">E-mail</span><span class="contact-cta-value">sp32@sosnowiec.edu.pl</span></span></a>
       </div>
-    `).join('');
+      <hr class="contact-divider">
+      <div class="contact-info-row">
+        <div class="contact-info-block"><p class="contact-info-lbl">Adres</p><address>ul. Armii Krajowej 93<br>41-215 Sosnowiec<br>woj. śląskie</address><a href="https://maps.google.com/?q=ul.+Armii+Krajowej+93,+41-215+Sosnowiec" target="_blank" rel="noopener" class="contact-map-link">Pokaż na mapie →</a></div>
+        <div class="contact-info-block"><p class="contact-info-lbl">Godziny pracy</p><p>Sekretariat:<br>pon–pt 7:00–15:00</p><p class="contact-note">Szkoła: 8:00–16:25<br>Świetlica: 6:30–17:00</p></div>
+      </div>
+    </div>
+  </div>
+</div>
 
-    photosGrid.addEventListener('click', e => {
-      const item = e.target.closest('.photo-item');
-      if (item) openLightbox(urls, parseInt(item.dataset.idx));
-    });
-    photosGrid.addEventListener('keydown', e => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        const item = e.target.closest('.photo-item');
-        if (item) { e.preventDefault(); openLightbox(urls, parseInt(item.dataset.idx)); }
-      }
-    });
-  } catch {
-    photosGrid.innerHTML = '<p style="color:var(--tx-m);grid-column:1/-1">Nie udało się załadować zdjęć.</p>';
-  }
-}
 
-function closeAlbum() {
-  activeAlbumId = null;
-  document.getElementById('albumViewer').classList.remove('open');
-  document.querySelectorAll('.album-card').forEach(c => c.classList.remove('active'));
-}
-
-document.getElementById('viewerClose').addEventListener('click', closeAlbum);
-
-(async () => {
-  await loadAlbums();
-  const autoId = new URLSearchParams(location.search).get('album');
-  if (autoId) {
-    const card = document.querySelector(`[data-id="${autoId}"]`);
-    if (card) openAlbum(autoId, card.dataset.title, card.dataset.desc);
-  }
-})();
-</script>
+<script src="shared.js" defer></script>
+</body>
+</html>

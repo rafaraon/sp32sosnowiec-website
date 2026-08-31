@@ -1,0 +1,112 @@
+{% extends "_base.html" %}
+{% block page_title %}Galeria{% endblock %}
+{% block eyebrow %}Szkoła Podstawowa nr 32{% endblock %}
+{% block hero_title %}Galeria{% endblock %}
+{% block breadcrumb_page %}Galeria{% endblock %}
+{% block page_css %}
+<style>
+.album-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.25rem;margin-top:2rem}
+.album-card{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);transition:box-shadow var(--tr),transform var(--tr);text-decoration:none;color:inherit;display:flex;flex-direction:column;cursor:pointer}
+.album-card:hover{box-shadow:var(--sh-m);transform:translateY(-2px)}
+.album-thumb{width:100%;aspect-ratio:4/3;object-fit:cover;background:var(--clv)}
+.album-thumb-placeholder{width:100%;aspect-ratio:4/3;background:var(--clv);display:flex;align-items:center;justify-content:center;font-size:2.5rem}
+.album-body{padding:1rem;flex:1}
+.album-meta{font-family:var(--font-d);font-size:.65rem;font-weight:700;color:var(--ca);letter-spacing:.05em;text-transform:uppercase;margin-bottom:.3rem}
+.album-title{font-family:var(--font-d);font-size:.95rem;font-weight:800;color:var(--tx)}
+.skel-card{background:var(--clv);border-radius:var(--r);height:220px;animation:pulse 1.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.75rem;margin-top:1.5rem}
+.photo-thumb{width:100%;aspect-ratio:1;object-fit:cover;border-radius:var(--r-s);cursor:zoom-in;transition:opacity var(--tr)}
+.photo-thumb:hover{opacity:.85}
+</style>
+{% endblock %}
+{% block content %}
+<div class="container page-main">
+<div x-data="galleryApp()" x-init="load()">
+
+  <template x-if="!currentAlbum">
+    <div>
+      <template x-if="loading">
+        <div class="album-grid">
+          <div class="skel-card"></div><div class="skel-card"></div><div class="skel-card"></div>
+        </div>
+      </template>
+      <template x-if="!loading && albums.length === 0">
+        <p style="color:var(--tx-m);margin-top:2rem">Brak albumów w galerii.</p>
+      </template>
+      <template x-if="!loading && albums.length > 0">
+        <div class="album-grid">
+          <template x-for="album in albums" :key="album.id">
+            <a href="#" @click.prevent="openAlbum(album.slug)" class="album-card">
+              <img x-show="album.cover_url" :src="album.cover_url" :alt="album.title" class="album-thumb" loading="lazy">
+              <div class="album-thumb-placeholder" x-show="!album.cover_url">🖼️</div>
+              <div class="album-body">
+                <p class="album-meta" x-text="album.school_year + (album.class_label ? ' · kl. '+album.class_label : '')"></p>
+                <p class="album-title" x-text="album.title"></p>
+              </div>
+            </a>
+          </template>
+        </div>
+      </template>
+    </div>
+  </template>
+
+  <template x-if="currentAlbum">
+    <div>
+      <button @click="currentAlbum=null;currentPhotos=[]" style="font-family:var(--font-d);font-size:.85rem;font-weight:700;color:var(--cp);margin-bottom:1.5rem;cursor:pointer;background:none;border:none;padding:0">← Wróć do galerii</button>
+      <h2 style="font-family:var(--font-d);font-size:1.5rem;font-weight:800;color:var(--tx);margin-bottom:.5rem" x-text="currentAlbum.title"></h2>
+      <p style="font-size:.85rem;color:var(--tx-m);margin-bottom:1.5rem" x-text="currentAlbum.school_year + (currentAlbum.class_label ? ' · klasa '+currentAlbum.class_label : '') + (currentAlbum.event_date ? ' · '+fmtDate(currentAlbum.event_date) : '')"></p>
+      <template x-if="photosLoading">
+        <div class="photo-grid">
+          <template x-for="i in 9" :key="i">
+            <div style="aspect-ratio:1;background:var(--clv);border-radius:var(--r-s);animation:pulse 1.5s ease-in-out infinite"></div>
+          </template>
+        </div>
+      </template>
+      <template x-if="!photosLoading">
+        <div class="photo-grid">
+          <template x-for="photo in currentPhotos" :key="photo.id">
+            <img :src="photo.thumb_url" :alt="currentAlbum.title" class="photo-thumb" loading="lazy"
+                 @click="window.open(photo.url,'_blank')">
+          </template>
+        </div>
+      </template>
+    </div>
+  </template>
+
+</div>
+</div>
+<script>
+function galleryApp(){
+  return{
+    albums:[],loading:true,
+    currentAlbum:null,currentPhotos:[],photosLoading:false,
+    async load(){
+      try{
+        const r=await fetch('/api/public/gallery');
+        if(!r.ok)throw new Error();
+        const d=await r.json();
+        this.albums=d.albums;
+      }catch{}
+      finally{this.loading=false}
+    },
+    async openAlbum(slug){
+      this.photosLoading=true;
+      try{
+        const r=await fetch('/api/public/gallery/'+slug);
+        if(!r.ok)throw new Error();
+        const d=await r.json();
+        this.currentAlbum=d.album;
+        this.currentPhotos=d.photos;
+      }catch{}
+      finally{this.photosLoading=false}
+    },
+    fmtDate(iso){
+      if(!iso)return'';
+      return new Date(iso).toLocaleDateString('pl-PL',{day:'numeric',month:'long',year:'numeric'});
+    }
+  }
+}
+</script>
+<script src="/alpine.min.js" defer></script>
+{% endblock %}

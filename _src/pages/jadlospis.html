@@ -1,0 +1,63 @@
+{% extends "_base.html" %}
+{% block page_title %}Jadłospis{% endblock %}
+{% block eyebrow %}Stołówka szkolna{% endblock %}
+{% block hero_title %}Jadłospis{% endblock %}
+{% block breadcrumb_page %}Jadłospis{% endblock %}
+{% block page_css %}
+<style>
+.menu-card{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:2rem;margin-top:2rem;text-align:center;box-shadow:var(--sh)}
+.menu-card p{color:var(--tx-m);margin-bottom:1rem;font-size:.95rem}
+.menu-week{font-family:var(--font-d);font-size:1.1rem;font-weight:800;color:var(--tx);margin-bottom:1rem}
+.menu-btn{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--font-d);font-weight:700;font-size:.95rem;padding:.75rem 1.75rem;border-radius:var(--r-s);background:var(--cp);color:#fff;text-decoration:none;transition:background var(--tr)}
+.menu-btn:hover{background:var(--ca)}
+.menu-empty{background:var(--clv-l);border:1px dashed var(--bd);border-radius:var(--r);padding:2.5rem;margin-top:2rem;text-align:center}
+.menu-empty p{color:var(--tx-m);font-size:.95rem}
+</style>
+{% endblock %}
+{% block content %}
+<div class="container page-main">
+<div x-data="menuApp()" x-init="load()">
+  <template x-if="loading">
+    <div style="background:var(--clv);border-radius:var(--r);height:200px;animation:pulse 1.5s ease-in-out infinite;margin-top:2rem"></div>
+  </template>
+  <template x-if="!loading && menu">
+    <div class="menu-card">
+      <p class="menu-week" x-text="'Tydzień: ' + fmtWeek(menu.week_start)"></p>
+      <p>Kliknij poniżej, aby otworzyć jadłospis na bieżący tydzień.</p>
+      <a :href="menu.url" target="_blank" rel="noopener" class="menu-btn">📋 Otwórz jadłospis (PDF)</a>
+      <p x-show="menu.notes" x-text="menu.notes" style="margin-top:1rem;font-size:.85rem;color:var(--tx-m)"></p>
+    </div>
+  </template>
+  <template x-if="!loading && !menu">
+    <div class="menu-empty">
+      <p>Jadłospis na bieżący tydzień nie został jeszcze opublikowany.</p>
+      <p style="margin-top:.5rem">Sprawdź ponownie w poniedziałek rano lub skontaktuj się ze stołówką.</p>
+    </div>
+  </template>
+</div>
+</div>
+<script>
+function menuApp(){
+  return{
+    menu:null,loading:true,
+    async load(){
+      try{
+        const r=await fetch('/api/public/menu/current');
+        if(!r.ok)throw new Error();
+        const d=await r.json();
+        this.menu=d.menu;
+      }catch{}
+      finally{this.loading=false}
+    },
+    fmtWeek(iso){
+      if(!iso)return'';
+      const d=new Date(iso);
+      const end=new Date(d);end.setDate(end.getDate()+4);
+      const fmt=dt=>dt.toLocaleDateString('pl-PL',{day:'numeric',month:'long'});
+      return fmt(d)+' – '+fmt(end)+' '+end.getFullYear();
+    }
+  }
+}
+</script>
+<script src="/alpine.min.js" defer></script>
+{% endblock %}
