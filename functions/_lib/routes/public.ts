@@ -53,8 +53,6 @@ publicRouter.get('/documents/:category', async (c) => {
   const allowed = ['dokumenty', 'zfss', 'druki', 'rodo']
   if (!allowed.includes(category)) return c.json({ error: 'invalid category' }, 400)
 
-  if (category === 'zfss') return c.json({ error: 'forbidden' }, 403)
-
   const rows = await c.env.DB.prepare(
     `SELECT * FROM documents WHERE category = ? AND published = 1 ORDER BY sort_order ASC, uploaded_at DESC`
   ).bind(category).all<DocumentRow>()
