@@ -1,0 +1,38 @@
+{
+  "name": "sp32sosnowiec-website",
+  "version": "1.0.0",
+  "description": "",
+  "main": "shared.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "dev": "wrangler pages dev --port 8788 .",
+    "deploy": "wrangler pages deploy .",
+    "build": "python3 build.py",
+    "db:migrate:local": "wrangler d1 migrations apply sp32-db --local",
+    "db:migrate:remote": "wrangler d1 migrations apply sp32-db --remote",
+    "test": "vitest run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rafaraon/sp32sosnowiec-website.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/rafaraon/sp32sosnowiec-website/issues"
+  },
+  "homepage": "https://github.com/rafaraon/sp32sosnowiec-website#readme",
+  "dependencies": {
+    "hono": "^4.13.5"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20260831.1",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.11",
+    "wrangler": "^4.127.1"
+  }
+}
