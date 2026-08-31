@@ -12,6 +12,7 @@ declare type PagesFunction<E = unknown> = (context: {
   data: Record<string, unknown>
 }) => Response | Promise<Response>
 import { publicRouter } from '../_lib/routes/public'
+import { adminRouter } from '../_lib/routes/admin'
 import { cacheMiddleware } from '../_lib/middleware/cache'
 
 const app = new Hono<{ Bindings: Env }>()
@@ -20,6 +21,8 @@ app.use('*', cors({ origin: '*', allowMethods: ['GET', 'POST', 'PUT', 'DELETE'] 
 
 app.use('/api/public/*', cacheMiddleware)
 app.route('/api/public', publicRouter)
+
+app.route('/api/admin', adminRouter)
 
 app.get('/api/health', (c) => c.json({ ok: true, ts: new Date().toISOString() }))
 

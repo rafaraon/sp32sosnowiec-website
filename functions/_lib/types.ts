@@ -2,7 +2,15 @@ export type Env = {
   DB: D1Database
   MEDIA: R2Bucket
   ADMIN_EMAIL: string
+  ADMIN_SECRET: string
   MEDIA_PUBLIC_URL: string
+}
+
+export type AdminRole = 'admin' | 'editor'
+
+export interface AdminUser {
+  email: string
+  role: AdminRole
 }
 
 export interface NewsRow {

@@ -4,3 +4,4 @@ Thumbs.db
 .wrangler/
 node_modules/
 dokumenty/
+.dev.vars
