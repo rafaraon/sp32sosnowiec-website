@@ -14,5 +14,5 @@ bucket_name = "sp32-media"
 
 [vars]
 ADMIN_EMAIL = "sp32.tech@gmail.com"
-MEDIA_PUBLIC_URL = "https://pub.sp32sosnowiec.pl"
+MEDIA_PUBLIC_URL = "https://pub.sp32sosnowiec.edu.pl"
 
