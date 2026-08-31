@@ -1,0 +1,39 @@
+{% extends "_base.html" %}
+{% block page_title %}Doradca zawodowy{% endblock %}
+{% block eyebrow %}Orientacja zawodowa · Klasy IV–VIII{% endblock %}
+{% block hero_title %}Doradca zawodowy{% endblock %}
+{% block breadcrumb_page %}Doradca zawodowy{% endblock %}
+{% block page_css %}<link rel="stylesheet" href="/specialist-shared.css">{% endblock %}
+{% block content %}
+<div class="container page-main" x-data="specialistApp('doradca')" x-init="load()">
+  <template x-if="loading">
+    <div><div class="skel" style="height:100px;margin-bottom:2rem"></div><div class="hours-grid"><div class="skel" style="height:80px"></div><div class="skel" style="height:80px"></div></div></div>
+  </template>
+  <template x-if="!loading && specialist">
+    <div>
+      <div class="staff-card">
+        <p class="staff-role">Doradca zawodowy</p>
+        <p class="staff-name" x-text="(specialist.title_prefix ? specialist.title_prefix + ' ' : '') + specialist.name"></p>
+        <p class="staff-note" x-text="'Gabinet nr ' + (specialist.room ?? '—')"></p>
+      </div>
+      <h2 class="section-title">Godziny pracy</h2>
+      <div class="hours-grid">
+        <template x-for="h in specialist.hours" :key="h.day">
+          <div class="hour-card"><p class="hour-day" x-text="h.day"></p><p class="hour-time" x-text="h.from + '–' + h.to"></p></div>
+        </template>
+      </div>
+      <div class="contact-cta-strip">
+        <p>Chcesz umówić poradę indywidualną?</p>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap">
+          <a href="tel:+48322634301">32 263-43-01 (sekretariat)</a>
+          <a href="kontakt.html">Dane kontaktowe →</a>
+        </div>
+      </div>
+    </div>
+  </template>
+</div>
+<script>
+function specialistApp(role){return{specialist:null,loading:true,async load(){try{const r=await fetch('/api/public/specialists');if(!r.ok)throw new Error();const d=await r.json();this.specialist=d.specialists.find(s=>s.role===role)||null;}catch{}finally{this.loading=false}}}}
+</script>
+<script src="/alpine.min.js" defer></script>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "_base.html" %}
+{% block page_title %}Pedagog szkolny{% endblock %}
+{% block eyebrow %}Wsparcie uczniów i rodziców{% endblock %}
+{% block hero_title %}Pedagog szkolny{% endblock %}
+{% block breadcrumb_page %}Pedagog szkolny{% endblock %}
+{% block page_css %}<link rel="stylesheet" href="/specialist-shared.css">{% endblock %}
+{% block content %}
+<div class="container page-main" x-data="specialistApp('pedagog')" x-init="load()">
+  <template x-if="loading">
+    <div>
+      <div class="skel" style="height:100px;margin-bottom:2rem"></div>
+      <div class="hours-grid">
+        <div class="skel" style="height:80px"></div><div class="skel" style="height:80px"></div><div class="skel" style="height:80px"></div>
+      </div>
+    </div>
+  </template>
+  <template x-if="!loading && specialist">
+    <div>
+      <div class="staff-card">
+        <p class="staff-role">Pedagog szkolny / Pedagog specjalny</p>
+        <p class="staff-name" x-text="(specialist.title_prefix ? specialist.title_prefix + ' ' : '') + specialist.name"></p>
+        <p class="staff-note" x-text="'Gabinet nr ' + (specialist.room ?? '—') + (specialist.phone_ext ? ' · tel. wew. ' + specialist.phone_ext : '')"></p>
+      </div>
+      <h2 class="section-title">Godziny pracy</h2>
+      <div class="hours-grid">
+        <template x-for="h in specialist.hours" :key="h.day">
+          <div class="hour-card"><p class="hour-day" x-text="h.day"></p><p class="hour-time" x-text="h.from + '–' + h.to"></p></div>
+        </template>
+      </div>
+      <div class="contact-cta-strip">
+        <p>Chcesz umówić spotkanie lub masz pytanie?</p>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap">
+          <a href="tel:+48322634301">32 263-43-01<span x-show="specialist.phone_ext" x-text="' wew. ' + specialist.phone_ext"></span></a>
+          <a href="kontakt.html">Dane kontaktowe →</a>
+        </div>
+      </div>
+    </div>
+  </template>
+</div>
+<script>
+function specialistApp(role){return{specialist:null,loading:true,async load(){try{const r=await fetch('/api/public/specialists');if(!r.ok)throw new Error();const d=await r.json();this.specialist=d.specialists.find(s=>s.role===role)||null;}catch{}finally{this.loading=false}}}}
+</script>
+<script src="/alpine.min.js" defer></script>
+{% endblock %}

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Psycholog szkolny — SP32 Sosnowiec</title>
+<title>Doradca zawodowy — SP32 Sosnowiec</title>
 <!-- Favicon -->
 <link rel="icon" href="grafiki-ai/logo-sp32.png" type="image/png">
 <link rel="apple-touch-icon" href="grafiki-ai/logo-sp32.png">
@@ -222,52 +222,47 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
     <nav class="breadcrumb" aria-label="Jesteś tutaj">
       <a href="index.html">Strona główna</a><span class="breadcrumb-sep">›</span>
       
-      <span aria-current="page">Psycholog szkolny</span>
+        
+          <span>Rodzice</span>
+        
+        <span class="breadcrumb-sep">›</span>
+      
+      <span aria-current="page">Doradca zawodowy</span>
     </nav>
   </div>
 </div>
 
 <div class="page-hero">
   <div class="container">
-    <p class="page-hero-eyebrow">Wsparcie psychologiczne</p>
-    <h1 class="page-hero-title">Psycholog szkolny</h1>
+    <p class="page-hero-eyebrow">Orientacja zawodowa · Klasy IV–VIII</p>
+    <h1 class="page-hero-title">Doradca zawodowy</h1>
     
   </div>
 </div>
 
 <main id="main-content" class="page-main">
   
-<div class="container page-main" x-data="specialistApp('psycholog')" x-init="load()">
+<div class="container page-main" x-data="specialistApp('doradca')" x-init="load()">
   <template x-if="loading">
-    <div>
-      <div class="skel" style="height:100px;margin-bottom:2rem"></div>
-      <div class="hours-grid">
-        <div class="skel" style="height:80px"></div>
-        <div class="skel" style="height:80px"></div>
-        <div class="skel" style="height:80px"></div>
-      </div>
-    </div>
+    <div><div class="skel" style="height:100px;margin-bottom:2rem"></div><div class="hours-grid"><div class="skel" style="height:80px"></div><div class="skel" style="height:80px"></div></div></div>
   </template>
   <template x-if="!loading && specialist">
     <div>
       <div class="staff-card">
-        <p class="staff-role">Psycholog szkolny</p>
+        <p class="staff-role">Doradca zawodowy</p>
         <p class="staff-name" x-text="(specialist.title_prefix ? specialist.title_prefix + ' ' : '') + specialist.name"></p>
-        <p class="staff-note" x-text="'Gabinet nr ' + (specialist.room ?? '—') + (specialist.phone_ext ? ' · tel. wew. ' + specialist.phone_ext : '')"></p>
+        <p class="staff-note" x-text="'Gabinet nr ' + (specialist.room ?? '—')"></p>
       </div>
       <h2 class="section-title">Godziny pracy</h2>
       <div class="hours-grid">
         <template x-for="h in specialist.hours" :key="h.day">
-          <div class="hour-card">
-            <p class="hour-day" x-text="h.day"></p>
-            <p class="hour-time" x-text="h.from + '–' + h.to"></p>
-          </div>
+          <div class="hour-card"><p class="hour-day" x-text="h.day"></p><p class="hour-time" x-text="h.from + '–' + h.to"></p></div>
         </template>
       </div>
       <div class="contact-cta-strip">
-        <p>Chcesz umówić spotkanie lub masz pytanie?</p>
+        <p>Chcesz umówić poradę indywidualną?</p>
         <div style="display:flex;gap:1rem;flex-wrap:wrap">
-          <a href="tel:+48322634301">32 263-43-01</a>
+          <a href="tel:+48322634301">32 263-43-01 (sekretariat)</a>
           <a href="kontakt.html">Dane kontaktowe →</a>
         </div>
       </div>
@@ -275,20 +270,7 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
   </template>
 </div>
 <script>
-function specialistApp(role){
-  return{
-    specialist:null,loading:true,
-    async load(){
-      try{
-        const r=await fetch('/api/public/specialists');
-        if(!r.ok)throw new Error();
-        const d=await r.json();
-        this.specialist=d.specialists.find(s=>s.role===role)||null;
-      }catch{}
-      finally{this.loading=false}
-    }
-  }
-}
+function specialistApp(role){return{specialist:null,loading:true,async load(){try{const r=await fetch('/api/public/specialists');if(!r.ok)throw new Error();const d=await r.json();this.specialist=d.specialists.find(s=>s.role===role)||null;}catch{}finally{this.loading=false}}}}
 </script>
 <script src="/alpine.min.js" defer></script>
 
