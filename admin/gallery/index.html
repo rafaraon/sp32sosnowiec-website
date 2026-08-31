@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Galeria — Panel SP32</title>
+<link rel="stylesheet" href="/admin/_shared.css">
+<style>
+.album-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem }
+.album-card { background: #fff; border: 1px solid #e8e8e8; border-radius: 8px; overflow: hidden; cursor: pointer; transition: box-shadow .15s }
+.album-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,.1) }
+.album-cover { height: 120px; background: #f0f0f0; display: flex; align-items: center; justify-content: center; color: #bbb; font-size: 2rem; overflow: hidden }
+.album-cover img { width: 100%; height: 100%; object-fit: cover }
+.album-info { padding: .75rem }
+.album-info h3 { font-size: .82rem; font-weight: 700; margin-bottom: .25rem; line-height: 1.3 }
+.album-info small { font-size: .7rem; color: #888 }
+.photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: .5rem }
+.photo-cell { position: relative; aspect-ratio: 1; overflow: hidden; border-radius: 6px; background: #f0f0f0 }
+.photo-cell img { width: 100%; height: 100%; object-fit: cover }
+.photo-cell .photo-actions { position: absolute; inset: 0; background: rgba(0,0,0,.5); display: none; flex-direction: column; align-items: center; justify-content: center; gap: .4rem }
+.photo-cell:hover .photo-actions { display: flex }
+.photo-cell.anon { opacity: .5 }
+.photo-cell .anon-label { position: absolute; top: 4px; left: 4px; font-size: .6rem; background: #f59e0b; color: #fff; padding: .1rem .3rem; border-radius: 3px; font-weight: 700 }
+.upload-zone { border: 2px dashed #d0d0d0; border-radius: 8px; padding: 2rem; text-align: center; cursor: pointer; transition: border-color .15s; margin-bottom: 1rem }
+.upload-zone:hover { border-color: #1a1a2e }
+.upload-zone input { display: none }
+</style>
+</head>
+<body x-data="galleryAdmin()" x-init="init()">
+<div id="sidebar">
+  <div class="brand"><span>SP32 Panel</span><small x-text="role === 'admin' ? 'Administrator' : 'Redaktor'"></small></div>
+  <nav>
+    <a href="/admin/index.html">📊 Dashboard</a>
+    <div class="nav-section">Treści</div>
+    <a href="/admin/news/index.html">📰 Aktualności</a>
+    <a href="/admin/gallery/index.html" class="active">🖼️ Galeria</a>
+    <template x-if="role === 'admin'">
+      <div>
+        <div class="nav-section">Admin</div>
+        <a href="/admin/documents/index.html" class="admin-only">📄 Dokumenty</a>
+        <a href="/admin/specialists/index.html" class="admin-only">👥 Specjaliści</a>
+        <a href="/admin/menu/index.html" class="admin-only">🍽️ Jadłospis</a>
+        <a href="/admin/rodo/index.html" class="admin-only">🔐 RODO</a>
+      </div>
+    </template>
+  </nav>
+  <div class="sidebar-footer" x-text="userEmail"></div>
+</div>
+
+<div id="main">
+  <div id="topbar">
+    <h1 x-text="mode === 'list' ? 'Galeria' : (currentAlbum?.title ?? 'Album')"></h1>
+    <div style="display:flex;gap:.5rem;align-items:center">
+      <button x-show="mode === 'album'" class="btn btn-outline" @click="mode = 'list'; currentAlbum = null; photos = []">← Wróć</button>
+      <button x-show="mode === 'album' && currentAlbum" class="btn btn-outline btn-sm"
+        @click="togglePublish()"
+        x-text="currentAlbum?.published ? 'Ukryj album' : 'Opublikuj album'"></button>
+      <button x-show="mode === 'list'" class="btn btn-primary" @click="openDrawer()">+ Nowy album</button>
+    </div>
+  </div>
+  <div id="content">
+    <template x-if="loading"><div class="skel" style="height:300px;border-radius:8px"></div></template>
+
+    <!-- Album list mode -->
+    <template x-if="!loading && mode === 'list'">
+      <div>
+        <template x-if="albums.length === 0">
+          <p style="color:#999;text-align:center;padding:3rem">Brak albumów</p>
+        </template>
+        <div class="album-grid">
+          <template x-for="album in albums" :key="album.id">
+            <div class="album-card" @click="openAlbum(album)">
+              <div class="album-cover">
+                <template x-if="album.cover_url"><img :src="album.cover_url" :alt="album.title"></template>
+                <template x-if="!album.cover_url"><span>🖼️</span></template>
+              </div>
+              <div class="album-info">
+                <h3 x-text="album.title"></h3>
+                <small x-text="album.school_year + (album.class_label ? ' · ' + album.class_label : '')"></small><br>
+                <span class="badge" :class="album.published ? 'badge-green' : 'badge-gray'" x-text="album.published ? 'Opublikowany' : 'Ukryty'" style="margin-top:.35rem"></span>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </template>
+
+    <!-- Album detail mode -->
+    <template x-if="!loading && mode === 'album'">
+      <div>
+        <div class="upload-zone" @click="$refs.fileInput.click()" @dragover.prevent @drop.prevent="handleDrop($event)">
+          <input type="file" x-ref="fileInput" multiple accept="image/*" @change="handleFiles($event.target.files)">
+          <p style="color:#888;font-size:.85rem">Kliknij lub upuść zdjęcia tutaj</p>
+          <p x-show="uploading" style="color:#1a1a2e;font-weight:700;margin-top:.5rem" x-text="'Przesyłanie... ' + uploadProgress"></p>
+        </div>
+        <div class="photo-grid">
+          <template x-for="photo in photos" :key="photo.id">
+            <div class="photo-cell" :class="{ anon: photo.anonymized }">
+              <img :src="photo.thumb_url" :alt="'Zdjęcie ' + photo.id" loading="lazy">
+              <span x-show="photo.anonymized" class="anon-label">Anon</span>
+              <div class="photo-actions">
+                <button class="btn btn-danger btn-sm" @click.stop="removePhoto(photo)">Usuń</button>
+                <button x-show="!photo.anonymized" class="btn btn-outline btn-sm" style="background:rgba(255,255,255,.9)" @click.stop="anonymize(photo)">Anonimizuj</button>
+              </div>
+            </div>
+          </template>
+          <template x-if="photos.length === 0 && !uploading">
+            <p style="color:#999;font-size:.82rem;grid-column:1/-1">Brak zdjęć w albumie</p>
+          </template>
+        </div>
+      </div>
+    </template>
+  </div>
+</div>
+
+<!-- Create album drawer -->
+<div class="drawer-overlay" :class="{open: drawerOpen}" @click="closeDrawer()"></div>
+<div class="drawer" :class="{open: drawerOpen}">
+  <div class="drawer-header">
+    <h2>Nowy album</h2>
+    <button class="btn btn-outline btn-sm" @click="closeDrawer()">✕</button>
+  </div>
+  <div class="drawer-body">
+    <div class="form-group">
+      <label class="form-label">Tytuł *</label>
+      <input class="form-input" x-model="newAlbum.title" @input="newAlbum.slug = slugify(newAlbum.title)" placeholder="np. Dzień Sportu 2026">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Slug</label>
+      <input class="form-input" x-model="newAlbum.slug" placeholder="dzien-sportu-2026">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Rok szkolny *</label>
+      <input class="form-input" x-model="newAlbum.school_year" placeholder="2025/2026">
+      <p class="form-hint">Format: RRRR/RRRR</p>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Klasa (opcjonalnie)</label>
+      <input class="form-input" x-model="newAlbum.class_label" placeholder="np. 8a">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Data wydarzenia</label>
+      <input class="form-input" type="date" x-model="newAlbum.event_date">
+    </div>
+    <div x-show="createError" class="alert alert-error" x-text="createError"></div>
+  </div>
+  <div class="drawer-footer">
+    <button class="btn btn-outline" @click="closeDrawer()">Anuluj</button>
+    <button class="btn btn-primary" @click="createAlbum()" :disabled="creating" x-text="creating ? 'Tworzenie...' : 'Utwórz album'"></button>
+  </div>
+</div>
+
+<script src="/admin/_shared.js"></script>
+<script src="/alpine.min.js" defer></script>
+<script>
+function galleryAdmin() {
+  return {
+    albums: [], photos: [], loading: true,
+    mode: 'list', currentAlbum: null,
+    drawerOpen: false, newAlbum: {}, creating: false, createError: '',
+    uploading: false, uploadProgress: '',
+    userEmail: '', role: 'editor',
+
+    async init() {
+      try {
+        const me = await API.get('/me')
+        this.userEmail = me.email; this.role = me.role
+      } catch {}
+      await this.loadAlbums()
+    },
+
+    async loadAlbums() {
+      this.loading = true
+      try {
+        const d = await fetch('/api/public/gallery').then(r => r.json())
+        this.albums = d.albums ?? []
+      } catch {}
+      finally { this.loading = false }
+    },
+
+    async openAlbum(album) {
+      this.currentAlbum = album
+      this.mode = 'album'
+      this.loading = true
+      try {
+        const d = await fetch('/api/public/gallery/' + album.slug).then(r => r.json())
+        this.photos = d.photos ?? []
+      } catch {}
+      finally { this.loading = false }
+    },
+
+    async togglePublish() {
+      if (!this.currentAlbum) return
+      try {
+        const result = await API.put('/gallery/albums/' + this.currentAlbum.id, {
+          published: !this.currentAlbum.published
+        })
+        this.currentAlbum = result.album
+        const idx = this.albums.findIndex(a => a.id === this.currentAlbum.id)
+        if (idx >= 0) this.albums[idx] = result.album
+      } catch(e) { alert(e.message) }
+    },
+
+    async createAlbum() {
+      if (!this.newAlbum.title || !this.newAlbum.school_year) {
+        this.createError = 'Tytuł i rok szkolny są wymagane'; return
+      }
+      if (!this.newAlbum.slug) this.newAlbum.slug = slugify(this.newAlbum.title)
+      this.creating = true; this.createError = ''
+      try {
+        await API.post('/gallery/albums', {
+          title: this.newAlbum.title,
+          slug: this.newAlbum.slug,
+          school_year: this.newAlbum.school_year,
+          class_label: this.newAlbum.class_label || null,
+          event_date: this.newAlbum.event_date || null
+        })
+        this.closeDrawer(); await this.loadAlbums()
+      } catch(e) { this.createError = e.message }
+      finally { this.creating = false }
+    },
+
+    openDrawer() {
+      this.newAlbum = { title: '', slug: '', school_year: '', class_label: '', event_date: '' }
+      this.createError = ''; this.drawerOpen = true
+    },
+    closeDrawer() { this.drawerOpen = false },
+
+    handleDrop(e) {
+      this.handleFiles(e.dataTransfer.files)
+    },
+
+    async handleFiles(files) {
+      if (!files || !files.length || !this.currentAlbum) return
+      this.uploading = true
+      let done = 0
+      for (const file of Array.from(files)) {
+        this.uploadProgress = `${done + 1}/${files.length}`
+        try {
+          const fd = new FormData()
+          fd.append('file', file)
+          const result = await API.postForm('/gallery/albums/' + this.currentAlbum.id + '/photos', fd)
+          if (result.photo) this.photos.push(result.photo)
+        } catch(e) { console.error('Upload failed:', file.name, e.message) }
+        done++
+      }
+      this.uploading = false; this.uploadProgress = ''
+    },
+
+    async removePhoto(photo) {
+      if (!confirm('Usunąć to zdjęcie?')) return
+      try {
+        await API.delete('/gallery/photos/' + photo.id)
+        this.photos = this.photos.filter(p => p.id !== photo.id)
+      } catch(e) { alert(e.message) }
+    },
+
+    async anonymize(photo) {
+      if (!confirm('Oznaczyć zdjęcie jako zanonimizowane?')) return
+      try {
+        await API.put('/gallery/photos/' + photo.id + '/anonymize', {})
+        const p = this.photos.find(p => p.id === photo.id)
+        if (p) p.anonymized = true
+      } catch(e) { alert(e.message) }
+    }
+  }
+}
+</script>
+</body>
+</html>
