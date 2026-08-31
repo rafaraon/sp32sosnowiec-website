@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Jadłospis — Panel SP32</title>
+<link rel="stylesheet" href="/admin/_shared.css">
+</head>
+<body x-data="menuAdmin()" x-init="init()">
+<div id="sidebar">
+  <div class="brand"><span>SP32 Panel</span><small x-text="role === 'admin' ? 'Administrator' : 'Redaktor'"></small></div>
+  <nav>
+    <a href="/admin/index.html">📊 Dashboard</a>
+    <div class="nav-section">Treści</div>
+    <a href="/admin/news/index.html">📰 Aktualności</a>
+    <a href="/admin/gallery/index.html">🖼️ Galeria</a>
+    <template x-if="role === 'admin'">
+      <div>
+        <div class="nav-section">Admin</div>
+        <a href="/admin/documents/index.html" class="admin-only">📄 Dokumenty</a>
+        <a href="/admin/specialists/index.html" class="admin-only">👥 Specjaliści</a>
+        <a href="/admin/menu/index.html" class="active admin-only">🍽️ Jadłospis</a>
+        <a href="/admin/rodo/index.html" class="admin-only">🔐 RODO</a>
+      </div>
+    </template>
+  </nav>
+  <div class="sidebar-footer" x-text="userEmail"></div>
+</div>
+<div id="main">
+  <div id="topbar"><h1>Jadłospis</h1></div>
+  <div id="content">
+    <template x-if="role !== 'admin' && !loading">
+      <div class="alert alert-warn">Brak dostępu — tylko Administrator</div>
+    </template>
+    <template x-if="role === 'admin'">
+      <div>
+        <div class="card">
+          <div class="card-title">Dodaj jadłospis</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+            <div class="form-group" style="margin:0">
+              <label class="form-label">Tydzień (poniedziałek) *</label>
+              <input class="form-input" type="date" x-model="form.week_start">
+            </div>
+            <div class="form-group" style="margin:0">
+              <label class="form-label">Plik PDF</label>
+              <input class="form-input" type="file" accept=".pdf" x-ref="menuFile">
+            </div>
+          </div>
+          <div class="form-group" style="margin-top:1rem">
+            <label class="form-label">Uwagi</label>
+            <input class="form-input" x-model="form.notes" placeholder="Opcjonalne uwagi">
+          </div>
+          <div x-show="uploadError" class="alert alert-error" x-text="uploadError" style="margin-top:.75rem"></div>
+          <div style="margin-top:1rem;text-align:right">
+            <button class="btn btn-primary" @click="uploadMenu()" :disabled="uploading" x-text="uploading ? 'Dodawanie...' : 'Dodaj jadłospis'"></button>
+          </div>
+        </div>
+        <template x-if="loading"><div class="skel" style="height:200px;border-radius:8px"></div></template>
+        <template x-if="!loading">
+          <div class="card" style="padding:0;overflow:hidden">
+            <table class="data-table">
+              <thead><tr><th>Tydzień</th><th>Plik PDF</th><th>Uwagi</th><th></th></tr></thead>
+              <tbody>
+                <template x-for="week in weeks" :key="week.id">
+                  <tr>
+                    <td x-text="fmtDate(week.week_start)"></td>
+                    <td>
+                      <a x-show="week.url" :href="week.url" target="_blank" rel="noopener" style="color:#1a1a2e;font-weight:700;font-size:.78rem">Pobierz PDF</a>
+                      <span x-show="!week.url" style="color:#bbb;font-size:.78rem">—</span>
+                    </td>
+                    <td style="color:#888;font-size:.78rem" x-text="week.notes ?? '—'"></td>
+                    <td style="text-align:right">
+                      <button class="btn btn-danger btn-sm" @click="remove(week)">Usuń</button>
+                    </td>
+                  </tr>
+                </template>
+                <template x-if="weeks.length === 0">
+                  <tr><td colspan="4" style="color:#999;text-align:center;padding:2rem">Brak jadłospisów</td></tr>
+                </template>
+              </tbody>
+            </table>
+          </div>
+        </template>
+      </div>
+    </template>
+  </div>
+</div>
+<script src="/admin/_shared.js"></script>
+<script src="/alpine.min.js" defer></script>
+<script>
+function menuAdmin() {
+  return {
+    weeks: [], loading: true, userEmail: '', role: 'editor',
+    form: { week_start: '', notes: '' },
+    uploading: false, uploadError: '',
+
+    async init() {
+      try { const me = await API.get('/me'); this.userEmail = me.email; this.role = me.role } catch {}
+      await this.load()
+    },
+    async load() {
+      this.loading = true
+      try {
+        const d = await fetch('/api/public/menu').then(r => r.json())
+        this.weeks = d.weeks ?? []
+      } catch {}
+      finally { this.loading = false }
+    },
+    async uploadMenu() {
+      if (!this.form.week_start) { this.uploadError = 'Wybierz tydzień'; return }
+      this.uploading = true; this.uploadError = ''
+      try {
+        const fd = new FormData()
+        fd.append('week_start', this.form.week_start)
+        if (this.form.notes) fd.append('notes', this.form.notes)
+        const fileEl = this.$refs.menuFile
+        if (fileEl?.files?.[0]) fd.append('file', fileEl.files[0])
+        await API.postForm('/menu', fd)
+        this.form = { week_start: '', notes: '' }
+        if (fileEl) fileEl.value = ''
+        await this.load()
+      } catch(e) { this.uploadError = e.message }
+      finally { this.uploading = false }
+    },
+    async remove(week) {
+      if (!confirm(`Usunąć jadłospis z ${this.fmtDate(week.week_start)}?`)) return
+      try { await API.delete('/menu/' + week.id); this.weeks = this.weeks.filter(w => w.id !== week.id) } catch(e) { alert(e.message) }
+    },
+    fmtDate
+  }
+}
+</script>
+</body>
+</html>

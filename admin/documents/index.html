@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dokumenty — Panel SP32</title>
+<link rel="stylesheet" href="/admin/_shared.css">
+<style>
+.tabs { display: flex; gap: 0; border-bottom: 2px solid #e8e8e8; margin-bottom: 1.5rem }
+.tab { padding: .6rem 1.25rem; font-size: .82rem; font-weight: 700; color: #888; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px }
+.tab.active { color: #1a1a2e; border-bottom-color: #1a1a2e }
+</style>
+</head>
+<body x-data="docsAdmin()" x-init="init()">
+<div id="sidebar">
+  <div class="brand"><span>SP32 Panel</span><small x-text="role === 'admin' ? 'Administrator' : 'Redaktor'"></small></div>
+  <nav>
+    <a href="/admin/index.html">📊 Dashboard</a>
+    <div class="nav-section">Treści</div>
+    <a href="/admin/news/index.html">📰 Aktualności</a>
+    <a href="/admin/gallery/index.html">🖼️ Galeria</a>
+    <template x-if="role === 'admin'">
+      <div>
+        <div class="nav-section">Admin</div>
+        <a href="/admin/documents/index.html" class="active admin-only">📄 Dokumenty</a>
+        <a href="/admin/specialists/index.html" class="admin-only">👥 Specjaliści</a>
+        <a href="/admin/menu/index.html" class="admin-only">🍽️ Jadłospis</a>
+        <a href="/admin/rodo/index.html" class="admin-only">🔐 RODO</a>
+      </div>
+    </template>
+  </nav>
+  <div class="sidebar-footer" x-text="userEmail"></div>
+</div>
+<div id="main">
+  <div id="topbar"><h1>Dokumenty</h1></div>
+  <div id="content">
+    <template x-if="role !== 'admin' && !loading">
+      <div class="alert alert-warn">Brak dostępu — tylko Administrator</div>
+    </template>
+    <template x-if="role === 'admin'">
+      <div>
+        <div class="tabs">
+          <template x-for="tab in tabs" :key="tab.key">
+            <div class="tab" :class="{active: activeTab === tab.key}" @click="switchTab(tab.key)" x-text="tab.label"></div>
+          </template>
+        </div>
+        <div style="display:flex;justify-content:flex-end;margin-bottom:1rem">
+          <label class="btn btn-primary" style="cursor:pointer">
+            + Dodaj dokument
+            <input type="file" accept=".pdf,.docx,.doc,.xlsx,.xls" style="display:none" @change="upload($event)">
+          </label>
+        </div>
+        <template x-if="loading"><div class="skel" style="height:200px;border-radius:8px"></div></template>
+        <template x-if="!loading">
+          <div class="card" style="padding:0;overflow:hidden">
+            <table class="data-table">
+              <thead><tr><th>Tytuł</th><th>Typ</th><th>Rozmiar</th><th>Data</th><th>Status</th><th></th></tr></thead>
+              <tbody>
+                <template x-for="doc in docs" :key="doc.id">
+                  <tr>
+                    <td x-text="doc.title"></td>
+                    <td style="color:#888;font-size:.75rem" x-text="(doc.file_type ?? '—').toUpperCase()"></td>
+                    <td style="color:#888;font-size:.75rem" x-text="doc.file_size ? Math.round(doc.file_size/1024) + ' KB' : '—'"></td>
+                    <td x-text="fmtDate(doc.uploaded_at)"></td>
+                    <td>
+                      <span class="badge" :class="doc.published ? 'badge-green' : 'badge-gray'" x-text="doc.published ? 'Widoczny' : 'Ukryty'"></span>
+                    </td>
+                    <td style="text-align:right;white-space:nowrap">
+                      <button class="btn btn-outline btn-sm" @click="togglePublish(doc)" x-text="doc.published ? 'Ukryj' : 'Pokaż'"></button>
+                      <button class="btn btn-danger btn-sm" @click="remove(doc)" style="margin-left:.4rem">Usuń</button>
+                    </td>
+                  </tr>
+                </template>
+                <template x-if="docs.length === 0">
+                  <tr><td colspan="6" style="color:#999;text-align:center;padding:2rem">Brak dokumentów w tej kategorii</td></tr>
+                </template>
+              </tbody>
+            </table>
+          </div>
+        </template>
+      </div>
+    </template>
+  </div>
+</div>
+<script src="/admin/_shared.js"></script>
+<script src="/alpine.min.js" defer></script>
+<script>
+function docsAdmin() {
+  return {
+    tabs: [
+      { key: 'dokumenty', label: 'Dokumenty szkolne' },
+      { key: 'druki', label: 'Druki' },
+      { key: 'zfss', label: 'ZFŚS' },
+      { key: 'rodo', label: 'RODO/IOD' },
+    ],
+    activeTab: 'dokumenty',
+    docs: [], loading: true, userEmail: '', role: 'editor',
+
+    async init() {
+      try { const me = await API.get('/me'); this.userEmail = me.email; this.role = me.role } catch {}
+      await this.load()
+    },
+    async switchTab(key) { this.activeTab = key; await this.load() },
+    async load() {
+      this.loading = true
+      try {
+        const d = await fetch('/api/public/documents/' + this.activeTab).then(r => r.json())
+        this.docs = d.documents ?? []
+      } catch {}
+      finally { this.loading = false }
+    },
+    async upload(e) {
+      const file = e.target.files[0]; if (!file) return
+      const title = prompt('Tytuł dokumentu:', file.name.replace(/\.[^.]+$/, ''))
+      if (!title) return
+      const fd = new FormData()
+      fd.append('file', file); fd.append('title', title); fd.append('category', this.activeTab)
+      try { await API.postForm('/documents', fd); await this.load() } catch(e) { alert(e.message) }
+      e.target.value = ''
+    },
+    async togglePublish(doc) {
+      try {
+        const res = await API.put('/documents/' + doc.id, { published: !doc.published })
+        const idx = this.docs.findIndex(d => d.id === doc.id)
+        if (idx >= 0) this.docs[idx] = res.document
+      } catch(e) { alert(e.message) }
+    },
+    async remove(doc) {
+      if (!confirm(`Usunąć "${doc.title}"?`)) return
+      try { await API.delete('/documents/' + doc.id); this.docs = this.docs.filter(d => d.id !== doc.id) } catch(e) { alert(e.message) }
+    },
+    fmtDate
+  }
+}
+</script>
+</body>
+</html>

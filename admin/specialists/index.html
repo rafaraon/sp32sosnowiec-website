@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Specjaliści — Panel SP32</title>
+<link rel="stylesheet" href="/admin/_shared.css">
+<style>
+.spec-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem }
+.spec-card { background: #fff; border: 1px solid #e8e8e8; border-radius: 8px; padding: 1.25rem }
+.spec-card h3 { font-size: .9rem; font-weight: 700; margin-bottom: .25rem }
+.spec-card .role-label { font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #888; margin-bottom: .75rem }
+.hours-row { display: flex; gap: .5rem; font-size: .78rem; margin-bottom: .2rem }
+.hours-editor { border: 1px solid #e8e8e8; border-radius: 6px; overflow: hidden; margin-bottom: .5rem }
+.hours-editor-row { display: grid; grid-template-columns: 1fr 80px 80px 32px; gap: .35rem; padding: .35rem .5rem; border-bottom: 1px solid #f0f0f0; align-items: center }
+.hours-editor-row:last-child { border-bottom: none }
+.hours-editor input { font-size: .78rem; padding: .25rem .4rem; border: 1px solid #d0d0d0; border-radius: 4px; width: 100% }
+</style>
+</head>
+<body x-data="specAdmin()" x-init="init()">
+<div id="sidebar">
+  <div class="brand"><span>SP32 Panel</span><small x-text="role === 'admin' ? 'Administrator' : 'Redaktor'"></small></div>
+  <nav>
+    <a href="/admin/index.html">📊 Dashboard</a>
+    <div class="nav-section">Treści</div>
+    <a href="/admin/news/index.html">📰 Aktualności</a>
+    <a href="/admin/gallery/index.html">🖼️ Galeria</a>
+    <template x-if="role === 'admin'">
+      <div>
+        <div class="nav-section">Admin</div>
+        <a href="/admin/documents/index.html" class="admin-only">📄 Dokumenty</a>
+        <a href="/admin/specialists/index.html" class="active admin-only">👥 Specjaliści</a>
+        <a href="/admin/menu/index.html" class="admin-only">🍽️ Jadłospis</a>
+        <a href="/admin/rodo/index.html" class="admin-only">🔐 RODO</a>
+      </div>
+    </template>
+  </nav>
+  <div class="sidebar-footer" x-text="userEmail"></div>
+</div>
+<div id="main">
+  <div id="topbar"><h1>Specjaliści</h1></div>
+  <div id="content">
+    <template x-if="role !== 'admin' && !loading">
+      <div class="alert alert-warn">Brak dostępu — tylko Administrator</div>
+    </template>
+    <template x-if="loading"><div class="skel" style="height:300px;border-radius:8px"></div></template>
+    <template x-if="!loading && role === 'admin'">
+      <div class="spec-grid">
+        <template x-for="spec in specialists" :key="spec.role">
+          <div class="spec-card">
+            <div class="role-label" x-text="spec.role"></div>
+            <h3 x-text="(spec.title_prefix ? spec.title_prefix + ' ' : '') + spec.name"></h3>
+            <p style="font-size:.78rem;color:#888;margin-bottom:.5rem" x-text="[spec.room ? 'Gabinet: ' + spec.room : null, spec.phone_ext ? 'Tel.: ' + spec.phone_ext : null].filter(Boolean).join(' · ') || '—'"></p>
+            <template x-for="h in spec.hours" :key="h.day">
+              <div class="hours-row"><span style="flex:1" x-text="h.day"></span><span x-text="h.from + '–' + h.to"></span></div>
+            </template>
+            <template x-if="spec.hours.length === 0"><p style="font-size:.78rem;color:#bbb">Brak godzin</p></template>
+            <button class="btn btn-outline btn-sm" style="margin-top:.75rem" @click="openEdit(spec)">Edytuj</button>
+          </div>
+        </template>
+      </div>
+    </template>
+  </div>
+</div>
+
+<!-- Edit drawer -->
+<div class="drawer-overlay" :class="{open: drawerOpen}" @click="closeDrawer()"></div>
+<div class="drawer" :class="{open: drawerOpen}">
+  <div class="drawer-header">
+    <h2 x-text="'Edytuj: ' + (editing.role ?? '')"></h2>
+    <button class="btn btn-outline btn-sm" @click="closeDrawer()">✕</button>
+  </div>
+  <div class="drawer-body">
+    <div class="form-group">
+      <label class="form-label">Tytuł (np. mgr)</label>
+      <input class="form-input" x-model="editing.title_prefix" placeholder="np. mgr, dr">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Imię i nazwisko *</label>
+      <input class="form-input" x-model="editing.name" placeholder="Jan Kowalski">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Gabinet</label>
+      <input class="form-input" x-model="editing.room" placeholder="np. 12">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Nr telefonu wew.</label>
+      <input class="form-input" x-model="editing.phone_ext" placeholder="np. 123">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Godziny przyjęć</label>
+      <div class="hours-editor">
+        <template x-for="(h, i) in editing.hours" :key="i">
+          <div class="hours-editor-row">
+            <input x-model="h.day" placeholder="Dzień">
+            <input x-model="h.from" placeholder="Od">
+            <input x-model="h.to" placeholder="Do">
+            <button @click="editing.hours.splice(i, 1)" style="border:none;background:none;cursor:pointer;color:#dc2626;font-weight:700">✕</button>
+          </div>
+        </template>
+      </div>
+      <button class="btn btn-outline btn-sm" @click="editing.hours.push({day:'',from:'',to:''})">+ Dodaj godziny</button>
+    </div>
+    <div class="form-group">
+      <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer">
+        <input type="checkbox" x-model="editing.active">
+        <span class="form-label" style="margin:0">Aktywny (widoczny publicznie)</span>
+      </label>
+    </div>
+    <div x-show="saveError" class="alert alert-error" x-text="saveError"></div>
+  </div>
+  <div class="drawer-footer">
+    <button class="btn btn-outline" @click="closeDrawer()">Anuluj</button>
+    <button class="btn btn-primary" @click="save()" :disabled="saving" x-text="saving ? 'Zapisywanie...' : 'Zapisz'"></button>
+  </div>
+</div>
+
+<script src="/admin/_shared.js"></script>
+<script src="/alpine.min.js" defer></script>
+<script>
+function specAdmin() {
+  return {
+    specialists: [], loading: true, userEmail: '', role: 'editor',
+    drawerOpen: false, editing: { hours: [] }, saving: false, saveError: '',
+
+    async init() {
+      try { const me = await API.get('/me'); this.userEmail = me.email; this.role = me.role } catch {}
+      await this.load()
+    },
+    async load() {
+      this.loading = true
+      try {
+        const d = await fetch('/api/public/specialists').then(r => r.json())
+        this.specialists = d.specialists ?? []
+      } catch {}
+      finally { this.loading = false }
+    },
+    openEdit(spec) {
+      this.editing = { ...spec, hours: spec.hours.map(h => ({ ...h })) }
+      this.saveError = ''; this.drawerOpen = true
+    },
+    closeDrawer() { this.drawerOpen = false },
+    async save() {
+      if (!this.editing.name) { this.saveError = 'Imię i nazwisko jest wymagane'; return }
+      this.saving = true; this.saveError = ''
+      try {
+        await API.put('/specialists/' + this.editing.role, {
+          name: this.editing.name,
+          title_prefix: this.editing.title_prefix || null,
+          room: this.editing.room || null,
+          phone_ext: this.editing.phone_ext || null,
+          hours: this.editing.hours,
+          active: this.editing.active
+        })
+        this.closeDrawer(); await this.load()
+      } catch(e) { this.saveError = e.message }
+      finally { this.saving = false }
+    }
+  }
+}
+</script>
+</body>
+</html>
