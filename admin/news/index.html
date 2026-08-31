@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aktualności — Panel SP32</title>
+<link rel="stylesheet" href="/admin/_shared.css">
+</head>
+<body x-data="newsAdmin()" x-init="init()">
+<div id="sidebar">
+  <div class="brand"><span>SP32 Panel</span><small x-text="role === 'admin' ? 'Administrator' : 'Redaktor'"></small></div>
+  <nav>
+    <a href="/admin/index.html">📊 Dashboard</a>
+    <div class="nav-section">Treści</div>
+    <a href="/admin/news/index.html" class="active">📰 Aktualności</a>
+    <a href="/admin/gallery/index.html">🖼️ Galeria</a>
+    <template x-if="role === 'admin'">
+      <div>
+        <div class="nav-section">Admin</div>
+        <a href="/admin/documents/index.html" class="admin-only">📄 Dokumenty</a>
+        <a href="/admin/specialists/index.html" class="admin-only">👥 Specjaliści</a>
+        <a href="/admin/menu/index.html" class="admin-only">🍽️ Jadłospis</a>
+        <a href="/admin/rodo/index.html" class="admin-only">🔐 RODO</a>
+      </div>
+    </template>
+  </nav>
+  <div class="sidebar-footer" x-text="userEmail"></div>
+</div>
+
+<div id="main">
+  <div id="topbar">
+    <h1>Aktualności</h1>
+    <button class="btn btn-primary" @click="openDrawer(null)">+ Nowa aktualność</button>
+  </div>
+  <div id="content">
+    <template x-if="loading">
+      <div><div class="skel" style="height:300px;border-radius:8px"></div></div>
+    </template>
+    <template x-if="!loading">
+      <div class="card" style="padding:0;overflow:hidden">
+        <table class="data-table">
+          <thead><tr><th>Tytuł</th><th>Status</th><th>Data publ.</th><th>Autor</th><th></th></tr></thead>
+          <tbody>
+            <template x-for="item in items" :key="item.id">
+              <tr>
+                <td style="font-weight:600" x-text="item.title"></td>
+                <td>
+                  <span class="badge" :class="statusBadge(item.published_at)" x-text="statusLabel(item.published_at)"></span>
+                </td>
+                <td x-text="fmtDate(item.published_at)"></td>
+                <td style="color:#888;font-size:.75rem" x-text="item.author_email ?? '—'"></td>
+                <td style="text-align:right;white-space:nowrap">
+                  <button class="btn btn-outline btn-sm" @click="openDrawer(item)">Edytuj</button>
+                  <button class="btn btn-danger btn-sm" @click="remove(item)" style="margin-left:.4rem">Usuń</button>
+                </td>
+              </tr>
+            </template>
+            <template x-if="items.length === 0">
+              <tr><td colspan="5" style="color:#999;text-align:center;padding:2rem">Brak aktualności</td></tr>
+            </template>
+          </tbody>
+        </table>
+      </div>
+    </template>
+  </div>
+</div>
+
+<!-- Drawer -->
+<div class="drawer-overlay" :class="{open: drawerOpen}" @click="closeDrawer()"></div>
+<div class="drawer" :class="{open: drawerOpen}">
+  <div class="drawer-header">
+    <h2 x-text="editing.id ? 'Edytuj aktualność' : 'Nowa aktualność'"></h2>
+    <button class="btn btn-outline btn-sm" @click="closeDrawer()">✕</button>
+  </div>
+  <div class="drawer-body">
+    <div class="form-group">
+      <label class="form-label">Tytuł *</label>
+      <input class="form-input" x-model="editing.title" @input="autoSlug()" placeholder="Tytuł aktualności">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Slug (URL)</label>
+      <input class="form-input" x-model="editing.slug" placeholder="tytuł-aktualnosci">
+      <p class="form-hint">Automatycznie generowany z tytułu</p>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Skrót (excerpt)</label>
+      <textarea class="form-input" x-model="editing.excerpt" rows="3" placeholder="Krótki opis widoczny na liście"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Treść (HTML)</label>
+      <textarea class="form-input" x-model="editing.body_html" rows="10" placeholder="<p>Treść artykułu...</p>"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Data publikacji</label>
+      <input class="form-input" type="datetime-local" x-model="editing.published_at_local">
+      <p class="form-hint">Puste = szkic (niewidoczny publicznie)</p>
+    </div>
+    <div x-show="saveError" class="alert alert-error" x-text="saveError"></div>
+  </div>
+  <div class="drawer-footer">
+    <button class="btn btn-outline" @click="closeDrawer()">Anuluj</button>
+    <button class="btn btn-primary" @click="save()" :disabled="saving" x-text="saving ? 'Zapisywanie...' : 'Zapisz'"></button>
+  </div>
+</div>
+
+<script src="/admin/_shared.js"></script>
+<script src="/alpine.min.js" defer></script>
+<script>
+function newsAdmin() {
+  return {
+    items: [], loading: true,
+    drawerOpen: false, editing: {}, saving: false, saveError: '',
+    userEmail: '', role: 'editor',
+    async init() {
+      try {
+        const me = await API.get('/me')
+        this.userEmail = me.email; this.role = me.role
+      } catch {}
+      await this.load()
+    },
+    async load() {
+      this.loading = true
+      try {
+        const d = await fetch('/api/public/news?limit=50').then(r => r.json())
+        this.items = d.items ?? []
+      } catch {}
+      finally { this.loading = false }
+    },
+    openDrawer(item) {
+      if (item) {
+        const local = item.published_at ? item.published_at.replace(' ', 'T').slice(0,16) : ''
+        this.editing = { ...item, published_at_local: local }
+      } else {
+        this.editing = { title: '', slug: '', excerpt: '', body_html: '', published_at_local: '' }
+      }
+      this.saveError = ''; this.drawerOpen = true
+    },
+    closeDrawer() { this.drawerOpen = false },
+    autoSlug() {
+      if (!this.editing.id) this.editing.slug = slugify(this.editing.title)
+    },
+    async save() {
+      if (!this.editing.title || !this.editing.slug) { this.saveError = 'Tytuł i slug są wymagane'; return }
+      this.saving = true; this.saveError = ''
+      try {
+        const pub = this.editing.published_at_local
+          ? new Date(this.editing.published_at_local).toISOString().replace('T',' ').slice(0,19)
+          : null
+        const payload = {
+          title: this.editing.title,
+          slug: this.editing.slug,
+          excerpt: this.editing.excerpt || null,
+          body_html: this.editing.body_html || null,
+          published_at: pub
+        }
+        if (this.editing.id) await API.put('/news/' + this.editing.id, payload)
+        else await API.post('/news', payload)
+        this.closeDrawer(); await this.load()
+      } catch(e) { this.saveError = e.message }
+      finally { this.saving = false }
+    },
+    async remove(item) {
+      if (!confirm(`Usunąć "${item.title}"?`)) return
+      try { await API.delete('/news/' + item.id); await this.load() } catch(e) { alert(e.message) }
+    },
+    statusLabel(pub) {
+      if (!pub) return 'Szkic'
+      return new Date(pub) <= new Date() ? 'Opublikowany' : 'Zaplanowany'
+    },
+    statusBadge(pub) {
+      if (!pub) return 'badge-gray'
+      return new Date(pub) <= new Date() ? 'badge-green' : 'badge-yellow'
+    },
+    fmtDate
+  }
+}
+</script>
+</body>
+</html>
