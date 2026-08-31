@@ -5,7 +5,8 @@ function jwtPayload(token: string): Record<string, unknown> | null {
   try {
     const parts = token.split('.')
     if (parts.length !== 3) return null
-    const payload = atob(parts[1].replace(/-/g, '+').replace(/_/g, '/'))
+    const raw = parts[1] + '==='.slice(0, (4 - parts[1].length % 4) % 4)
+    const payload = atob(raw.replace(/-/g, '+').replace(/_/g, '/'))
     return JSON.parse(payload)
   } catch {
     return null
@@ -22,7 +23,7 @@ export async function adminAuth(
 ): Promise<void | Response> {
   // Local dev bypass
   const devSecret = c.req.header('x-admin-secret')
-  if (devSecret && devSecret === c.env.ADMIN_SECRET) {
+  if (c.env.DEV_MODE === '1' && devSecret && devSecret === c.env.ADMIN_SECRET) {
     const email = c.req.header('x-admin-email') ?? c.env.ADMIN_EMAIL
     c.set('user', { email, role: resolveRole(email, c.env.ADMIN_EMAIL) })
     return next()
@@ -32,12 +33,13 @@ export async function adminAuth(
   const jwt = c.req.header('cf-access-jwt-assertion')
   if (!jwt) return c.json({ error: 'unauthorized' }, 401)
 
+  // CF Access verifies JWT signature at the edge before requests reach this Worker
   const payload = jwtPayload(jwt)
   if (!payload || typeof payload['email'] !== 'string') {
     return c.json({ error: 'unauthorized' }, 401)
   }
 
-  const email = payload['email'] as string
+  const email = payload['email']
   c.set('user', { email, role: resolveRole(email, c.env.ADMIN_EMAIL) })
   return next()
 }

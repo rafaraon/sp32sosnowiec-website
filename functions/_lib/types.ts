@@ -3,6 +3,7 @@ export type Env = {
   MEDIA: R2Bucket
   ADMIN_EMAIL: string
   ADMIN_SECRET: string
+  DEV_MODE?: string
   MEDIA_PUBLIC_URL: string
 }
 
