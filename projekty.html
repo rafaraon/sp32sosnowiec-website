@@ -104,6 +104,7 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
 .project-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.25rem;margin:2rem 0}
 .project-card{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:1.5rem;box-shadow:var(--sh);display:flex;flex-direction:column;gap:.6rem;transition:box-shadow var(--tr),transform var(--tr)}
 .project-card:hover{box-shadow:var(--sh-m);transform:translateY(-2px)}
+.project-card[hidden]{display:none}
 .project-tag{display:inline-flex;font-family:var(--font-d);font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:var(--clv-l);color:var(--cp);border-radius:4px;padding:.2rem .5rem;align-self:flex-start}
 .project-title{font-family:var(--font-d);font-size:1rem;font-weight:700;color:var(--tx);line-height:1.35}
 .project-desc{font-size:.88rem;color:var(--tx-m);line-height:1.6;flex:1}
@@ -111,8 +112,8 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
 .project-status-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--cp);margin-right:.35rem;vertical-align:middle}
 .section-title{font-family:var(--font-d);font-size:1.4rem;font-weight:800;letter-spacing:-.02em;color:var(--tx);margin-bottom:.75rem}
 .section-sub{font-size:.95rem;color:var(--tx-m);margin-bottom:1.5rem;max-width:640px;line-height:1.7}
-.coming-soon-card{background:var(--clv-l);border:1px dashed var(--bd);border-radius:var(--r);padding:2rem;text-align:center;margin-top:2rem}
-.coming-soon-card p{font-family:var(--font-d);font-size:.95rem;color:var(--tx-m)}
+.no-results{text-align:center;padding:3rem 0;color:var(--tx-m);font-size:.95rem;display:none}
+.filter-count{background:var(--ca);color:#fff;border-radius:99px;font-size:.65rem;padding:.1rem .45rem;margin-left:.3rem;font-family:var(--font-d);font-weight:700}
 </style>
 
 <link rel="stylesheet" href="header.css">
@@ -277,10 +278,98 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
     </div>
 
     <div class="project-grid" id="projectGrid" aria-live="polite" aria-label="Lista projektów">
-      <div class="proj-loading">Ładowanie projektów…</div>
+
+      <div class="project-card" data-kat="europejski">
+        <span class="project-tag">🌍 Europejski</span>
+        <p class="project-title">Erasmus+ „Szkoła bez granic"</p>
+        <p class="project-desc">Wymiana doświadczeń pedagogicznych z partnerami z Niemiec, Czech i Słowacji. Uczniowie uczestniczą w warsztatach językowych i kulturowych.</p>
+        <p class="project-status"><span class="project-status-dot"></span>W realizacji</p>
+      </div>
+
+      <div class="project-card" data-kat="cyfrowy">
+        <span class="project-tag">💻 Cyfrowy</span>
+        <p class="project-title">Laboratoria Przyszłości</p>
+        <p class="project-desc">Wyposażenie szkoły w nowoczesne narzędzia: drukarki 3D, zestawy robotyczne i sprzęt do nagrywania. Program MEN wspierający edukację STEAM.</p>
+        <p class="project-status"><span class="project-status-dot"></span>Zakończony</p>
+      </div>
+
+      <div class="project-card" data-kat="ministerialny">
+        <span class="project-tag">📋 Ministerialny</span>
+        <p class="project-title">Aktywna Szkoła</p>
+        <p class="project-desc">Rządowy program wspierający aktywność fizyczną uczniów. Doposażenie sali gimnastycznej i zakup sprzętu sportowego dla klas I–VIII.</p>
+        <p class="project-status"><span class="project-status-dot"></span>Zakończony</p>
+      </div>
+
+      <div class="project-card" data-kat="profilaktyczny">
+        <span class="project-tag">🧠 Profilaktyczny</span>
+        <p class="project-title">Zachowaj Trzeźwy Umysł</p>
+        <p class="project-desc">Ogólnopolski program profilaktyki uzależnień i zdrowego stylu życia. Warsztaty, konkursy plastyczne i zajęcia integracyjne dla uczniów.</p>
+        <p class="project-status"><span class="project-status-dot"></span>Cykliczny</p>
+      </div>
+
+      <div class="project-card" data-kat="patriotyczny">
+        <span class="project-tag">🏛️ Patriotyczny</span>
+        <p class="project-title">Poznaj Polskę</p>
+        <p class="project-desc">Ministerialny program dofinansowania wycieczek edukacyjnych po Polsce. Uczniowie odwiedzają miejsca historyczne i kulturowe naszego kraju.</p>
+        <p class="project-status"><span class="project-status-dot"></span>Cykliczny</p>
+      </div>
+
+      <div class="project-card" data-kat="spoleczny">
+        <span class="project-tag">🤝 Społeczny</span>
+        <p class="project-title">Wolontariat „Razem możemy więcej"</p>
+        <p class="project-desc">Szkolny klub wolontariatu działający w ramach Szkolnej Akademii Wolontariatu. Akcje charytatywne, zbiórki i wsparcie lokalnych inicjatyw.</p>
+        <p class="project-status"><span class="project-status-dot"></span>Cykliczny</p>
+      </div>
+
+      <div class="project-card" data-kat="sportowy">
+        <span class="project-tag">⚽ Sportowy</span>
+        <p class="project-title">Sportowe Talenty Sosnowca</p>
+        <p class="project-desc">Program miejski wspierający utalentowanych sportowo uczniów. Dodatkowe treningi, udział w zawodach regionalnych i ogólnopolskich.</p>
+        <p class="project-status"><span class="project-status-dot"></span>W realizacji</p>
+      </div>
+
+      <div class="project-card" data-kat="cyfrowy">
+        <span class="project-tag">💻 Cyfrowy</span>
+        <p class="project-title">Ogólnopolska Sieć Edukacyjna</p>
+        <p class="project-desc">Podłączenie szkoły do szerokopasmowego internetu w ramach OSE. Bezpieczny, szybki dostęp do zasobów cyfrowych dla wszystkich uczniów i nauczycieli.</p>
+        <p class="project-status"><span class="project-status-dot"></span>Zakończony</p>
+      </div>
+
+      <div class="project-card" data-kat="ministerialny">
+        <span class="project-tag">📋 Ministerialny</span>
+        <p class="project-title">Wsparcie z Funduszu Pomocy</p>
+        <p class="project-desc">Realizacja programów pomocowych dla uczniów z Ukrainy — zajęcia językowe, integracja i wsparcie psychologiczne w ramach programu rządowego.</p>
+        <p class="project-status"><span class="project-status-dot"></span>Zakończony</p>
+      </div>
+
     </div>
+    <p class="no-results" id="noResults">Brak projektów w wybranej kategorii.</p>
 
   </div>
+<script>
+(function(){
+  var cards = document.querySelectorAll('.project-card');
+  var btns = document.querySelectorAll('.filter-btn');
+  var noRes = document.getElementById('noResults');
+  var cntAll = document.getElementById('cnt-wszystkie');
+  cntAll.textContent = cards.length;
+
+  btns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var kat = this.dataset.kat;
+      btns.forEach(function(b){b.classList.remove('active')});
+      this.classList.add('active');
+      var visible = 0;
+      cards.forEach(function(c){
+        var show = kat === 'wszystkie' || c.dataset.kat === kat;
+        c.hidden = !show;
+        if(show) visible++;
+      });
+      noRes.style.display = visible === 0 ? 'block' : 'none';
+    });
+  });
+})();
+</script>
 
 </main>
 
