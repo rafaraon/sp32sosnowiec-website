@@ -85,6 +85,9 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
 .util-bar-link{display:inline-flex;align-items:center;gap:.25rem;color:rgba(255,255,255,.75);font-weight:700;padding:.2rem .65rem;border-radius:3px;transition:color var(--tr),background var(--tr);white-space:nowrap;font-size:.68rem;letter-spacing:.05em}
 .util-bar-link:hover{color:#fff;background:rgba(255,255,255,.1)}
 .util-bar-link svg{flex-shrink:0;opacity:.7}
+.util-bar-link--zfss{color:#fff;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:4px;padding:.15rem .6rem}
+.util-bar-link--zfss:hover{background:rgba(255,255,255,.28)!important}
+.util-bar-link--zfss svg{opacity:.9}
 .util-bar-sep{width:1px;height:12px;background:rgba(255,255,255,.15);margin:0 .1rem}
 
 @media(max-width:768px){.util-bar-tagline{display:none}.util-bar-inner{justify-content:flex-end}}
@@ -98,20 +101,35 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
 
 <style>
 .page-main{padding:3rem 0 5rem}
-.prose{max-width:700px}
-.prose h2{font-family:var(--font-d);font-size:1.5rem;font-weight:800;color:var(--tx);letter-spacing:-.02em;margin:2rem 0 .75rem}
-.prose h3{font-family:var(--font-d);font-size:1.1rem;font-weight:700;color:var(--tx);margin:1.5rem 0 .5rem}
+.prose{max-width:740px}
+.prose h2{font-family:var(--font-d);font-size:1.5rem;font-weight:800;color:var(--tx);letter-spacing:-.02em;margin:2.5rem 0 .75rem}
 .prose p{font-size:1rem;color:var(--tx-m);line-height:1.75;margin-bottom:1rem}
-.prose blockquote{border-left:3px solid var(--ca);padding:.75rem 1.25rem;background:var(--clv-l);border-radius:0 var(--r-s) var(--r-s) 0;margin:1.5rem 0}
+.prose blockquote{border-left:3px solid var(--ca);padding:.75rem 1.25rem;background:var(--clv-l);border-radius:0 var(--r-s) var(--r-s) 0;margin:0 0 2rem}
 .prose blockquote p{color:var(--tx);font-style:italic;margin:0}
 .prose blockquote cite{display:block;font-family:var(--font-d);font-size:.78rem;font-weight:600;color:var(--tx-m);margin-top:.4rem;font-style:normal}
-.timeline{border-left:2px solid var(--bd);padding-left:1.5rem;margin:2rem 0;display:flex;flex-direction:column;gap:1.25rem}
-.tl-item{position:relative}
-.tl-item::before{content:'';position:absolute;left:-1.85rem;top:.35rem;width:10px;height:10px;border-radius:50%;background:var(--ca);border:2px solid var(--sf)}
-.tl-year{font-family:var(--font-d);font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ca);margin-bottom:.2rem}
-.tl-text{font-size:.92rem;color:var(--tx);line-height:1.6}
-.coming-soon-card{background:var(--clv-l);border:1px dashed var(--bd);border-radius:var(--r);padding:2rem;text-align:center;margin-top:2rem}
-.coming-soon-card p{font-family:var(--font-d);font-size:.95rem;color:var(--tx-m)}
+
+/* Timeline */
+.timeline{position:relative;padding-left:2rem;margin:2.5rem 0 0;display:flex;flex-direction:column;gap:0}
+.timeline::before{content:'';position:absolute;left:0;top:.5rem;bottom:0;width:2px;background:var(--bd)}
+
+/* Era header */
+.tl-era{position:relative;margin:2rem 0 1.25rem;padding-left:.25rem}
+.tl-era::before{content:'';position:absolute;left:-2.35rem;top:50%;transform:translateY(-50%);width:14px;height:14px;border-radius:50%;background:var(--ca);border:2px solid var(--sf);box-shadow:0 0 0 3px var(--ca)}
+.tl-era-label{display:inline-flex;align-items:center;gap:.4rem;background:var(--ca);color:#fff;font-family:var(--font-d);font-size:.75rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:.3rem .75rem;border-radius:999px;line-height:1}
+
+/* Individual items */
+.tl-item{position:relative;padding-bottom:1.25rem;border-bottom:1px solid var(--bd)}
+.tl-item:last-child{border-bottom:none;padding-bottom:0}
+.tl-item::before{content:'';position:absolute;left:-2.3rem;top:.45rem;width:10px;height:10px;border-radius:50%;background:var(--clv);border:2px solid var(--ca)}
+.tl-date{font-family:var(--font-d);font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ca);margin-bottom:.25rem}
+.tl-text{font-size:.93rem;color:var(--tx);line-height:1.65}
+.tl-text strong{color:var(--tx);font-weight:700}
+
+/* Patron section */
+.patron-card{display:flex;gap:1.25rem;align-items:flex-start;background:var(--clv-l);border:1px solid var(--bd);border-radius:var(--r);padding:1.5rem;margin:2rem 0}
+.patron-icon{flex-shrink:0;width:48px;height:48px;background:var(--ca);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.4rem}
+.patron-body h3{font-family:var(--font-d);font-size:1rem;font-weight:800;color:var(--tx);margin:0 0 .3rem}
+.patron-body p{font-size:.9rem;color:var(--tx-m);line-height:1.65;margin:0}
 </style>
 
 <link rel="stylesheet" href="header.css">
@@ -136,7 +154,7 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
         E-Dziennik
       </a>
       <div class="util-bar-sep" aria-hidden="true"></div>
-      <a href="zfss.html" class="util-bar-link">
+      <a href="zfss.html" class="util-bar-link util-bar-link--zfss">
         <svg width="11" height="11" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M2 2h8v1.5H7v1H9a2 2 0 0 1 0 4H7v1.5H5V8.5H3a2 2 0 0 1 0-4h2v-1H2V2zm3 4H3.5a.5.5 0 0 0 0 1H5V6zm2 0v1h1.5a.5.5 0 0 0 0-1H7z"/></svg>
         ZFŚS
       </a>
@@ -170,6 +188,7 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
             <li><a href="dyrekcja.html" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-nasza-szkola-dyrekcja.png" alt="" width="18" height="18" aria-hidden="true"></span>Dyrekcja i kadra</a></li>
             <li><a href="sukcesy.html" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-nasza-szkola-sukcesy.png" alt="" width="18" height="18" aria-hidden="true"></span>Sukcesy uczniów</a></li>
             <li><a href="galeria.html" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-nasza-szkola-galeria.png" alt="" width="18" height="18" aria-hidden="true"></span>Galeria</a></li>
+            <li><a href="rocznica.html" class="dropdown-item" role="menuitem"><span class="di-icon" style="font-size:1rem;display:flex;align-items:center;justify-content:center">🎂</span>90. rocznica szkoły</a></li>
           </ul>
         </li>
         <li class="has-dropdown">
@@ -267,41 +286,245 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
 <main id="main-content" class="page-main">
   
 <div class="container">
-    <div class="prose">
+  <div class="prose">
 
-      <blockquote>
-        <p>Przeszłość zachowana w pamięci, staje się częścią teraźniejszości.</p>
-        <cite>Tadeusz Kotarbiński — motto SP 32</cite>
-      </blockquote>
+    <blockquote>
+      <p>Przeszłość zachowana w pamięci, staje się częścią teraźniejszości.</p>
+      <cite>Tadeusz Kotarbiński — motto SP 32</cite>
+    </blockquote>
 
-      <h2>Początki — 1933 rok</h2>
-      <p>Szkoła Podstawowa nr 32 im. Leona Kruczkowskiego w Sosnowcu została założona <strong>11 listopada 1933 roku</strong> w Kazimierzu Górniczym, w symboliczną rocznicę odzyskania przez Polskę niepodległości. Od samego początku szkoła była częścią lokalnej społeczności i odzwierciedlała wartości, na których budowano odrodzoną Polskę.</p>
+    <div class="patron-card">
+      <div class="patron-icon">✒️</div>
+      <div class="patron-body">
+        <h3>Patron — Leon Kruczkowski (1900–1962)</h3>
+        <p>Pisarz, dramaturg i działacz społeczny urodzony w Krakowie. Autor takich dzieł jak „Niemcy" czy „Juliusz i Ethel". Znany z zaangażowania społecznego i humanistycznych wartości, które do dziś stanowią fundament wychowania w naszej szkole. W 1985 roku szkoła w Kazimierzu przyjęła jego imię.</p>
+      </div>
+    </div>
 
-      <h2>Patron szkoły — Leon Kruczkowski</h2>
-      <p>Szkoła nosi imię <strong>Leona Kruczkowskiego</strong> (1900–1962) — pisarza, dramaturga i działacza społecznego urodzonego w Krakowie. Autor takich dzieł jak „Niemcy" czy „Juliusz i Ethel" znany był z zaangażowania społecznego i humanistycznych wartości, które do dziś stanowią fundament wychowania w naszej szkole.</p>
+    <h2>Kronika szkoły</h2>
 
-      <h2>Oś czasu</h2>
-      <div class="timeline">
-        <div class="tl-item">
-          <p class="tl-year">11 listopada 1933</p>
-          <p class="tl-text">Założenie szkoły w Kazimierzu Górniczym — w 15. rocznicę odzyskania niepodległości przez Polskę.</p>
-        </div>
-        <div class="tl-item">
-          <p class="tl-year">2023</p>
-          <p class="tl-text">Obchody <strong>90. rocznicy szkoły</strong> — uroczyste wydarzenie z udziałem społeczności szkolnej, absolwentów i zaproszonych gości. Z okazji jubileuszu wydana została monografia szkoły obejmująca lata 1933–2023.</p>
-        </div>
-        <div class="tl-item">
-          <p class="tl-year">17 listopada 2023</p>
-          <p class="tl-text">Główne uroczystości jubileuszowe 90-lecia pod kierunkiem dyrekcji i grona pedagogicznego.</p>
-        </div>
+    <div class="timeline">
+
+      <!-- 1930s -->
+      <div class="tl-era"><span class="tl-era-label">Lata 30.</span></div>
+
+      <div class="tl-item">
+        <p class="tl-date">11 XI 1933</p>
+        <p class="tl-text">Poświęcenie nowo wybudowanej szkoły w 15. rocznicę odzyskania niepodległości. Publiczna Szkoła w Kazimierzu została wybudowana z funduszy gminy olkusko-siewierskiej oraz Kuratorium kieleckiego i starosty będzińskiego.</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-date">22 XI 1933</p>
+        <p class="tl-text">Pierwsze zebranie samorządu szkolnego, zorganizowano świetlicę szkolną.</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-date">3 XII 1933</p>
+        <p class="tl-text">Pierwsze zebranie Komitetu Rodzicielskiego. Rodzice opodatkowali się na rzecz szkoły — wybudowano jadalnię, utworzono bibliotekę, zorganizowano boisko i ogród, teren ogrodzono i zadrzewiono, kupiono pomoce naukowe.</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-date">1934/1935</p>
+        <p class="tl-text">Rozpoczyna działalność Szkolna Kasa Oszczędności. Powstaje męska 87. Zagłębiowska Drużyna Harcerska im. Lisa Kuli i żeńska Zagłębiowska Drużyna Harcerska im. Marii Konopnickiej, gromada zuchów, spółdzielnia uczniowska, koło PCK i szkolne koło sportowe (siatkówka i koszykówka).</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-date">1938</p>
+        <p class="tl-text">Poświęcono sztandar szkoły, który zaginął w czasie ocupacji.</p>
       </div>
 
-      <div class="coming-soon-card">
-        <p>Pełna historia szkoły jest w przygotowaniu. Wkrótce pojawią się tu archiwalne fotografie, wspomnienia absolwentów i szczegółowa kronika lat 1933–2026.</p>
+      <!-- 1939–1949 -->
+      <div class="tl-era"><span class="tl-era-label">Okres wojenny i powojenny</span></div>
+
+      <div class="tl-item">
+        <p class="tl-date">1939–1945</p>
+        <p class="tl-text">W czasie okupacji nauka w szkole była kilkakrotnie przerywana decyzją władz niemieckich — w budynku stacjonowało wojsko. Nauka odbywała się w szkołach na Porąbce i Grabocinie; jesienią 1939 roku powstało tajne nauczanie na tzw. „kompletach".</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-date">1947</p>
+        <p class="tl-text">Na terenie placu szkolnego odbyło się „Święto Pieśni", w którym uczniowie z Niemców, Porąbki i Maczek prezentowali tańce regionalne i pieśni narodowe. W szkole działała drużyna harcerska i chór.</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-date">10 IV 1949</p>
+        <p class="tl-text">Odbyły się nowe wybory do Komitetu Rodzicielskiego.</p>
+      </div>
+
+      <!-- 1950s–1970s -->
+      <div class="tl-era"><span class="tl-era-label">Lata 50.–70.</span></div>
+
+      <div class="tl-item">
+        <p class="tl-date">1958</p>
+        <p class="tl-text">Dzięki staraniom kierownika szkoły pani Marii Trzaski, nauczycieli i rodziców, przygotowano plany rozbudowy szkoły.</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-date">1966</p>
+        <p class="tl-text">Szkołę odwiedza wojewoda śląski gen. Jerzy Ziętek.</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-date">1966–1972</p>
+        <p class="tl-text"><strong>Rozbudowa szkoły.</strong> Powstały nowe sale lekcyjne, jasne korytarze, gabinet lekarski, biblioteka, świetlica, stołówka, pokój nauczycielski, hala gimnastyczna i węzły sanitarne.</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-date">1973</p>
+        <p class="tl-text">We wrześniu odbyło się pierwsze uroczyste ślubowanie klas pierwszych.</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-date">1975</p>
+        <p class="tl-text">Szkolna drużyna pod opieką mgr. Jerzego Malczewskiego zdobyła miejsce w czwórce najlepszych drużyn województwa katowickiego.</p>
+      </div>
+
+      <!-- 1980s -->
+      <div class="tl-era"><span class="tl-era-label">Lata 80.</span></div>
+
+      <div class="tl-item">
+        <p class="tl-date">Styczeń 1980</p>
+        <p class="tl-text">Szkołę odwiedza żona Leona Kruczkowskiego — Jadwiga Kruczkowska.</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-date">7 VI 1980</p>
+        <p class="tl-text">Kopalnia „Kazimierz-Juliusz" ufundowała nowy sztandar szkoły.</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-date">1983</p>
+        <p class="tl-text">Pojawiła się nowa tradycja szkoły — uczniowie klas VIII żegnają szkołę, tańcząc staropolskiego poloneza.</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-date">1984</p>
+        <p class="tl-text">Uczniowie szkoły odwiedzają żonę Leona Kruczkowskiego i składają kwiaty na grobie pisarza.</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-date">28 VI 1985</p>
+        <p class="tl-text"><strong>Szkoła Podstawowa w Kazimierzu otrzymała imię Leona Kruczkowskiego.</strong> Odsłonięto tablicę pamiątkową.</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-date">1988</p>
+        <p class="tl-text">Komitet Rodzicielski ustanowił odznakę „Zasłużony dla Szkoły Podstawowej nr 32" — wręczono ją po raz pierwszy 25 XI 1988 r.</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-date">1989</p>
+        <p class="tl-text">Uczniowie klas III wyjechali na „zielone lekcje". Szkoła otrzymała pamiątkowy medal za wybitne zasługi dla LOK. W szkole rozpoczął pracę pedagog szkolny.</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-date">1990</p>
+        <p class="tl-text">Kolejna rozbudowa szkoły — powstały trzy nowe sale lekcyjne i węzły sanitarne.</p>
+      </div>
+
+      <!-- 1990s -->
+      <div class="tl-era"><span class="tl-era-label">Lata 90.</span></div>
+
+      <div class="tl-item">
+        <p class="tl-date">18 VI 1991</p>
+        <p class="tl-text">Sukces młodych siatkarzy — zdobyli I miejsce w finale wojewódzkim w mini siatkówce (opiekun drużyny: mgr Wiesław Cieślik).</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-date">1 IX 1993</p>
+        <p class="tl-text">Utworzono klasy o profilu sportowym.</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-date">XI 1993</p>
+        <p class="tl-text"><strong>60. rocznica powstania szkoły.</strong></p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-date">1994–1999</p>
+        <p class="tl-text">Innowacja pedagogiczna dotycząca nauczania historii w połączeniu z elementami historii regionalnej (autorka: mgr Jadwiga Koźlak).</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-date">1995</p>
+        <p class="tl-text">W szkole powstaje <strong>pracownia komputerowa</strong>. Szkoła zdobywa I miejsce w III Ogólnopolskim Turnieju Minisiatkówki.</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-date">1995–2000</p>
+        <p class="tl-text">Innowacja pedagogiczna z nauczania matematyki (autorki: mgr Wanda Kucharska-Chochorek, mgr Barbara Pachołek, Kazimiera Szczepara).</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-date">1997</p>
+        <p class="tl-text">I miejsce w III Ogólnopolskim Turnieju Minisiatkówki w Zabrzu.</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-date">1997–1998</p>
+        <p class="tl-text">W klasach VII wprowadzono przedmiot „Wiedza o lokalnej ojczyźnie" (autorki: mgr Jadwiga Koźlak i mgr Aleksandra Żbik).</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-date">1998</p>
+        <p class="tl-text">Uczniowie (Małgorzata Łakomiec, Żaneta Orłowska, Marcin Mroczek) pod opieką mgr Ireny Federowicz ilustrują legendy w książce Mariana Kantora Mirskiego „Legendy i podania Zagłębiowskie". Obchodzimy <strong>65. rocznicę powstania szkoły</strong>.</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-date">1999</p>
+        <p class="tl-text">Szkoła otrzymała nagrodę pieniężną za działalność w zakresie edukacji ekologicznej od Funduszu Ochrony Środowiska i Gospodarki Wodnej w Katowicach. Agata Chochorek zostaje laureatką konkursu z języka francuskiego.</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-date">1 IX 1999</p>
+        <p class="tl-text">Wprowadzono reformę edukacji — utworzono sześcioletnie szkoły podstawowe.</p>
+      </div>
+
+      <!-- 2000s -->
+      <div class="tl-era"><span class="tl-era-label">Lata 2000.</span></div>
+
+      <div class="tl-item">
+        <p class="tl-date">2000</p>
+        <p class="tl-text">Nowa tradycja — uczniowie klas pierwszych rozpoczynają ślubowanie od staropolskiego poloneza.</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-date">2001</p>
+        <p class="tl-text">Jacek Iwachow zostaje finalistą Pikomatu, Angelika Dyczko finalistką konkursu „Nudna matematyka".</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-date">1 IX 2001</p>
+        <p class="tl-text">Wprowadzono naukę języka niemieckiego w klasach I–VI. Uczniowie publikują prace plastyczne w MOPSIE — dodatku do „Dziennika Zachodniego".</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-date">11 XI 2001</p>
+        <p class="tl-text">Uczniowie biorą udział w akademii środowiskowej z okazji Święta Niepodległości.</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-date">XII 2001</p>
+        <p class="tl-text">Szkoła organizuje koncert z okazji <strong>100-lecia miasta Sosnowca</strong>.</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-date">IV 2002</p>
+        <p class="tl-text">Uczniowie klas VI po raz pierwszy piszą egzamin kompetencji.</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-date">2002</p>
+        <p class="tl-text">Kamil Samul zdobywa I miejsce w Korespondencyjnych Mistrzostwach Polski w Pływaniu. Chłopcy zajmują I miejsce w Mistrzostwach Województwa Śląskiego w Minisiatkówce.</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-date">1 IX 2002</p>
+        <p class="tl-text"><strong>Utworzono Zespół Szkół Ogólnokształcących nr 12</strong> — w jego skład weszły SP nr 32 oraz Gimnazjum nr 5. Dyrektorem ZSO nr 12 została mgr Iwona Gajdzik.</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-date">2003</p>
+        <p class="tl-text">Uczniowie uczestniczą w akcji charytatywnej „Kazimierz dla Wojtusia". Dzięki staraniom Pani Dyrektor pozyskano pierwszego sponsora — firmę Hoga — która przekazała sprzęt komputerowy do pracowni informatycznej.</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-date">18 III 2003</p>
+        <p class="tl-text">Gościmy aktorkę z Teatru Dzieci Zagłębia w Będzinie — przedstawienie „Bal w pokoju lal".</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-date">11 XI 2003</p>
+        <p class="tl-text"><strong>70. rocznica powstania szkoły.</strong></p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-date">2006</p>
+        <p class="tl-text">I miejsce w Międzyszkolnym Konkursie Małych Form Teatralnych za przedstawienie „Calineczka" (reżyseria: mgr Anna Kyć). Piotr Miska zdobywa wyróżnienie w finale XXIV Ogólnopolskiego Sejmiku Matematyków.</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-date">13 IV 2007</p>
+        <p class="tl-text">Spotkanie Samorządu Szkolnego ZSO nr 12 z Prezydentem Miasta Sosnowca Zbigniewem Jaskiernią w cyklu „Współpraca z Samorządem Lokalnym". Debatę prowadzili Bartłomiej Klos i Piotr Miska.</p>
+      </div>
+
+      <!-- 2020s -->
+      <div class="tl-era"><span class="tl-era-label">Czasy współczesne</span></div>
+
+      <div class="tl-item">
+        <p class="tl-date">2023</p>
+        <p class="tl-text"><strong>90. rocznica szkoły</strong> — uroczyste wydarzenie z udziałem społeczności szkolnej, absolwentów i zaproszonych gości. Z okazji jubileuszu wydana została monografia szkoły obejmująca lata 1933–2023.</p>
+      </div>
+      <div class="tl-item">
+        <p class="tl-date">17 XI 2023</p>
+        <p class="tl-text">Główne uroczystości jubileuszowe 90-lecia pod kierunkiem dyrekcji i grona pedagogicznego.</p>
       </div>
 
     </div>
+
   </div>
+</div>
 
 </main>
 

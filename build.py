@@ -65,6 +65,10 @@ PAGES = [
         "breadcrumb_section": "",
         "active_nav": "nasza-szkola",
     }),
+    ("rocznica.html", "rocznica.html", {
+        "breadcrumb_section": "Nasza Szkoła",
+        "active_nav": "nasza-szkola",
+    }),
 
     # ── Aktualności / Artykuł ─────────────────────────────────────────────────
     ("aktualnosci.html", "aktualnosci.html", {

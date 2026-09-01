@@ -85,6 +85,9 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
 .util-bar-link{display:inline-flex;align-items:center;gap:.25rem;color:rgba(255,255,255,.75);font-weight:700;padding:.2rem .65rem;border-radius:3px;transition:color var(--tr),background var(--tr);white-space:nowrap;font-size:.68rem;letter-spacing:.05em}
 .util-bar-link:hover{color:#fff;background:rgba(255,255,255,.1)}
 .util-bar-link svg{flex-shrink:0;opacity:.7}
+.util-bar-link--zfss{color:#fff;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:4px;padding:.15rem .6rem}
+.util-bar-link--zfss:hover{background:rgba(255,255,255,.28)!important}
+.util-bar-link--zfss svg{opacity:.9}
 .util-bar-sep{width:1px;height:12px;background:rgba(255,255,255,.15);margin:0 .1rem}
 
 @media(max-width:768px){.util-bar-tagline{display:none}.util-bar-inner{justify-content:flex-end}}
@@ -160,7 +163,7 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
         E-Dziennik
       </a>
       <div class="util-bar-sep" aria-hidden="true"></div>
-      <a href="zfss.html" class="util-bar-link">
+      <a href="zfss.html" class="util-bar-link util-bar-link--zfss">
         <svg width="11" height="11" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M2 2h8v1.5H7v1H9a2 2 0 0 1 0 4H7v1.5H5V8.5H3a2 2 0 0 1 0-4h2v-1H2V2zm3 4H3.5a.5.5 0 0 0 0 1H5V6zm2 0v1h1.5a.5.5 0 0 0 0-1H7z"/></svg>
         ZFŚS
       </a>
@@ -194,6 +197,7 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
             <li><a href="dyrekcja.html" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-nasza-szkola-dyrekcja.png" alt="" width="18" height="18" aria-hidden="true"></span>Dyrekcja i kadra</a></li>
             <li><a href="sukcesy.html" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-nasza-szkola-sukcesy.png" alt="" width="18" height="18" aria-hidden="true"></span>Sukcesy uczniów</a></li>
             <li><a href="galeria.html" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-nasza-szkola-galeria.png" alt="" width="18" height="18" aria-hidden="true"></span>Galeria</a></li>
+            <li><a href="rocznica.html" class="dropdown-item" role="menuitem"><span class="di-icon" style="font-size:1rem;display:flex;align-items:center;justify-content:center">🎂</span>90. rocznica szkoły</a></li>
           </ul>
         </li>
         <li class="has-dropdown">
