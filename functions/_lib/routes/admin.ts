@@ -195,12 +195,14 @@ adminRouter.put('/gallery/albums/:id', async (c) => {
 
   const body = await c.req.json<Partial<{
     title: string
+    school_year: string
+    class_label: string
     event_date: string
     published: boolean | number
     cover_r2_key: string
   }>>()
 
-  const allowedKeys = ['title', 'event_date', 'published', 'cover_r2_key'] as const
+  const allowedKeys = ['title', 'school_year', 'class_label', 'event_date', 'published', 'cover_r2_key'] as const
   type AllowedKey = typeof allowedKeys[number]
 
   const sets: string[] = []
@@ -215,6 +217,11 @@ adminRouter.put('/gallery/albums/:id', async (c) => {
       }
       vals.push(val)
     }
+  }
+
+  if ('school_year' in body && body.school_year) {
+    const endYear = parseInt(body.school_year.split('/')[1] ?? '0', 10)
+    if (endYear) { sets.push('graduation_year = ?'); vals.push(endYear) }
   }
 
   if (sets.length === 0) {
