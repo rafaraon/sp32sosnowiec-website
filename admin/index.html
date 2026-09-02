@@ -27,9 +27,23 @@
   <div class="sidebar-footer" x-text="user.email || 'Ładowanie...'"></div>
 </div>
 <div id="main">
-  <div id="topbar"><h1>Dashboard</h1><span class="user-pill" x-text="user.email"></span></div>
+  <div id="topbar">
+    <h1>Dashboard</h1>
+    <div style="display:flex;gap:.5rem;align-items:center">
+      <span class="user-pill" x-text="user.email"></span>
+      <template x-if="user.role === 'admin'">
+        <button class="btn btn-outline btn-sm" @click="purgeCache()" :disabled="purging"
+          x-text="purging ? 'Czyszczenie...' : '🔄 Wyczyść cache'"
+          title="Wyczyść cache CDN — zmiany pojawią się natychmiast na stronie"></button>
+      </template>
+    </div>
+  </div>
   <div id="content">
     <template x-if="loading"><div class="skel" style="height:200px;border-radius:8px"></div></template>
+    <template x-if="purgeMsg">
+      <div class="alert" :class="purgeOk ? 'alert-ok' : 'alert-error'" style="margin-bottom:.75rem"
+        x-text="purgeMsg"></div>
+    </template>
     <template x-if="!loading">
       <div>
         <div class="stat-grid">
@@ -57,6 +71,10 @@ function dashApp() {
     stats: { news: 0, albums: 0, documents: 0, rodo_pending: 0 },
     rodoAlerts: [],
     loading: true,
+    purging: false,
+    purgeMsg: '',
+    purgeOk: false,
+
     async init() {
       try {
         const me = await API.get('/me')
@@ -75,6 +93,22 @@ function dashApp() {
         this.rodoAlerts = auditData.albums ?? []
       } catch(e) { console.error(e) }
       finally { this.loading = false }
+    },
+
+    async purgeCache() {
+      this.purging = true; this.purgeMsg = ''; this.purgeOk = false
+      try {
+        const r = await API.post('/cache/purge', {})
+        this.purgeMsg = r.message ?? 'Cache wyczyszczony.'
+        this.purgeOk = true
+      } catch(e) {
+        this.purgeMsg = e.message?.includes('setup_needed') || e.message?.includes('503')
+          ? 'Brak konfiguracji: dodaj CF_ZONE_ID i CF_PURGE_TOKEN w ustawieniach Workera.'
+          : (e.message ?? 'Błąd podczas czyszczenia cache.')
+        this.purgeOk = false
+      }
+      this.purging = false
+      setTimeout(() => { this.purgeMsg = '' }, 6000)
     }
   }
 }

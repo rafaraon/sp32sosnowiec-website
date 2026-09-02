@@ -4,6 +4,7 @@ import type { Env } from '../types'
 export async function cacheMiddleware(c: Context<{ Bindings: Env }>, next: Next) {
   await next()
   if (c.res.ok) {
-    c.res.headers.set('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=60')
+    // 30s edge TTL + 10s stale-while-revalidate — fresh enough for editorial updates
+    c.res.headers.set('Cache-Control', 'public, s-maxage=30, stale-while-revalidate=10')
   }
 }

@@ -5,6 +5,8 @@ export type Env = {
   ADMIN_SECRET: string
   DEV_MODE?: string
   MEDIA_PUBLIC_URL: string
+  CF_ZONE_ID?: string
+  CF_PURGE_TOKEN?: string
 }
 
 export type AdminRole = 'admin' | 'editor'

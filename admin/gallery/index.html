@@ -134,8 +134,15 @@
       <input class="form-input" x-model="newAlbum.school_year" placeholder="2025/2026">
       <p class="form-hint">Format: RRRR/RRRR</p>
     </div>
+    <div style="background:#fff3cd;border:2px solid #e6a817;border-radius:8px;padding:.85rem 1rem;font-size:.82rem;line-height:1.6;color:#5a3e00;margin:.25rem 0 .5rem">
+      <strong style="display:block;margin-bottom:.3rem">⚠️ WAŻNE — RODO / Ochrona prywatności dzieci</strong>
+      Podanie klasy jest <strong>krytycznie ważne</strong> dla dzieci i rodziców.
+      Na podstawie klasy i roku szkolnego system oblicza rok ukończenia szkoły przez uczniów,
+      co pozwala automatycznie zarządzać retencją zdjęć zgodnie z RODO (usunięcie po 3 latach od ukończenia szkoły).
+      <br>Bez klasy — zdjęcia dzieci nie mogą być prawidłowo zarządzane i mogą być przechowywane dłużej niż pozwala prawo.
+    </div>
     <div class="form-group">
-      <label class="form-label">Klasa (opcjonalnie)</label>
+      <label class="form-label">Klasa <span style="color:#c0392b;font-weight:700">(zalecane — ważne dla RODO)</span></label>
       <input class="form-input" x-model="newAlbum.class_label" placeholder="np. 8a">
     </div>
     <div class="form-group">

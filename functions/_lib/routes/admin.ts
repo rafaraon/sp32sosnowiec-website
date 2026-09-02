@@ -654,3 +654,28 @@ adminRouter.delete('/users/:id', requireAdmin, async (c) => {
   await c.env.DB.prepare('DELETE FROM admin_users WHERE id = ?').bind(id).run()
   return c.json({ ok: true })
 })
+
+// ── Cache ─────────────────────────────────────────────────────────────────────
+
+// POST /api/admin/cache/purge — globally purge all cached responses via CF API
+adminRouter.post('/cache/purge', requireAdmin, async (c) => {
+  const zoneId = c.env.CF_ZONE_ID
+  const token  = c.env.CF_PURGE_TOKEN
+  if (!zoneId || !token) {
+    return c.json({
+      error: 'CF_ZONE_ID lub CF_PURGE_TOKEN nie są skonfigurowane w ustawieniach Workera.',
+      setup_needed: true
+    }, 503)
+  }
+  const resp = await fetch(`https://api.cloudflare.com/client/v4/zones/${zoneId}/purge_cache`, {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ purge_everything: true })
+  })
+  const data = await resp.json<{ success: boolean; errors?: Array<{ message: string }> }>()
+  if (!resp.ok || !data.success) {
+    const msg = data.errors?.[0]?.message ?? resp.statusText
+    return c.json({ error: `CF API error: ${msg}` }, 502)
+  }
+  return c.json({ ok: true, message: 'Cache wyczyszczony globalnie. Zmiany będą widoczne za chwilę.' })
+})
