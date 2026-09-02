@@ -275,6 +275,34 @@ adminRouter.delete('/gallery/albums/:id', async (c) => {
   return c.json({ ok: true })
 })
 
+// POST /api/admin/gallery/albums/:id/cover — upload cover image
+adminRouter.post('/gallery/albums/:id/cover', async (c) => {
+  const albumId = Number(c.req.param('id'))
+
+  const album = await c.env.DB.prepare('SELECT id, slug, cover_r2_key FROM gallery_albums WHERE id = ?')
+    .bind(albumId)
+    .first<{ id: number; slug: string; cover_r2_key: string | null }>()
+
+  if (!album) return c.json({ error: 'Not found' }, 404)
+
+  const formData = await c.req.formData()
+  const file = formData.get('file')
+  if (!file || !(file instanceof File)) return c.json({ error: 'file is required' }, 400)
+
+  if (album.cover_r2_key) {
+    await c.env.MEDIA.delete(album.cover_r2_key).catch(() => {})
+  }
+
+  const key = r2Key(`gallery/${album.slug}/cover`, file.name)
+  await uploadToR2(c.env, key, file)
+
+  await c.env.DB.prepare('UPDATE gallery_albums SET cover_r2_key = ? WHERE id = ?')
+    .bind(key, albumId)
+    .run()
+
+  return c.json({ cover_url: `/api/public/r2/${key}` }, 200)
+})
+
 // ── Gallery Photos ────────────────────────────────────────────────────────────
 
 // POST /api/admin/gallery/albums/:id/photos — upload photo to album

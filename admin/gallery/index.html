@@ -99,6 +99,19 @@
     <!-- Album detail mode -->
     <template x-if="!loading && mode === 'album'">
       <div>
+        <!-- Cover upload -->
+        <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.25rem;padding:.85rem 1rem;background:var(--sf,#f8f8f8);border:1px solid #e8e8e8;border-radius:8px">
+          <div style="width:72px;height:52px;border-radius:6px;overflow:hidden;background:#e8e8e8;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.4rem">
+            <template x-if="currentAlbum.cover_url"><img :src="currentAlbum.cover_url" style="width:100%;height:100%;object-fit:cover"></template>
+            <template x-if="!currentAlbum.cover_url"><span>🖼️</span></template>
+          </div>
+          <div>
+            <p style="font-size:.78rem;font-weight:700;margin-bottom:.25rem">Okładka albumu</p>
+            <p style="font-size:.72rem;color:#888;margin-bottom:.4rem" x-text="currentAlbum.cover_url ? 'Kliknij aby zmienić okładkę' : 'Brak okładki — kliknij aby dodać'"></p>
+            <input type="file" x-ref="coverInput" accept="image/*" style="display:none" @change="uploadCover($event.target.files[0])">
+            <button class="btn btn-outline btn-sm" @click="$refs.coverInput.click()" :disabled="uploadingCover" x-text="uploadingCover ? 'Przesyłanie...' : 'Zmień okładkę'"></button>
+          </div>
+        </div>
         <div class="upload-zone" @click="$refs.fileInput.click()" @dragover.prevent @drop.prevent="handleDrop($event)">
           <input type="file" x-ref="fileInput" multiple accept="image/*" @change="handleFiles($event.target.files)">
           <p style="color:#888;font-size:.85rem">Kliknij lub upuść zdjęcia tutaj</p>
@@ -210,6 +223,7 @@ function galleryAdmin() {
     mode: 'list', currentAlbum: null,
     drawerOpen: false, newAlbum: {}, creating: false, createError: '',
     editDrawerOpen: false, editAlbum: {}, editAlbumId: null, saving: false, editError: '',
+    uploadingCover: false,
     uploading: false, uploadProgress: '',
     userEmail: '', role: 'editor',
 
@@ -299,6 +313,19 @@ function galleryAdmin() {
         this.closeEditDrawer()
       } catch(e) { this.editError = e.message }
       finally { this.saving = false }
+    },
+
+    async uploadCover(file) {
+      if (!file || !this.currentAlbum) return
+      this.uploadingCover = true
+      try {
+        const fd = new FormData(); fd.append('file', file)
+        const result = await API.postForm('/gallery/albums/' + this.currentAlbum.id + '/cover', fd)
+        this.currentAlbum = { ...this.currentAlbum, cover_url: result.cover_url }
+        const idx = this.albums.findIndex(a => a.id === this.currentAlbum.id)
+        if (idx >= 0) this.albums[idx] = { ...this.albums[idx], cover_url: result.cover_url }
+      } catch(e) { alert('Błąd uploadu okładki: ' + e.message) }
+      finally { this.uploadingCover = false }
     },
 
     async deleteAlbum(album) {

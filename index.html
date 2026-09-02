@@ -424,7 +424,15 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
 /* ════════════════════════
    GALERIA PREVIEW
 ════════════════════════ */
-.gallery-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+.gallery-carousel { position: relative; }
+.gallery-grid { display: flex; gap: 1rem; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; }
+.gallery-grid::-webkit-scrollbar { display: none; }
+.gallery-grid .skel-card { min-width: calc(25% - .75rem); flex-shrink: 0; }
+.gallery-nav { position: absolute; top: 50%; transform: translateY(-50%); background: var(--bg); border: 1.5px solid var(--bd); border-radius: 50%; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.1rem; font-weight: 700; color: var(--tx); z-index: 2; box-shadow: 0 2px 8px rgba(0,0,0,.12); transition: background .18s, color .18s, opacity .18s; }
+.gallery-nav:hover { background: var(--cp); color: #fff; border-color: var(--cp); }
+.gallery-nav:disabled { opacity: 0; pointer-events: none; }
+.gallery-nav-prev { left: -19px; }
+.gallery-nav-next { right: -19px; }
 .album-card { border-radius: var(--r); overflow: hidden; box-shadow: var(--sh); transition: transform var(--tr), box-shadow var(--tr); background: var(--sf); border: 1px solid var(--bd); }
 .album-card:hover { transform: translateY(-4px); box-shadow: var(--sh-m); }
 
@@ -544,7 +552,7 @@ details.footer-info-card summary::marker { display: none; }
   .nav-hamburger { display: flex; }
   .news-grid { grid-template-columns: 1fr; }
   .about-grid { grid-template-columns: 1fr; gap: 2rem; }
-  .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+  .gallery-grid .skel-card { min-width: calc(50% - .5rem); }
   .footer-top { flex-direction: column; align-items: flex-start; gap: 1rem; }
 
   /* ── footer-info mobile: accordion na pełną szerokość ── */
@@ -580,7 +588,7 @@ details.footer-info-card summary::marker { display: none; }
 }
 @media (max-width: 600px) {
   .quicklinks .container { grid-template-columns: repeat(2, 1fr); }
-  .gallery-grid { grid-template-columns: 1fr 1fr; }
+  .gallery-grid .skel-card { min-width: calc(50% - .5rem); }
   .stats-grid { grid-template-columns: 1fr 1fr; }
   .hero { min-height: 440px; }
   .hero-content { padding: 2.5rem 0; }
@@ -969,11 +977,15 @@ details.footer-info-card summary::marker { display: none; }
       </div>
       <a href="galeria.html" class="section-link">Wszystkie albumy →</a>
     </div>
-    <div class="gallery-grid stagger" id="home-gallery-grid">
-      <div class="skel-card skel-album"></div>
-      <div class="skel-card skel-album"></div>
-      <div class="skel-card skel-album"></div>
-      <div class="skel-card skel-album"></div>
+    <div class="gallery-carousel">
+      <button class="gallery-nav gallery-nav-prev" id="gallery-prev" aria-label="Poprzedni album" disabled>‹</button>
+      <div class="gallery-grid" id="home-gallery-grid">
+        <div class="skel-card skel-album"></div>
+        <div class="skel-card skel-album"></div>
+        <div class="skel-card skel-album"></div>
+        <div class="skel-card skel-album"></div>
+      </div>
+      <button class="gallery-nav gallery-nav-next" id="gallery-next" aria-label="Następny album" disabled>›</button>
     </div>
   </div>
 </section>
@@ -1267,19 +1279,38 @@ details.footer-info-card summary::marker { display: none; }
   (async () => {
     const COLORS = ['at-green', 'at-coral', 'at-gold', 'at-lav'];
     const grid = document.getElementById('home-gallery-grid');
+    const btnPrev = document.getElementById('gallery-prev');
+    const btnNext = document.getElementById('gallery-next');
     if (!grid) return;
+
+    function cardW() {
+      const w = grid.offsetWidth;
+      if (w < 480) return w;
+      if (w < 768) return (w - 16) / 2;
+      return (w - 48) / 4;
+    }
+    function updateNav() {
+      if (!btnPrev || !btnNext) return;
+      btnPrev.disabled = grid.scrollLeft < 4;
+      btnNext.disabled = grid.scrollLeft >= grid.scrollWidth - grid.offsetWidth - 4;
+    }
+    if (btnPrev) btnPrev.addEventListener('click', () => { grid.scrollBy({ left: -cardW() * 2 - 16, behavior: 'smooth' }); });
+    if (btnNext) btnNext.addEventListener('click', () => { grid.scrollBy({ left: cardW() * 2 + 16, behavior: 'smooth' }); });
+    grid.addEventListener('scroll', updateNav, { passive: true });
+
     try {
-      const { albums: galleries = [] } = await fetch('/api/public/gallery?limit=4').then(r => r.json());
+      const { albums: galleries = [] } = await fetch('/api/public/gallery?limit=12').then(r => r.json());
       if (!galleries.length) {
         grid.innerHTML = '<div class="skel-empty"><strong>Galeria już wkrótce</strong>Zdjęcia pojawią się tu, gdy tylko je dodamy — zapraszamy niebawem!</div>';
         return;
       }
       grid.innerHTML = galleries.map((g, i) => {
-        const count = g.image_count ?? 0;
-        const isNew = (Date.now() - new Date(g.published_at || g.created_at)) < 30 * 864e5;
+        const count = g.photo_count ?? g.image_count ?? 0;
+        const isNew = (Date.now() - new Date(g.created_at)) < 30 * 864e5;
         const thumbBg = g.cover_url ? ` style="background:url('${g.cover_url}') center/cover no-repeat"` : '';
         const thumbCls = g.cover_url ? '' : COLORS[i % 4];
-        return `<a href="galeria.html" class="album-card reveal" aria-label="Album: ${g.title}, ${count} zdjęć">
+        const cw = `style="min-width:${Math.round(cardW())}px;flex-shrink:0;scroll-snap-align:start"`;
+        return `<a href="galeria.html" class="album-card reveal" aria-label="Album: ${g.title}, ${count} zdjęć" ${cw}>
           <div class="album-thumb ${thumbCls}"${thumbBg}><span class="album-count">${count} zdjęć</span></div>
           <div class="album-info">
             <div class="album-meta">${isNew ? '<span class="chip chip-new">Nowe</span>' : ''}</div>
@@ -1288,6 +1319,7 @@ details.footer-info-card summary::marker { display: none; }
         </a>`;
       }).join('');
       revealAll();
+      setTimeout(updateNav, 50);
     } catch { grid.innerHTML = '<div class="skel-empty"><strong>Galeria już wkrótce</strong>Zdjęcia pojawią się tu, gdy tylko je dodamy!</div>'; }
   })();
 
