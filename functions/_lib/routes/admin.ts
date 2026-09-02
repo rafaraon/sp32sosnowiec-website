@@ -128,6 +128,21 @@ adminRouter.delete('/news/:id', async (c) => {
 
 // ── Gallery Albums ────────────────────────────────────────────────────────────
 
+// GET /api/admin/gallery/albums — list all albums (including unpublished)
+adminRouter.get('/gallery/albums', async (c) => {
+  const rows = await c.env.DB.prepare(
+    `SELECT id, title, slug, school_year, class_label, graduation_year, event_date,
+            cover_r2_key, published, created_at,
+            (SELECT COUNT(*) FROM gallery_photos WHERE album_id = gallery_albums.id) as photo_count
+     FROM gallery_albums ORDER BY created_at DESC`
+  ).all()
+  const albums = (rows.results ?? []).map((a: any) => ({
+    ...a,
+    cover_url: a.cover_r2_key ? `/api/public/r2/${a.cover_r2_key}` : null
+  }))
+  return c.json({ albums })
+})
+
 // POST /api/admin/gallery/albums — create album
 adminRouter.post('/gallery/albums', async (c) => {
   const body = await c.req.json<{

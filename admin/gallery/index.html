@@ -179,9 +179,9 @@ function galleryAdmin() {
     async loadAlbums() {
       this.loading = true
       try {
-        const d = await fetch('/api/public/gallery').then(r => r.json())
+        const d = await API.get('/gallery/albums')
         this.albums = d.albums ?? []
-      } catch {}
+      } catch(e) { console.error('loadAlbums', e) }
       finally { this.loading = false }
     },
 
