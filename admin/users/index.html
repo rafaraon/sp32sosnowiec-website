@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Użytkownicy — Panel SP32</title>
+<link rel="stylesheet" href="/admin/_shared.css">
+<style>
+.user-table { width: 100%; border-collapse: collapse; font-size: .85rem }
+.user-table th { text-align: left; font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: #888; padding: .5rem .75rem; border-bottom: 2px solid #e8e8e8 }
+.user-table td { padding: .65rem .75rem; border-bottom: 1px solid #f0f0f0; vertical-align: middle }
+.user-table tr:last-child td { border-bottom: none }
+.user-table tr:hover td { background: #fafafa }
+.badge { display: inline-flex; align-items: center; gap: .25rem; font-size: .68rem; font-weight: 700; padding: .18rem .5rem; border-radius: 99px; white-space: nowrap }
+.badge-admin   { background: #ffe8d6; color: #b94a00 }
+.badge-editor  { background: #e8f4ff; color: #1a6ab1 }
+.badge-off     { background: #f0f0f0; color: #999 }
+.user-email    { font-weight: 600; color: #1a1a2e }
+.user-name     { color: #555 }
+.user-meta     { font-size: .72rem; color: #aaa }
+.action-btns   { display: flex; gap: .35rem; flex-wrap: wrap }
+.btn-xs { padding: .25rem .55rem; font-size: .72rem; border-radius: 5px; border: 1px solid #d0d0d0; background: #fff; cursor: pointer; font-weight: 600; transition: background .12s, color .12s }
+.btn-xs:hover { background: #1a1a2e; color: #fff; border-color: #1a1a2e }
+.btn-xs.danger:hover { background: #c0392b; border-color: #c0392b; color: #fff }
+.btn-xs.success { background: #27ae60; color: #fff; border-color: #27ae60 }
+.btn-xs:disabled { opacity: .4; cursor: not-allowed }
+.info-box { background: #fffbe6; border: 1px solid #f0d060; border-radius: 8px; padding: .85rem 1rem; font-size: .82rem; line-height: 1.6; color: #5a4400; margin-bottom: 1.25rem }
+.info-box strong { display: block; margin-bottom: .25rem }
+.info-box ol { margin: .25rem 0 0 1.1rem }
+.form-row { display: flex; gap: .65rem; align-items: flex-end; flex-wrap: wrap }
+.form-group { display: flex; flex-direction: column; gap: .3rem; flex: 1; min-width: 160px }
+.form-label { font-size: .72rem; font-weight: 700; color: #555; text-transform: uppercase; letter-spacing: .06em }
+.section-title { font-size: .85rem; font-weight: 700; color: #444; margin-bottom: 1rem; padding-bottom: .5rem; border-bottom: 1px solid #e8e8e8 }
+.me-badge { font-size: .65rem; background: #e8f0ff; color: #1a4ab1; border-radius: 4px; padding: .1rem .35rem; margin-left: .35rem; font-weight: 700 }
+</style>
+</head>
+<body x-data="usersAdmin()" x-init="init()">
+<div id="sidebar">
+  <div class="brand"><span>SP32 Panel</span><small x-text="role === 'admin' ? 'Administrator' : 'Redaktor'"></small></div>
+  <nav>
+    <a href="/admin/index.html">📊 Dashboard</a>
+    <div class="nav-section">Treści</div>
+    <a href="/admin/news/index.html">📰 Aktualności</a>
+    <a href="/admin/gallery/index.html">🖼️ Galeria</a>
+    <template x-if="role === 'admin'">
+      <div>
+        <div class="nav-section">Admin</div>
+        <a href="/admin/documents/index.html" class="admin-only">📄 Dokumenty</a>
+        <a href="/admin/specialists/index.html" class="admin-only">👥 Specjaliści</a>
+        <a href="/admin/menu/index.html" class="admin-only">🍽️ Jadłospis</a>
+        <a href="/admin/rodo/index.html" class="admin-only">🔐 RODO</a>
+        <a href="/admin/users/index.html" class="active admin-only">🧑‍💼 Użytkownicy</a>
+      </div>
+    </template>
+  </nav>
+  <div class="sidebar-footer" x-text="userEmail"></div>
+</div>
+
+<div id="main">
+  <div id="topbar">
+    <h1>Użytkownicy panelu</h1>
+  </div>
+  <div id="content">
+
+    <template x-if="role !== 'admin' && !loading">
+      <div class="alert alert-warn">Brak dostępu — ta sekcja jest tylko dla Administratora.</div>
+    </template>
+
+    <template x-if="role === 'admin'">
+      <div>
+
+        <!-- Info box -->
+        <div class="info-box">
+          <strong>⚠️ Jak działa dostęp do panelu?</strong>
+          Aby nauczyciel mógł się zalogować, konieczne są <strong>dwa kroki</strong>:
+          <ol>
+            <li>Dodaj ich email poniżej (Panel SP32 — uprawnienia i rola)</li>
+            <li>Dodaj ten sam email w <strong>Cloudflare Access → Applications → Panel Redakcja → Policies → Redakcja-redaktorzy → Emails</strong> — dopiero wtedy system wyśle im kod OTP do logowania</li>
+          </ol>
+          Edytor widzi: aktualności i galerię. Administrator widzi wszystko.
+        </div>
+
+        <!-- Add user form -->
+        <div class="card" style="margin-bottom:1.25rem">
+          <div class="section-title">Dodaj nowego użytkownika</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Imię i nazwisko</label>
+              <input class="form-input" type="text" x-model="form.name" placeholder="np. mgr Anna Nowak" @keydown.enter="addUser()">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Adres e-mail</label>
+              <input class="form-input" type="email" x-model="form.email" placeholder="anna.nowak@sp32.edu.pl" @keydown.enter="addUser()">
+            </div>
+            <div class="form-group" style="max-width:140px">
+              <label class="form-label">Rola</label>
+              <select class="form-input" x-model="form.role">
+                <option value="editor">Edytor</option>
+                <option value="admin">Administrator</option>
+              </select>
+            </div>
+            <div style="padding-bottom:.1rem">
+              <button class="btn btn-primary" @click="addUser()" :disabled="adding">
+                <span x-text="adding ? 'Dodawanie...' : '+ Dodaj'"></span>
+              </button>
+            </div>
+          </div>
+          <div x-show="formError" class="alert alert-error" x-text="formError" style="margin-top:.75rem"></div>
+        </div>
+
+        <!-- Users list -->
+        <div class="card">
+          <div class="section-title">Zarejestrowani użytkownicy</div>
+
+          <template x-if="loading">
+            <p style="color:#aaa;font-size:.85rem">Ładowanie...</p>
+          </template>
+
+          <template x-if="!loading && users.length === 0">
+            <p style="color:#aaa;font-size:.85rem">Brak użytkowników.</p>
+          </template>
+
+          <template x-if="!loading && users.length > 0">
+            <div style="overflow-x:auto">
+              <table class="user-table">
+                <thead>
+                  <tr>
+                    <th>Imię i nazwisko</th>
+                    <th>E-mail</th>
+                    <th>Rola</th>
+                    <th>Status</th>
+                    <th>Dodano</th>
+                    <th>Akcje</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <template x-for="u in users" :key="u.id">
+                    <tr>
+                      <td class="user-name">
+                        <span x-text="u.name || '—'"></span>
+                        <span class="me-badge" x-show="u.email.toLowerCase() === userEmail.toLowerCase()">Ty</span>
+                      </td>
+                      <td class="user-email" x-text="u.email"></td>
+                      <td>
+                        <span class="badge" :class="u.role === 'admin' ? 'badge-admin' : 'badge-editor'" x-text="u.role === 'admin' ? '⭐ Administrator' : '✏️ Edytor'"></span>
+                      </td>
+                      <td>
+                        <span class="badge" :class="u.active ? 'badge-editor' : 'badge-off'" x-text="u.active ? '✓ Aktywny' : '✗ Wyłączony'"></span>
+                      </td>
+                      <td class="user-meta" x-text="fmtDate(u.created_at)"></td>
+                      <td>
+                        <div class="action-btns" x-show="u.email.toLowerCase() !== userEmail.toLowerCase()">
+                          <button class="btn-xs" @click="toggleRole(u)" :disabled="u._saving"
+                            x-text="u.role === 'admin' ? '→ Edytor' : '→ Admin'"
+                            :title="u.role === 'admin' ? 'Zmień na Edytor' : 'Zmień na Administrator'">
+                          </button>
+                          <button class="btn-xs" @click="toggleActive(u)" :disabled="u._saving"
+                            x-text="u.active ? 'Wyłącz' : 'Włącz'">
+                          </button>
+                          <button class="btn-xs danger" @click="removeUser(u)" :disabled="u._saving">Usuń</button>
+                        </div>
+                        <span class="user-meta" x-show="u.email.toLowerCase() === userEmail.toLowerCase()">Twoje konto</span>
+                      </td>
+                    </tr>
+                  </template>
+                </tbody>
+              </table>
+            </div>
+          </template>
+        </div>
+
+      </div>
+    </template>
+
+  </div>
+</div>
+
+<script src="/admin/_shared.js"></script>
+<script src="/alpine.min.js" defer></script>
+<script>
+function usersAdmin() {
+  return {
+    ...sharedAdmin(),
+    users: [],
+    form: { name: '', email: '', role: 'editor' },
+    adding: false,
+    formError: '',
+
+    async init() {
+      await this.fetchMe()
+      if (this.role === 'admin') await this.load()
+    },
+
+    async load() {
+      this.loading = true
+      try {
+        const r = await API.get('/users')
+        this.users = (r.users ?? []).map(u => ({ ...u, _saving: false }))
+      } catch(e) { console.error(e) }
+      finally { this.loading = false }
+    },
+
+    async addUser() {
+      this.formError = ''
+      const { name, email, role } = this.form
+      if (!name.trim()) { this.formError = 'Wpisz imię i nazwisko'; return }
+      if (!email.trim()) { this.formError = 'Wpisz adres e-mail'; return }
+      this.adding = true
+      try {
+        const r = await API.post('/users', { name: name.trim(), email: email.trim().toLowerCase(), role })
+        this.users.push({ ...r.user, _saving: false })
+        this.form = { name: '', email: '', role: 'editor' }
+      } catch(e) { this.formError = e.message }
+      finally { this.adding = false }
+    },
+
+    async toggleRole(u) {
+      u._saving = true
+      try {
+        const newRole = u.role === 'admin' ? 'editor' : 'admin'
+        const r = await API.patch('/users/' + u.id, { role: newRole })
+        Object.assign(u, r.user)
+      } catch(e) { alert(e.message) }
+      finally { u._saving = false }
+    },
+
+    async toggleActive(u) {
+      if (!u.active && !confirm('Włączyć tego użytkownika?')) return
+      if (u.active  && !confirm('Wyłączyć tego użytkownika? Nie będzie mógł korzystać z panelu.')) return
+      u._saving = true
+      try {
+        const r = await API.patch('/users/' + u.id, { active: !u.active })
+        Object.assign(u, r.user)
+      } catch(e) { alert(e.message) }
+      finally { u._saving = false }
+    },
+
+    async removeUser(u) {
+      if (!confirm(`Usunąć użytkownika ${u.email}?\nUtraci dostęp do panelu. Pamiętaj też usunąć ich email z Cloudflare Access.`)) return
+      u._saving = true
+      try {
+        await API.delete('/users/' + u.id)
+        this.users = this.users.filter(x => x.id !== u.id)
+      } catch(e) { alert(e.message); u._saving = false }
+    },
+
+    fmtDate(iso) {
+      if (!iso) return '—'
+      const d = new Date(iso)
+      return d.toLocaleDateString('pl-PL', { day: '2-digit', month: '2-digit', year: 'numeric' })
+    }
+  }
+}
+</script>
+</body>
+</html>

@@ -1,5 +1,5 @@
 import { Hono } from 'hono'
-import type { Env, AdminUser, NewsRow, GalleryAlbumRow, GalleryPhotoRow, DocumentRow, MenuWeekRow, SpecialistRow, ConsentRequestRow } from '../types'
+import type { Env, AdminUser, AdminUserRow, NewsRow, GalleryAlbumRow, GalleryPhotoRow, DocumentRow, MenuWeekRow, SpecialistRow, ConsentRequestRow } from '../types'
 import { calcGraduationYear } from '../types'
 import { adminAuth, requireAdmin } from '../auth'
 import { newsToJson, albumToJson, photoToJson, documentToJson, menuToJson, specialistToJson } from '../db'
@@ -560,4 +560,97 @@ adminRouter.get('/rodo/audit', requireAdmin, async (c) => {
      ORDER BY graduation_year ASC`
   ).bind(currentYear, currentYear).all()
   return c.json({ albums: rows.results ?? [], current_year: currentYear })
+})
+
+// ── USER MANAGEMENT (admin only) ──────────────────────────────────────────────
+
+// GET /api/admin/users — list all admin users
+adminRouter.get('/users', requireAdmin, async (c) => {
+  const rows = await c.env.DB.prepare(
+    'SELECT id, email, name, role, active, created_at, created_by FROM admin_users ORDER BY created_at ASC'
+  ).all<AdminUserRow>()
+  return c.json({ users: rows.results ?? [] })
+})
+
+// POST /api/admin/users — add a new admin user
+adminRouter.post('/users', requireAdmin, async (c) => {
+  const me = c.get('user')
+  const body = await c.req.json<{ email?: string; name?: string; role?: string }>()
+
+  const email = (body.email ?? '').trim().toLowerCase()
+  const name  = (body.name  ?? '').trim()
+  const role  = body.role === 'admin' ? 'admin' : 'editor'
+
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return c.json({ error: 'Podaj prawidłowy adres e-mail' }, 400)
+  }
+  if (!name) {
+    return c.json({ error: 'Imię i nazwisko jest wymagane' }, 400)
+  }
+
+  const existing = await c.env.DB.prepare(
+    'SELECT id FROM admin_users WHERE email = ? COLLATE NOCASE'
+  ).bind(email).first<{ id: number }>()
+
+  if (existing) {
+    return c.json({ error: 'Ten adres e-mail jest już zarejestrowany' }, 409)
+  }
+
+  const row = await c.env.DB.prepare(
+    `INSERT INTO admin_users (email, name, role, active, created_by)
+     VALUES (?, ?, ?, 1, ?) RETURNING *`
+  ).bind(email, name, role, me.email).first<AdminUserRow>()
+
+  if (!row) return c.json({ error: 'Insert failed' }, 500)
+  return c.json({ user: row }, 201)
+})
+
+// PATCH /api/admin/users/:id — update name, role, active
+adminRouter.patch('/users/:id', requireAdmin, async (c) => {
+  const me = c.get('user')
+  const id = Number(c.req.param('id'))
+  const body = await c.req.json<{ name?: string; role?: string; active?: boolean }>()
+
+  const existing = await c.env.DB.prepare(
+    'SELECT id, email FROM admin_users WHERE id = ?'
+  ).bind(id).first<{ id: number; email: string }>()
+
+  if (!existing) return c.json({ error: 'Not found' }, 404)
+  // Prevent self-demotion or deactivation
+  if (existing.email.toLowerCase() === me.email.toLowerCase()) {
+    return c.json({ error: 'Nie możesz edytować własnego konta' }, 400)
+  }
+
+  const sets: string[] = []
+  const vals: unknown[] = []
+  if (body.name !== undefined)   { sets.push('name = ?');   vals.push(body.name.trim()) }
+  if (body.role !== undefined)   { sets.push('role = ?');   vals.push(body.role === 'admin' ? 'admin' : 'editor') }
+  if (body.active !== undefined) { sets.push('active = ?'); vals.push(body.active ? 1 : 0) }
+
+  if (!sets.length) return c.json({ error: 'No fields to update' }, 400)
+  vals.push(id)
+
+  const row = await c.env.DB.prepare(
+    `UPDATE admin_users SET ${sets.join(', ')} WHERE id = ? RETURNING *`
+  ).bind(...vals).first<AdminUserRow>()
+
+  return c.json({ user: row })
+})
+
+// DELETE /api/admin/users/:id — remove user
+adminRouter.delete('/users/:id', requireAdmin, async (c) => {
+  const me = c.get('user')
+  const id = Number(c.req.param('id'))
+
+  const existing = await c.env.DB.prepare(
+    'SELECT id, email FROM admin_users WHERE id = ?'
+  ).bind(id).first<{ id: number; email: string }>()
+
+  if (!existing) return c.json({ error: 'Not found' }, 404)
+  if (existing.email.toLowerCase() === me.email.toLowerCase()) {
+    return c.json({ error: 'Nie możesz usunąć własnego konta' }, 400)
+  }
+
+  await c.env.DB.prepare('DELETE FROM admin_users WHERE id = ?').bind(id).run()
+  return c.json({ ok: true })
 })

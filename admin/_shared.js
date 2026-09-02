@@ -20,6 +20,14 @@ const API = {
     if (!r.ok) { const e = await r.json().catch(() => ({})); throw new Error(e.error || `HTTP ${r.status}`) }
     return r.json()
   },
+  async patch(path, body) {
+    const r = await fetch('/api/admin' + path, {
+      method: 'PATCH', headers: { 'Content-Type': 'application/json', ...adminHeaders() },
+      body: JSON.stringify(body)
+    })
+    if (!r.ok) { const e = await r.json().catch(() => ({})); throw new Error(e.error || `HTTP ${r.status}`) }
+    return r.json()
+  },
   async delete(path) {
     const r = await fetch('/api/admin' + path, { method: 'DELETE', headers: adminHeaders() })
     if (!r.ok) throw new Error(`HTTP ${r.status}`)

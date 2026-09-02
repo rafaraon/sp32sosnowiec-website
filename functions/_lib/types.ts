@@ -106,6 +106,16 @@ export interface ConsentRequestRow {
   notes: string | null
 }
 
+export interface AdminUserRow {
+  id: number
+  email: string
+  name: string
+  role: AdminRole
+  active: number
+  created_at: string
+  created_by: string | null
+}
+
 export function calcGraduationYear(schoolYear: string, classLabel: string | null): number {
   const endYear = parseInt(schoolYear.split('/')[1], 10)
   if (!classLabel) return endYear
