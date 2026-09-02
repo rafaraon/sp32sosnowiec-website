@@ -25,8 +25,9 @@ publicRouter.get('/news/:slug', async (c) => {
 
 publicRouter.get('/gallery', async (c) => {
   const rows = await c.env.DB.prepare(
-    `SELECT * FROM gallery_albums WHERE published = 1 ORDER BY event_date DESC, created_at DESC LIMIT 50`
-  ).all<GalleryAlbumRow>()
+    `SELECT *, (SELECT COUNT(*) FROM gallery_photos WHERE album_id = gallery_albums.id) as photo_count
+     FROM gallery_albums WHERE published = 1 ORDER BY event_date DESC, created_at DESC LIMIT 50`
+  ).all<GalleryAlbumRow & { photo_count: number }>()
 
   return c.json({ albums: (rows.results ?? []).map(r => albumToJson(r, c.env)) })
 })
