@@ -521,12 +521,13 @@ adminRouter.post('/rodo/requests', requireAdmin, async (c) => {
   return c.json({ request: row }, 201)
 })
 
-// PUT /api/admin/rodo/requests/:id — update status/notes
+// PUT /api/admin/rodo/requests/:id — update status/notes/director_approved
 adminRouter.put('/rodo/requests/:id', requireAdmin, async (c) => {
   const id = Number(c.req.param('id'))
   const body = await c.req.json<{
     status?: 'pending' | 'in_progress' | 'resolved'
     notes?: string
+    director_approved?: boolean
   }>()
   const user = c.get('user')
 
@@ -539,6 +540,9 @@ adminRouter.put('/rodo/requests/:id', requireAdmin, async (c) => {
     }
   }
   if ('notes' in body) { sets.push('notes = ?'); vals.push(body.notes ?? null) }
+  if (body.director_approved) {
+    sets.push("director_approved_at = datetime('now')")
+  }
   if (!sets.length) return c.json({ error: 'No fields to update' }, 400)
   vals.push(id)
 

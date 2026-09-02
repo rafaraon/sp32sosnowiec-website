@@ -106,6 +106,11 @@ export interface ConsentRequestRow {
   resolved_by: string | null
   status: 'pending' | 'in_progress' | 'resolved'
   notes: string | null
+  submitter_type: 'parent' | 'student' | 'adult'
+  submitter_email: string | null
+  reference_number: string | null
+  director_approved_at: string | null
+  matched_albums: string | null // JSON string
 }
 
 export interface AdminUserRow {

@@ -1,0 +1,236 @@
+{% extends "_base.html" %}
+{% block page_title %}Wniosek RODO — zdjęcia{% endblock %}
+{% block eyebrow %}RODO · Prawa do zdjęć{% endblock %}
+{% block hero_title %}Wniosek o usunięcie lub wycofanie zgody na zdjęcia{% endblock %}
+{% block hero_sub %}Formularz dla rodziców, opiekunów prawnych oraz uczniów, którzy ukończyli 13 lat{% endblock %}
+{% block breadcrumb_page %}Wniosek RODO{% endblock %}
+
+{% block page_css %}
+<style>
+.page-main{padding:3rem 0 5rem}
+.rodo-wrap{max-width:680px}
+
+.info-box{background:var(--bg-alt,#f5f5f5);border-left:4px solid var(--accent,#e05c2a);border-radius:0 8px 8px 0;padding:1rem 1.25rem;margin-bottom:2rem;font-size:.9rem;line-height:1.7;color:var(--tx-m)}
+.info-box strong{color:var(--tx);display:block;margin-bottom:.3rem}
+
+.warn-box{background:#fff8e6;border:1px solid #f5c842;border-radius:8px;padding:1rem 1.25rem;margin-bottom:2rem;font-size:.88rem;line-height:1.7;color:#5a3e00}
+
+.form-card{background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:2rem}
+.form-section{font-size:.7rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--tx-m);margin:1.75rem 0 .75rem;padding-bottom:.4rem;border-bottom:1px solid var(--bd)}
+.form-section:first-child{margin-top:0}
+.fgrp{display:flex;flex-direction:column;gap:.3rem;margin-bottom:1rem}
+.fgrp label{font-size:.78rem;font-weight:700;color:var(--tx)}
+.fgrp input,.fgrp select,.fgrp textarea{font-size:.9rem;padding:.55rem .75rem;border:1px solid var(--bd);border-radius:7px;background:var(--bg);color:var(--tx);transition:border-color .15s;width:100%;box-sizing:border-box}
+.fgrp input:focus,.fgrp select:focus,.fgrp textarea:focus{outline:none;border-color:var(--accent,#e05c2a)}
+.fgrp .hint{font-size:.75rem;color:var(--tx-m);margin-top:.2rem}
+.fgrp .req{color:#c0392b;margin-left:.2rem}
+
+.radio-group{display:flex;flex-direction:column;gap:.55rem}
+.radio-opt{display:flex;gap:.75rem;align-items:flex-start;padding:.7rem .85rem;border:1px solid var(--bd);border-radius:8px;cursor:pointer;transition:border-color .15s,background .15s}
+.radio-opt:has(input:checked){border-color:var(--accent,#e05c2a);background:rgba(224,92,42,.06)}
+.radio-opt input[type=radio]{margin-top:.15rem;accent-color:var(--accent,#e05c2a);flex-shrink:0}
+.radio-opt .ro-label{font-size:.88rem;font-weight:700;color:var(--tx)}
+.radio-opt .ro-desc{font-size:.78rem;color:var(--tx-m);margin-top:.15rem;line-height:1.5}
+
+.type-grid{display:grid;grid-template-columns:1fr 1fr;gap:.65rem}
+@media(max-width:520px){.type-grid{grid-template-columns:1fr}}
+.type-card{border:1px solid var(--bd);border-radius:10px;padding:1rem;cursor:pointer;transition:border-color .15s,background .15s;position:relative}
+.type-card:has(input:checked){border-color:var(--accent,#e05c2a);background:rgba(224,92,42,.06)}
+.type-card input{position:absolute;opacity:0;width:0;height:0}
+.type-card .tc-title{font-size:.9rem;font-weight:800;color:var(--tx);margin-bottom:.3rem}
+.type-card .tc-desc{font-size:.78rem;color:var(--tx-m);line-height:1.55}
+
+.underage-warn{display:none;background:#fff3e0;border:1px solid #f59e0b;border-radius:8px;padding:.85rem 1rem;font-size:.83rem;color:#5a3200;margin-top:.65rem;line-height:1.6}
+.underage-warn.visible{display:block}
+
+.submit-btn{width:100%;padding:.85rem;font-size:1rem;font-weight:800;background:var(--accent,#e05c2a);color:#fff;border:none;border-radius:9px;cursor:pointer;margin-top:1.5rem;transition:opacity .15s}
+.submit-btn:disabled{opacity:.5;cursor:not-allowed}
+.submit-btn:hover:not(:disabled){opacity:.88}
+
+.result-box{display:none;background:#f0fdf4;border:2px solid #4ade80;border-radius:12px;padding:2rem;text-align:center}
+.result-box.visible{display:block}
+.result-box .ref{font-family:monospace;font-size:1.5rem;font-weight:900;color:#166534;letter-spacing:.05em;margin:1rem 0}
+.result-box p{font-size:.9rem;color:#166534;line-height:1.7}
+.err-msg{display:none;background:#fee2e2;border:1px solid #fca5a5;border-radius:8px;padding:.75rem 1rem;font-size:.85rem;color:#991b1b;margin-top:1rem}
+.err-msg.visible{display:block}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-main">
+  <div class="container">
+    <div class="rodo-wrap">
+
+      <div class="info-box">
+        <strong>Kto może złożyć wniosek?</strong>
+        Rodzic lub opiekun prawny — w imieniu ucznia w każdym wieku.<br>
+        Uczeń samodzielnie — jeśli ukończył <strong>13 lat</strong> (ograniczona zdolność do czynności prawnych w sferze osobistej, art. 15 KC).<br>
+        Były uczeń — samodzielnie, jeśli jest pełnoletni.
+      </div>
+
+      <div class="warn-box">
+        <strong>⚠️ Weryfikacja tożsamości</strong>
+        Ze względu na ochronę danych dzieci, przed realizacją wniosku szkoła jest zobowiązana zweryfikować tożsamość osoby składającej wniosek.
+        Prosimy o kontakt z sekretariatem (telefoniczny lub osobisty) i podanie <strong>numeru referencyjnego</strong>, który otrzymasz po wysłaniu tego formularza.
+      </div>
+
+      <!-- Form -->
+      <div class="form-card" id="rodo-form-wrap">
+
+        <div class="form-section">1. Kto składa wniosek?</div>
+        <div class="radio-group">
+          <label class="radio-opt">
+            <input type="radio" name="submitter_type" value="parent" checked onchange="onSubmitterChange(this.value)">
+            <div>
+              <div class="ro-label">Rodzic / opiekun prawny</div>
+              <div class="ro-desc">Składam wniosek w imieniu mojego dziecka (ucznia szkoły)</div>
+            </div>
+          </label>
+          <label class="radio-opt">
+            <input type="radio" name="submitter_type" value="student" onchange="onSubmitterChange(this.value)">
+            <div>
+              <div class="ro-label">Uczeń (13–17 lat)</div>
+              <div class="ro-desc">Składam wniosek we własnym imieniu — ukończyłem/am 13 lat</div>
+            </div>
+          </label>
+          <label class="radio-opt">
+            <input type="radio" name="submitter_type" value="adult" onchange="onSubmitterChange(this.value)">
+            <div>
+              <div class="ro-label">Były uczeń (pełnoletni)</div>
+              <div class="ro-desc">Byłem/am uczniem tej szkoły i jestem pełnoletni/a</div>
+            </div>
+          </label>
+        </div>
+        <div class="underage-warn" id="underage-warn">
+          Jeśli uczeń nie ukończył jeszcze 13 lat — wniosek może złożyć wyłącznie rodzic lub opiekun prawny.
+          Prosimy wybrać pierwszą opcję.
+        </div>
+
+        <div class="form-section">2. Dane ucznia</div>
+        <div class="fgrp">
+          <label>Imię i nazwisko ucznia <span class="req">*</span></label>
+          <input type="text" id="student_name" placeholder="np. Jan Kowalski" autocomplete="off">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+          <div class="fgrp">
+            <label>Klasa <span class="req">*</span></label>
+            <input type="text" id="class_label" placeholder="np. 8a">
+            <span class="hint">Klasa w momencie nauki</span>
+          </div>
+          <div class="fgrp">
+            <label>Rok szkolny <span class="req">*</span></label>
+            <input type="text" id="school_year" placeholder="np. 2023/2024">
+            <span class="hint">Rok, którego dotyczą zdjęcia</span>
+          </div>
+        </div>
+
+        <div class="form-section">3. Rodzaj wniosku</div>
+        <div class="type-grid">
+          <label class="type-card">
+            <input type="radio" name="request_type" value="withdrawal" checked>
+            <div class="tc-title">✋ Wycofanie zgody</div>
+            <div class="tc-desc">Proszę o zaprzestanie publicznego udostępniania zdjęć. Zdjęcia mogą pozostać w archiwum szkoły.</div>
+          </label>
+          <label class="type-card">
+            <input type="radio" name="request_type" value="deletion">
+            <div class="tc-title">🗑️ Usunięcie zdjęć</div>
+            <div class="tc-desc">Proszę o trwałe usunięcie zdjęć z galerii i archiwum szkoły (wymaga zatwierdzenia dyrektora).</div>
+          </label>
+        </div>
+
+        <div class="form-section">4. Dane kontaktowe</div>
+        <div class="fgrp">
+          <label>Adres e-mail do kontaktu <span class="req">*</span></label>
+          <input type="email" id="submitter_email" placeholder="twoj@email.pl">
+          <span class="hint">Na ten adres wyślemy potwierdzenie, gdy wniosek zostanie zrealizowany</span>
+        </div>
+
+        <div class="form-section">5. Dodatkowe informacje (opcjonalnie)</div>
+        <div class="fgrp">
+          <label>Opis — jakich konkretnie zdjęć dotyczy wniosek?</label>
+          <textarea id="notes" rows="3" placeholder="np. Zdjęcia z wycieczki do Krakowa, marzec 2024. Uczeń w czerwonej kurtce."></textarea>
+          <span class="hint">Im dokładniejszy opis, tym sprawniej zrealizujemy wniosek</span>
+        </div>
+
+        <div class="err-msg" id="err-msg"></div>
+        <button class="submit-btn" id="submit-btn" onclick="submitRodo()">Wyślij wniosek</button>
+      </div>
+
+      <!-- Success -->
+      <div class="result-box" id="result-box">
+        <div style="font-size:2.5rem">✅</div>
+        <p><strong>Wniosek przyjęty.</strong></p>
+        <div class="ref" id="result-ref"></div>
+        <p>
+          Zanotuj ten numer referencyjny — będzie potrzebny przy kontakcie z sekretariatem.<br>
+          Skontaktujemy się z Tobą po weryfikacji tożsamości.<br><br>
+          <strong>Sekretariat:</strong> tel. <a href="tel:+48323631250">32 363 12 50</a><br>
+          pon.–pt. 7:30–15:30
+        </p>
+        <p style="font-size:.78rem;color:#4ade80;margin-top:1.25rem">
+          Znaleźliśmy <span id="result-albums"></span> albumów pasujących do podanej klasy i roku szkolnego.
+          Nauczyciel przejrzy je i zidentyfikuje Twoje zdjęcia.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block page_scripts %}
+<script>
+function onSubmitterChange(val) {
+  document.getElementById('underage-warn').classList.toggle('visible', val === 'student')
+}
+
+async function submitRodo() {
+  const btn = document.getElementById('submit-btn')
+  const err = document.getElementById('err-msg')
+  err.classList.remove('visible')
+
+  const studentName = document.getElementById('student_name').value.trim()
+  const classLabel  = document.getElementById('class_label').value.trim()
+  const schoolYear  = document.getElementById('school_year').value.trim()
+  const email       = document.getElementById('submitter_email').value.trim()
+  const notes       = document.getElementById('notes').value.trim()
+  const submitter   = document.querySelector('input[name=submitter_type]:checked')?.value ?? 'parent'
+  const reqType     = document.querySelector('input[name=request_type]:checked')?.value ?? 'withdrawal'
+
+  if (!studentName) { showErr('Podaj imię i nazwisko ucznia.'); return }
+  if (!classLabel)  { showErr('Podaj klasę ucznia.'); return }
+  if (!schoolYear)  { showErr('Podaj rok szkolny (np. 2023/2024).'); return }
+  if (!email || !email.includes('@')) { showErr('Podaj prawidłowy adres e-mail.'); return }
+
+  btn.disabled = true
+  btn.textContent = 'Wysyłanie...'
+
+  try {
+    const r = await fetch('/api/public/rodo/request', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ student_name: studentName, class_label: classLabel, school_year: schoolYear,
+        submitter_type: submitter, submitter_email: email, request_type: reqType, notes: notes || null })
+    })
+    const d = await r.json()
+    if (!r.ok) { showErr(d.error ?? 'Wystąpił błąd. Spróbuj ponownie.'); btn.disabled = false; btn.textContent = 'Wyślij wniosek'; return }
+
+    document.getElementById('rodo-form-wrap').style.display = 'none'
+    document.getElementById('result-ref').textContent = d.reference_number
+    const albums = d.matched_albums_count ?? 0
+    document.getElementById('result-albums').textContent = albums === 0 ? 'Nie znaleziono' : albums
+    document.getElementById('result-box').classList.add('visible')
+  } catch(e) {
+    showErr('Błąd połączenia. Sprawdź internet i spróbuj ponownie.')
+    btn.disabled = false; btn.textContent = 'Wyślij wniosek'
+  }
+}
+
+function showErr(msg) {
+  const err = document.getElementById('err-msg')
+  err.textContent = msg
+  err.classList.add('visible')
+  err.scrollIntoView({ behavior: 'smooth', block: 'center' })
+}
+</script>
+{% endblock %}

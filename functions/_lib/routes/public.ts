@@ -68,6 +68,69 @@ publicRouter.get('/specialists', async (c) => {
   return c.json({ specialists: (rows.results ?? []).map(specialistToJson) })
 })
 
+// POST /api/public/rodo/request — public RODO request submission
+publicRouter.post('/rodo/request', async (c) => {
+  const body = await c.req.json<{
+    student_name?: string
+    class_label?: string
+    school_year?: string
+    submitter_type?: string
+    submitter_email?: string
+    request_type?: string
+    notes?: string
+  }>().catch(() => ({}))
+
+  if (!body.student_name?.trim()) return c.json({ error: 'Imię i nazwisko ucznia jest wymagane' }, 400)
+  if (!['withdrawal', 'deletion'].includes(body.request_type ?? '')) return c.json({ error: 'Nieprawidłowy typ wniosku' }, 400)
+
+  // Find matching albums by class + school_year
+  type AlbumMatch = { id: number; title: string; slug: string }
+  let matched: AlbumMatch[] = []
+  if (body.class_label) {
+    const q = body.school_year
+      ? `SELECT id, title, slug FROM gallery_albums WHERE class_label = ? AND school_year = ? ORDER BY event_date DESC LIMIT 30`
+      : `SELECT id, title, slug FROM gallery_albums WHERE class_label = ? ORDER BY event_date DESC LIMIT 30`
+    const rows = body.school_year
+      ? await c.env.DB.prepare(q).bind(body.class_label.trim(), body.school_year.trim()).all<AlbumMatch>()
+      : await c.env.DB.prepare(q).bind(body.class_label.trim()).all<AlbumMatch>()
+    matched = rows.results ?? []
+  }
+
+  // Graduation year from school_year string "2023/2024" → 2024
+  let graduation_year: number | null = null
+  if (body.school_year) {
+    const parts = body.school_year.split('/')
+    if (parts.length === 2) graduation_year = parseInt(parts[1]) || null
+  }
+
+  // Sequential reference number RODO-YYYY-NNN
+  const year = new Date().getFullYear()
+  const countRow = await c.env.DB.prepare(
+    `SELECT COUNT(*) as cnt FROM consent_requests WHERE requested_at >= ?`
+  ).bind(`${year}-01-01`).first<{ cnt: number }>()
+  const seq = String((countRow?.cnt ?? 0) + 1).padStart(3, '0')
+  const ref = `RODO-${year}-${seq}`
+
+  await c.env.DB.prepare(
+    `INSERT INTO consent_requests
+       (student_name, class_label, graduation_year, request_type,
+        submitter_type, submitter_email, reference_number, matched_albums, notes)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+  ).bind(
+    body.student_name.trim(),
+    body.class_label?.trim() || null,
+    graduation_year,
+    body.request_type,
+    ['parent', 'student', 'adult'].includes(body.submitter_type ?? '') ? body.submitter_type : 'parent',
+    body.submitter_email?.trim() || null,
+    ref,
+    JSON.stringify(matched),
+    body.notes?.trim() || null
+  ).run()
+
+  return c.json({ ok: true, reference_number: ref, matched_albums_count: matched.length }, 201)
+})
+
 publicRouter.get('/menu/current', async (c) => {
   const today = new Date().toISOString().split('T')[0]
   const d = new Date(today)
