@@ -23,7 +23,22 @@
 </style>
 {% endblock %}
 {% block content %}
-<div class="container page-main" x-data="docsApp()" x-init="load()">
+<div class="container page-main">
+
+  <section class="logo-download-section" style="margin-bottom:2.5rem">
+    <h2 style="font-family:var(--font-d);font-size:1.1rem;font-weight:800;color:var(--tx);margin-bottom:.75rem">Zasoby graficzne</h2>
+    <div class="doc-item">
+      <span class="doc-icon">🖼️</span>
+      <div style="flex:1;min-width:0">
+        <p class="doc-title">Logotyp Szkoły Podstawowej nr 32 w Sosnowcu</p>
+        <p class="doc-meta">PNG · Oficjalne logo szkoły do użytku instytucjonalnego</p>
+      </div>
+      <a href="/grafiki-ai/logo-sp32.png" download="logo-SP32-Sosnowiec.png" class="doc-link">⬇ Pobierz</a>
+    </div>
+  </section>
+
+</div>
+<div class="container page-main" style="padding-top:0" x-data="docsApp()" x-init="load()">
 
   <div class="tabs" role="tablist">
     <button class="tab-btn" :class="{active:tab==='dokumenty'}" @click="switchTab('dokumenty')" role="tab">Dokumenty szkolne</button>

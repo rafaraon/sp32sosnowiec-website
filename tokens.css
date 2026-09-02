@@ -77,3 +77,23 @@
   --sh:    0 2px 12px rgba(0,0,0,.28);
   --sh-m:  0 4px 24px rgba(0,0,0,.38);
 }
+
+/* ── Wysoki kontrast ─────────────────────────────────────────────── */
+.high-contrast,
+.high-contrast * {
+  background-color: #000 !important;
+  color: #fff !important;
+  border-color: #fff !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+.high-contrast a,
+.high-contrast button { color: #FFFF00 !important; }
+.high-contrast a:hover,
+.high-contrast button:hover { color: #fff !important; background-color: #222 !important; }
+.high-contrast img { filter: contrast(1.2); }
+.high-contrast .site-header,
+.high-contrast .site-footer { background: #000 !important; }
+.high-contrast .btn-prim,
+.high-contrast .btn { background: #000 !important; color: #FFFF00 !important; border: 2px solid #FFFF00 !important; }
+.high-contrast :focus-visible { outline: 3px solid #FFFF00 !important; }

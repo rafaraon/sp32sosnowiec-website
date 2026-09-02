@@ -55,7 +55,7 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   border-radius: 50%; background: #fff; box-shadow: 0 0 0 4px #fff;
   transition: transform var(--tr);
 }
-.logo:hover .logo-img { transform: scale(1.07); }
+.logo:hover .logo-img { transform: scale(1.13); }
 .logo-text { display: flex; flex-direction: column; }
 .logo-name { font-family: var(--font-d); font-weight: 700; font-size: .9rem; color: #fff; line-height: 1.2; }
 .logo-patron { font-size: .68rem; color: rgba(255,255,255,.72); line-height: 1.3; }
