@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zgoda na wycieczkę szkolną — SP32 Sosnowiec</title>
+<link rel="icon" href="grafiki-ai/logo-sp32.png" type="image/png">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-b);background:var(--bg);color:var(--tx);line-height:1.6}
+a{text-decoration:none;color:inherit}
+
+.screen-wrap{max-width:760px;margin:2rem auto;padding:0 1.5rem 4rem}
+.screen-header{display:flex;align-items:center;gap:1rem;margin-bottom:2rem}
+.screen-back{display:inline-flex;align-items:center;gap:.4rem;font-family:var(--font-d);font-size:.85rem;font-weight:700;color:var(--cp);padding:.5rem 1rem;border-radius:999px;border:1.5px solid var(--cp);transition:background .15s}
+.screen-back:hover{background:var(--clv-l)}
+.screen-title{font-family:var(--font-d);font-size:1.4rem;font-weight:800;color:var(--tx)}
+.print-btn{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--font-d);font-size:.9rem;font-weight:700;color:#fff;background:var(--cp);padding:.65rem 1.5rem;border-radius:999px;border:none;cursor:pointer;margin-left:auto;transition:background .15s}
+.print-btn:hover{background:var(--cp-d)}
+.print-btn svg{width:1rem;height:1rem;stroke:#fff;stroke-width:2;fill:none}
+.notice{background:var(--clv-l);border:1px solid var(--bd);border-left:4px solid var(--ca);border-radius:.75rem;padding:1rem 1.25rem;margin-bottom:1.5rem;font-size:.85rem;color:var(--tx-m);line-height:1.6}
+.notice strong{color:var(--tx);font-family:var(--font-d)}
+.doc-card{background:var(--sf);border:1.5px solid var(--bd);border-radius:2rem;padding:2.5rem}
+.doc{font-family:var(--font-b);font-size:11pt;line-height:1.7;color:#000}
+.doc-logo-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;padding-bottom:.75rem;border-bottom:2px solid #374151}
+.doc-school-name{font-family:var(--font-d);font-size:11pt;font-weight:800;line-height:1.3}
+.doc-school-address{font-size:9pt;color:#555}
+.doc-title{text-align:center;font-size:15pt;font-weight:800;margin:1.25rem 0 .35rem;font-family:var(--font-d);letter-spacing:-.01em}
+.doc-subtitle{text-align:center;font-size:10pt;color:#666;margin-bottom:1.75rem}
+.doc-section{margin-bottom:1.5rem}
+.doc-section-title{font-family:var(--font-d);font-size:10pt;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#555;border-bottom:1px solid #e5e7eb;padding-bottom:.3rem;margin-bottom:.75rem}
+.doc-label{font-size:9.5pt;color:#555;margin-bottom:.15rem}
+.doc-field{border-bottom:1px solid #374151;min-height:1.7rem;margin-bottom:.85rem;display:flex;align-items:flex-end;padding-bottom:2px}
+.doc-pairs{display:grid;grid-template-columns:1fr 1fr;gap:0 2rem}
+.doc-thirds{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0 1.5rem}
+.doc-col{flex:1}
+.doc-checkbox-group{margin:.5rem 0;font-size:10.5pt}
+.doc-checkbox-group li{list-style:none;margin-bottom:.35rem;display:flex;align-items:flex-start;gap:.5rem}
+.doc-checkbox-group li::before{content:'☐';font-size:13pt;line-height:1.2;flex-shrink:0}
+.doc-note{font-size:9pt;color:#888;font-style:italic;margin-top:1.5rem;border-top:1px solid #e5e7eb;padding-top:.75rem;line-height:1.5}
+.doc-sign-row{display:flex;gap:2rem;margin-top:1.75rem}
+.doc-sign-block{flex:1;text-align:center}
+.doc-sign-line{border-bottom:1px solid #374151;height:2rem;margin-bottom:.3rem}
+.doc-sign-label{font-size:9pt;color:#666}
+.consent-box{border:2px solid #374151;border-radius:4px;padding:1rem;margin:1rem 0}
+.consent-options{display:flex;gap:2rem;margin-top:.5rem;font-size:11pt}
+.consent-options li{list-style:none;display:flex;align-items:center;gap:.5rem;font-weight:700}
+.consent-options li::before{content:'☐';font-size:14pt;line-height:1}
+.dot-line{border-bottom:1px dotted #9ca3af;min-height:1.5rem;margin-bottom:.75rem}
+
+@media print {
+  .screen-back,.print-btn,.notice,.screen-header,.doc-card{all:unset}
+  .doc-card{display:block}
+  .screen-wrap{padding:0;max-width:none;margin:0}
+  .screen-header{display:none}
+  .notice{display:none}
+  body{background:#fff;font-size:11pt}
+  @page{margin:1.8cm 2cm}
+}
+</style>
+</head>
+<body>
+<div class="screen-wrap">
+  <div class="screen-header">
+    <a href="portal-rodzica.html" class="screen-back">← Portal Rodzica</a>
+    <span class="screen-title">Zgoda na wycieczkę szkolną</span>
+    <button class="print-btn" onclick="window.print()">
+      <svg viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Drukuj / Pobierz PDF
+    </button>
+  </div>
+
+  <div class="notice">
+    <strong>Informacja:</strong> Wypełniony formularz oddaj wychowawcy klasy w terminie przez niego wskazanym, zwykle <strong>na tydzień przed wycieczką</strong>. Wychowawca może go zastąpić własnym formularzem szkoły — zapytaj o to przed wypełnieniem.
+  </div>
+
+  <div class="doc-card">
+    <div class="doc">
+      <div class="doc-logo-row">
+        <div>
+          <p class="doc-school-name">Szkoła Podstawowa nr 32<br>im. Leona Kruczkowskiego w Sosnowcu</p>
+          <p class="doc-school-address">ul. Armii Krajowej 93, 41-215 Sosnowiec &nbsp;·&nbsp; tel. 32 263-43-01</p>
+        </div>
+        <div style="text-align:right;font-size:9pt;color:#888">
+          Rok szkolny: ____________<br>
+          Data złożenia: ____________
+        </div>
+      </div>
+
+      <div class="doc-title">ZGODA RODZICA / OPIEKUNA PRAWNEGO<br>NA UDZIAŁ W WYCIECZCE SZKOLNEJ</div>
+
+      <!-- Dane dziecka -->
+      <div class="doc-section">
+        <p class="doc-section-title">Dane ucznia</p>
+        <div class="doc-pairs">
+          <div class="doc-col">
+            <p class="doc-label">Imię i nazwisko ucznia</p>
+            <div class="doc-field"></div>
+          </div>
+          <div class="doc-col">
+            <p class="doc-label">Klasa</p>
+            <div class="doc-field"></div>
+          </div>
+        </div>
+        <div class="doc-pairs">
+          <div class="doc-col">
+            <p class="doc-label">Imię i nazwisko rodzica / opiekuna prawnego</p>
+            <div class="doc-field"></div>
+          </div>
+          <div class="doc-col">
+            <p class="doc-label">Telefon kontaktowy (dostępny w dniu wycieczki)</p>
+            <div class="doc-field"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dane wycieczki -->
+      <div class="doc-section">
+        <p class="doc-section-title">Informacje o wycieczce (wypełnia wychowawca)</p>
+        <div class="doc-pairs">
+          <div class="doc-col">
+            <p class="doc-label">Miejsce docelowe / cel wycieczki</p>
+            <div class="doc-field"></div>
+          </div>
+          <div class="doc-col">
+            <p class="doc-label">Data wycieczki</p>
+            <div class="doc-field"></div>
+          </div>
+        </div>
+        <div class="doc-thirds">
+          <div class="doc-col">
+            <p class="doc-label">Godzina zbiórki</p>
+            <div class="doc-field"></div>
+          </div>
+          <div class="doc-col">
+            <p class="doc-label">Godzina powrotu (szacowana)</p>
+            <div class="doc-field"></div>
+          </div>
+          <div class="doc-col">
+            <p class="doc-label">Środek transportu</p>
+            <div class="doc-field"></div>
+          </div>
+        </div>
+        <p class="doc-label">Wychowawca / kierownik wycieczki</p>
+        <div class="doc-field"></div>
+      </div>
+
+      <!-- Zgoda -->
+      <div class="doc-section">
+        <p class="doc-section-title">Oświadczenie o zgodzie</p>
+        <div class="consent-box">
+          <p style="font-size:10.5pt">Ja, niżej podpisany/a, jako rodzic/opiekun prawny ucznia wymienionego powyżej:</p>
+          <ul class="consent-options">
+            <li>WYRAŻAM ZGODĘ</li>
+            <li>NIE WYRAŻAM ZGODY</li>
+          </ul>
+          <p style="font-size:10pt;margin-top:.5rem;color:#444">na udział mojego dziecka w wycieczce szkolnej opisanej powyżej.</p>
+        </div>
+      </div>
+
+      <!-- Informacje zdrowotne -->
+      <div class="doc-section">
+        <p class="doc-section-title">Informacje zdrowotne (istotne dla bezpieczeństwa)</p>
+        <p class="doc-label">Choroby przewlekłe, alergie pokarmowe, alergie (w tym na owady, rośliny, leki)</p>
+        <div class="doc-field" style="min-height:2.5rem"></div>
+        <p class="doc-label">Przyjmowane leki (nazwa, dawkowanie, godziny podania)</p>
+        <div class="doc-field" style="min-height:2.5rem"></div>
+        <p style="font-size:10.5pt;margin-bottom:.4rem">Czy dziecko może uczestniczyć w całym programie wycieczki?</p>
+        <ul class="doc-checkbox-group">
+          <li>Tak, bez ograniczeń</li>
+          <li>Tak, z następującymi ograniczeniami: <span style="border-bottom:1px solid #374151;display:inline-block;min-width:200px">&nbsp;</span></li>
+        </ul>
+      </div>
+
+      <!-- Upoważnienie -->
+      <div class="doc-section">
+        <p class="doc-section-title">Upoważnienie do decyzji medycznych</p>
+        <p style="font-size:10.5pt">W przypadku nagłego wypadku lub pogorszenia stanu zdrowia dziecka upoważniam opiekunów wycieczki do:</p>
+        <ul class="doc-checkbox-group" style="margin-top:.5rem">
+          <li>wezwania pogotowia ratunkowego (numer 112)</li>
+          <li>podjęcia niezbędnej pierwszej pomocy</li>
+          <li>przewiezienia dziecka do najbliższego szpitalnego oddziału ratunkowego</li>
+          <li>kontaktu z rodzicem / opiekunem pod podanym numerem telefonu</li>
+        </ul>
+      </div>
+
+      <!-- Koszty -->
+      <div class="doc-section">
+        <p class="doc-section-title">Finansowanie</p>
+        <div class="doc-pairs">
+          <div class="doc-col">
+            <p class="doc-label">Koszt wycieczki (kwota)</p>
+            <div class="doc-field"></div>
+          </div>
+          <div class="doc-col">
+            <p class="doc-label">Termin i sposób płatności</p>
+            <div class="doc-field"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Podpisy -->
+      <div class="doc-sign-row">
+        <div class="doc-sign-block">
+          <div class="doc-sign-line"></div>
+          <p class="doc-sign-label">data i podpis rodzica / opiekuna prawnego</p>
+        </div>
+        <div class="doc-sign-block" style="text-align:right">
+          <div class="doc-sign-line"></div>
+          <p class="doc-sign-label">data i podpis wychowawcy (potwierdzenie przyjęcia)</p>
+        </div>
+      </div>
+
+      <p class="doc-note">Formularz stanowi wzór pomocniczy. Wychowawca klasy może stosować własny formularz szkoły. Wyrażenie lub odmowa zgody przez oboje rodziców (opiekunów prawnych) ma taką samą moc prawną. Podanie informacji zdrowotnych jest dobrowolne, jednak pomaga zapewnić bezpieczeństwo dziecka podczas wycieczki. Dane zawarte w formularzu przetwarzane są wyłącznie na potrzeby organizacji wycieczki zgodnie z RODO.</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>

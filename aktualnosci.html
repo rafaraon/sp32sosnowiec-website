@@ -100,75 +100,83 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
 </style>
 
 <style>
-.news-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem;margin-top:2rem}
-.news-card{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);transition:box-shadow var(--tr),transform var(--tr);text-decoration:none;color:inherit;display:flex;flex-direction:column}
-.news-card:hover{box-shadow:var(--sh-m);transform:translateY(-2px)}
-.news-card img{width:100%;aspect-ratio:16/9;object-fit:cover;background:var(--clv)}
-.news-card-body{padding:1.25rem;flex:1;display:flex;flex-direction:column;gap:.4rem}
-.news-date{font-family:var(--font-d);font-size:.7rem;font-weight:700;color:var(--ca);letter-spacing:.05em;text-transform:uppercase}
-.news-card h2{font-family:var(--font-d);font-size:1rem;font-weight:800;color:var(--tx);line-height:1.35}
-.news-card p{font-size:.88rem;color:var(--tx-m);line-height:1.6;margin-top:.2rem}
-.skel-card{background:var(--clv);border-radius:var(--r);height:280px;animation:pulse 1.5s ease-in-out infinite}
+/* ── News page layout ── */
+.news-page-header{margin-bottom:1.75rem}
+.news-page-title{font-family:var(--font-d);font-size:clamp(1.6rem,4vw,2.2rem);font-weight:900;color:var(--tx);letter-spacing:-.03em;margin-bottom:.4rem}
+.news-page-sub{font-size:1rem;color:var(--tx-m);font-weight:600;max-width:560px}
+
+/* Filter tabs */
+.filter-tabs{display:flex;flex-wrap:wrap;gap:.65rem;margin-bottom:2rem}
+.filter-tab{padding:.6rem 1.35rem;border-radius:2rem;font-family:var(--font-d);font-weight:700;font-size:.88rem;border:2px solid var(--bd);background:var(--sf);color:var(--tx-m);transition:border-color .18s,color .18s,background .18s,box-shadow .18s;cursor:pointer}
+.filter-tab:hover{border-color:var(--cp);color:var(--cp)}
+.filter-tab.active{background:var(--cp);color:#fff;border-color:var(--cp);box-shadow:0 4px 14px rgba(212,117,106,.38)}
+
+/* Two-column layout */
+.news-layout{display:flex;gap:2.5rem;align-items:flex-start}
+.news-content{flex:1;min-width:0}
+.news-sidebar{width:268px;flex-shrink:0;display:flex;flex-direction:column;gap:1.25rem}
+
+/* Cards grid */
+.news-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1.5rem}
+.news-card{background:var(--sf);border-radius:2rem;border:2px solid var(--bd);overflow:hidden;box-shadow:0 4px 18px rgba(0,0,0,.06);transition:box-shadow .22s,transform .22s;text-decoration:none;color:inherit;display:flex;flex-direction:column}
+.news-card:hover{box-shadow:0 20px 56px rgba(0,0,0,.13);transform:translateY(-3px)}
+.news-cover{width:100%;aspect-ratio:16/9;object-fit:cover;background:var(--clv);display:block}
+.news-card-body{padding:1.4rem;flex:1;display:flex;flex-direction:column;gap:.4rem}
+.news-card-badges{display:flex;align-items:center;gap:.5rem;margin-bottom:.35rem;flex-wrap:wrap}
+.news-date-badge{background:var(--cp);color:#fff;padding:.25rem .7rem;border-radius:.65rem;font-family:var(--font-d);font-size:.68rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;flex-shrink:0}
+.news-cat-chip{padding:.22rem .65rem;border-radius:.65rem;font-family:var(--font-d);font-size:.65rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase}
+.news-cat-chip.komunikat{background:#fef3c7;color:#d97706}
+.news-cat-chip.ogloszenie{background:#fff0e6;color:#ea580c}
+.news-cat-chip.wydarzenie{background:#ede9fe;color:#7c3aed}
+.news-cat-chip.sukces{background:#dcfce7;color:#16a34a}
+.news-card h2{font-family:var(--font-d);font-size:1.05rem;font-weight:800;color:var(--cp);line-height:1.32}
+.news-card-excerpt{font-size:.87rem;color:var(--tx-m);line-height:1.65;flex:1}
+.news-read-more{display:inline-flex;align-items:center;gap:.35rem;font-family:var(--font-d);font-weight:800;font-size:.88rem;color:var(--cp);margin-top:.75rem;transition:gap .18s}
+.news-card:hover .news-read-more{gap:.6rem}
+
+/* Skeleton + error */
+.skel-card{background:var(--clv);border-radius:2rem;height:300px;animation:pulse 1.5s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
 .fetch-error{background:var(--clv-l);border:1px solid var(--bd);border-radius:var(--r);padding:2rem;text-align:center;margin-top:2rem}
 .fetch-error p{color:var(--tx-m);font-size:.95rem}
 .fetch-error a{color:var(--cp);font-weight:700}
+.news-empty{color:var(--tx-m);font-size:.95rem;padding:3rem 0;text-align:center}
 
-/* ── Pinned new-site banner ── */
-.new-site-banner{
-  position:relative;overflow:hidden;
-  background:linear-gradient(135deg,var(--cp-d) 0%,var(--cp) 45%,var(--ca) 100%);
-  border-radius:var(--r);padding:2rem 2.5rem;margin-top:2rem;
-  display:flex;align-items:center;justify-content:space-between;gap:1.5rem;
-  box-shadow:0 8px 40px rgba(195,80,15,.35);
-  animation:bannerIn .6s cubic-bezier(.22,1,.36,1) both;
-}
-@keyframes bannerIn{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:none}}
-.new-site-banner::before{
-  content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse 60% 80% at 80% 50%,rgba(255,255,255,.12) 0%,transparent 70%);
-  pointer-events:none;
-}
-.new-site-banner::after{
-  content:'';position:absolute;top:-50%;left:-20%;width:200%;height:200%;
-  background:conic-gradient(transparent 0deg,rgba(255,255,255,.06) 60deg,transparent 120deg);
-  animation:shimmer 4s linear infinite;pointer-events:none;
-}
-@keyframes shimmer{to{transform:rotate(360deg)}}
-.nsb-badge{
-  display:inline-flex;align-items:center;gap:.4rem;
-  background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);
-  border-radius:2rem;padding:.25rem .75rem;
-  font-family:var(--font-d);font-size:.65rem;font-weight:700;letter-spacing:.12em;
-  text-transform:uppercase;color:#fff;margin-bottom:.6rem;
-  backdrop-filter:blur(6px);
-}
-.nsb-dot{width:6px;height:6px;border-radius:50%;background:#6eff9f;box-shadow:0 0 8px #6eff9f;animation:blink 1.2s ease-in-out infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-.nsb-title{font-family:var(--font-d);font-size:clamp(1.1rem,3vw,1.5rem);font-weight:900;color:#fff;line-height:1.2;letter-spacing:-.02em;text-shadow:0 2px 12px rgba(0,0,0,.2)}
-.nsb-sub{font-size:.88rem;color:rgba(255,255,255,.82);margin-top:.35rem;line-height:1.5}
-.nsb-btn{
-  flex-shrink:0;display:inline-flex;align-items:center;gap:.5rem;
-  background:#fff;color:var(--cp);font-family:var(--font-d);font-weight:800;font-size:.9rem;
-  padding:.7rem 1.4rem;border-radius:var(--r-s);white-space:nowrap;
-  box-shadow:0 4px 20px rgba(0,0,0,.18);text-decoration:none;
-  transition:transform .18s,box-shadow .18s;
-  animation:pulse-btn 2.4s ease-in-out infinite;
-}
-@keyframes pulse-btn{0%,100%{box-shadow:0 4px 20px rgba(0,0,0,.18)}50%{box-shadow:0 4px 28px rgba(255,140,60,.55),0 0 0 6px rgba(255,255,255,.08)}}
-.nsb-btn:hover{transform:translateY(-2px) scale(1.03);box-shadow:0 8px 32px rgba(0,0,0,.25)}
-.nsb-icon{font-size:1.1rem}
-@media(max-width:600px){
-  .new-site-banner{flex-direction:column;align-items:flex-start;padding:1.5rem}
-  .nsb-btn{width:100%;justify-content:center}
-}
-@media(prefers-reduced-motion:reduce){
-  .new-site-banner::after,.nsb-dot,.nsb-btn{animation:none}
-  .new-site-banner{animation:none}
-}
+/* Sidebar widgets */
+.sidebar-widget{background:var(--sf);border:2px solid var(--bd);border-radius:2rem;padding:1.5rem}
+.sidebar-widget h4{font-family:var(--font-d);font-size:.95rem;font-weight:800;color:var(--tx);margin-bottom:1rem}
+.search-wrap{position:relative}
+.search-input{width:100%;background:var(--bg);border:2px solid var(--bd);border-radius:.75rem;padding:.75rem 2.5rem .75rem .85rem;font-family:var(--font-d);font-weight:600;font-size:.88rem;color:var(--tx);transition:border-color .18s}
+.search-input:focus{outline:none;border-color:var(--cp)}
+.search-icon{position:absolute;right:.75rem;top:50%;transform:translateY(-50%);color:var(--tx-m);pointer-events:none}
+
+/* Dark "latest" panel */
+.sidebar-latest{background:var(--cp-d);border-color:transparent;position:relative;overflow:hidden;color:#fff}
+.sidebar-latest::before{content:'';position:absolute;top:-3rem;right:-3rem;width:8rem;height:8rem;background:var(--cp);border-radius:50%;opacity:.2;filter:blur(2rem);pointer-events:none}
+.sidebar-latest h4{color:#fff;position:relative;z-index:1}
+.latest-items{display:flex;flex-direction:column;gap:.9rem;position:relative;z-index:1}
+.latest-item{display:flex;gap:.75rem;text-decoration:none;cursor:pointer}
+.latest-bar{width:4px;border-radius:2px;background:var(--cp);flex-shrink:0;min-height:2.5rem;transition:width .18s,background .18s}
+.latest-item:hover .latest-bar{width:6px}
+.latest-when{font-size:.65rem;font-family:var(--font-d);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:.15rem}
+.latest-title{font-size:.83rem;font-weight:700;color:rgba(255,255,255,.82);line-height:1.4;transition:color .18s}
+.latest-item:hover .latest-title{color:var(--ca)}
+.sidebar-see-all{display:inline-block;margin-top:1rem;font-family:var(--font-d);font-size:.75rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ca);transition:color .18s;position:relative;z-index:1}
+.sidebar-see-all:hover{color:#fff}
+
+/* Quick links */
+.sidebar-links{background:var(--clv-l);border-color:rgba(212,117,106,.2)}
+.sidebar-links h4{color:var(--cp);text-transform:uppercase;letter-spacing:.08em;font-size:.75rem}
+.quick-links-list{display:flex;flex-direction:column;gap:.7rem}
+.quick-link{display:flex;align-items:center;gap:.6rem;font-family:var(--font-d);font-weight:700;font-size:.88rem;color:var(--tx);transition:color .18s;text-decoration:none}
+.quick-link:hover{color:var(--cp)}
+.quick-link svg{color:var(--cp);flex-shrink:0}
+
+@media(max-width:960px){.news-layout{flex-direction:column}.news-sidebar{width:100%}}
+@media(max-width:640px){.news-grid{grid-template-columns:1fr}}
 </style>
 
-<link rel="stylesheet" href="header.css">
+<link rel="stylesheet" href="header.css?v=4">
 <link rel="stylesheet" href="footer.css">
 </head>
 <body>
@@ -185,7 +193,7 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
         BIP
       </a>
       <div class="util-bar-sep" aria-hidden="true"></div>
-      <a href="https://sp32sosnowiec.edupage.org" class="util-bar-link" target="_blank" rel="noopener noreferrer">
+      <a href="https://portal.librus.pl/rodzina" class="util-bar-link" target="_blank" rel="noopener noreferrer">
         <svg width="11" height="11" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M2 10V5l4-3 4 3v5H7.5V7.5h-3V10H2z"/></svg>
         E-Dziennik
       </a>
@@ -315,72 +323,187 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
 </div>
 
 <main id="main-content" class="page-main">
-  
-<div class="container page-main">
-
-<div class="new-site-banner">
-  <div>
-    <div class="nsb-badge"><span class="nsb-dot"></span> Nowe</div>
-    <p class="nsb-title">Mamy nową stronę szkoły!</p>
-    <p class="nsb-sub">Aktualne informacje, galeria, jadłospis i dokumenty — wszystko w jednym miejscu.<br>Sprawdź i zapamiętaj nowy adres: <strong style="color:#fff">sp32sosnowiec.edu.pl</strong></p>
-  </div>
-  <a href="index.html" class="nsb-btn">
-    <span class="nsb-icon">✨</span> Odkryj nową stronę
-  </a>
-</div>
-
+<div class="container">
 <div x-data="newsApp()" x-init="load()">
-  <template x-if="loading">
-    <div class="news-grid">
-      <div class="skel-card"></div>
-      <div class="skel-card"></div>
-      <div class="skel-card"></div>
-    </div>
-  </template>
-  <template x-if="error">
-    <div class="fetch-error">
-      <p>Treść chwilowo niedostępna. <a href="" @click.prevent="load()">Spróbuj ponownie →</a></p>
-    </div>
-  </template>
-  <template x-if="!loading && !error && items.length === 0">
-    <p style="color:var(--tx-m);margin-top:2rem">Brak aktualności.</p>
-  </template>
-  <template x-if="!loading && !error && items.length > 0">
-    <div class="news-grid">
-      <template x-for="item in items" :key="item.id">
-        <a :href="'artykul.html?slug=' + item.slug" class="news-card">
-          <img x-show="item.cover_url" :src="item.cover_url" :alt="item.title" loading="lazy">
-          <div style="width:100%;aspect-ratio:16/9;background:var(--clv)" x-show="!item.cover_url"></div>
-          <div class="news-card-body">
-            <p class="news-date" x-text="fmtDate(item.published_at)"></p>
-            <h2 x-text="item.title"></h2>
-            <p x-text="item.excerpt"></p>
+
+  <header class="news-page-header">
+    <h2 class="news-page-title">Co słychać w naszej szkole? 🎒</h2>
+    <p class="news-page-sub">Najważniejsze informacje dla uczniów, rodziców i nauczycieli w jednym miejscu.</p>
+  </header>
+
+  <!-- Filter tabs -->
+  <div class="filter-tabs" role="group" aria-label="Filtruj aktualności">
+    <button class="filter-tab" :class="activeFilter==='all' && 'active'" @click="activeFilter='all'">Wszystkie</button>
+    <button class="filter-tab" :class="activeFilter==='ogloszenie' && 'active'" @click="activeFilter='ogloszenie'">Ogłoszenia</button>
+    <button class="filter-tab" :class="activeFilter==='komunikat' && 'active'" @click="activeFilter='komunikat'">Komunikaty</button>
+    <button class="filter-tab" :class="activeFilter==='wydarzenie' && 'active'" @click="activeFilter='wydarzenie'">Wydarzenia</button>
+  </div>
+
+  <div class="news-layout">
+
+    <!-- Main content -->
+    <div class="news-content">
+      <template x-if="loading">
+        <div class="news-grid">
+          <div class="skel-card"></div>
+          <div class="skel-card"></div>
+          <div class="skel-card"></div>
+          <div class="skel-card"></div>
+        </div>
+      </template>
+
+      <template x-if="error">
+        <div class="fetch-error">
+          <p>Treść chwilowo niedostępna. <a href="" @click.prevent="load()">Spróbuj ponownie →</a></p>
+        </div>
+      </template>
+
+      <template x-if="!loading && !error">
+        <div>
+          <template x-if="filteredItems().length === 0">
+            <p class="news-empty">Brak aktualności pasujących do filtra.</p>
+          </template>
+          <div class="news-grid" x-show="filteredItems().length > 0">
+            <template x-for="item in filteredItems()" :key="item.id">
+              <a :href="'artykul.html?slug=' + item.slug" class="news-card">
+                <template x-if="item.cover_url">
+                  <img class="news-cover" :src="item.cover_url" :alt="item.title" loading="lazy">
+                </template>
+                <div class="news-card-body">
+                  <div class="news-card-badges">
+                    <span class="news-date-badge" x-text="fmtDateShort(item.published_at)"></span>
+                    <template x-if="item.category">
+                      <span class="news-cat-chip" :class="item.category" x-text="item.category === 'ogloszenie' ? 'OGŁOSZENIE' : item.category === 'komunikat' ? 'KOMUNIKAT' : item.category === 'wydarzenie' ? 'WYDARZENIE' : 'SUKCES'"></span>
+                    </template>
+                  </div>
+                  <h2 x-text="item.title"></h2>
+                  <p class="news-card-excerpt" x-text="item.excerpt"></p>
+                  <span class="news-read-more">
+                    Czytaj więcej
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 8 16 12 12 16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                  </span>
+                </div>
+              </a>
+            </template>
           </div>
-        </a>
+        </div>
       </template>
     </div>
-  </template>
+
+    <!-- Sidebar -->
+    <aside class="news-sidebar" aria-label="Panel boczny">
+
+      <!-- Search -->
+      <div class="sidebar-widget">
+        <h4>Szukaj informacji</h4>
+        <div class="search-wrap">
+          <input type="search" class="search-input" x-model="search" placeholder="Wpisz frazę..." aria-label="Szukaj aktualności">
+          <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </div>
+      </div>
+
+      <!-- Latest updates — dark panel -->
+      <div class="sidebar-widget sidebar-latest">
+        <h4>Najnowsze komunikaty</h4>
+        <div class="latest-items">
+          <template x-for="item in items.slice(0,3)" :key="item.id">
+            <a :href="'artykul.html?slug=' + item.slug" class="latest-item">
+              <div class="latest-bar"></div>
+              <div>
+                <p class="latest-when" x-text="relDate(item.published_at)"></p>
+                <p class="latest-title" x-text="item.title"></p>
+              </div>
+            </a>
+          </template>
+          <template x-if="items.length === 0 && !loading">
+            <p style="color:rgba(255,255,255,.5);font-size:.85rem">Brak aktualności.</p>
+          </template>
+        </div>
+        <a href="aktualnosci.html" class="sidebar-see-all">Zobacz wszystkie →</a>
+      </div>
+
+      <!-- Quick links -->
+      <div class="sidebar-widget sidebar-links">
+        <h4>Szybkie linki</h4>
+        <ul class="quick-links-list">
+          <li>
+            <a href="https://portal.librus.pl/rodzina" class="quick-link" target="_blank" rel="noopener">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              E-Dziennik
+            </a>
+          </li>
+          <li>
+            <a href="jadlospis.html" class="quick-link">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/></svg>
+              Jadłospis
+            </a>
+          </li>
+          <li>
+            <a href="dzwonki.html" class="quick-link">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Plan lekcji i przerwy
+            </a>
+          </li>
+          <li>
+            <a href="galeria.html" class="quick-link">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              Galeria
+            </a>
+          </li>
+        </ul>
+      </div>
+
+    </aside>
+  </div>
+
 </div>
 </div>
+
 <script>
-function newsApp(){
-  return{
-    items:[],loading:true,error:false,
-    async load(){
-      this.loading=true;this.error=false;
-      try{
-        const r=await fetch('/api/public/news');
-        if(!r.ok)throw new Error();
-        const d=await r.json();
-        this.items=d.items;
-      }catch{this.error=true}
-      finally{this.loading=false}
+function newsApp() {
+  return {
+    items: [], loading: true, error: false,
+    search: '', activeFilter: 'all',
+    async load() {
+      this.loading = true; this.error = false;
+      try {
+        const r = await fetch('/api/public/news?limit=50');
+        if (!r.ok) throw new Error();
+        const d = await r.json();
+        this.items = d.items ?? [];
+      } catch { this.error = true; }
+      finally { this.loading = false; }
     },
-    fmtDate(iso){
-      if(!iso)return'';
-      return new Date(iso).toLocaleDateString('pl-PL',{day:'numeric',month:'long',year:'numeric'});
+    filteredItems() {
+      return this.items.filter(item => {
+        if (this.activeFilter && this.activeFilter !== 'all') {
+          if (item.category !== this.activeFilter) return false;
+        }
+        if (this.search) {
+          const q = this.search.toLowerCase();
+          if (!item.title?.toLowerCase().includes(q) && !item.excerpt?.toLowerCase().includes(q)) return false;
+        }
+        return true;
+      });
+    },
+    fmtDate(iso) {
+      if (!iso) return '';
+      return new Date(iso.replace(' ', 'T')).toLocaleDateString('pl-PL', { day: 'numeric', month: 'long', year: 'numeric' });
+    },
+    fmtDateShort(iso) {
+      if (!iso) return '';
+      return new Date(iso.replace(' ', 'T')).toLocaleDateString('pl-PL', { day: 'numeric', month: 'short', year: 'numeric' }).toUpperCase();
+    },
+    relDate(iso) {
+      if (!iso) return '';
+      const d = new Date(iso.replace(' ', 'T'));
+      const diff = Math.floor((Date.now() - d) / 86400000);
+      if (diff === 0) return 'Dzisiaj';
+      if (diff === 1) return 'Wczoraj';
+      if (diff < 7) return diff + ' dni temu';
+      return this.fmtDateShort(iso);
     }
-  }
+  };
 }
 </script>
 <script src="/alpine.min.js" defer></script>
@@ -395,7 +518,7 @@ function newsApp(){
         <div class="footer-school-name">Szkoła Podstawowa nr 32<br>im. L. Kruczkowskiego w Sosnowcu</div>
       </a>
       <div class="footer-ext">
-        <a href="https://sp32sosnowiec.edupage.org" class="footer-ext-link" target="_blank" rel="noopener">E-Dziennik ↗</a>
+        <a href="https://portal.librus.pl/rodzina" class="footer-ext-link" target="_blank" rel="noopener">E-Dziennik ↗</a>
         <a href="https://sp_32_sosnowiec.bip.gov.pl/" class="footer-ext-link" target="_blank" rel="noopener">BIP ↗</a>
         <a href="https://www.facebook.com/SP32Sosnowiec" class="footer-ext-link" target="_blank" rel="noopener">Facebook ↗</a>
       </div>
@@ -482,6 +605,6 @@ function newsApp(){
 </div>
 
 
-<script src="shared.js" defer></script>
+<script src="shared.js?v=5" defer></script>
 </body>
 </html>

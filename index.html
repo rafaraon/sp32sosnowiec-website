@@ -15,6 +15,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="tokens.css">
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.525.0/dist/umd/lucide.min.js"></script>
 
 <style>
 
@@ -48,33 +49,42 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
 /* ════════════════════════
    HEADER
 ════════════════════════ */
-.site-header { position: sticky; top: 0; z-index: 100; background: linear-gradient(90deg, var(--cp) 0%, var(--ca) 100%); box-shadow: 0 2px 20px rgba(0,0,0,.22); }
-.header-inner { display: flex; align-items: center; gap: 1.5rem; padding: 1rem 0; min-height: 80px; }
-
-.logo { display: flex; align-items: center; gap: .65rem; flex-shrink: 0; }
-.logo-img {
-  width: 60px; height: 60px; object-fit: contain; flex-shrink: 0;
-  border-radius: 50%;
-  background: #fff;
-  box-shadow: 0 0 0 4px #fff;
-  transition: transform var(--tr);
+.site-header {
+  position: sticky; top: 0; z-index: 100;
+  background: linear-gradient(90deg, var(--cp) 0%, var(--ca) 50%, #FF9F6A 100%);
+  border-bottom: 5px solid rgba(0,0,0,.16);
+  box-shadow: 0 4px 32px rgba(0,0,0,.22);
+  transition: background .3s ease, backdrop-filter .3s ease;
 }
-.logo:hover .logo-img { transform: scale(1.13); }
+.site-header.scrolled {
+  background: linear-gradient(90deg, rgba(195,80,15,.95) 0%, rgba(175,38,58,.95) 100%);
+  backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+}
+.header-inner { display: flex; align-items: center; gap: 1.5rem; padding: .85rem 0; min-height: 100px; }
+
+.logo { display: flex; align-items: center; gap: .75rem; flex-shrink: 0; }
+.logo-img {
+  width: 80px; height: 80px; object-fit: contain; flex-shrink: 0;
+  border-radius: 50%; background: #fff;
+  box-shadow: 0 0 0 4px rgba(255,255,255,.5), 0 8px 28px rgba(0,0,0,.22);
+  transition: transform .25s cubic-bezier(.34,1.56,.64,1);
+}
+.logo:hover .logo-img { transform: scale(1.1); }
 .logo-text { display: flex; flex-direction: column; }
-.logo-name { font-family: var(--font-d); font-weight: 700; font-size: .9rem; color: #fff; line-height: 1.2; }
-.logo-patron { font-size: .68rem; color: rgba(255,255,255,.72); line-height: 1.3; }
+.logo-name { font-family: var(--font-d); font-weight: 800; font-size: 1rem; color: #fff; line-height: 1.2; }
+.logo-patron { font-size: .7rem; color: rgba(255,255,255,.75); line-height: 1.3; }
 
 .main-nav { flex: 1; }
-.main-nav > ul { display: flex; gap: .25rem; align-items: center; }
+.main-nav > ul { display: flex; gap: .2rem; align-items: center; }
 .main-nav > ul > li > a {
-  font-family: var(--font-d); font-size: .92rem; font-weight: 700;
-  color: rgba(255,255,255,.88); padding: .5rem .75rem;
-  border-radius: var(--r-s); transition: background var(--tr), color var(--tr);
-  white-space: nowrap; display: flex; align-items: center; gap: .2rem;
+  font-family: var(--font-d); font-size: .93rem; font-weight: 800;
+  color: rgba(255,255,255,.92); padding: .55rem .85rem;
+  border-radius: 10px;
+  transition: background .2s ease, transform .15s ease, color .15s;
+  white-space: nowrap; display: flex; align-items: center; gap: .25rem;
 }
-.main-nav > ul > li > a:hover,
-.main-nav > ul > li > a.active { background: rgba(255,255,255,.12); color: #fff; }
-.main-nav > ul > li > a.active { color: var(--ca); }
+.main-nav > ul > li > a:hover { background: rgba(255,255,255,.16); color: #fff; transform: translateY(-2px); }
+.main-nav > ul > li > a.active { background: rgba(0,0,0,.16); color: #fff; }
 .nav-caret { font-size: .65rem; opacity: .7; transition: transform .16s; }
 .has-dropdown:hover .nav-caret,
 .has-dropdown.open .nav-caret { transform: rotate(180deg); }
@@ -84,47 +94,61 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
 ════════════════════════ */
 .has-dropdown { position: relative; }
 .dropdown {
-  position: absolute; top: 100%; left: 0;
-  min-width: 212px;
-  background: var(--sf); border: 1px solid var(--bd); border-radius: var(--r);
-  box-shadow: var(--sh-m); padding: .4rem; padding-top: .6rem; list-style: none;
-  opacity: 0; visibility: hidden; transform: translateY(-6px);
-  transition: opacity .16s ease, transform .16s ease, visibility .16s;
+  position: absolute; top: calc(100% + 6px); left: 0; min-width: 220px;
+  background: var(--sf);
+  border-radius: 20px;
+  border-bottom: 4px solid var(--cp);
+  box-shadow: 0 24px 64px rgba(45,26,8,.18), 0 6px 20px rgba(0,0,0,.1);
+  padding: .5rem; list-style: none;
+  opacity: 0; visibility: hidden; transform: translateY(10px);
+  transition: opacity .28s cubic-bezier(.23,1,.32,1),
+              transform .28s cubic-bezier(.23,1,.32,1),
+              visibility .28s;
   z-index: 200;
 }
 .dropdown::before {
-  content: ''; position: absolute;
-  top: -8px; left: 0; right: 0; height: 8px;
+  content: ''; position: absolute; top: -10px; left: 0; right: 0; height: 10px;
 }
 .dropdown-wide {
-  min-width: 424px;
-  display: grid; grid-template-columns: 1fr 1fr; column-gap: .25rem;
+  min-width: 440px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: .2rem;
 }
 .has-dropdown:hover .dropdown,
 .has-dropdown.open   .dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
 .dropdown-item {
-  display: flex; align-items: center; gap: .65rem;
-  padding: .45rem .6rem; border-radius: var(--r-s);
-  color: var(--tx); font-family: var(--font-d); font-size: .82rem; font-weight: 600;
-  transition: background var(--tr), color var(--tr); white-space: nowrap;
+  display: flex; align-items: center; gap: .7rem;
+  padding: .6rem .8rem; border-radius: 12px;
+  border: 1.5px solid transparent;
+  color: var(--tx); font-family: var(--font-d); font-size: .84rem; font-weight: 700;
+  transition: background .18s, color .18s, border-color .18s; white-space: nowrap;
 }
-.dropdown-item:hover, .dropdown-item:focus-visible { background: var(--clv-l); color: var(--cp); outline: none; }
+.dropdown-item:hover, .dropdown-item:focus-visible {
+  background: var(--clv-l); color: var(--cp);
+  border-color: rgba(255,159,67,.35); outline: none;
+}
 .di-icon {
-  width: 30px; height: 30px; border-radius: 7px; flex-shrink: 0;
+  width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
-  background: var(--di-bg, rgba(31,75,60,.1));
+  background: rgba(255,159,67,.12);
+  transition: background .18s, box-shadow .18s;
+}
+.dropdown-item:hover .di-icon {
+  background: var(--cp);
+  box-shadow: 0 4px 12px rgba(255,159,67,.4);
 }
 .di-icon img {
   width: 18px; height: 18px; object-fit: contain;
-  mix-blend-mode: multiply;
+  mix-blend-mode: multiply; transition: filter .18s;
 }
+.dropdown-item:hover .di-icon img { filter: invert(1) brightness(2); mix-blend-mode: normal; }
+.di-icon span { transition: transform .18s; }
+.dropdown-item:hover .di-icon span { transform: scale(1.2); }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) .di-icon img { mix-blend-mode: normal; filter: invert(1) brightness(1.4); }
+  :root:not([data-theme="light"]) .dropdown-item:hover .di-icon img { filter: invert(1) brightness(2); }
 }
 :root[data-theme="dark"] .di-icon img { mix-blend-mode: normal; filter: invert(1) brightness(1.4); }
-.main-nav > ul > li:nth-child(2) .di-icon { --di-bg: rgba(255,159,67,.18); }
-.main-nav > ul > li:nth-child(3) .di-icon { --di-bg: rgba(249,194,46,.18); }
-.main-nav > ul > li:nth-child(4) .di-icon { --di-bg: rgba(238,90,111,.18); }
+:root[data-theme="dark"] .dropdown-item:hover .di-icon img { filter: invert(1) brightness(2); }
 
 /* ════════════════════════
    HAMBURGER + MOBILE NAV
@@ -208,12 +232,15 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
 .a11y-btn:focus-visible { outline: 2px solid var(--ca); outline-offset: 2px; }
 
 .btn-edupage {
-  background: #fff; color: var(--cp); font-family: var(--font-d); font-weight: 800;
-  font-size: .85rem; padding: .5rem 1rem; border-radius: var(--r-s);
-  transition: background var(--tr), transform var(--tr), box-shadow var(--tr); white-space: nowrap;
-  box-shadow: 0 2px 8px rgba(0,0,0,.15);
+  background: rgba(0,0,0,.22); color: #fff;
+  border: 2px solid rgba(255,255,255,.28);
+  font-family: var(--font-d); font-weight: 800; font-size: .88rem;
+  padding: .6rem 1.4rem; border-radius: 14px;
+  transition: background .2s, transform .15s, box-shadow .2s;
+  white-space: nowrap; box-shadow: 0 4px 16px rgba(0,0,0,.18);
+  letter-spacing: .02em;
 }
-.btn-edupage:hover { background: rgba(255,255,255,.9); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(0,0,0,.2); }
+.btn-edupage:hover { background: rgba(0,0,0,.34); transform: translateY(-1px); box-shadow: 0 8px 28px rgba(0,0,0,.26); }
 .btn-edupage:focus-visible { outline: 2px solid rgba(255,255,255,.7); outline-offset: 2px; }
 
 /* ════════════════════════
@@ -349,43 +376,45 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
 /* ════════════════════════
    AKTUALNOŚCI
 ════════════════════════ */
-.news-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+.news-layout { display: flex; gap: 2.5rem; align-items: flex-start; }
+.news-content { flex: 1; min-width: 0; }
+.news-sidebar-home { width: 268px; flex-shrink: 0; display: flex; flex-direction: column; gap: 1.25rem; }
 
+.news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.25rem; }
 .news-card {
-  background: var(--sf); border-radius: var(--r); box-shadow: var(--sh);
-  border: 1px solid var(--bd); overflow: hidden; transition: transform var(--tr), box-shadow var(--tr);
-  display: flex; flex-direction: column;
+  background: var(--sf); border-radius: 2rem; border: 2px solid var(--bd);
+  overflow: hidden; box-shadow: 0 4px 18px rgba(0,0,0,.06);
+  transition: box-shadow .22s, transform .22s; display: flex; flex-direction: column;
+  text-decoration: none; color: inherit;
 }
-.news-card:hover { transform: translateY(-4px); box-shadow: var(--sh-m); }
+.news-card:hover { transform: translateY(-3px); box-shadow: 0 20px 56px rgba(0,0,0,.13); }
+.news-cover { width: 100%; aspect-ratio: 16/9; object-fit: cover; background: var(--clv); display: block; }
+.news-card-body { padding: 1.4rem; flex: 1; display: flex; flex-direction: column; gap: .4rem; }
+.news-card-badges { margin-bottom: .35rem; display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
+.news-date-badge { background: var(--cp); color: #fff; padding: .25rem .7rem; border-radius: .65rem; font-family: var(--font-d); font-size: .68rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; flex-shrink: 0; }
+.news-cat-chip { padding: .22rem .65rem; border-radius: .65rem; font-family: var(--font-d); font-size: .65rem; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; }
+.news-cat-chip.komunikat { background: #fef3c7; color: #d97706; }
+.news-cat-chip.ogloszenie { background: #fff0e6; color: #ea580c; }
+.news-cat-chip.wydarzenie { background: #ede9fe; color: #7c3aed; }
+.news-cat-chip.sukces { background: #dcfce7; color: #16a34a; }
+.news-title { font-family: var(--font-d); font-size: 1.05rem; font-weight: 800; color: var(--cp); line-height: 1.32; flex: 1; }
+.news-excerpt { font-size: .87rem; color: var(--tx-m); line-height: 1.65; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.news-read-more { display: inline-flex; align-items: center; gap: .35rem; font-family: var(--font-d); font-weight: 800; font-size: .88rem; color: var(--cp); margin-top: .75rem; transition: gap .18s; }
+.news-card:hover .news-read-more { gap: .6rem; }
 
-.news-card-img {
-  height: 140px; display: flex; align-items: center; justify-content: center;
-  font-size: .65rem; font-family: var(--font-d); color: rgba(100,80,160,.4);
-  letter-spacing: .1em; text-transform: uppercase; font-weight: 700;
-}
-.nc-green { background: color-mix(in srgb, var(--cp) 15%, var(--sf)); color: rgba(31,75,60,.35); }
-.nc-coral { background: color-mix(in srgb, var(--ca) 12%, var(--sf)); color: rgba(212,117,106,.4); }
-.nc-arch  { background: color-mix(in srgb, #888 10%, var(--sf)); color: rgba(100,100,100,.35); }
-
-.news-card-body { padding: 1.1rem 1.2rem 1.25rem; flex: 1; display: flex; flex-direction: column; }
-.news-meta { display: flex; align-items: center; gap: .5rem; margin-bottom: .65rem; flex-wrap: wrap; }
-.news-date { font-size: .75rem; color: var(--tx-m); font-variant-numeric: tabular-nums; }
-.chip {
-  display: inline-flex; align-items: center; gap: .25rem; padding: .15rem .45rem;
-  border-radius: 20px; font-size: .68rem; font-family: var(--font-d); font-weight: 700; white-space: nowrap;
-}
-.chip-archive {
-  background: color-mix(in srgb, var(--tx-m) 10%, var(--sf));
-  border: 1px solid color-mix(in srgb, var(--tx-m) 20%, var(--bd)); color: var(--tx-m);
-}
-.chip-new { background: color-mix(in srgb, var(--cp) 10%, transparent); color: var(--cp); }
-.chip-szkolne { background: color-mix(in srgb, var(--cp) 13%, transparent); color: #A05010; border: 1px solid color-mix(in srgb, var(--cp) 28%, transparent); }
-.chip-projekty { background: color-mix(in srgb, var(--ca) 13%, transparent); color: var(--ca-d); border: 1px solid color-mix(in srgb, var(--ca) 28%, transparent); }
-.chip-ogloszenia { background: color-mix(in srgb, var(--ql4) 18%, transparent); color: #7A5010; border: 1px solid color-mix(in srgb, var(--ql4) 35%, transparent); }
-.news-title { font-family: var(--font-d); font-size: 1rem; font-weight: 700; line-height: 1.35; color: var(--tx); margin-bottom: .6rem; flex: 1; }
-.news-excerpt { font-size: .85rem; color: var(--tx-m); line-height: 1.55; margin-bottom: 1rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.news-read-more { font-family: var(--font-d); font-size: .82rem; font-weight: 700; color: var(--cp); display: flex; align-items: center; gap: .25rem; margin-top: auto; transition: gap var(--tr), color var(--tr); }
-.news-card:hover .news-read-more { gap: .45rem; color: var(--ca); }
+/* Sidebar widgets (homepage) */
+.hn-widget { background: var(--sf); border: 2px solid var(--bd); border-radius: 2rem; padding: 1.5rem; }
+.hn-widget h4 { font-family: var(--font-d); font-size: .75rem; font-weight: 800; color: var(--cp); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 1rem; }
+.hn-dziennik { background: var(--cp-d); border-color: transparent; color: #fff; display: flex; flex-direction: column; align-items: flex-start; gap: .75rem; position: relative; overflow: hidden; }
+.hn-dziennik::before { content: ''; position: absolute; top: -3rem; right: -3rem; width: 8rem; height: 8rem; background: var(--cp); border-radius: 50%; opacity: .2; filter: blur(2rem); pointer-events: none; }
+.hn-dziennik-title { font-family: var(--font-d); font-size: 1.1rem; font-weight: 900; color: #fff; line-height: 1.2; position: relative; z-index: 1; }
+.hn-dziennik-sub { font-size: .83rem; color: rgba(255,255,255,.7); font-weight: 600; position: relative; z-index: 1; }
+.hn-dziennik-btn { display: inline-flex; align-items: center; gap: .5rem; background: #fff; color: var(--cp); font-family: var(--font-d); font-weight: 800; font-size: .88rem; padding: .6rem 1.2rem; border-radius: 1rem; transition: transform .18s, box-shadow .18s; position: relative; z-index: 1; }
+.hn-dziennik-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,0,0,.18); }
+.hn-links-list { display: flex; flex-direction: column; gap: .7rem; }
+.hn-link { display: flex; align-items: center; gap: .6rem; font-family: var(--font-d); font-weight: 700; font-size: .88rem; color: var(--tx); transition: color .18s; text-decoration: none; }
+.hn-link:hover { color: var(--cp); }
+.hn-link svg { color: var(--cp); flex-shrink: 0; }
 
 /* ════════════════════════
    SKELETON LOADERS
@@ -550,6 +579,8 @@ details.footer-info-card summary::marker { display: none; }
   .logo-patron { display: none; }
   .main-nav { display: none; }
   .nav-hamburger { display: flex; }
+  .news-layout { flex-direction: column; }
+  .news-sidebar-home { width: 100%; }
   .news-grid { grid-template-columns: 1fr; }
   .about-grid { grid-template-columns: 1fr; gap: 2rem; }
   .gallery-grid .skel-card { min-width: calc(50% - .5rem); }
@@ -719,6 +750,28 @@ details.footer-info-card summary::marker { display: none; }
 .ql-card { transition: transform .32s cubic-bezier(.25,.8,.25,1), box-shadow .32s cubic-bezier(.25,.8,.25,1), border-color .2s; }
 .ql-card::after { transition: transform .32s cubic-bezier(.25,.8,.25,1); }
 .ql-card:hover { transform: translateY(-5px); box-shadow: 0 14px 42px rgba(255,159,67,.2); }
+
+/* ── Lucide icons w nav dropdown ── */
+/* createIcons() zastępuje <i> przez <svg> — targetujemy svg + color dla currentColor */
+.di-icon { color: var(--cp); }
+.dropdown-item:hover .di-icon,
+.dropdown-item:focus .di-icon { color: #fff; }
+.di-icon svg[data-lucide] { width:18px; height:18px; stroke-width:1.75; fill:none; flex-shrink:0; display:block; }
+
+/* ── Najnowsze komunikaty sidebar widget ── */
+.hn-news-latest { background:var(--cp-d); color:#fff; border-radius:var(--r); padding:1.1rem 1.1rem 1rem; display:flex; flex-direction:column; gap:.7rem; }
+.hn-nl-head { display:flex; align-items:center; justify-content:space-between; gap:.5rem; }
+.hn-nl-title { font-family:var(--font-d); font-weight:700; font-size:.75rem; letter-spacing:.09em; text-transform:uppercase; color:var(--cp); }
+.hn-nl-all { font-size:.72rem; font-weight:600; letter-spacing:.05em; text-transform:uppercase; color:rgba(255,255,255,.5); text-decoration:none; transition:color .15s; flex-shrink:0; }
+.hn-nl-all:hover { color:var(--cp); }
+.hn-nl-list { display:flex; flex-direction:column; gap:0; list-style:none; padding:0; margin:0; }
+.hn-nl-item { display:flex; flex-direction:column; gap:.12rem; padding:.45rem 0; border-bottom:1px solid rgba(255,255,255,.1); }
+.hn-nl-item:first-child { padding-top:0; }
+.hn-nl-item:last-child { border-bottom:none; padding-bottom:0; }
+.hn-nl-date { font-size:.64rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--cp); }
+.hn-nl-name { font-size:.82rem; line-height:1.4; color:rgba(255,255,255,.88); }
+.hn-nl-name a { color:inherit; text-decoration:none; transition:color .15s; }
+.hn-nl-name a:hover { color:var(--cp); }
 </style>
 
 <div id="scroll-bar" aria-hidden="true"></div>
@@ -733,7 +786,7 @@ details.footer-info-card summary::marker { display: none; }
         BIP
       </a>
       <div class="util-bar-sep" aria-hidden="true"></div>
-      <a href="https://sp32sosnowiec.edupage.org" class="util-bar-link" target="_blank" rel="noopener noreferrer">
+      <a href="https://portal.librus.pl/rodzina" class="util-bar-link" target="_blank" rel="noopener noreferrer">
         <svg width="11" height="11" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M2 10V5l4-3 4 3v5H7.5V7.5h-3V10H2z"/></svg>
         E-Dziennik
       </a>
@@ -767,34 +820,36 @@ details.footer-info-card summary::marker { display: none; }
         <li class="has-dropdown">
           <a href="#" aria-haspopup="true" aria-expanded="false">Nasza Szkoła <span class="nav-caret" aria-hidden="true">▾</span></a>
           <ul class="dropdown" role="menu">
-            <li><a href="historia.html" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-nasza-szkola-historia.png" srcset="grafiki-ai/nav-nasza-szkola-historia@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Historia szkoły</a></li>
-            <li><a href="profil.html" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-nasza-szkola-profil.png" srcset="grafiki-ai/nav-nasza-szkola-profil@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Profil szkoły</a></li>
-            <li><a href="dyrekcja.html" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-nasza-szkola-dyrekcja.png" srcset="grafiki-ai/nav-nasza-szkola-dyrekcja@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Dyrekcja i kadra</a></li>
-            <li><a href="sukcesy.html" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-nasza-szkola-sukcesy.png" srcset="grafiki-ai/nav-nasza-szkola-sukcesy@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Sukcesy uczniów</a></li>
-            <li><a href="galeria.html" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-nasza-szkola-galeria.png" srcset="grafiki-ai/nav-nasza-szkola-galeria@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Galeria</a></li>
-            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-nasza-szkola-rocznica.png" srcset="grafiki-ai/nav-nasza-szkola-rocznica@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>90. rocznica szkoły</a></li>
+            <li><a href="historia.html" class="dropdown-item" role="menuitem"><span class="di-icon"><i data-lucide="landmark"></i></span>Historia szkoły</a></li>
+            <li><a href="profil.html" class="dropdown-item" role="menuitem"><span class="di-icon"><i data-lucide="info"></i></span>Profil szkoły</a></li>
+            <li><a href="dyrekcja.html" class="dropdown-item" role="menuitem"><span class="di-icon"><i data-lucide="users"></i></span>Dyrekcja i kadra</a></li>
+            <li><a href="sukcesy.html" class="dropdown-item" role="menuitem"><span class="di-icon"><i data-lucide="trophy"></i></span>Sukcesy uczniów</a></li>
+            <li><a href="galeria.html" class="dropdown-item" role="menuitem"><span class="di-icon"><i data-lucide="image"></i></span>Galeria</a></li>
+            <li><a href="#" class="dropdown-item" role="menuitem"><span class="di-icon"><i data-lucide="cake"></i></span>90. rocznica szkoły</a></li>
           </ul>
         </li>
 
         <li class="has-dropdown">
           <a href="#" aria-haspopup="true" aria-expanded="false">Uczniowie <span class="nav-caret" aria-hidden="true">▾</span></a>
           <ul class="dropdown" role="menu">
-            <li><a href="biblioteka.html" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-uczniowie-biblioteka.png" srcset="grafiki-ai/nav-uczniowie-biblioteka@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Biblioteka</a></li>
-            <li><a href="swietlica.html" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-uczniowie-swietlica.png" srcset="grafiki-ai/nav-uczniowie-swietlica@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Świetlica</a></li>
-            <li><a href="wolontariat.html" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-uczniowie-wolontariat.png" srcset="grafiki-ai/nav-uczniowie-wolontariat@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Wolontariat</a></li>
-            <li><a href="dzwonki.html" class="dropdown-item" role="menuitem"><span class="di-icon" style="font-size:1rem;display:flex;align-items:center;justify-content:center">🔔</span>Lekcje i przerwy</a></li>
+            <li><a href="dokumenty.html" class="dropdown-item" role="menuitem"><span class="di-icon"><i data-lucide="folder-open"></i></span>Dokumenty szkolne</a></li>
+            <li><a href="biblioteka.html" class="dropdown-item" role="menuitem"><span class="di-icon"><i data-lucide="book-open"></i></span>Biblioteka</a></li>
+            <li><a href="swietlica.html" class="dropdown-item" role="menuitem"><span class="di-icon"><i data-lucide="sun"></i></span>Świetlica</a></li>
+            <li><a href="wolontariat.html" class="dropdown-item" role="menuitem"><span class="di-icon"><i data-lucide="heart"></i></span>Wolontariat</a></li>
+            <li><a href="dzwonki.html" class="dropdown-item" role="menuitem"><span class="di-icon"><i data-lucide="bell"></i></span>Lekcje i przerwy</a></li>
           </ul>
         </li>
 
         <li class="has-dropdown">
-          <a href="#" aria-haspopup="true" aria-expanded="false">Rodzice <span class="nav-caret" aria-hidden="true">▾</span></a>
+          <a href="portal-rodzica.html" aria-haspopup="true" aria-expanded="false">Rodzice <span class="nav-caret" aria-hidden="true">▾</span></a>
           <ul class="dropdown dropdown-wide" role="menu">
-            <li><a href="rekrutacja.html" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-informacje.png" srcset="grafiki-ai/nav-rodzice-informacje@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Rekrutacja</a></li>
-            <li><a href="kalendarz.html" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-informacje.png" srcset="grafiki-ai/nav-rodzice-informacje@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Kalendarz szkolny</a></li>
-            <li><a href="rada-rodzicow.html" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-informacje.png" srcset="grafiki-ai/nav-rodzice-informacje@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Rada Rodziców</a></li>
-            <li><a href="jadlospis.html" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-jadlospis.png" srcset="grafiki-ai/nav-rodzice-jadlospis@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Jadłospis / Stołówka</a></li>
-            <li><a href="psycholog.html" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-psycholog.png" srcset="grafiki-ai/nav-rodzice-psycholog@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Psycholog szkolny</a></li>
-            <li><a href="standardy-ochrony-maloletnich.html" class="dropdown-item" role="menuitem"><span class="di-icon"><img src="grafiki-ai/nav-rodzice-informacje.png" srcset="grafiki-ai/nav-rodzice-informacje@2x.png 2x" alt="" width="20" height="20" aria-hidden="true"></span>Standardy Ochrony Małoletnich</a></li>
+            <li><a href="portal-rodzica.html" class="dropdown-item" role="menuitem"><span class="di-icon"><i data-lucide="home"></i></span>Portal Rodzica</a></li>
+            <li><a href="rekrutacja.html" class="dropdown-item" role="menuitem"><span class="di-icon"><i data-lucide="user-plus"></i></span>Rekrutacja</a></li>
+            <li><a href="kalendarz.html" class="dropdown-item" role="menuitem"><span class="di-icon"><i data-lucide="calendar"></i></span>Kalendarz szkolny</a></li>
+            <li><a href="rada-rodzicow.html" class="dropdown-item" role="menuitem"><span class="di-icon"><i data-lucide="users-2"></i></span>Rada Rodziców</a></li>
+            <li><a href="jadlospis.html" class="dropdown-item" role="menuitem"><span class="di-icon"><i data-lucide="utensils"></i></span>Jadłospis / Stołówka</a></li>
+            <li><a href="psycholog.html" class="dropdown-item" role="menuitem"><span class="di-icon"><i data-lucide="brain"></i></span>Psycholog szkolny</a></li>
+            <li><a href="standardy-ochrony-maloletnich.html" class="dropdown-item" role="menuitem"><span class="di-icon"><i data-lucide="shield"></i></span>Standardy Ochrony Małoletnich</a></li>
           </ul>
         </li>
 
@@ -814,7 +869,7 @@ details.footer-info-card summary::marker { display: none; }
         <span class="hamburger-line"></span>
         <span class="hamburger-line"></span>
       </button>
-      <a href="https://sp32sosnowiec.edupage.org" class="btn-edupage" target="_blank" rel="noopener noreferrer" aria-label="E-Dziennik — otwiera EduPage w nowej karcie">
+      <a href="https://portal.librus.pl/rodzina" class="btn-edupage" target="_blank" rel="noopener noreferrer" aria-label="E-Dziennik Librus — otwiera Librusa w nowej karcie">
         E-Dziennik →
       </a>
     </div>
@@ -847,6 +902,7 @@ details.footer-info-card summary::marker { display: none; }
 
     <hr class="mob-divider">
     <p class="mob-section-title"><img src="grafiki-ai/nav-mobile-uczniowie.png" srcset="grafiki-ai/nav-mobile-uczniowie@2x.png 2x" alt="" width="16" height="16" aria-hidden="true" style="display:inline;vertical-align:middle;margin-right:.4rem">Uczniowie</p>
+    <a href="dokumenty.html" class="mob-sub">📄 Dokumenty szkolne</a>
     <a href="biblioteka.html" class="mob-sub"><img src="grafiki-ai/nav-uczniowie-biblioteka.png" srcset="grafiki-ai/nav-uczniowie-biblioteka@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Biblioteka</a>
     <a href="swietlica.html" class="mob-sub"><img src="grafiki-ai/nav-uczniowie-swietlica.png" srcset="grafiki-ai/nav-uczniowie-swietlica@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Świetlica</a>
     <a href="wolontariat.html" class="mob-sub"><img src="grafiki-ai/nav-uczniowie-wolontariat.png" srcset="grafiki-ai/nav-uczniowie-wolontariat@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Wolontariat</a>
@@ -854,6 +910,7 @@ details.footer-info-card summary::marker { display: none; }
 
     <hr class="mob-divider">
     <p class="mob-section-title"><img src="grafiki-ai/nav-mobile-rodzice.png" srcset="grafiki-ai/nav-mobile-rodzice@2x.png 2x" alt="" width="16" height="16" aria-hidden="true" style="display:inline;vertical-align:middle;margin-right:.4rem">Rodzice</p>
+    <a href="portal-rodzica.html" class="mob-sub" style="font-weight:700;color:var(--cp)">🏠 Portal Rodzica</a>
     <a href="rekrutacja.html" class="mob-sub"><img src="grafiki-ai/nav-rodzice-informacje.png" srcset="grafiki-ai/nav-rodzice-informacje@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Rekrutacja</a>
     <a href="kalendarz.html" class="mob-sub"><img src="grafiki-ai/nav-rodzice-informacje.png" srcset="grafiki-ai/nav-rodzice-informacje@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Kalendarz szkolny</a>
     <a href="rada-rodzicow.html" class="mob-sub"><img src="grafiki-ai/nav-rodzice-informacje.png" srcset="grafiki-ai/nav-rodzice-informacje@2x.png 2x" alt="" width="18" height="18" aria-hidden="true">Rada Rodziców</a>
@@ -871,9 +928,37 @@ details.footer-info-card summary::marker { display: none; }
   <div class="hero-bg" aria-hidden="true">
     <div class="hero-overlay"></div>
   </div>
+  <!-- Floating sticker decorations -->
+  <div class="hero-stickers" aria-hidden="true">
+    <!-- Gwiazdka -->
+    <svg class="stk" width="48" height="48" viewBox="0 0 48 48" fill="none">
+      <path d="M24 4l4.5 13H42l-11 8 4.5 13L24 30l-11.5 8 4.5-13-11-8h13.5z" fill="#FF9F43"/>
+    </svg>
+    <!-- Serce -->
+    <svg class="stk" width="44" height="44" viewBox="0 0 44 44" fill="none">
+      <path d="M22 38s-17-11-17-22a11 11 0 0122 0 11 11 0 0122 0C39 27 22 38 22 38z" fill="#EE5A6F"/>
+    </svg>
+    <!-- Kółko outline -->
+    <svg class="stk" width="40" height="40" viewBox="0 0 40 40" fill="none">
+      <circle cx="20" cy="20" r="16" stroke="#F9C22E" stroke-width="4"/>
+    </svg>
+    <!-- Plus/krzyżyk -->
+    <svg class="stk" width="36" height="36" viewBox="0 0 36 36" fill="none">
+      <rect x="14" y="2" width="8" height="32" rx="4" fill="#FF9F43"/>
+      <rect x="2" y="14" width="32" height="8" rx="4" fill="#FF9F43"/>
+    </svg>
+    <!-- Gwiazdka mała koralowa -->
+    <svg class="stk" width="32" height="32" viewBox="0 0 32 32" fill="none">
+      <path d="M16 2l3 9h9l-7.5 5.5L23 26l-7-5-7 5 2.5-9.5L4 11h9z" fill="#EE5A6F"/>
+    </svg>
+    <!-- Trójkąt -->
+    <svg class="stk" width="38" height="38" viewBox="0 0 38 38" fill="none">
+      <path d="M19 4l16 28H3z" fill="#F9C22E"/>
+    </svg>
+  </div>
   <div class="container hero-content" id="main-content">
     <p class="hero-eyebrow">Sosnowiec · od 1933 roku</p>
-    <h1 class="hero-title">Uczymy,<br>wychowujemy,<br>inspirujemy.</h1>
+    <h1 class="hero-title shimmer-text">Uczymy,<br>wychowujemy,<br>inspirujemy.</h1>
     <p class="hero-sub">Szkoła Podstawowa nr 32 im. Leona Kruczkowskiego w Sosnowcu — miejsce, gdzie każde dziecko ma szansę się rozwijać.</p>
     <div class="hero-ctas">
       <button class="btn btn-prim" id="btn-edziennik-hero">E-Dziennik</button>
@@ -888,7 +973,7 @@ details.footer-info-card summary::marker { display: none; }
 <section class="quicklinks" aria-label="Szybki dostęp">
   <div class="container">
 
-    <a href="https://sp32sosnowiec.edupage.org" class="ql-card ql-dz" target="_blank" rel="noopener" aria-label="E-Dziennik — logowanie EduPage">
+    <a href="https://portal.librus.pl/rodzina" class="ql-card ql-dz" target="_blank" rel="noopener" aria-label="E-Dziennik Librus — logowanie">
       <div class="ql-icon-circle" aria-hidden="true">
         <img src="grafiki-ai/ikona-dziennik.png" alt="" width="58" height="58">
       </div>
@@ -935,10 +1020,61 @@ details.footer-info-card summary::marker { display: none; }
       </div>
       <a href="aktualnosci.html" class="section-link" aria-label="Wszystkie aktualności">Zobacz wszystkie →</a>
     </div>
-    <div class="news-grid stagger" id="home-news-grid">
-      <div class="skel-card skel-news"></div>
-      <div class="skel-card skel-news"></div>
-      <div class="skel-card skel-news"></div>
+    <div class="news-layout">
+      <div class="news-content">
+        <div class="news-grid stagger" id="home-news-grid">
+          <div class="skel-card skel-news"></div>
+          <div class="skel-card skel-news"></div>
+          <div class="skel-card skel-news"></div>
+        </div>
+      </div>
+      <aside class="news-sidebar-home" aria-label="Linki i informacje">
+        <!-- E-Dziennik CTA -->
+        <div class="hn-widget hn-dziennik">
+          <p class="hn-dziennik-title">E-Dziennik<br>SP32</p>
+          <p class="hn-dziennik-sub">Oceny, obecności i ogłoszenia klasowe w jednym miejscu.</p>
+          <a href="https://portal.librus.pl/rodzina" class="hn-dziennik-btn" target="_blank" rel="noopener">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Zaloguj się →
+          </a>
+        </div>
+        <!-- Szybkie linki -->
+        <div class="hn-widget">
+          <h4>Szybkie linki</h4>
+          <ul class="hn-links-list">
+            <li><a href="jadlospis.html" class="hn-link">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/></svg>
+              Jadłospis
+            </a></li>
+            <li><a href="dzwonki.html" class="hn-link">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Plan lekcji i przerwy
+            </a></li>
+            <li><a href="galeria.html" class="hn-link">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              Galeria
+            </a></li>
+            <li><a href="biblioteka.html" class="hn-link">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+              Biblioteka
+            </a></li>
+            <li><a href="rekrutacja.html" class="hn-link">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              Rekrutacja
+            </a></li>
+          </ul>
+        </div>
+        <!-- Najnowsze komunikaty -->
+        <div class="hn-widget hn-news-latest">
+          <div class="hn-nl-head">
+            <span class="hn-nl-title">Najnowsze komunikaty</span>
+            <a href="#aktualnosci" class="hn-nl-all">ZOBACZ →</a>
+          </div>
+          <ul class="hn-nl-list" id="hn-nl-list">
+            <li class="hn-nl-item"><span class="hn-nl-name" style="color:rgba(255,255,255,.45);font-size:.78rem">Ładowanie…</span></li>
+          </ul>
+        </div>
+      </aside>
     </div>
   </div>
 </section>
@@ -1016,7 +1152,7 @@ details.footer-info-card summary::marker { display: none; }
         <div class="footer-school-name">Szkoła Podstawowa nr 32<br>im. L. Kruczkowskiego w Sosnowcu</div>
       </a>
       <div class="footer-ext" aria-label="Serwisy zewnętrzne">
-        <a href="https://sp32sosnowiec.edupage.org" class="footer-ext-link" target="_blank" rel="noopener">E-Dziennik ↗</a>
+        <a href="https://portal.librus.pl/rodzina" class="footer-ext-link" target="_blank" rel="noopener">E-Dziennik ↗</a>
         <a href="https://sp_32_sosnowiec.bip.gov.pl/" class="footer-ext-link" target="_blank" rel="noopener">BIP ↗</a>
         <a href="https://www.facebook.com/SP32Sosnowiec" class="footer-ext-link" target="_blank" rel="noopener">Facebook ↗</a>
         <a href="https://www.gov.pl/web/edukacja" class="footer-ext-link" target="_blank" rel="noopener">MEN.gov.pl ↗</a>
@@ -1099,10 +1235,10 @@ details.footer-info-card summary::marker { display: none; }
       <p style="font-size:2rem;margin-bottom:.75rem;text-align:center">📓</p>
       <p class="contact-school-name" style="text-align:center;margin-bottom:1rem">Elektroniczny dziennik szkolny<br><span style="font-weight:400;font-size:.85rem;color:var(--tx-m)">SP32 Sosnowiec</span></p>
       <p style="font-size:.9rem;color:var(--tx-m);line-height:1.65;margin-bottom:1.25rem;text-align:center">
-        Niebawem udostępnimy bezpośredni link do dziennika elektronicznego dla rodziców i uczniów. Tymczasem zapraszamy bezpośrednio do systemu EduPage.
+        Szkoła korzysta z systemu <strong>Librus</strong>. Zaloguj się jako rodzic lub uczeń, aby sprawdzić oceny, frekwencję i komunikaty.
       </p>
-      <a href="https://sp32sosnowiec.edupage.org" target="_blank" rel="noopener" class="btn btn-prim" style="width:100%;justify-content:center;margin-bottom:.75rem">
-        Przejdź do EduPage →
+      <a href="https://portal.librus.pl/rodzina" target="_blank" rel="noopener" class="btn btn-prim" style="width:100%;justify-content:center;margin-bottom:.75rem">
+        Przejdź do Librus →
       </a>
       <p style="font-size:.75rem;color:var(--tx-m);text-align:center">
         Potrzebujesz pomocy z logowaniem? Skontaktuj się z sekretariatem:<br>
@@ -1249,25 +1385,25 @@ details.footer-info-card summary::marker { display: none; }
         grid.innerHTML = '<div class="skel-empty"><strong>Aktualności już wkrótce</strong>Niebawem pojawią się tu szkolne aktualności — zapraszamy ponownie!</div>';
         return;
       }
+      const CAT_LABELS = { komunikat: 'KOMUNIKAT', ogloszenie: 'OGŁOSZENIE', wydarzenie: 'WYDARZENIE', sukces: 'SUKCES' };
       grid.innerHTML = articles.map(a => {
-        const d = new Date(a.published_at || a.created_at);
-        const ds = `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
-        const cat = CAT[a.category] || { cls: 'chip-szkolne', lab: a.category };
-        const imgPart = a.cover_url
-          ? `<div class="news-card-img" style="background:url('${a.cover_url}') center/cover no-repeat"></div>`
-          : `<div class="news-card-img nc-green"></div>`;
-        return `<article class="news-card reveal">
-          ${imgPart}
+        const d = new Date((a.published_at || a.created_at).replace(' ', 'T'));
+        const ds = d.toLocaleDateString('pl-PL', { day: 'numeric', month: 'short', year: 'numeric' }).toUpperCase();
+        const coverPart = a.cover_url
+          ? `<img class="news-cover" src="${a.cover_url}" alt="${a.title.replace(/"/g,'&quot;')}" loading="lazy">`
+          : '';
+        const chipPart = a.category && CAT_LABELS[a.category]
+          ? `<span class="news-cat-chip ${a.category}">${CAT_LABELS[a.category]}</span>`
+          : '';
+        return `<a href="artykul.html?slug=${a.slug}" class="news-card reveal">
+          ${coverPart}
           <div class="news-card-body">
-            <div class="news-meta">
-              <time class="news-date" datetime="${(a.published_at||a.created_at).slice(0,10)}">${ds}</time>
-              <span class="chip ${cat.cls}">${cat.lab}</span>
-            </div>
+            <div class="news-card-badges"><span class="news-date-badge">${ds}</span>${chipPart}</div>
             <h3 class="news-title">${a.title}</h3>
-            <p class="news-excerpt">${a.lead || ''}</p>
-            <a href="artykul.html?slug=${a.slug}" class="news-read-more">Czytaj więcej →</a>
+            <p class="news-excerpt">${a.excerpt || ''}</p>
+            <span class="news-read-more">Czytaj więcej <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 8 16 12 12 16"/><line x1="8" y1="12" x2="16" y2="12"/></svg></span>
           </div>
-        </article>`;
+        </a>`;
       }).join('');
       revealAll();
     } catch {
@@ -1389,4 +1525,39 @@ details.footer-info-card summary::marker { display: none; }
       });
     });
   })();
+
+  /* ── Najnowsze komunikaty sidebar widget ── */
+  (function() {
+    const list = document.getElementById('hn-nl-list');
+    if (!list) return;
+    const rel = (iso) => {
+      const d = Math.floor((Date.now() - new Date(iso)) / 86400000);
+      if (d === 0) return 'DZISIAJ';
+      if (d === 1) return 'WCZORAJ';
+      return d + ' DNI TEMU';
+    };
+    fetch('/api/public/news?limit=3')
+      .then(r => r.ok ? r.json() : Promise.reject())
+      .then(data => {
+        const items = Array.isArray(data) ? data : (data.items || data.results || []);
+        if (!items.length) {
+          list.innerHTML = '<li class="hn-nl-item"><span class="hn-nl-name" style="color:rgba(255,255,255,.45)">Brak komunikatów</span></li>';
+          return;
+        }
+        list.innerHTML = items.slice(0, 3).map(n => `<li class="hn-nl-item">
+          <span class="hn-nl-date">${rel(n.published_at || n.date || n.created_at)}</span>
+          <span class="hn-nl-name"><a href="${n.url || '#'}">${n.title || n.name || ''}</a></span>
+        </li>`).join('');
+      })
+      .catch(() => {
+        list.innerHTML = [
+          { d: 'DZISIAJ',    t: 'Zebranie Rady Rodziców — klasy 4–8' },
+          { d: 'WCZORAJ',    t: 'Harmonogram uroczystości szkolnych' },
+          { d: '3 DNI TEMU', t: 'Wyniki rekrutacji do klas pierwszych' }
+        ].map(n => `<li class="hn-nl-item"><span class="hn-nl-date">${n.d}</span><span class="hn-nl-name">${n.t}</span></li>`).join('');
+      });
+  })();
+
+  /* ── Lucide icons init ── */
+  if (window.lucide) lucide.createIcons();
 </script>

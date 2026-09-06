@@ -82,13 +82,58 @@
       <input class="form-input" x-model="editing.slug" placeholder="tytuł-aktualnosci">
       <p class="form-hint">Automatycznie generowany z tytułu</p>
     </div>
+    <!-- Cover image -->
+    <div class="form-group" x-show="editing.id">
+      <label class="form-label">Okładka (cover)</label>
+      <div style="border:1px solid #e0e0e0;border-radius:8px;overflow:hidden;margin-bottom:.5rem">
+        <template x-if="editing.cover_url">
+          <img :src="editing.cover_url" style="width:100%;max-height:180px;object-fit:cover;display:block">
+        </template>
+        <template x-if="!editing.cover_url">
+          <div style="height:120px;background:#f5f5f5;display:flex;align-items:center;justify-content:center;color:#bbb;font-size:2rem">🖼️</div>
+        </template>
+      </div>
+      <input type="file" x-ref="coverInput" accept="image/*" style="display:none" @change="uploadCover($event.target.files[0])">
+      <button class="btn btn-outline btn-sm" @click="$refs.coverInput.click()" :disabled="uploadingCover" x-text="uploadingCover ? 'Przesyłanie...' : (editing.cover_url ? 'Zmień okładkę' : 'Dodaj okładkę')"></button>
+      <p class="form-hint">JPG/PNG, min. 1200×630 px. Widoczna na liście aktualności.</p>
+    </div>
+    <div x-show="!editing.id" class="form-group">
+      <p class="form-hint" style="padding:.5rem .75rem;background:#fffbe6;border-radius:6px;border:1px solid #ffe58f">💡 Okładkę możesz dodać po zapisaniu artykułu — otwórz Edytuj ponownie.</p>
+    </div>
+
     <div class="form-group">
       <label class="form-label">Skrót (excerpt)</label>
       <textarea class="form-input" x-model="editing.excerpt" rows="3" placeholder="Krótki opis widoczny na liście"></textarea>
     </div>
+    <!-- Admin: edytor HTML -->
+    <template x-if="role === 'admin'">
+      <div class="form-group">
+        <label class="form-label">Treść (HTML)</label>
+        <textarea class="form-input" x-model="editing.body_html" rows="10" placeholder="<p>Treść artykułu...</p>" style="font-family:monospace;font-size:.82rem"></textarea>
+        <p class="form-hint">Wpisz dowolny HTML — &lt;p&gt;, &lt;strong&gt;, &lt;table&gt;, &lt;ul&gt; itp.</p>
+      </div>
+    </template>
+    <!-- Redaktor: edytor zwykłego tekstu -->
+    <template x-if="role !== 'admin'">
+      <div class="form-group">
+        <label class="form-label">Treść artykułu</label>
+        <textarea class="form-input" x-model="editing.body_text" rows="10" placeholder="Wpisz treść. Zostaw pusty wiersz między akapitami."></textarea>
+        <p class="form-hint">Pusty wiersz = nowy akapit &nbsp;·&nbsp; Enter = nowa linia w tym samym akapicie</p>
+      </div>
+    </template>
     <div class="form-group">
-      <label class="form-label">Treść (HTML)</label>
-      <textarea class="form-input" x-model="editing.body_html" rows="10" placeholder="<p>Treść artykułu...</p>"></textarea>
+      <label class="form-label">Kategoria</label>
+      <div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.25rem">
+        <template x-for="cat in [{id:'komunikat',label:'KOMUNIKAT',color:'#d97706'},{id:'ogloszenie',label:'OGŁOSZENIE',color:'#ea580c'},{id:'wydarzenie',label:'WYDARZENIE',color:'#7c3aed'},{id:'sukces',label:'SUKCES',color:'#16a34a'}]" :key="cat.id">
+          <button type="button"
+            @click="editing.category = editing.category === cat.id ? null : cat.id"
+            :style="editing.category === cat.id ? `background:${cat.color};color:#fff;border-color:${cat.color}` : 'background:transparent;color:#555;border-color:#d0d0d0'"
+            style="padding:.35rem .9rem;border-radius:2rem;font-size:.75rem;font-weight:700;letter-spacing:.06em;border:2px solid;cursor:pointer;transition:all .15s;font-family:inherit"
+            x-text="cat.label">
+          </button>
+        </template>
+      </div>
+      <p class="form-hint">Opcjonalnie — jeden chip na aktualność</p>
     </div>
     <div class="form-group">
       <label class="form-label">Data publikacji</label>
@@ -106,10 +151,38 @@
 <script src="/admin/_shared.js"></script>
 <script src="/alpine.min.js" defer></script>
 <script>
+/* Konwersja HTML → zwykły tekst (do edycji przez redaktora) */
+function htmlToText(html) {
+  if (!html) return '';
+  return html
+    .replace(/<\/p>\s*<p>/gi, '\n\n')
+    .replace(/<\/p>/gi, '\n\n')
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/<\/li>/gi, '\n')
+    .replace(/<\/tr>/gi, '\n')
+    .replace(/<\/th>/gi, '\t')
+    .replace(/<\/td>/gi, '\t')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&nbsp;/g, ' ')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
+/* Konwersja zwykły tekst → HTML (do zapisu) */
+function textToHtml(text) {
+  if (!text || !text.trim()) return '';
+  return text
+    .trim()
+    .split(/\n\n+/)
+    .map(p => '<p>' + p.trim().replace(/\n/g, '<br>') + '</p>')
+    .join('\n');
+}
+
 function newsAdmin() {
   return {
     items: [], loading: true,
     drawerOpen: false, editing: {}, saving: false, saveError: '',
+    uploadingCover: false,
     userEmail: '', role: 'editor',
     async init() {
       try {
@@ -129,9 +202,10 @@ function newsAdmin() {
     openDrawer(item) {
       if (item) {
         const local = item.published_at ? item.published_at.replace(' ', 'T').slice(0,16) : ''
-        this.editing = { ...item, published_at_local: local }
+        const bodyText = htmlToText(item.body_html || '')
+        this.editing = { ...item, published_at_local: local, body_text: bodyText }
       } else {
-        this.editing = { title: '', slug: '', excerpt: '', body_html: '', published_at_local: '' }
+        this.editing = { title: '', slug: '', excerpt: '', body_html: '', body_text: '', published_at_local: '', category: null }
       }
       this.saveError = ''; this.drawerOpen = true
     },
@@ -146,18 +220,34 @@ function newsAdmin() {
         const pub = this.editing.published_at_local
           ? new Date(this.editing.published_at_local).toISOString().replace('T',' ').slice(0,19)
           : null
+        const bodyHtml = this.role === 'admin'
+          ? (this.editing.body_html || null)
+          : textToHtml(this.editing.body_text || '')
         const payload = {
           title: this.editing.title,
           slug: this.editing.slug,
           excerpt: this.editing.excerpt || null,
-          body_html: this.editing.body_html || null,
-          published_at: pub
+          body_html: bodyHtml,
+          published_at: pub,
+          category: this.editing.category || null
         }
         if (this.editing.id) await API.put('/news/' + this.editing.id, payload)
         else await API.post('/news', payload)
         this.closeDrawer(); await this.load()
       } catch(e) { this.saveError = e.message }
       finally { this.saving = false }
+    },
+    async uploadCover(file) {
+      if (!file || !this.editing.id) return
+      this.uploadingCover = true
+      try {
+        const fd = new FormData(); fd.append('file', file)
+        const result = await API.postForm('/news/' + this.editing.id + '/cover', fd)
+        this.editing = { ...this.editing, cover_url: result.cover_url }
+        const idx = this.items.findIndex(i => i.id === this.editing.id)
+        if (idx >= 0) this.items[idx] = { ...this.items[idx], cover_url: result.cover_url }
+      } catch(e) { alert('Błąd uploadu okładki: ' + e.message) }
+      finally { this.uploadingCover = false }
     },
     async remove(item) {
       if (!confirm(`Usunąć "${item.title}"?`)) return

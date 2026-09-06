@@ -2,7 +2,7 @@ import { Hono } from 'hono'
 import type { Env, AdminUser, AdminUserRow, NewsRow, GalleryAlbumRow, GalleryPhotoRow, DocumentRow, MenuWeekRow, SpecialistRow, ConsentRequestRow } from '../types'
 import { calcGraduationYear } from '../types'
 import { adminAuth, requireAdmin } from '../auth'
-import { newsToJson, albumToJson, photoToJson, documentToJson, menuToJson, specialistToJson } from '../db'
+import { newsToJson, albumToJson, photoToJson, documentToJson, menuToJson, specialistToJson, publicUrl } from '../db'
 import { r2Key, uploadToR2 } from '../r2'
 
 type Variables = { user: AdminUser }
@@ -26,15 +26,19 @@ adminRouter.post('/news', async (c) => {
     body_html?: string
     cover_r2_key?: string
     published_at?: string
+    category?: string
   }>()
 
   if (!body.title || !body.slug) {
     return c.json({ error: 'title and slug are required' }, 400)
   }
 
+  const VALID_CATEGORIES = ['komunikat', 'ogloszenie', 'wydarzenie', 'sukces']
+  const category = body.category && VALID_CATEGORIES.includes(body.category) ? body.category : null
+
   const row = await c.env.DB.prepare(
-    `INSERT INTO news (title, slug, excerpt, body_html, cover_r2_key, published_at, author_email)
-     VALUES (?, ?, ?, ?, ?, ?, ?)
+    `INSERT INTO news (title, slug, excerpt, body_html, cover_r2_key, published_at, author_email, category)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
      RETURNING *`
   )
     .bind(
@@ -44,7 +48,8 @@ adminRouter.post('/news', async (c) => {
       body.body_html ?? null,
       body.cover_r2_key ?? null,
       body.published_at ?? null,
-      user.email
+      user.email,
+      category
     )
     .first<NewsRow>()
 
@@ -74,10 +79,17 @@ adminRouter.put('/news/:id', async (c) => {
     body_html: string
     cover_r2_key: string
     published_at: string
+    category: string
   }>>()
 
-  const allowedKeys = ['title', 'slug', 'excerpt', 'body_html', 'cover_r2_key', 'published_at'] as const
+  const allowedKeys = ['title', 'slug', 'excerpt', 'body_html', 'cover_r2_key', 'published_at', 'category'] as const
   type AllowedKey = typeof allowedKeys[number]
+
+  const VALID_CATEGORIES = ['komunikat', 'ogloszenie', 'wydarzenie', 'sukces']
+  if ('category' in body) {
+    (body as Record<string, unknown>)['category'] =
+      body.category && VALID_CATEGORIES.includes(body.category) ? body.category : null
+  }
 
   const sets: string[] = []
   const vals: unknown[] = []
@@ -103,6 +115,34 @@ adminRouter.put('/news/:id', async (c) => {
   }
 
   return c.json({ item: newsToJson(row, c.env) })
+})
+
+// POST /api/admin/news/:id/cover — upload cover image for article
+adminRouter.post('/news/:id/cover', async (c) => {
+  const id = Number(c.req.param('id'))
+
+  const article = await c.env.DB.prepare('SELECT id, slug, cover_r2_key FROM news WHERE id = ?')
+    .bind(id)
+    .first<{ id: number; slug: string; cover_r2_key: string | null }>()
+
+  if (!article) return c.json({ error: 'Not found' }, 404)
+
+  const formData = await c.req.formData()
+  const file = formData.get('file')
+  if (!file || !(file instanceof File)) return c.json({ error: 'file is required' }, 400)
+
+  if (article.cover_r2_key) {
+    await c.env.MEDIA.delete(article.cover_r2_key).catch(() => {})
+  }
+
+  const key = r2Key(`news/${article.slug}/cover`, file.name)
+  await uploadToR2(c.env, key, file)
+
+  await c.env.DB.prepare('UPDATE news SET cover_r2_key = ?, updated_at = datetime(\'now\') WHERE id = ?')
+    .bind(key, id)
+    .run()
+
+  return c.json({ cover_url: publicUrl(c.env, key) }, 200)
 })
 
 // DELETE /api/admin/news/:id — delete article (and R2 cover if present)
@@ -275,6 +315,15 @@ adminRouter.delete('/gallery/albums/:id', async (c) => {
   return c.json({ ok: true })
 })
 
+// GET /api/admin/gallery/albums/:id/photos — list photos for any album (published or not)
+adminRouter.get('/gallery/albums/:id/photos', async (c) => {
+  const albumId = Number(c.req.param('id'))
+  const photos = await c.env.DB.prepare(
+    'SELECT * FROM gallery_photos WHERE album_id = ? ORDER BY sort_order ASC, created_at ASC'
+  ).bind(albumId).all<GalleryPhotoRow>()
+  return c.json({ photos: (photos.results ?? []).map(r => photoToJson(r, c.env)) })
+})
+
 // POST /api/admin/gallery/albums/:id/cover — upload cover image
 adminRouter.post('/gallery/albums/:id/cover', async (c) => {
   const albumId = Number(c.req.param('id'))
@@ -300,7 +349,7 @@ adminRouter.post('/gallery/albums/:id/cover', async (c) => {
     .bind(key, albumId)
     .run()
 
-  return c.json({ cover_url: `/api/public/r2/${key}` }, 200)
+  return c.json({ cover_url: publicUrl(c.env, key) }, 200)
 })
 
 // ── Gallery Photos ────────────────────────────────────────────────────────────
@@ -707,6 +756,35 @@ adminRouter.delete('/users/:id', requireAdmin, async (c) => {
 
   await c.env.DB.prepare('DELETE FROM admin_users WHERE id = ?').bind(id).run()
   return c.json({ ok: true })
+})
+
+// ── Storage stats ─────────────────────────────────────────────────────────────
+
+// GET /api/admin/stats/storage — real R2 usage + D1 row counts
+adminRouter.get('/stats/storage', async (c) => {
+  let totalBytes = 0
+  let totalFiles = 0
+  let cursor: string | undefined
+
+  do {
+    const listing = await c.env.MEDIA.list({ limit: 1000, ...(cursor ? { cursor } : {}) })
+    for (const obj of listing.objects) {
+      totalBytes += obj.size
+      totalFiles++
+    }
+    cursor = listing.truncated ? listing.cursor : undefined
+  } while (cursor)
+
+  const db = await c.env.DB.prepare(`
+    SELECT
+      (SELECT COUNT(*) FROM gallery_albums) as albums,
+      (SELECT COUNT(*) FROM gallery_photos) as photos,
+      (SELECT COUNT(*) FROM news) as news,
+      (SELECT COUNT(*) FROM documents) as documents,
+      (SELECT COUNT(*) FROM menu_weeks) as menu_weeks
+  `).first<Record<string, number>>()
+
+  return c.json({ bytes: totalBytes, files: totalFiles, db: db ?? {} })
 })
 
 // ── Cache ─────────────────────────────────────────────────────────────────────

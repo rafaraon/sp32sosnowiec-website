@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wzór usprawiedliwienia nieobecności — SP32 Sosnowiec</title>
+<link rel="icon" href="grafiki-ai/logo-sp32.png" type="image/png">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-b);background:var(--bg);color:var(--tx);line-height:1.6}
+a{text-decoration:none;color:inherit}
+
+/* Screen only */
+.screen-wrap{max-width:760px;margin:2rem auto;padding:0 1.5rem 4rem}
+.screen-header{display:flex;align-items:center;gap:1rem;margin-bottom:2rem}
+.screen-back{display:inline-flex;align-items:center;gap:.4rem;font-family:var(--font-d);font-size:.85rem;font-weight:700;color:var(--cp);padding:.5rem 1rem;border-radius:999px;border:1.5px solid var(--cp);transition:background .15s}
+.screen-back:hover{background:var(--clv-l)}
+.screen-title{font-family:var(--font-d);font-size:1.4rem;font-weight:800;color:var(--tx)}
+.print-btn{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--font-d);font-size:.9rem;font-weight:700;color:#fff;background:var(--cp);padding:.65rem 1.5rem;border-radius:999px;border:none;cursor:pointer;margin-left:auto;transition:background .15s}
+.print-btn:hover{background:var(--cp-d)}
+.print-btn svg{width:1rem;height:1rem;stroke:#fff;stroke-width:2;fill:none}
+.notice{background:var(--clv-l);border:1px solid var(--bd);border-left:4px solid var(--ca);border-radius:.75rem;padding:1rem 1.25rem;margin-bottom:1.5rem;font-size:.85rem;color:var(--tx-m);line-height:1.6}
+.notice strong{color:var(--tx);font-family:var(--font-d)}
+.doc-card{background:var(--sf);border:1.5px solid var(--bd);border-radius:2rem;padding:2.5rem}
+
+/* Document */
+.doc{font-family:var(--font-b);font-size:14pt;line-height:1.7;color:#000}
+.doc-school{text-align:right;font-size:10pt;color:#555;margin-bottom:1.5rem;border-bottom:1px solid #e5e7eb;padding-bottom:1rem}
+.doc-title{text-align:center;font-size:16pt;font-weight:700;letter-spacing:-.01em;margin-bottom:2rem;font-family:var(--font-d)}
+.doc-city-date{text-align:right;margin-bottom:2rem;font-size:11pt}
+.doc-label{font-size:10pt;color:#666;margin-bottom:.15rem}
+.doc-field{border-bottom:1px solid #374151;min-height:1.8rem;margin-bottom:1.25rem;display:flex;align-items:flex-end;padding-bottom:2px}
+.doc-field-half{width:50%;display:inline-block;border-bottom:1px solid #374151;min-height:1.8rem;margin-right:2rem}
+.doc-row{display:flex;gap:2rem;margin-bottom:.25rem}
+.doc-col{flex:1}
+.doc-body{margin-bottom:2rem;font-size:11pt}
+.doc-body p{margin-bottom:.5rem}
+.doc-body span.fill{border-bottom:1px solid #374151;display:inline-block;min-width:160px;vertical-align:bottom}
+.doc-checkbox-group{margin:1rem 0 1.5rem;font-size:11pt}
+.doc-checkbox-group li{list-style:none;margin-bottom:.4rem;display:flex;align-items:center;gap:.5rem}
+.doc-checkbox-group li::before{content:'☐';font-size:14pt;line-height:1}
+.doc-note{font-size:9.5pt;color:#666;font-style:italic;margin-top:2rem;border-top:1px solid #e5e7eb;padding-top:.75rem}
+.doc-sign{display:flex;justify-content:flex-end;margin-top:3rem}
+.doc-sign-block{text-align:center;width:240px}
+.doc-sign-line{border-bottom:1px solid #374151;height:2rem;margin-bottom:.35rem}
+.doc-sign-label{font-size:9pt;color:#666}
+.doc-pairs{display:grid;grid-template-columns:1fr 1fr;gap:0 2rem}
+
+/* Print */
+@media print {
+  .screen-back,.print-btn,.notice,.screen-header,.doc-card{all:unset}
+  .doc-card{display:block}
+  .screen-wrap{padding:0;max-width:none;margin:0}
+  .screen-header{display:none}
+  .notice{display:none}
+  body{background:#fff;font-size:12pt}
+  .doc{font-size:12pt}
+  @page{margin:2cm 2.5cm}
+}
+</style>
+</head>
+<body>
+<div class="screen-wrap">
+  <div class="screen-header">
+    <a href="portal-rodzica.html" class="screen-back">← Portal Rodzica</a>
+    <span class="screen-title">Wzór usprawiedliwienia</span>
+    <button class="print-btn" onclick="window.print()">
+      <svg viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Drukuj / Pobierz PDF
+    </button>
+  </div>
+
+  <div class="notice">
+    <strong>Wskazówka:</strong> Drukuj lub zapisz jako PDF (Ctrl+P → „Zapisz jako PDF"). Zgodnie ze statutem szkoły usprawiedliwienie należy dostarczyć wychowawcy <strong>w ciągu 7 dni od powrotu</strong> ucznia do szkoły. W wielu przypadkach wystarczy wiadomość przez <strong>e-dziennik Librus</strong>.
+  </div>
+
+  <div class="doc-card">
+    <div class="doc">
+      <div class="doc-school">
+        Szkoła Podstawowa nr 32 im. L. Kruczkowskiego<br>
+        ul. Armii Krajowej 93, 41-215 Sosnowiec
+      </div>
+
+      <div class="doc-title">USPRAWIEDLIWIENIE NIEOBECNOŚCI UCZNIA</div>
+
+      <div class="doc-city-date">
+        Sosnowiec, dnia &nbsp;<span style="border-bottom:1px solid #374151;display:inline-block;min-width:120px">&nbsp;</span>
+      </div>
+
+      <div class="doc-pairs">
+        <div class="doc-col">
+          <p class="doc-label">Imię i nazwisko ucznia</p>
+          <div class="doc-field"></div>
+        </div>
+        <div class="doc-col">
+          <p class="doc-label">Klasa</p>
+          <div class="doc-field"></div>
+        </div>
+      </div>
+
+      <div class="doc-body" style="margin-top:1.5rem">
+        <p>Proszę o usprawiedliwienie nieobecności mojego dziecka/podopiecznego w szkole</p>
+      </div>
+
+      <div class="doc-pairs">
+        <div class="doc-col">
+          <p class="doc-label">w dniu / od dnia</p>
+          <div class="doc-field"></div>
+        </div>
+        <div class="doc-col">
+          <p class="doc-label">do dnia</p>
+          <div class="doc-field"></div>
+        </div>
+      </div>
+
+      <div style="margin-top:1.25rem">
+        <p class="doc-label">Łączna liczba dni nieobecności</p>
+        <div class="doc-field" style="max-width:120px"></div>
+      </div>
+
+      <p style="margin:1.5rem 0 .5rem;font-size:11pt">Powód nieobecności:</p>
+      <ul class="doc-checkbox-group">
+        <li>choroba (potwierdzona / niepotwierdzona zaświadczeniem lekarskim)</li>
+        <li>wizyta lekarska / zabieg medyczny</li>
+        <li>ważna uroczystość rodzinna</li>
+        <li>inne (proszę podać): <span style="border-bottom:1px solid #374151;display:inline-block;min-width:200px">&nbsp;</span></li>
+      </ul>
+
+      <div>
+        <p class="doc-label">Dodatkowe informacje / uwagi (opcjonalnie)</p>
+        <div class="doc-field" style="min-height:3.5rem"></div>
+      </div>
+
+      <div class="doc-sign">
+        <div class="doc-sign-block">
+          <div class="doc-sign-line"></div>
+          <p class="doc-sign-label">podpis rodzica / opiekuna prawnego</p>
+        </div>
+      </div>
+
+      <div style="margin-top:2.5rem;border-top:1px dashed #d1d5db;padding-top:1.25rem">
+        <p style="font-size:10pt;color:#888;font-weight:700;margin-bottom:.5rem">DLA WYCHOWAWCY</p>
+        <div class="doc-pairs">
+          <div class="doc-col">
+            <p class="doc-label">Data przyjęcia usprawiedliwienia</p>
+            <div class="doc-field"></div>
+          </div>
+          <div class="doc-col">
+            <p class="doc-label">Podpis wychowawcy</p>
+            <div class="doc-field"></div>
+          </div>
+        </div>
+        <div style="margin-top:.5rem">
+          <p class="doc-label">Decyzja: &nbsp;&nbsp; ☐ Usprawiedliwione &nbsp;&nbsp; ☐ Nieusprawiedliwione &nbsp;&nbsp; ☐ Wymaga wyjaśnienia</p>
+        </div>
+      </div>
+
+      <p class="doc-note">Zgodnie ze Statutem Szkoły Podstawowej nr 32 w Sosnowcu. Usprawiedliwienie należy dostarczyć wychowawcy klasy w ciągu 7 dni od powrotu ucznia do szkoły.</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>

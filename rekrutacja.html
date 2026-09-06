@@ -64,18 +64,95 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
 .tl-year{font-family:var(--font-d);font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ca);margin-bottom:.2rem}
 .tl-text{font-size:.92rem;color:var(--tx);line-height:1.6}
 
-/* ── Coming soon ── */
-.coming-soon-card{background:var(--clv-l);border:1px dashed var(--bd);border-radius:var(--r);padding:2rem;text-align:center;margin-top:2rem}
-.coming-soon-card p{font-family:var(--font-d);font-size:.95rem;color:var(--tx-m)}
+/* ── Hide default page hero (replaced by custom hero inside main) ── */
+.page-hero{display:none}
+.page-main{padding:0}
 
-/* ── CTA button ── */
-.cta-btn{display:inline-flex;align-items:center;gap:.4rem;font-family:var(--font-d);font-weight:700;font-size:.95rem;padding:.75rem 1.5rem;border-radius:var(--r-s);background:var(--cp);color:#fff;transition:background var(--tr),transform var(--tr)}
-.cta-btn:hover{background:var(--ca);transform:translateY(-1px)}
+/* ── Rekrutacja hero card ── */
+.rek-main{padding:3rem 0 6rem}
+.rek-hero{background:linear-gradient(135deg,var(--cp) 0%,var(--ca) 100%);border-radius:3.5rem;padding:4rem;color:#fff;position:relative;overflow:hidden;border-left:12px solid var(--cp-d);box-shadow:0 25px 80px rgba(45,26,8,.18);margin-bottom:5rem}
+.rek-hero::before{content:'';position:absolute;top:-5rem;right:-5rem;width:20rem;height:20rem;background:#fff;opacity:.05;border-radius:50%;filter:blur(3rem);pointer-events:none}
+.rek-hero::after{content:'';position:absolute;bottom:-3rem;left:2rem;width:10rem;height:10rem;background:var(--cp-d);opacity:.2;border-radius:50%;filter:blur(2rem);pointer-events:none}
+.rek-hero-eyebrow{display:inline-block;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);padding:.35rem 1rem;border-radius:2rem;font-family:var(--font-d);font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin-bottom:1.5rem;position:relative;z-index:1}
+.rek-hero-title{font-family:var(--font-d);font-size:clamp(2.2rem,5vw,4.5rem);font-weight:800;line-height:1.05;letter-spacing:-.03em;margin-bottom:1.25rem;max-width:700px;position:relative;z-index:1}
+.rek-hero-sub{font-size:1.15rem;line-height:1.7;color:rgba(255,255,255,.8);max-width:560px;margin-bottom:2rem;position:relative;z-index:1}
+.rek-hero-cta{display:inline-flex;align-items:center;gap:.5rem;background:rgba(0,0,0,.18);color:#fff;border:2px solid rgba(255,255,255,.3);font-family:var(--font-d);font-weight:800;font-size:1rem;padding:.9rem 2rem;border-radius:1rem;transition:background .2s,transform .15s,box-shadow .2s;position:relative;z-index:1}
+.rek-hero-cta:hover{background:rgba(0,0,0,.28);transform:translateY(-2px);box-shadow:0 12px 32px rgba(0,0,0,.2)}
 
-/* ── Section titles (dyrekcja, sukcesy, etc.) ── */
-.section-title{font-family:var(--font-d);font-size:1.4rem;font-weight:800;color:var(--tx);letter-spacing:-.02em;margin:2rem 0 .4rem}
-.section-sub{font-size:.95rem;color:var(--tx-m);margin-bottom:1.5rem;max-width:600px}
-.updated-note{display:inline-block;font-family:var(--font-d);font-size:.75rem;font-weight:600;color:var(--tx-m);background:var(--clv-l);border:1px solid var(--bd);padding:.3rem .75rem;border-radius:20px;margin-bottom:1.5rem}
+/* ── Section helpers ── */
+.rek-section{margin-bottom:5rem}
+.rek-eyebrow{display:block;font-family:var(--font-d);font-size:.72rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--cp);margin-bottom:.5rem}
+.rek-section-title{font-family:var(--font-d);font-size:clamp(1.8rem,4vw,3rem);font-weight:800;color:var(--tx);letter-spacing:-.03em;line-height:1.1}
+
+/* ── Timeline ── */
+.rek-timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;margin-top:3rem}
+.rek-tl-item{display:flex;flex-direction:column;align-items:center;text-align:center}
+.rek-tl-circle{width:5.5rem;height:5.5rem;border-radius:50%;background:var(--sf);display:flex;align-items:center;justify-content:center;font-size:2rem;border:4px solid;box-shadow:0 10px 32px rgba(0,0,0,.08);margin-bottom:1.25rem;transition:transform .2s var(--tr);flex-shrink:0}
+.rek-tl-item:hover .rek-tl-circle{transform:scale(1.1)}
+.rek-tl-date{font-family:var(--font-d);font-size:1.05rem;font-weight:800;margin-bottom:.35rem}
+.rek-tl-title{font-family:var(--font-d);font-size:1rem;font-weight:700;color:var(--tx);margin-bottom:.35rem;line-height:1.3}
+.rek-tl-desc{font-size:.86rem;color:var(--tx-m);line-height:1.6}
+
+/* ── Process card ── */
+.rek-process{background:var(--sf);border-radius:3.5rem;padding:4rem;box-shadow:0 20px 80px rgba(0,0,0,.07);border:2px solid var(--bd);margin-bottom:5rem}
+.rek-process-inner{display:flex;gap:4rem;align-items:flex-start}
+.rek-process-left{flex:0 0 280px}
+.rek-process-left h2{font-family:var(--font-d);font-size:2.5rem;font-weight:800;color:var(--tx);letter-spacing:-.03em;line-height:1.05;margin-bottom:1rem}
+.rek-process-left p{font-size:1rem;color:var(--tx-m);line-height:1.7;margin-bottom:1.5rem}
+.rek-process-link{display:inline-flex;align-items:center;gap:.35rem;color:var(--cp-d);font-family:var(--font-d);font-weight:800;font-size:1rem;transition:color .18s}
+.rek-process-link:hover{color:var(--cp)}
+.rek-process-grid{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.rek-step{background:var(--bg);border-radius:1.75rem;padding:2rem;border:2px solid transparent;transition:border-color .2s}
+.rek-step-num{display:inline-flex;align-items:center;justify-content:center;width:3.25rem;height:3.25rem;border-radius:1rem;font-family:var(--font-d);font-weight:800;font-size:1.4rem;color:#fff;margin-bottom:1.25rem;transition:transform .2s}
+.rek-step:hover .rek-step-num{transform:scale(1.15) rotate(5deg)}
+.rek-step h4{font-family:var(--font-d);font-size:1.1rem;font-weight:800;color:var(--tx);margin-bottom:.5rem}
+.rek-step p{font-size:.9rem;color:var(--tx-m);line-height:1.65}
+
+/* ── Document cards ── */
+.rek-docs-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;margin-top:3rem}
+.rek-doc-card{background:var(--sf);border-radius:2rem;padding:2rem;box-shadow:0 8px 32px rgba(0,0,0,.07);border-left:8px solid;transition:transform .2s}
+.rek-doc-card:hover{transform:translateY(-6px)}
+.rek-doc-icon{font-size:2.25rem;margin-bottom:1rem;display:block}
+.rek-doc-card h4{font-family:var(--font-d);font-size:1.05rem;font-weight:800;color:var(--tx);margin-bottom:.5rem}
+.rek-doc-card p{font-size:.88rem;color:var(--tx-m);line-height:1.65}
+
+/* ── FAQ + Contact ── */
+.rek-faq-contact{display:grid;grid-template-columns:1fr 1fr;gap:4rem;margin-bottom:5rem}
+.rek-faq h2{font-family:var(--font-d);font-size:2.25rem;font-weight:800;color:var(--tx);letter-spacing:-.03em;margin-bottom:2rem}
+.rek-faq-items{display:flex;flex-direction:column;gap:1rem}
+.rek-faq-item{background:var(--sf);border-radius:1rem;overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,.06)}
+.rek-faq-item summary{display:flex;justify-content:space-between;align-items:center;padding:1.25rem 1.5rem;cursor:pointer;font-family:var(--font-d);font-weight:800;color:var(--tx);list-style:none;gap:1rem;transition:color .18s}
+.rek-faq-item summary::-webkit-details-marker{display:none}
+.rek-faq-item summary::after{content:'+';font-size:1.3rem;color:var(--tx-m);transition:transform .2s;flex-shrink:0}
+.rek-faq-item[open] summary::after{transform:rotate(45deg)}
+.rek-faq-item[open] summary{color:var(--cp)}
+.rek-faq-body{padding:0 1.5rem 1.25rem;font-size:.9rem;color:var(--tx-m);line-height:1.7}
+.rek-contact{background:var(--cp-d);border-radius:2.5rem;padding:3rem;color:#fff;position:relative;overflow:hidden;box-shadow:0 24px 80px rgba(45,26,8,.22)}
+.rek-contact::before{content:'';position:absolute;top:-4rem;right:-4rem;width:14rem;height:14rem;background:var(--cp);border-radius:50%;opacity:.25;filter:blur(2rem);pointer-events:none}
+.rek-contact h2{font-family:var(--font-d);font-size:2.25rem;font-weight:800;margin-bottom:2rem;letter-spacing:-.03em;position:relative;z-index:1}
+.rek-contact-items{display:flex;flex-direction:column;gap:2rem;position:relative;z-index:1}
+.rek-contact-item{display:flex;align-items:flex-start;gap:1.25rem}
+.rek-contact-icon{width:3.25rem;height:3.25rem;border-radius:1rem;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
+.rek-contact-lbl{font-family:var(--font-d);font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:.2rem}
+.rek-contact-val{font-family:var(--font-d);font-size:1.1rem;font-weight:800;color:#fff;line-height:1.3;display:block}
+.rek-contact-note{font-size:.82rem;color:rgba(255,255,255,.45);margin-top:.15rem}
+
+/* ── Responsive ── */
+@media(max-width:1000px){
+  .rek-timeline{grid-template-columns:repeat(2,1fr)}
+  .rek-process-inner{flex-direction:column}
+  .rek-process-left{flex:none}
+  .rek-docs-grid{grid-template-columns:repeat(2,1fr)}
+  .rek-faq-contact{grid-template-columns:1fr}
+}
+@media(max-width:640px){
+  .rek-hero{padding:2.5rem 1.75rem;border-radius:2rem;border-left-width:6px}
+  .rek-process{padding:2.5rem 1.75rem;border-radius:2rem}
+  .rek-contact{padding:2rem 1.5rem;border-radius:2rem}
+  .rek-timeline{grid-template-columns:1fr}
+  .rek-process-grid{grid-template-columns:1fr}
+  .rek-docs-grid{grid-template-columns:1fr}
+}
 
 /* ── Utility bar ── */
 .util-bar{background:var(--cp-d);color:rgba(255,255,255,.65);font-size:.7rem;font-family:var(--font-d);font-weight:500;letter-spacing:.02em}
@@ -99,7 +176,7 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
 </style>
 
-<link rel="stylesheet" href="header.css">
+<link rel="stylesheet" href="header.css?v=4">
 <link rel="stylesheet" href="footer.css">
 </head>
 <body>
@@ -116,7 +193,7 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
         BIP
       </a>
       <div class="util-bar-sep" aria-hidden="true"></div>
-      <a href="https://sp32sosnowiec.edupage.org" class="util-bar-link" target="_blank" rel="noopener noreferrer">
+      <a href="https://portal.librus.pl/rodzina" class="util-bar-link" target="_blank" rel="noopener noreferrer">
         <svg width="11" height="11" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M2 10V5l4-3 4 3v5H7.5V7.5h-3V10H2z"/></svg>
         E-Dziennik
       </a>
@@ -250,71 +327,171 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
   </div>
 </div>
 
-<main id="main-content" class="page-main">
-  
-<div class="container">
-    <div class="prose">
+<main id="main-content" class="page-main rek-main">
+  <div class="container">
 
-      <h2>Zapisy do klasy pierwszej</h2>
-      <p>Rekrutacja do klasy pierwszej szkoły podstawowej prowadzona jest zgodnie z terminarzem ustalonym przez Urząd Miejski w Sosnowcu. Szczegółowe terminy rekrutacji na rok szkolny 2026/2027 zostaną opublikowane w grudniu 2025 r.</p>
-
-      <div class="info-cards">
-        <div class="info-card">
-          <span class="info-card-label">Rejon szkoły</span>
-          <span class="info-card-value">Kazimierz Górniczy</span>
-          <p>dzieci z rejonu przyjmowane bez postępowania rekrutacyjnego</p>
-        </div>
-        <div class="info-card">
-          <span class="info-card-label">Wiek</span>
-          <span class="info-card-value">7 lat (opcja 6)</span>
-          <p>dzieci urodzone w 2019 r. (lub 2020 r. za zgodą poradni)</p>
-        </div>
-        <div class="info-card">
-          <span class="info-card-label">System rekrutacyjny</span>
-          <span class="info-card-value">Nabór Online</span>
-          <p>nabor.um.sosnowiec.pl</p>
-        </div>
-      </div>
-
-      <h2>Wymagane dokumenty</h2>
-      <ul class="list">
-        <li>Wniosek o przyjęcie do szkoły (wypełniany w systemie Nabór Online)</li>
-        <li>Akt urodzenia dziecka — do wglądu</li>
-        <li>Zaświadczenie o zameldowaniu lub zamieszkaniu na terenie obwodu szkoły</li>
-        <li>Opinia poradni psychologiczno-pedagogicznej — tylko gdy dziecko 6-letnie</li>
-        <li>W przypadku dzieci z orzeczeniem o potrzebie kształcenia specjalnego — kopia orzeczenia</li>
-      </ul>
-
-      <h2>Klasa „0" (oddział przedszkolny)</h2>
-      <p>W SP32 funkcjonuje <strong>oddział przedszkolny (klasa 0)</strong> dla dzieci 6-letnich urodzonych w 2020 r. Zapisy na rok szkolny 2026/2027 prowadzone są w tym samym terminie co zapisy do klasy pierwszej. Dzieci z oddziału przedszkolnego mają pierwszeństwo w przyjęciu do klasy I w kolejnym roku szkolnym.</p>
-
-      <h2>Harmonogram rekrutacji 2026/2027</h2>
-      <div class="timeline">
-        <div class="tl-item">
-          <p class="tl-year">Luty 2026</p>
-          <p class="tl-text">Uruchomienie systemu Nabór Online — składanie wniosków elektronicznie lub w sekretariacie szkoły.</p>
-        </div>
-        <div class="tl-item">
-          <p class="tl-year">Marzec 2026</p>
-          <p class="tl-text">Weryfikacja złożonych wniosków i dokumentów przez komisję rekrutacyjną.</p>
-        </div>
-        <div class="tl-item">
-          <p class="tl-year">Kwiecień 2026</p>
-          <p class="tl-text">Opublikowanie list kandydatów zakwalifikowanych i niezakwalifikowanych.</p>
-        </div>
-        <div class="tl-item">
-          <p class="tl-year">Maj 2026</p>
-          <p class="tl-text">Potwierdzenie woli zapisu. Opublikowanie ostatecznych list przyjętych.</p>
-        </div>
-      </div>
-
-      <h2>Kontakt w sprawach rekrutacji</h2>
-      <p>Sekretariat szkoły: <a href="tel:+48322634301" style="color:var(--cp);font-weight:600">32 263-43-01</a>, pon–pt 7:00–15:00.<br>
-      E-mail: <a href="mailto:sp32@sosnowiec.edu.pl" style="color:var(--cp);font-weight:600">sp32@sosnowiec.edu.pl</a></p>
-
+    <!-- Hero -->
+    <div class="rek-hero">
+      <span class="rek-hero-eyebrow">Rodzice · Rekrutacja 2026/2027</span>
+      <h1 class="rek-hero-title">Zapisz swoje dziecko do SP32</h1>
+      <p class="rek-hero-sub">Od 1933 roku w Sosnowcu kształtujemy młode talenty i tworzymy domową atmosferę dla każdego ucznia. Zapraszamy do grona uczniów Szkoły Podstawowej nr 32 im. L. Kruczkowskiego.</p>
+      <a href="https://nabor.um.sosnowiec.pl" target="_blank" rel="noopener noreferrer" class="rek-hero-cta">
+        Zapisz online w systemie Nabór →
+      </a>
     </div>
-  </div>
 
+    <!-- Harmonogram -->
+    <section class="rek-section" aria-labelledby="rek-harmonogram-h">
+      <div style="text-align:center;margin-bottom:0">
+        <span class="rek-eyebrow">Kiedy do nas dołączyć?</span>
+        <h2 id="rek-harmonogram-h" class="rek-section-title">Harmonogram rekrutacji</h2>
+      </div>
+      <div class="rek-timeline">
+        <div class="rek-tl-item">
+          <div class="rek-tl-circle" style="border-color:var(--ca)">🚪</div>
+          <p class="rek-tl-date" style="color:var(--ca)">Luty 2026</p>
+          <h3 class="rek-tl-title">Nabór Online</h3>
+          <p class="rek-tl-desc">Uruchomienie systemu — składanie wniosków elektronicznie lub w sekretariacie szkoły.</p>
+        </div>
+        <div class="rek-tl-item">
+          <div class="rek-tl-circle" style="border-color:var(--cp)">📝</div>
+          <p class="rek-tl-date" style="color:var(--cp)">Marzec 2026</p>
+          <h3 class="rek-tl-title">Weryfikacja</h3>
+          <p class="rek-tl-desc">Weryfikacja złożonych wniosków i dokumentów przez komisję rekrutacyjną.</p>
+        </div>
+        <div class="rek-tl-item">
+          <div class="rek-tl-circle" style="border-color:var(--cp-d)">📢</div>
+          <p class="rek-tl-date" style="color:var(--cp-d)">Kwiecień 2026</p>
+          <h3 class="rek-tl-title">Ogłoszenie wyników</h3>
+          <p class="rek-tl-desc">Listy kandydatów zakwalifikowanych i niezakwalifikowanych.</p>
+        </div>
+        <div class="rek-tl-item">
+          <div class="rek-tl-circle" style="border-color:#1a3a2e;background:#1a3a2e;color:#fff">✅</div>
+          <p class="rek-tl-date" style="color:#1a3a2e">Maj 2026</p>
+          <h3 class="rek-tl-title">Potwierdzenie woli</h3>
+          <p class="rek-tl-desc">Potwierdzenie zapisu i ogłoszenie ostatecznych list przyjętych.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Proces w 4 krokach -->
+    <div class="rek-process">
+      <div class="rek-process-inner">
+        <div class="rek-process-left">
+          <h2>Proces w 4 krokach</h2>
+          <p>Uprościliśmy rekrutację tak bardzo, jak to możliwe. Każdy krok jest monitorowany przez nasz zespół wsparcia.</p>
+          <a href="#kontakt" class="rek-process-link">Masz pytania techniczne? ↗</a>
+        </div>
+        <div class="rek-process-grid">
+          <div class="rek-step" style="--hov:var(--cp)">
+            <span class="rek-step-num" style="background:var(--cp)">1</span>
+            <h4>Rejestracja Online</h4>
+            <p>Wypełnij formularz zgłoszeniowy w systemie <strong>nabor.um.sosnowiec.pl</strong>.</p>
+          </div>
+          <div class="rek-step">
+            <span class="rek-step-num" style="background:var(--ca)">2</span>
+            <h4>Dostarczenie dokumentów</h4>
+            <p>Przynieś oryginały do sekretariatu szkoły w godzinach 7:00–15:00.</p>
+          </div>
+          <div class="rek-step">
+            <span class="rek-step-num" style="background:var(--cp-d)">3</span>
+            <h4>Weryfikacja komisji</h4>
+            <p>Komisja rekrutacyjna sprawdza kompletność dokumentów i kryteria przyjęcia.</p>
+          </div>
+          <div class="rek-step">
+            <span class="rek-step-num" style="background:#1a3a2e">4</span>
+            <h4>Potwierdzenie przyjęcia</h4>
+            <p>Odbierz decyzję i dołącz do grupy klasy na E-Dzienniku Edupage.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dokumenty -->
+    <section class="rek-section" aria-labelledby="rek-docs-h">
+      <div style="text-align:center">
+        <h2 id="rek-docs-h" class="rek-section-title">Lista dokumentów</h2>
+        <p style="font-size:1rem;color:var(--tx-m);margin-top:.75rem">Przygotuj poniższe dokumenty przed wizytą w sekretariacie</p>
+      </div>
+      <div class="rek-docs-grid">
+        <div class="rek-doc-card" style="border-color:var(--ca)">
+          <span class="rek-doc-icon">🎓</span>
+          <h4>Wniosek / Świadectwo</h4>
+          <p>Wniosek o przyjęcie (z syst. naboru) oraz ostatnie świadectwo lub opinia z przedszkola.</p>
+        </div>
+        <div class="rek-doc-card" style="border-color:var(--cp)">
+          <span class="rek-doc-icon">📄</span>
+          <h4>Akt urodzenia</h4>
+          <p>Akt urodzenia dziecka — do wglądu komisji rekrutacyjnej.</p>
+        </div>
+        <div class="rek-doc-card" style="border-color:var(--cp-d)">
+          <span class="rek-doc-icon">🏠</span>
+          <h4>Zaświadczenie adresowe</h4>
+          <p>Zaświadczenie o zameldowaniu lub zamieszkaniu na terenie obwodu szkoły.</p>
+        </div>
+        <div class="rek-doc-card" style="border-color:#1a3a2e">
+          <span class="rek-doc-icon">📋</span>
+          <h4>Opinia / Orzeczenie</h4>
+          <p>Opinia poradni — przy dziecku 6-letnim. Kopia orzeczenia przy kształceniu specjalnym.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ + Kontakt -->
+    <section class="rek-faq-contact" id="kontakt">
+      <div class="rek-faq">
+        <h2>Najczęstsze pytania</h2>
+        <div class="rek-faq-items">
+          <details class="rek-faq-item">
+            <summary>Czy przyjmujecie uczniów spoza rejonu?</summary>
+            <div class="rek-faq-body">Tak, w miarę dostępności miejsc przyjmujemy dzieci spoza obwodu szkoły. Priorytet mają dzieci zameldowane lub zamieszkałe w rejonie szkoły (dzielnica Kazimierz Górniczy).</div>
+          </details>
+          <details class="rek-faq-item">
+            <summary>Czy jest klasa 0 (oddział przedszkolny)?</summary>
+            <div class="rek-faq-body">Tak — w SP32 funkcjonuje oddział przedszkolny dla dzieci 6-letnich. Zapisy w tym samym terminie co do klasy pierwszej. Dzieci z „zerówki" mają pierwszeństwo w przyjęciu do klasy I w kolejnym roku.</div>
+          </details>
+          <details class="rek-faq-item">
+            <summary>Gdzie składam dokumenty?</summary>
+            <div class="rek-faq-body">Wniosek wypełniasz elektronicznie na <strong>nabor.um.sosnowiec.pl</strong>. Oryginały dokumentów przynosisz do sekretariatu przy ul. Armii Krajowej 93 w godzinach 7:00–15:00.</div>
+          </details>
+          <details class="rek-faq-item">
+            <summary>Czy szkoła zapewnia opiekę świetlicową?</summary>
+            <div class="rek-faq-body">Tak, świetlica szkolna pracuje od godziny 7:00 do 16:00 w dni nauki szkolnej, oferując zajęcia tematyczne i pomoc w odrabianiu lekcji.</div>
+          </details>
+        </div>
+      </div>
+
+      <div class="rek-contact">
+        <h2>Kontakt rekrutacyjny</h2>
+        <div class="rek-contact-items">
+          <div class="rek-contact-item">
+            <div class="rek-contact-icon" style="background:var(--ca)">📞</div>
+            <div>
+              <p class="rek-contact-lbl">Zadzwoń do nas</p>
+              <a href="tel:+48322634301" class="rek-contact-val">32 263-43-01</a>
+              <p class="rek-contact-note">Sekretariat: pon–pt 7:00–15:00</p>
+            </div>
+          </div>
+          <div class="rek-contact-item">
+            <div class="rek-contact-icon" style="background:var(--cp)">✉️</div>
+            <div>
+              <p class="rek-contact-lbl">Napisz wiadomość</p>
+              <a href="mailto:sp32@sosnowiec.edu.pl" class="rek-contact-val">sp32@sosnowiec.edu.pl</a>
+            </div>
+          </div>
+          <div class="rek-contact-item">
+            <div class="rek-contact-icon" style="background:var(--cp-d)">📍</div>
+            <div>
+              <p class="rek-contact-lbl">Odwiedź nas</p>
+              <p class="rek-contact-val">ul. Armii Krajowej 93</p>
+              <p class="rek-contact-note">41-215 Sosnowiec</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
 </main>
 
 <footer class="site-footer" role="contentinfo">
@@ -325,7 +502,7 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
         <div class="footer-school-name">Szkoła Podstawowa nr 32<br>im. L. Kruczkowskiego w Sosnowcu</div>
       </a>
       <div class="footer-ext">
-        <a href="https://sp32sosnowiec.edupage.org" class="footer-ext-link" target="_blank" rel="noopener">E-Dziennik ↗</a>
+        <a href="https://portal.librus.pl/rodzina" class="footer-ext-link" target="_blank" rel="noopener">E-Dziennik ↗</a>
         <a href="https://sp_32_sosnowiec.bip.gov.pl/" class="footer-ext-link" target="_blank" rel="noopener">BIP ↗</a>
         <a href="https://www.facebook.com/SP32Sosnowiec" class="footer-ext-link" target="_blank" rel="noopener">Facebook ↗</a>
       </div>
@@ -412,6 +589,6 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
 </div>
 
 
-<script src="shared.js" defer></script>
+<script src="shared.js?v=5" defer></script>
 </body>
 </html>

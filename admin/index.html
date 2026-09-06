@@ -58,6 +58,44 @@
             <a href="/admin/rodo/index.html" style="font-weight:700">Przejdź do RODO</a>
           </div>
         </template>
+
+        <!-- Storage widget -->
+        <div style="margin-top:1.5rem;background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:1.1rem 1.25rem">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem">
+            <span style="font-weight:700;font-size:.92rem">💾 Przestrzeń dyskowa (R2)</span>
+            <button @click="loadStorage()" :disabled="storageLoading"
+              style="font-size:.75rem;color:var(--cp);background:none;border:none;cursor:pointer;padding:0"
+              x-text="storageLoading ? 'Ładowanie…' : '↻ Odśwież'"></button>
+          </div>
+          <template x-if="!storageLoaded && !storageLoading">
+            <button @click="loadStorage()"
+              style="font-size:.82rem;color:var(--cp);background:var(--clv-l);border:1px solid var(--bd);border-radius:6px;padding:.35rem .8rem;cursor:pointer">
+              Sprawdź zajętość
+            </button>
+          </template>
+          <template x-if="storageLoading">
+            <div style="font-size:.82rem;color:var(--tx-m)">Trwa liczenie plików w R2…</div>
+          </template>
+          <template x-if="storageLoaded && !storageLoading">
+            <div>
+              <div style="display:flex;align-items:baseline;gap:.4rem;margin-bottom:.5rem">
+                <span style="font-size:1.6rem;font-weight:800;font-variant-numeric:tabular-nums" x-text="storageUsedLabel"></span>
+                <span style="font-size:.8rem;color:var(--tx-m)" x-text="'z ' + storageLimitLabel + ' (' + storagePct + '%)'"></span>
+              </div>
+              <div style="background:var(--clv);border-radius:4px;height:8px;overflow:hidden;margin-bottom:.65rem">
+                <div :style="'width:'+storagePct+'%;background:'+storageBarColor+';height:100%;border-radius:4px;transition:width .4s ease'"></div>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:.4rem .8rem;font-size:.78rem;color:var(--tx-m)">
+                <span>📁 <strong x-text="storageFiles"></strong> plików w R2</span>
+                <span>🖼️ Zdjęcia: <strong x-text="storage.db.photos ?? '—'"></strong></span>
+                <span>📰 Albumy: <strong x-text="storage.db.albums ?? '—'"></strong></span>
+                <span>📄 Dokumenty: <strong x-text="storage.db.documents ?? '—'"></strong></span>
+                <span>📰 Aktualności: <strong x-text="storage.db.news ?? '—'"></strong></span>
+                <span>🍽️ Jadłospisy: <strong x-text="storage.db.menu_weeks ?? '—'"></strong></span>
+              </div>
+            </div>
+          </template>
+        </div>
       </div>
     </template>
   </div>
@@ -74,6 +112,25 @@ function dashApp() {
     purging: false,
     purgeMsg: '',
     purgeOk: false,
+    storage: { bytes: 0, files: 0, db: {} },
+    storageLoaded: false,
+    storageLoading: false,
+    STORAGE_LIMIT_BYTES: 10 * 1024 * 1024 * 1024, // 10 GB (R2 free tier)
+    get storageUsedLabel() {
+      const b = this.storage.bytes
+      if (b >= 1024**3) return (b / 1024**3).toFixed(2) + ' GB'
+      if (b >= 1024**2) return (b / 1024**2).toFixed(1) + ' MB'
+      return (b / 1024).toFixed(0) + ' KB'
+    },
+    get storageLimitLabel() { return '10 GB' },
+    get storageFiles() { return this.storage.files.toLocaleString('pl-PL') },
+    get storagePct() {
+      return Math.min(100, (this.storage.bytes / this.STORAGE_LIMIT_BYTES * 100)).toFixed(1)
+    },
+    get storageBarColor() {
+      const p = this.storage.bytes / this.STORAGE_LIMIT_BYTES * 100
+      return p > 80 ? '#DC2626' : p > 60 ? '#CA8A04' : '#16A34A'
+    },
 
     async init() {
       try {
@@ -93,6 +150,16 @@ function dashApp() {
         this.rodoAlerts = auditData.albums ?? []
       } catch(e) { console.error(e) }
       finally { this.loading = false }
+    },
+
+    async loadStorage() {
+      this.storageLoading = true
+      try {
+        const d = await API.get('/stats/storage')
+        this.storage = d
+        this.storageLoaded = true
+      } catch(e) { console.error('storage stats error', e) }
+      finally { this.storageLoading = false }
     },
 
     async purgeCache() {

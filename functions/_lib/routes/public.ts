@@ -71,7 +71,7 @@ publicRouter.get('/specialists', async (c) => {
 
 // POST /api/public/rodo/request — public RODO request submission
 publicRouter.post('/rodo/request', async (c) => {
-  const body = await c.req.json<{
+  type RodoBody = {
     student_name?: string
     class_label?: string
     school_year?: string
@@ -79,7 +79,8 @@ publicRouter.post('/rodo/request', async (c) => {
     submitter_email?: string
     request_type?: string
     notes?: string
-  }>().catch(() => ({}))
+  }
+  const body: RodoBody = await c.req.json<RodoBody>().catch(() => ({} as RodoBody))
 
   if (!body.student_name?.trim()) return c.json({ error: 'Imię i nazwisko ucznia jest wymagane' }, 400)
   if (!['withdrawal', 'deletion'].includes(body.request_type ?? '')) return c.json({ error: 'Nieprawidłowy typ wniosku' }, 400)

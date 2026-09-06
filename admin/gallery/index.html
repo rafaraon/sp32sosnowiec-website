@@ -249,7 +249,7 @@ function galleryAdmin() {
       this.mode = 'album'
       this.loading = true
       try {
-        const d = await fetch('/api/public/gallery/' + album.slug).then(r => r.json())
+        const d = await API.get('/gallery/albums/' + album.id + '/photos')
         this.photos = d.photos ?? []
       } catch {}
       finally { this.loading = false }

@@ -1,0 +1,11 @@
+/shared.js
+  Cache-Control: no-cache, must-revalidate
+
+/tokens.css
+  Cache-Control: no-cache, must-revalidate
+
+/header.css
+  Cache-Control: no-cache, must-revalidate
+
+/footer.css
+  Cache-Control: no-cache, must-revalidate

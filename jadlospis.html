@@ -109,8 +109,9 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
 .menu-empty p{color:var(--tx-m);font-size:.95rem}
 </style>
 
-<link rel="stylesheet" href="header.css">
+<link rel="stylesheet" href="header.css?v=4">
 <link rel="stylesheet" href="footer.css">
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.525.0/dist/umd/lucide.min.js"></script>
 </head>
 <body>
 
@@ -126,7 +127,7 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
         BIP
       </a>
       <div class="util-bar-sep" aria-hidden="true"></div>
-      <a href="https://sp32sosnowiec.edupage.org" class="util-bar-link" target="_blank" rel="noopener noreferrer">
+      <a href="https://portal.librus.pl/rodzina" class="util-bar-link" target="_blank" rel="noopener noreferrer">
         <svg width="11" height="11" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M2 10V5l4-3 4 3v5H7.5V7.5h-3V10H2z"/></svg>
         E-Dziennik
       </a>
@@ -266,7 +267,7 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
     <div class="menu-card">
       <p class="menu-week" x-text="'Tydzień: ' + fmtWeek(menu.week_start)"></p>
       <p>Kliknij poniżej, aby otworzyć jadłospis na bieżący tydzień.</p>
-      <a :href="menu.url" target="_blank" rel="noopener" class="menu-btn">📋 Otwórz jadłospis (PDF)</a>
+      <a :href="menu.url" target="_blank" rel="noopener" class="menu-btn" style="display:inline-flex;align-items:center;gap:.5rem"><i data-lucide="file-text" style="width:1.1rem;height:1.1rem;stroke:currentColor;stroke-width:2;fill:none"></i> Otwórz jadłospis (PDF)</a>
       <p x-show="menu.notes" x-text="menu.notes" style="margin-top:1rem;font-size:.85rem;color:var(--tx-m)"></p>
     </div>
   </template>
@@ -297,7 +298,8 @@ function menuApp(){
       const end=new Date(d);end.setDate(end.getDate()+4);
       const fmt=dt=>dt.toLocaleDateString('pl-PL',{day:'numeric',month:'long'});
       return fmt(d)+' – '+fmt(end)+' '+end.getFullYear();
-    }
+    },
+    afterRender(){this.$nextTick(()=>{if(window.lucide)lucide.createIcons()})}
   }
 }
 </script>
@@ -313,7 +315,7 @@ function menuApp(){
         <div class="footer-school-name">Szkoła Podstawowa nr 32<br>im. L. Kruczkowskiego w Sosnowcu</div>
       </a>
       <div class="footer-ext">
-        <a href="https://sp32sosnowiec.edupage.org" class="footer-ext-link" target="_blank" rel="noopener">E-Dziennik ↗</a>
+        <a href="https://portal.librus.pl/rodzina" class="footer-ext-link" target="_blank" rel="noopener">E-Dziennik ↗</a>
         <a href="https://sp_32_sosnowiec.bip.gov.pl/" class="footer-ext-link" target="_blank" rel="noopener">BIP ↗</a>
         <a href="https://www.facebook.com/SP32Sosnowiec" class="footer-ext-link" target="_blank" rel="noopener">Facebook ↗</a>
       </div>
@@ -400,6 +402,7 @@ function menuApp(){
 </div>
 
 
-<script src="shared.js" defer></script>
+<script src="shared.js?v=5" defer></script>
+<script>if(window.lucide)lucide.createIcons();document.addEventListener('DOMContentLoaded',function(){if(window.lucide)lucide.createIcons()});</script>
 </body>
 </html>
