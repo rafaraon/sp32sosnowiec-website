@@ -22,6 +22,7 @@
       <div>
         <div class="nav-section">Admin</div>
         <a href="/admin/documents/index.html" class="active admin-only">📄 Dokumenty</a>
+        <a href="/admin/documents/index.html?tab=zfss" class="admin-only">🏦 ZFŚS</a>
         <a href="/admin/specialists/index.html" class="admin-only">👥 Specjaliści</a>
         <a href="/admin/menu/index.html" class="admin-only">🍽️ Jadłospis</a>
         <a href="/admin/rodo/index.html" class="admin-only">🔐 RODO</a>
@@ -44,7 +45,16 @@
             <div class="tab" :class="{active: activeTab === tab.key}" @click="switchTab(tab.key)" x-text="tab.label"></div>
           </template>
         </div>
-        <div style="display:flex;justify-content:flex-end;margin-bottom:1rem">
+        <div style="display:flex;align-items:center;gap:.75rem;justify-content:flex-end;margin-bottom:1rem;flex-wrap:wrap">
+          <template x-if="activeTab === 'druki'">
+            <select x-model="uploadLocation" class="form-input" style="width:auto;font-size:.82rem;padding:.4rem .7rem">
+              <option value="">— Lokalizacja druku —</option>
+              <option value="swietlica">Świetlica</option>
+              <option value="pedagog">Pedagog / Psycholog</option>
+              <option value="wycieczki">Wycieczki</option>
+              <option value="sekretariat">Sekretariat</option>
+            </select>
+          </template>
           <label class="btn btn-primary" style="cursor:pointer">
             + Dodaj dokument
             <input type="file" accept=".pdf,.docx,.doc,.xlsx,.xls" style="display:none" @change="upload($event)">
@@ -54,11 +64,29 @@
         <template x-if="!loading">
           <div class="card" style="padding:0;overflow:hidden">
             <table class="data-table">
-              <thead><tr><th>Tytuł</th><th>Typ</th><th>Rozmiar</th><th>Data</th><th>Status</th><th></th></tr></thead>
+              <thead>
+                <tr>
+                  <th>Tytuł</th>
+                  <template x-if="activeTab === 'druki'"><th>Lokalizacja</th></template>
+                  <th>Typ</th><th>Rozmiar</th><th>Data</th><th>Status</th><th></th>
+                </tr>
+              </thead>
               <tbody>
                 <template x-for="doc in docs" :key="doc.id">
                   <tr>
                     <td x-text="doc.title"></td>
+                    <template x-if="activeTab === 'druki'">
+                      <td>
+                        <select class="form-input" style="font-size:.78rem;padding:.25rem .5rem;width:auto"
+                          @change="setLocation(doc, $event.target.value)">
+                          <option value="" :selected="!doc.location_key">— brak —</option>
+                          <option value="swietlica" :selected="doc.location_key==='swietlica'">Świetlica</option>
+                          <option value="pedagog" :selected="doc.location_key==='pedagog'">Pedagog / Psycholog</option>
+                          <option value="wycieczki" :selected="doc.location_key==='wycieczki'">Wycieczki</option>
+                          <option value="sekretariat" :selected="doc.location_key==='sekretariat'">Sekretariat</option>
+                        </select>
+                      </td>
+                    </template>
                     <td style="color:#888;font-size:.75rem" x-text="(doc.file_type ?? '—').toUpperCase()"></td>
                     <td style="color:#888;font-size:.75rem" x-text="doc.file_size ? Math.round(doc.file_size/1024) + ' KB' : '—'"></td>
                     <td x-text="fmtDate(doc.uploaded_at)"></td>
@@ -72,7 +100,7 @@
                   </tr>
                 </template>
                 <template x-if="docs.length === 0">
-                  <tr><td colspan="6" style="color:#999;text-align:center;padding:2rem">Brak dokumentów w tej kategorii</td></tr>
+                  <tr><td colspan="7" style="color:#999;text-align:center;padding:2rem">Brak dokumentów w tej kategorii</td></tr>
                 </template>
               </tbody>
             </table>
@@ -93,8 +121,9 @@ function docsAdmin() {
       { key: 'zfss', label: 'ZFŚS' },
       { key: 'rodo', label: 'RODO/IOD' },
     ],
-    activeTab: 'dokumenty',
+    activeTab: new URLSearchParams(location.search).get('tab') || 'dokumenty',
     docs: [], loading: true, userEmail: '', role: 'editor',
+    uploadLocation: '',
 
     async init() {
       try { const me = await API.get('/me'); this.userEmail = me.email; this.role = me.role } catch {}
@@ -104,19 +133,31 @@ function docsAdmin() {
     async load() {
       this.loading = true
       try {
-        const d = await fetch('/api/public/documents/' + this.activeTab).then(r => r.json())
+        const d = await API.get('/documents?category=' + this.activeTab)
         this.docs = d.documents ?? []
       } catch {}
       finally { this.loading = false }
     },
     async upload(e) {
       const file = e.target.files[0]; if (!file) return
+      if (this.activeTab === 'druki' && !this.uploadLocation) {
+        alert('Wybierz najpierw lokalizację druku z listy po lewej stronie przycisku.')
+        e.target.value = ''; return
+      }
       const title = prompt('Tytuł dokumentu:', file.name.replace(/\.[^.]+$/, ''))
       if (!title) return
       const fd = new FormData()
       fd.append('file', file); fd.append('title', title); fd.append('category', this.activeTab)
+      if (this.activeTab === 'druki' && this.uploadLocation) fd.append('location_key', this.uploadLocation)
       try { await API.postForm('/documents', fd); await this.load() } catch(e) { alert(e.message) }
       e.target.value = ''
+    },
+    async setLocation(doc, loc) {
+      try {
+        const res = await API.put('/documents/' + doc.id, { location_key: loc || null })
+        const idx = this.docs.findIndex(d => d.id === doc.id)
+        if (idx >= 0) this.docs[idx] = res.document
+      } catch(e) { alert(e.message) }
     },
     async togglePublish(doc) {
       try {

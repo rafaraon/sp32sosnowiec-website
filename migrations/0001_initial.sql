@@ -9,7 +9,8 @@ CREATE TABLE IF NOT EXISTS news (
   published_at  TEXT,
   created_at    TEXT NOT NULL DEFAULT (datetime('now')),
   updated_at    TEXT NOT NULL DEFAULT (datetime('now')),
-  author_email  TEXT
+  author_email  TEXT,
+  category      TEXT
 );
 
 -- Galerie — albumy

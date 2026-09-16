@@ -153,6 +153,12 @@ PAGES = [
         "active_nav": "",
     }),
 
+    # ── RODO ──────────────────────────────────────────────────────────────────
+    ("rodo-wniosek.html", "rodo-wniosek.html", {
+        "breadcrumb_section": "Prawa do zdjęć",
+        "active_nav": "",
+    }),
+
     # ── Inne ──────────────────────────────────────────────────────────────────
     ("deklaracja-dostepnosci.html", "deklaracja-dostepnosci.html", {
         "breadcrumb_section": "",

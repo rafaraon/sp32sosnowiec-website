@@ -17,6 +17,7 @@
       <div>
         <div class="nav-section">Admin</div>
         <a href="/admin/documents/index.html" class="admin-only">📄 Dokumenty</a>
+        <a href="/admin/documents/index.html?tab=zfss" class="admin-only">🏦 ZFŚS</a>
         <a href="/admin/specialists/index.html" class="admin-only">👥 Specjaliści</a>
         <a href="/admin/menu/index.html" class="admin-only">🍽️ Jadłospis</a>
         <a href="/admin/rodo/index.html" class="admin-only">🔐 RODO</a>
@@ -82,8 +83,8 @@
       <input class="form-input" x-model="editing.slug" placeholder="tytuł-aktualnosci">
       <p class="form-hint">Automatycznie generowany z tytułu</p>
     </div>
-    <!-- Cover image -->
-    <div class="form-group" x-show="editing.id">
+    <!-- Cover image — ukryta dla ZFŚS -->
+    <div class="form-group" x-show="editing.id && editing.category !== 'zfss'">
       <label class="form-label">Okładka (cover)</label>
       <div style="border:1px solid #e0e0e0;border-radius:8px;overflow:hidden;margin-bottom:.5rem">
         <template x-if="editing.cover_url">
@@ -97,11 +98,20 @@
       <button class="btn btn-outline btn-sm" @click="$refs.coverInput.click()" :disabled="uploadingCover" x-text="uploadingCover ? 'Przesyłanie...' : (editing.cover_url ? 'Zmień okładkę' : 'Dodaj okładkę')"></button>
       <p class="form-hint">JPG/PNG, min. 1200×630 px. Widoczna na liście aktualności.</p>
     </div>
-    <div x-show="!editing.id" class="form-group">
+    <!-- Okładka hint dla nowych wpisów (nie-ZFŚS) -->
+    <div x-show="!editing.id && editing.category !== 'zfss'" class="form-group">
       <p class="form-hint" style="padding:.5rem .75rem;background:#fffbe6;border-radius:6px;border:1px solid #ffe58f">💡 Okładkę możesz dodać po zapisaniu artykułu — otwórz Edytuj ponownie.</p>
     </div>
+    <!-- Informacja ZFŚS zamiast okładki -->
+    <div class="form-group" x-show="editing.category === 'zfss'">
+      <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:.85rem 1rem;font-size:.82rem;color:#1e40af;display:flex;gap:.6rem;align-items:flex-start">
+        <span style="font-size:1rem;flex-shrink:0;margin-top:.05rem">ℹ️</span>
+        <span>Ogłoszenia <strong>ZFŚS</strong> wyświetlane są na stronie ZFŚS jako pełny tekst — okładka i skrót nie są potrzebne. Skrót zostanie wygenerowany automatycznie.</span>
+      </div>
+    </div>
 
-    <div class="form-group">
+    <!-- Skrót — ukryty dla ZFŚS (auto-generowany przy zapisie) -->
+    <div class="form-group" x-show="editing.category !== 'zfss'">
       <label class="form-label">Skrót (excerpt)</label>
       <textarea class="form-input" x-model="editing.excerpt" rows="3" placeholder="Krótki opis widoczny na liście"></textarea>
     </div>
@@ -123,17 +133,39 @@
     </template>
     <div class="form-group">
       <label class="form-label">Kategoria</label>
-      <div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.25rem">
-        <template x-for="cat in [{id:'komunikat',label:'KOMUNIKAT',color:'#d97706'},{id:'ogloszenie',label:'OGŁOSZENIE',color:'#ea580c'},{id:'wydarzenie',label:'WYDARZENIE',color:'#7c3aed'},{id:'sukces',label:'SUKCES',color:'#16a34a'}]" :key="cat.id">
-          <button type="button"
-            @click="editing.category = editing.category === cat.id ? null : cat.id"
-            :style="editing.category === cat.id ? `background:${cat.color};color:#fff;border-color:${cat.color}` : 'background:transparent;color:#555;border-color:#d0d0d0'"
-            style="padding:.35rem .9rem;border-radius:2rem;font-size:.75rem;font-weight:700;letter-spacing:.06em;border:2px solid;cursor:pointer;transition:all .15s;font-family:inherit"
-            x-text="cat.label">
-          </button>
-        </template>
+      <div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.4rem">
+        <button type="button" @click="editing.category = null"
+          :style="!editing.category ? 'background:#e5e7eb;color:#374151;font-weight:800' : 'background:transparent;color:#9ca3af;border-color:#e5e7eb'"
+          style="padding:.4rem 1rem;border-radius:9999px;font-size:.72rem;font-weight:600;letter-spacing:.05em;border:2px solid #e5e7eb;cursor:pointer;transition:all .15s;font-family:inherit">
+          Brak
+        </button>
+        <button type="button" @click="editing.category = editing.category === 'komunikat' ? null : 'komunikat'"
+          :style="editing.category === 'komunikat' ? 'background:#d97706;color:#fff;border-color:#d97706' : 'background:transparent;color:#d97706;border-color:#fde68a'"
+          style="padding:.4rem 1rem;border-radius:9999px;font-size:.72rem;font-weight:700;letter-spacing:.05em;border:2px solid;cursor:pointer;transition:all .15s;font-family:inherit">
+          Komunikat
+        </button>
+        <button type="button" @click="editing.category = editing.category === 'ogloszenie' ? null : 'ogloszenie'"
+          :style="editing.category === 'ogloszenie' ? 'background:#ea580c;color:#fff;border-color:#ea580c' : 'background:transparent;color:#ea580c;border-color:#fed7aa'"
+          style="padding:.4rem 1rem;border-radius:9999px;font-size:.72rem;font-weight:700;letter-spacing:.05em;border:2px solid;cursor:pointer;transition:all .15s;font-family:inherit">
+          Ogłoszenie
+        </button>
+        <button type="button" @click="editing.category = editing.category === 'wydarzenie' ? null : 'wydarzenie'"
+          :style="editing.category === 'wydarzenie' ? 'background:#7c3aed;color:#fff;border-color:#7c3aed' : 'background:transparent;color:#7c3aed;border-color:#ddd6fe'"
+          style="padding:.4rem 1rem;border-radius:9999px;font-size:.72rem;font-weight:700;letter-spacing:.05em;border:2px solid;cursor:pointer;transition:all .15s;font-family:inherit">
+          Wydarzenie
+        </button>
+        <button type="button" @click="editing.category = editing.category === 'sukces' ? null : 'sukces'"
+          :style="editing.category === 'sukces' ? 'background:#16a34a;color:#fff;border-color:#16a34a' : 'background:transparent;color:#16a34a;border-color:#bbf7d0'"
+          style="padding:.4rem 1rem;border-radius:9999px;font-size:.72rem;font-weight:700;letter-spacing:.05em;border:2px solid;cursor:pointer;transition:all .15s;font-family:inherit">
+          Sukces
+        </button>
+        <button type="button" @click="editing.category = editing.category === 'zfss' ? null : 'zfss'"
+          :style="editing.category === 'zfss' ? 'background:#0369a1;color:#fff;border-color:#0369a1' : 'background:transparent;color:#0369a1;border-color:#bae6fd'"
+          style="padding:.4rem 1rem;border-radius:9999px;font-size:.72rem;font-weight:700;letter-spacing:.05em;border:2px solid;cursor:pointer;transition:all .15s;font-family:inherit">
+          ZFŚS
+        </button>
       </div>
-      <p class="form-hint">Opcjonalnie — jeden chip na aktualność</p>
+      <p class="form-hint" style="margin-top:.5rem">Opcjonalnie — jedna kategoria na aktualność</p>
     </div>
     <div class="form-group">
       <label class="form-label">Data publikacji</label>
@@ -178,6 +210,12 @@ function textToHtml(text) {
     .join('\n');
 }
 
+function autoExcerpt(source, maxLen) {
+  const text = source.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
+  if (!text) return null
+  return text.length <= maxLen ? text : text.slice(0, maxLen).replace(/\s+\S*$/, '') + '…'
+}
+
 function newsAdmin() {
   return {
     items: [], loading: true,
@@ -194,7 +232,7 @@ function newsAdmin() {
     async load() {
       this.loading = true
       try {
-        const d = await fetch('/api/public/news?limit=50').then(r => r.json())
+        const d = await API.get('/news')
         this.items = d.items ?? []
       } catch {}
       finally { this.loading = false }
@@ -223,10 +261,16 @@ function newsAdmin() {
         const bodyHtml = this.role === 'admin'
           ? (this.editing.body_html || null)
           : textToHtml(this.editing.body_text || '')
+
+        // Dla ZFŚS: auto-skrót ze strippowanego body_html jeśli pole puste
+        let excerpt = this.editing.category === 'zfss'
+          ? autoExcerpt(bodyHtml || this.editing.body_text || '', 200)
+          : (this.editing.excerpt || null)
+
         const payload = {
           title: this.editing.title,
           slug: this.editing.slug,
-          excerpt: this.editing.excerpt || null,
+          excerpt,
           body_html: bodyHtml,
           published_at: pub,
           category: this.editing.category || null

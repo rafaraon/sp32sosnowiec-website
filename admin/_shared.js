@@ -1,9 +1,9 @@
 function _handleApiError(r, e) {
-  if (r.status === 401 || r.status === 403 ||
-      (e.error && (e.error === 'unauthorized' || e.error === 'Unauthorized'))) {
+  if (r.status === 401 || (e.error && (e.error === 'unauthorized' || e.error === 'Unauthorized'))) {
     _showSessionExpired()
     throw new Error('Sesja wygasła — zaloguj się ponownie.')
   }
+  // 403 = insufficient permissions (not session expiry — don't show the misleading banner)
   throw new Error(e.error || `HTTP ${r.status}`)
 }
 

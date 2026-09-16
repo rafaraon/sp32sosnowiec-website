@@ -20,6 +20,12 @@
 .section-sub{font-size:.95rem;color:var(--tx-m);margin-bottom:1.5rem;max-width:640px;line-height:1.7}
 .no-results{text-align:center;padding:3rem 0;color:var(--tx-m);font-size:.95rem;display:none}
 .filter-count{background:var(--ca);color:#fff;border-radius:99px;font-size:.65rem;padding:.1rem .45rem;margin-left:.3rem;font-family:var(--font-d);font-weight:700}
+.filter-bar{display:flex;flex-wrap:wrap;gap:.5rem;margin:1.75rem 0 .5rem}
+.filter-btn{display:inline-flex;align-items:center;gap:.3em;font-family:var(--font-d);font-size:.8rem;font-weight:600;padding:.4rem .9rem;border-radius:999px;border:1.5px solid var(--bd);background:transparent;color:var(--tx-m);cursor:pointer;transition:border-color .15s,background .15s,color .15s;white-space:nowrap;line-height:1}
+.filter-btn:hover{border-color:var(--ca);color:var(--ca)}
+.filter-btn.active{border-color:var(--ca);background:var(--ca);color:#fff}
+.filter-btn.active .filter-count{background:rgba(255,255,255,.25);color:#fff}
+@media(max-width:480px){.filter-btn{font-size:.75rem;padding:.35rem .7rem}}
 </style>
 {% endblock %}
 {% block content %}

@@ -113,21 +113,9 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
 .photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.75rem;margin-top:1.5rem}
 .photo-thumb{width:100%;aspect-ratio:1;object-fit:cover;border-radius:var(--r-s);cursor:zoom-in;transition:opacity var(--tr)}
 .photo-thumb:hover{opacity:.85}
-
-/* Lightbox */
-.lb-overlay{position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
-.lb-overlay.lb-open{opacity:1;pointer-events:auto}
-.lb-img{max-width:min(90vw,1100px);max-height:88vh;object-fit:contain;border-radius:4px;display:block}
-.lb-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.12);border:none;color:#fff;font-size:2rem;width:52px;height:52px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;line-height:1;user-select:none}
-.lb-btn:hover{background:rgba(255,255,255,.28)}
-.lb-btn:disabled{opacity:.2;cursor:default}
-.lb-prev{left:1rem}
-.lb-next{right:1rem}
-.lb-close{position:absolute;top:1rem;right:1rem;width:40px;height:40px;font-size:1.2rem}
-.lb-counter{position:absolute;bottom:1.2rem;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.6);font-family:var(--font-d);font-size:.8rem;letter-spacing:.05em}
 </style>
 
-<link rel="stylesheet" href="header.css?v=4">
+<link rel="stylesheet" href="header.css?v=3">
 <link rel="stylesheet" href="footer.css">
 </head>
 <body>
@@ -144,7 +132,7 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
         BIP
       </a>
       <div class="util-bar-sep" aria-hidden="true"></div>
-      <a href="https://portal.librus.pl/rodzina" class="util-bar-link" target="_blank" rel="noopener noreferrer">
+      <a href="https://sp32sosnowiec.edupage.org" class="util-bar-link" target="_blank" rel="noopener noreferrer">
         <svg width="11" height="11" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M2 10V5l4-3 4 3v5H7.5V7.5h-3V10H2z"/></svg>
         E-Dziennik
       </a>
@@ -275,8 +263,17 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
 
 <main id="main-content" class="page-main">
   
-<div x-data="galleryApp()" x-init="load()">
 <div class="container page-main">
+
+<div style="background:var(--bg-alt,#f9f4f1);border:1px solid var(--bd);border-radius:10px;padding:1rem 1.25rem;margin-bottom:2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap">
+  <div style="font-size:.88rem;color:var(--tx-m);line-height:1.5">
+    <strong style="color:var(--tx)">🔐 Prawa do zdjęć</strong><br>
+    Chcesz wycofać zgodę na zdjęcia dziecka lub poprosić o ich usunięcie?
+  </div>
+  <a href="rodo-wniosek.html" style="display:inline-block;background:var(--accent,#e05c2a);color:#fff;font-weight:700;font-size:.82rem;padding:.5rem 1.1rem;border-radius:7px;white-space:nowrap;flex-shrink:0">Złóż wniosek RODO →</a>
+</div>
+
+<div x-data="galleryApp()" x-init="load()">
 
   <template x-if="!currentAlbum">
     <div>
@@ -319,34 +316,22 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
       </template>
       <template x-if="!photosLoading">
         <div class="photo-grid">
-          <template x-for="(photo, idx) in currentPhotos" :key="photo.id">
+          <template x-for="photo in currentPhotos" :key="photo.id">
             <img :src="photo.thumb_url" :alt="currentAlbum.title" class="photo-thumb" loading="lazy"
-                 @click="openLightbox(idx)">
+                 @click="window.open(photo.url,'_blank')">
           </template>
         </div>
       </template>
     </div>
   </template>
 
-</div><!-- end container -->
-
-<!-- Lightbox — inside Alpine scope -->
-<div class="lb-overlay" :class="{'lb-open':lbOpen}" role="dialog" aria-modal="true" aria-label="Przeglądarka zdjęć"
-     @keydown.window="onLbKey($event)" @click.self="closeLb()">
-  <button class="lb-btn lb-close" @click="closeLb()" aria-label="Zamknij">✕</button>
-  <button class="lb-btn lb-prev" @click="lbStep(-1)" :disabled="lbIdx===0" aria-label="Poprzednie zdjęcie">‹</button>
-  <img :src="currentPhotos[lbIdx]?.url ?? ''" :alt="currentAlbum?.title ?? ''" class="lb-img">
-  <button class="lb-btn lb-next" @click="lbStep(1)" :disabled="lbIdx>=currentPhotos.length-1" aria-label="Następne zdjęcie">›</button>
-  <div class="lb-counter" x-text="currentPhotos.length ? (lbIdx+1)+' / '+currentPhotos.length : ''"></div>
 </div>
-</div><!-- end Alpine scope -->
-
+</div>
 <script>
 function galleryApp(){
   return{
     albums:[],loading:true,
     currentAlbum:null,currentPhotos:[],photosLoading:false,
-    lbOpen:false,lbIdx:0,
     async load(){
       try{
         const r=await fetch('/api/public/gallery');
@@ -367,25 +352,6 @@ function galleryApp(){
       }catch{}
       finally{this.photosLoading=false}
     },
-    openLightbox(idx){
-      this.lbIdx=idx;
-      this.lbOpen=true;
-      document.body.style.overflow='hidden';
-    },
-    closeLb(){
-      this.lbOpen=false;
-      document.body.style.overflow='';
-    },
-    lbStep(dir){
-      const n=this.lbIdx+dir;
-      if(n>=0&&n<this.currentPhotos.length)this.lbIdx=n;
-    },
-    onLbKey(e){
-      if(!this.lbOpen)return;
-      if(e.key==='Escape')this.closeLb();
-      if(e.key==='ArrowLeft')this.lbStep(-1);
-      if(e.key==='ArrowRight')this.lbStep(1);
-    },
     fmtDate(iso){
       if(!iso)return'';
       return new Date(iso).toLocaleDateString('pl-PL',{day:'numeric',month:'long',year:'numeric'});
@@ -405,7 +371,7 @@ function galleryApp(){
         <div class="footer-school-name">Szkoła Podstawowa nr 32<br>im. L. Kruczkowskiego w Sosnowcu</div>
       </a>
       <div class="footer-ext">
-        <a href="https://portal.librus.pl/rodzina" class="footer-ext-link" target="_blank" rel="noopener">E-Dziennik ↗</a>
+        <a href="https://sp32sosnowiec.edupage.org" class="footer-ext-link" target="_blank" rel="noopener">E-Dziennik ↗</a>
         <a href="https://sp_32_sosnowiec.bip.gov.pl/" class="footer-ext-link" target="_blank" rel="noopener">BIP ↗</a>
         <a href="https://www.facebook.com/SP32Sosnowiec" class="footer-ext-link" target="_blank" rel="noopener">Facebook ↗</a>
       </div>
@@ -429,7 +395,7 @@ function galleryApp(){
       <details class="footer-info-card" open>
         <summary><p class="footer-info-label">Godziny pracy</p><span class="fic-chevron" aria-hidden="true">›</span></summary>
         <div class="fic-body">
-          <p>Szkoła: 6:00–21:00</p>
+          <p>Szkoła: 8:00–16:25</p>
           <p>Świetlica: 7:00–16:00</p>
           <p class="footer-note">W dni nauki szkolnej</p>
         </div>
@@ -485,13 +451,13 @@ function galleryApp(){
       <hr class="contact-divider">
       <div class="contact-info-row">
         <div class="contact-info-block"><p class="contact-info-lbl">Adres</p><address>ul. Armii Krajowej 93<br>41-215 Sosnowiec<br>woj. śląskie</address><a href="https://maps.google.com/?q=ul.+Armii+Krajowej+93,+41-215+Sosnowiec" target="_blank" rel="noopener" class="contact-map-link">Pokaż na mapie →</a></div>
-        <div class="contact-info-block"><p class="contact-info-lbl">Godziny pracy</p><p>Sekretariat:<br>pon–pt 7:00–15:00</p><p class="contact-note">Szkoła: 6:00–21:00<br>Świetlica: 7:00–16:00</p></div>
+        <div class="contact-info-block"><p class="contact-info-lbl">Godziny pracy</p><p>Sekretariat:<br>pon–pt 7:00–15:00</p><p class="contact-note">Szkoła: 8:00–16:25<br>Świetlica: 7:00–16:00</p></div>
       </div>
     </div>
   </div>
 </div>
 
 
-<script src="shared.js?v=5" defer></script>
+<script src="shared.js" defer></script>
 </body>
 </html>

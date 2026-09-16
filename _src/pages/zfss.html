@@ -9,6 +9,12 @@
 .zfss-intro{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:1.5rem 2rem;margin-bottom:2rem;max-width:42rem}
 .zfss-intro p{color:var(--tx-m);line-height:1.7;margin:0}
 .zfss-intro strong{color:var(--tx)}
+/* Tabs */
+.tab-bar{display:flex;gap:0;border-bottom:2px solid var(--bd);margin-bottom:2rem}
+.tab-btn{font-family:var(--font-d);font-size:.85rem;font-weight:700;padding:.65rem 1.25rem;border:none;background:transparent;color:var(--tx-m);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:color .15s,border-color .15s;white-space:nowrap}
+.tab-btn:hover{color:var(--tx)}
+.tab-btn.active{color:var(--cp);border-bottom-color:var(--cp)}
+/* Documents */
 .doc-list{display:flex;flex-direction:column;gap:.75rem}
 .doc-item{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r-s);padding:1rem 1.25rem;display:flex;align-items:center;gap:1rem;box-shadow:var(--sh);transition:box-shadow var(--tr)}
 .doc-item:hover{box-shadow:var(--sh-m)}
@@ -20,6 +26,15 @@
 .skel{background:var(--clv);border-radius:var(--r-s);animation:pulse 1.5s ease-in-out infinite;height:64px;margin-bottom:.75rem}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
 .empty-note{color:var(--tx-m);font-size:.95rem;padding:2rem 0}
+/* News */
+.news-list{display:flex;flex-direction:column;gap:1.25rem}
+.news-item{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:1.35rem 1.5rem;box-shadow:var(--sh)}
+.news-date{font-family:var(--font-d);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--cp);margin-bottom:.35rem}
+.news-title{font-family:var(--font-d);font-size:1rem;font-weight:800;color:var(--tx);margin-bottom:.65rem;line-height:1.35}
+.news-body{font-size:.9rem;color:var(--tx-m);line-height:1.7}
+.news-body p{margin:.5rem 0}
+.news-body p:first-child{margin-top:0}
+.news-body p:last-child{margin-bottom:0}
 </style>
 {% endblock %}
 {% block content %}
@@ -29,34 +44,64 @@
     <p><strong>Zakładowy Fundusz Świadczeń Socjalnych</strong> — dokumenty, regulaminy i wnioski dostępne dla pracowników Szkoły Podstawowej nr 32 w Sosnowcu. W przypadku pytań prosimy o kontakt z sekretariatem szkoły.</p>
   </div>
 
-  <template x-if="loading">
-    <div><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
-  </template>
+  <div class="tab-bar" role="tablist">
+    <button class="tab-btn" :class="tab==='docs'&&'active'" @click="tab='docs'" role="tab" :aria-selected="tab==='docs'">📄 Dokumenty</button>
+    <button class="tab-btn" :class="tab==='news'&&'active'" @click="tab='news';loadNews()" role="tab" :aria-selected="tab==='news'">📢 Aktualności ZFŚS</button>
+  </div>
 
-  <template x-if="!loading && items.length === 0">
-    <p class="empty-note">Brak dokumentów. Skontaktuj się z sekretariatem szkoły.</p>
-  </template>
-
-  <template x-if="!loading && items.length > 0">
-    <div class="doc-list">
-      <template x-for="doc in items" :key="doc.id">
-        <div class="doc-item">
-          <span class="doc-icon" x-text="doc.file_type === 'docx' ? '📝' : '📄'"></span>
-          <div style="flex:1;min-width:0">
-            <p class="doc-title" x-text="doc.title"></p>
-            <p class="doc-meta" x-text="doc.file_type ? doc.file_type.toUpperCase() + (doc.file_size ? ' · ' + fmtSize(doc.file_size) : '') : ''"></p>
+  <!-- TAB: DOKUMENTY -->
+  <div x-show="tab==='docs'">
+    <template x-if="loading">
+      <div><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
+    </template>
+    <template x-if="!loading && items.length === 0">
+      <p class="empty-note">Brak dokumentów. Skontaktuj się z sekretariatem szkoły.</p>
+    </template>
+    <template x-if="!loading && items.length > 0">
+      <div class="doc-list">
+        <template x-for="doc in items" :key="doc.id">
+          <div class="doc-item">
+            <span class="doc-icon" x-text="doc.file_type === 'docx' ? '📝' : '📄'"></span>
+            <div style="flex:1;min-width:0">
+              <p class="doc-title" x-text="doc.title"></p>
+              <p class="doc-meta" x-text="doc.file_type ? doc.file_type.toUpperCase() + (doc.file_size ? ' · ' + fmtSize(doc.file_size) : '') : ''"></p>
+            </div>
+            <a :href="doc.url" target="_blank" rel="noopener" class="doc-link">Pobierz ↗</a>
           </div>
-          <a :href="doc.url" target="_blank" rel="noopener" class="doc-link">Pobierz ↗</a>
-        </div>
-      </template>
-    </div>
-  </template>
+        </template>
+      </div>
+    </template>
+  </div>
+
+  <!-- TAB: AKTUALNOŚCI ZFŚS -->
+  <div x-show="tab==='news'">
+    <template x-if="newsLoading">
+      <div><div class="skel"></div><div class="skel"></div></div>
+    </template>
+    <template x-if="!newsLoading && newsItems.length === 0">
+      <p class="empty-note">Brak aktualności ZFŚS.</p>
+    </template>
+    <template x-if="!newsLoading && newsItems.length > 0">
+      <div class="news-list">
+        <template x-for="n in newsItems" :key="n.id">
+          <div class="news-item">
+            <p class="news-date" x-text="fmtDate(n.published_at)"></p>
+            <p class="news-title" x-text="n.title"></p>
+            <div class="news-body" x-show="n.body_html" x-html="n.body_html"></div>
+            <p class="news-body" x-show="!n.body_html && n.excerpt" x-text="n.excerpt"></p>
+          </div>
+        </template>
+      </div>
+    </template>
+  </div>
 
 </div>
 <script>
 function zfssApp(){
   return{
+    tab:'docs',
     items:[],loading:true,
+    newsItems:[],newsLoading:false,newsLoaded:false,
     async load(){
       this.loading=true;
       try{
@@ -67,10 +112,25 @@ function zfssApp(){
       }catch{this.items=[]}
       finally{this.loading=false}
     },
+    async loadNews(){
+      if(this.newsLoaded)return;
+      this.newsLoading=true;
+      try{
+        const r=await fetch('/api/public/news?category=zfss&limit=20');
+        if(!r.ok)throw new Error();
+        const d=await r.json();
+        this.newsItems=d.items;
+      }catch{this.newsItems=[]}
+      finally{this.newsLoading=false;this.newsLoaded=true}
+    },
     fmtSize(bytes){
       if(bytes<1024)return bytes+'B';
       if(bytes<1048576)return Math.round(bytes/1024)+'KB';
       return(bytes/1048576).toFixed(1)+'MB';
+    },
+    fmtDate(iso){
+      if(!iso)return'';
+      return new Date(iso).toLocaleDateString('pl-PL',{day:'numeric',month:'long',year:'numeric'});
     }
   }
 }

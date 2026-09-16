@@ -1,15 +1,22 @@
 import { Hono } from 'hono'
 import type { Env, NewsRow, GalleryAlbumRow, GalleryPhotoRow, DocumentRow, SpecialistRow, MenuWeekRow } from '../types'
 import { newsToJson, albumToJson, photoToJson, documentToJson, specialistToJson, menuToJson } from '../db'
+import { notifyAdminNewRequest } from '../email'
 
 export const publicRouter = new Hono<{ Bindings: Env }>()
 
 publicRouter.get('/news', async (c) => {
   const limit = Math.min(Number(c.req.query('limit') ?? 20), 50)
-  const rows = await c.env.DB.prepare(
-    `SELECT * FROM news WHERE published_at IS NOT NULL AND published_at <= datetime('now')
-     ORDER BY published_at DESC LIMIT ?`
-  ).bind(limit).all<NewsRow>()
+  const category = c.req.query('category') ?? null
+  const rows = category
+    ? await c.env.DB.prepare(
+        `SELECT * FROM news WHERE published_at IS NOT NULL AND published_at <= datetime('now') AND category = ?
+         ORDER BY published_at DESC LIMIT ?`
+      ).bind(category, limit).all<NewsRow>()
+    : await c.env.DB.prepare(
+        `SELECT * FROM news WHERE published_at IS NOT NULL AND published_at <= datetime('now')
+         ORDER BY published_at DESC LIMIT ?`
+      ).bind(limit).all<NewsRow>()
 
   return c.json({ items: (rows.results ?? []).map(r => newsToJson(r, c.env)) })
 })
@@ -54,9 +61,17 @@ publicRouter.get('/documents/:category', async (c) => {
   const allowed = ['dokumenty', 'zfss', 'druki', 'rodo']
   if (!allowed.includes(category)) return c.json({ error: 'invalid category' }, 400)
 
-  const rows = await c.env.DB.prepare(
-    `SELECT * FROM documents WHERE category = ? AND published = 1 ORDER BY sort_order ASC, uploaded_at DESC`
-  ).bind(category).all<DocumentRow>()
+  const location = c.req.query('location')
+  let rows
+  if (category === 'druki' && location) {
+    rows = await c.env.DB.prepare(
+      `SELECT * FROM documents WHERE category = 'druki' AND location_key = ? AND published = 1 ORDER BY sort_order ASC, uploaded_at DESC`
+    ).bind(location).all<DocumentRow>()
+  } else {
+    rows = await c.env.DB.prepare(
+      `SELECT * FROM documents WHERE category = ? AND published = 1 ORDER BY sort_order ASC, uploaded_at DESC`
+    ).bind(category).all<DocumentRow>()
+  }
 
   return c.json({ documents: (rows.results ?? []).map(r => documentToJson(r, c.env)) })
 })
@@ -129,6 +144,18 @@ publicRouter.post('/rodo/request', async (c) => {
     JSON.stringify(matched),
     body.notes?.trim() || null
   ).run()
+
+  // waitUntil keeps the Worker alive after the response is sent (required for background fetches)
+  c.executionCtx.waitUntil(
+    notifyAdminNewRequest(c.env, {
+      reference: ref,
+      studentName: body.student_name.trim(),
+      requestType: body.request_type as 'withdrawal' | 'deletion',
+      submitterEmail: body.submitter_email?.trim() || null,
+      classLabel: body.class_label?.trim() || null,
+      adminPanelUrl: 'https://sp32sosnowiec.edu.pl/admin/rodo/index.html',
+    }).catch(() => {})
+  )
 
   return c.json({ ok: true, reference_number: ref, matched_albums_count: matched.length }, 201)
 })

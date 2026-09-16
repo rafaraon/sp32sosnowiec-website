@@ -22,6 +22,15 @@
 {% endblock %}
 {% block content %}
 <div class="container page-main">
+
+<div style="background:var(--bg-alt,#f9f4f1);border:1px solid var(--bd);border-radius:10px;padding:1rem 1.25rem;margin-bottom:2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap">
+  <div style="font-size:.88rem;color:var(--tx-m);line-height:1.5">
+    <strong style="color:var(--tx)">🔐 Prawa do zdjęć</strong><br>
+    Chcesz wycofać zgodę na zdjęcia dziecka lub poprosić o ich usunięcie?
+  </div>
+  <a href="rodo-wniosek.html" style="display:inline-block;background:var(--accent,#e05c2a);color:#fff;font-weight:700;font-size:.82rem;padding:.5rem 1.1rem;border-radius:7px;white-space:nowrap;flex-shrink:0">Złóż wniosek RODO →</a>
+</div>
+
 <div x-data="galleryApp()" x-init="load()">
 
   <template x-if="!currentAlbum">

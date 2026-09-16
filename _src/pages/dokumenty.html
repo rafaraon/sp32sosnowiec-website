@@ -46,24 +46,62 @@
     <button class="tab-btn" :class="{active:tab==='rodo'}" @click="switchTab('rodo')" role="tab">RODO/IOD</button>
   </div>
 
-  <template x-if="loading">
-    <div><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
+  <!-- Zakładki: Dokumenty szkolne i RODO/IOD -->
+  <template x-if="tab !== 'druki'">
+    <div>
+      <template x-if="loading">
+        <div><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
+      </template>
+      <template x-if="!loading && items.length === 0">
+        <p class="empty-note">Brak dokumentów w tej kategorii.</p>
+      </template>
+      <template x-if="!loading && items.length > 0">
+        <div class="doc-list">
+          <template x-for="doc in items" :key="doc.id">
+            <div class="doc-item">
+              <span class="doc-icon" x-text="doc.file_type === 'docx' ? '📝' : '📄'"></span>
+              <div style="flex:1;min-width:0">
+                <p class="doc-title" x-text="doc.title"></p>
+                <p class="doc-meta" x-text="doc.file_type ? doc.file_type.toUpperCase() + (doc.file_size ? ' · ' + fmtSize(doc.file_size) : '') : ''"></p>
+              </div>
+              <a :href="doc.url" target="_blank" rel="noopener" class="doc-link">Pobierz ↗</a>
+            </div>
+          </template>
+        </div>
+      </template>
+    </div>
   </template>
 
-  <template x-if="!loading && items.length === 0">
-    <p class="empty-note">Brak dokumentów w tej kategorii.</p>
-  </template>
-
-  <template x-if="!loading && items.length > 0">
-    <div class="doc-list">
-      <template x-for="doc in items" :key="doc.id">
-        <div class="doc-item">
-          <span class="doc-icon" x-text="doc.file_type === 'docx' ? '📝' : '📄'"></span>
-          <div style="flex:1;min-width:0">
-            <p class="doc-title" x-text="doc.title"></p>
-            <p class="doc-meta" x-text="doc.file_type ? doc.file_type.toUpperCase() + (doc.file_size ? ' · ' + fmtSize(doc.file_size) : '') : ''"></p>
-          </div>
-          <a :href="doc.url" target="_blank" rel="noopener" class="doc-link">Pobierz ↗</a>
+  <!-- Zakładka: Druki do pobrania — pogrupowane wg lokalizacji -->
+  <template x-if="tab === 'druki'">
+    <div>
+      <template x-if="drukiLoading">
+        <div><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
+      </template>
+      <template x-if="!drukiLoading">
+        <div>
+          <template x-if="drukiAll.length === 0">
+            <p class="empty-note">Brak druków do pobrania.</p>
+          </template>
+          <template x-for="group in drukiGroups" :key="group.key">
+            <template x-if="group.items.length > 0">
+              <div style="margin-bottom:2rem">
+                <h3 style="font-family:var(--font-d);font-size:.82rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--tx-m);margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:1px solid var(--bd)" x-text="group.label"></h3>
+                <div class="doc-list">
+                  <template x-for="doc in group.items" :key="doc.id">
+                    <div class="doc-item">
+                      <span class="doc-icon" x-text="doc.file_type === 'docx' ? '📝' : '📄'"></span>
+                      <div style="flex:1;min-width:0">
+                        <p class="doc-title" x-text="doc.title"></p>
+                        <p class="doc-meta" x-text="doc.file_type ? doc.file_type.toUpperCase() + (doc.file_size ? ' · ' + fmtSize(doc.file_size) : '') : ''"></p>
+                      </div>
+                      <a :href="doc.url" target="_blank" rel="noopener" class="doc-link">Pobierz ↗</a>
+                    </div>
+                  </template>
+                </div>
+              </div>
+            </template>
+          </template>
         </div>
       </template>
     </div>
@@ -71,9 +109,20 @@
 
 </div>
 <script>
+const DRUKI_GROUPS = [
+  { key: 'swietlica',  label: 'Świetlica szkolna' },
+  { key: 'pedagog',    label: 'Pedagog / Psycholog' },
+  { key: 'wycieczki',  label: 'Wycieczki i wyjścia' },
+  { key: 'sekretariat',label: 'Sekretariat' },
+  { key: null,         label: 'Pozostałe' },
+]
 function docsApp(){
   return{
     tab:'dokumenty',items:[],loading:true,
+    drukiAll:[],drukiLoading:false,drukiLoaded:false,
+    get drukiGroups(){
+      return DRUKI_GROUPS.map(g=>({...g,items:this.drukiAll.filter(d=>d.location_key==g.key)}))
+    },
     async load(){
       this.loading=true;
       try{
@@ -84,7 +133,22 @@ function docsApp(){
       }catch{this.items=[]}
       finally{this.loading=false}
     },
-    switchTab(t){this.tab=t;this.load()},
+    async loadDruki(){
+      if(this.drukiLoaded)return;
+      this.drukiLoading=true;
+      try{
+        const r=await fetch('/api/public/documents/druki');
+        if(!r.ok)throw new Error();
+        const d=await r.json();
+        this.drukiAll=d.documents;
+      }catch{this.drukiAll=[]}
+      finally{this.drukiLoading=false;this.drukiLoaded=true}
+    },
+    switchTab(t){
+      this.tab=t;
+      if(t==='druki')this.loadDruki();
+      else this.load();
+    },
     fmtSize(bytes){
       if(bytes<1024)return bytes+'B';
       if(bytes<1048576)return Math.round(bytes/1024)+'KB';

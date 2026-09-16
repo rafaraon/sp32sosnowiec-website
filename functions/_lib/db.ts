@@ -39,7 +39,7 @@ export function documentToJson(row: DocumentRow, env: Env) {
 export function specialistToJson(row: SpecialistRow) {
   return {
     ...row,
-    hours: JSON.parse(row.hours),
+    hours: (() => { try { return JSON.parse(row.hours) } catch { return [] } })(),
     active: row.active === 1,
   }
 }

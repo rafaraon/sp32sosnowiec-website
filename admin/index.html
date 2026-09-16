@@ -17,6 +17,7 @@
       <div>
         <div class="nav-section">Admin</div>
         <a href="/admin/documents/index.html" class="admin-only">📄 Dokumenty</a>
+        <a href="/admin/documents/index.html?tab=zfss" class="admin-only">🏦 ZFŚS</a>
         <a href="/admin/specialists/index.html" class="admin-only">👥 Specjaliści</a>
         <a href="/admin/menu/index.html" class="admin-only">🍽️ Jadłospis</a>
         <a href="/admin/rodo/index.html" class="admin-only">🔐 RODO</a>
@@ -136,12 +137,13 @@ function dashApp() {
       try {
         const me = await API.get('/me')
         this.user = me
+        const isAdmin = me.role === 'admin'
         const [newsData, albumsData, docsData, rodoData, auditData] = await Promise.all([
-          fetch('/api/public/news?limit=50').then(r => r.json()).catch(() => ({ items: [] })),
-          fetch('/api/public/gallery').then(r => r.json()).catch(() => ({ albums: [] })),
-          fetch('/api/public/documents/dokumenty').then(r => r.json()).catch(() => ({ documents: [] })),
-          API.get('/rodo/requests?status=pending').catch(() => ({ requests: [] })),
-          API.get('/rodo/audit').catch(() => ({ albums: [] })),
+          API.get('/news').catch(() => ({ items: [] })),
+          API.get('/gallery/albums').catch(() => ({ albums: [] })),
+          isAdmin ? API.get('/documents?category=dokumenty').catch(() => ({ documents: [] })) : Promise.resolve({ documents: [] }),
+          isAdmin ? API.get('/rodo/requests?status=pending').catch(() => ({ requests: [] })) : Promise.resolve({ requests: [] }),
+          isAdmin ? API.get('/rodo/audit').catch(() => ({ albums: [] })) : Promise.resolve({ albums: [] }),
         ])
         this.stats.news = newsData.items?.length ?? 0
         this.stats.albums = albumsData.albums?.length ?? 0

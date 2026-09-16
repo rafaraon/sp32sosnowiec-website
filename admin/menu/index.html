@@ -17,6 +17,7 @@
       <div>
         <div class="nav-section">Admin</div>
         <a href="/admin/documents/index.html" class="admin-only">📄 Dokumenty</a>
+        <a href="/admin/documents/index.html?tab=zfss" class="admin-only">🏦 ZFŚS</a>
         <a href="/admin/specialists/index.html" class="admin-only">👥 Specjaliści</a>
         <a href="/admin/menu/index.html" class="active admin-only">🍽️ Jadłospis</a>
         <a href="/admin/rodo/index.html" class="admin-only">🔐 RODO</a>
@@ -101,7 +102,7 @@ function menuAdmin() {
     async load() {
       this.loading = true
       try {
-        const d = await fetch('/api/public/menu').then(r => r.json())
+        const d = await API.get('/menu')
         this.weeks = d.weeks ?? []
       } catch {}
       finally { this.loading = false }

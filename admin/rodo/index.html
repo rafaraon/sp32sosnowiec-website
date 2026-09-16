@@ -55,6 +55,7 @@
       <div>
         <div class="nav-section">Admin</div>
         <a href="/admin/documents/index.html" class="admin-only">📄 Dokumenty</a>
+        <a href="/admin/documents/index.html?tab=zfss" class="admin-only">🏦 ZFŚS</a>
         <a href="/admin/specialists/index.html" class="admin-only">👥 Specjaliści</a>
         <a href="/admin/menu/index.html" class="admin-only">🍽️ Jadłospis</a>
         <a href="/admin/rodo/index.html" class="active admin-only">🔐 RODO</a>
@@ -88,6 +89,56 @@
           Dla zdjęć grupowych: „Anonimizuj" jest wystarczające — zdjęcie znika ze strony, pozostaje w archiwum.
           Jeśli wymagane fizyczne zamazanie twarzy: pobierz → edytuj → wgraj ponownie.
         </div>
+
+        <!-- Procedura obsługi wniosku -->
+        <details style="margin-bottom:1.25rem;border:1px solid #c8d4f8;border-radius:10px;overflow:hidden">
+          <summary style="padding:.75rem 1rem;font-size:.83rem;font-weight:700;color:#1e3a5f;background:#eff6ff;cursor:pointer;display:flex;align-items:center;gap:.5rem;list-style:none">
+            <span>📋</span> Procedura obsługi wniosku (krok po kroku) <span style="margin-left:auto;font-size:.75rem;font-weight:400;color:#60a5fa">rozwiń ▾</span>
+          </summary>
+          <div style="padding:1rem;display:grid;grid-template-columns:1fr 1fr;gap:.75rem;background:#fff">
+
+            <div style="border:1px solid #e8e8e8;border-radius:8px;padding:.85rem;display:flex;gap:.75rem;align-items:flex-start">
+              <div style="width:24px;height:24px;border-radius:50%;background:#e8601c;color:#fff;font-weight:800;font-size:.75rem;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</div>
+              <div>
+                <div style="font-size:.8rem;font-weight:700;color:#1a1718;margin-bottom:2px">Wniosek wpływa do panelu</div>
+                <div style="font-size:.72rem;color:#666;line-height:1.5">System automatycznie wskazuje pasujące albumy. Powiadomienie e-mail trafia na skrzynkę admina.</div>
+              </div>
+            </div>
+
+            <div style="border:1px solid #e8e8e8;border-radius:8px;padding:.85rem;display:flex;gap:.75rem;align-items:flex-start">
+              <div style="width:24px;height:24px;border-radius:50%;background:#e8601c;color:#fff;font-weight:800;font-size:.75rem;display:flex;align-items:center;justify-content:center;flex-shrink:0">2</div>
+              <div>
+                <div style="font-size:.8rem;font-weight:700;color:#1a1718;margin-bottom:2px">Weryfikacja tożsamości</div>
+                <div style="font-size:.72rem;color:#666;line-height:1.5">Sekretariat kontaktuje się ze zgłaszającym i potwierdza tożsamość. Zmień status na <strong>„W toku"</strong>.</div>
+              </div>
+            </div>
+
+            <div style="border:1px solid #e8e8e8;border-radius:8px;padding:.85rem;display:flex;gap:.75rem;align-items:flex-start">
+              <div style="width:24px;height:24px;border-radius:50%;background:#2563eb;color:#fff;font-weight:800;font-size:.75rem;display:flex;align-items:center;justify-content:center;flex-shrink:0">3a</div>
+              <div>
+                <div style="font-size:.8rem;font-weight:700;color:#1a1718;margin-bottom:2px">Wycofanie zgody</div>
+                <div style="font-size:.72rem;color:#666;line-height:1.5">Kliknij link albumu → galeria admin → znajdź ucznia → <strong>„Anonimizuj"</strong>. Zdjęcie znika z publicznej galerii.</div>
+              </div>
+            </div>
+
+            <div style="border:1px solid #fecaca;border-radius:8px;padding:.85rem;display:flex;gap:.75rem;align-items:flex-start;background:#fef2f2">
+              <div style="width:24px;height:24px;border-radius:50%;background:#dc2626;color:#fff;font-weight:800;font-size:.75rem;display:flex;align-items:center;justify-content:center;flex-shrink:0">3b</div>
+              <div>
+                <div style="font-size:.8rem;font-weight:700;color:#1a1718;margin-bottom:2px">Usunięcie zdjęć</div>
+                <div style="font-size:.72rem;color:#666;line-height:1.5">Najpierw kliknij <strong>„Wyślij do dyrektora"</strong> + <strong>„Zatwierdzono przez dyrektora"</strong>. Potem usuń zdjęcia w galerii. Nieodwracalne.</div>
+              </div>
+            </div>
+
+            <div style="border:1px solid #bbf7d0;border-radius:8px;padding:.85rem;display:flex;gap:.75rem;align-items:flex-start;background:#f0fdf4;grid-column:1/-1">
+              <div style="width:24px;height:24px;border-radius:50%;background:#16a34a;color:#fff;font-weight:800;font-size:.75rem;display:flex;align-items:center;justify-content:center;flex-shrink:0">✓</div>
+              <div>
+                <div style="font-size:.8rem;font-weight:700;color:#1a1718;margin-bottom:2px">Zmień status na „Rozwiązany"</div>
+                <div style="font-size:.72rem;color:#166534;line-height:1.5">System automatycznie wysyła e-mail potwierdzający do rodzica/zgłaszającego. Wniosek jest zamknięty.</div>
+              </div>
+            </div>
+
+          </div>
+        </details>
 
         <!-- Wnioski -->
         <div class="card">
@@ -123,7 +174,7 @@
                   <span class="lbl">Uczeń / klasa / rok szkolny</span>
                   <span class="val">
                     <strong x-text="req.student_name"></strong><br>
-                    <span x-text="(req.class_label ?? '—') + ' · ' + (req.school_year_label ?? '')"></span>
+                    <span x-text="(req.class_label ?? '—') + (req.graduation_year ? ' · rocznik ' + req.graduation_year : '')"></span>
                   </span>
                 </div>
                 <div class="req-field">

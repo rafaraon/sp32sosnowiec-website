@@ -99,7 +99,7 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
 </style>
 
-<link rel="stylesheet" href="header.css?v=4">
+<link rel="stylesheet" href="header.css?v=3">
 <link rel="stylesheet" href="footer.css">
 </head>
 <body>
@@ -116,7 +116,7 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
         BIP
       </a>
       <div class="util-bar-sep" aria-hidden="true"></div>
-      <a href="https://portal.librus.pl/rodzina" class="util-bar-link" target="_blank" rel="noopener noreferrer">
+      <a href="https://sp32sosnowiec.edupage.org" class="util-bar-link" target="_blank" rel="noopener noreferrer">
         <svg width="11" height="11" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M2 10V5l4-3 4 3v5H7.5V7.5h-3V10H2z"/></svg>
         E-Dziennik
       </a>
@@ -258,7 +258,7 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
       <div class="info-cards">
         <div class="info-card">
           <span class="info-card-label">Godziny otwarcia</span>
-          <span class="info-card-value">6:30 – 17:00</span>
+          <span class="info-card-value">7:00 – 16:00</span>
           <p>poniedziałek – piątek<br>w dni nauki szkolnej</p>
         </div>
         <div class="info-card">
@@ -278,10 +278,10 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
 
       <h2>Program zajęć</h2>
       <ul class="list">
-        <li><strong>6:30 – 8:00</strong> — zajęcia powitalne, gry planszowe, rysowanie</li>
+        <li><strong>7:00 – 8:00</strong> — zajęcia powitalne, gry planszowe, rysowanie</li>
         <li><strong>12:00 – 14:00</strong> — odrabianie lekcji, pomoc wychowawcy</li>
-        <li><strong>14:00 – 16:00</strong> — zajęcia tematyczne, plastyczne, sportowe</li>
-        <li><strong>16:00 – 17:00</strong> — zabawy swobodne, czas wolny</li>
+        <li><strong>14:00 – 15:30</strong> — zajęcia tematyczne, plastyczne, sportowe</li>
+        <li><strong>15:30 – 16:00</strong> — zabawy swobodne, czas wolny</li>
       </ul>
 
       <h2>Zapisy do świetlicy</h2>
@@ -294,6 +294,30 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
     </div>
   </div>
 
+<div class="container" style="padding-bottom:4rem" x-data="drukiApp('swietlica')" x-init="load()">
+  <h2 style="font-family:var(--font-d);font-size:1.15rem;font-weight:800;color:var(--tx);margin-bottom:1rem">📄 Druki do pobrania</h2>
+  <template x-if="loading"><div style="height:56px;background:var(--clv);border-radius:8px;animation:pulse 1.5s ease-in-out infinite"></div></template>
+  <template x-if="!loading && items.length === 0"><p style="color:var(--tx-m);font-size:.9rem">Brak druków do pobrania.</p></template>
+  <template x-if="!loading && items.length > 0">
+    <div style="display:flex;flex-direction:column;gap:.65rem">
+      <template x-for="doc in items" :key="doc.id">
+        <div style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--r-s);padding:.9rem 1.1rem;display:flex;align-items:center;gap:.9rem;box-shadow:var(--sh)">
+          <span style="font-size:1.1rem;flex-shrink:0" x-text="doc.file_type==='docx'?'📝':'📄'"></span>
+          <div style="flex:1;min-width:0">
+            <p style="font-family:var(--font-d);font-weight:700;font-size:.88rem;color:var(--tx);margin:0" x-text="doc.title"></p>
+            <p style="font-size:.73rem;color:var(--tx-m);margin:.15rem 0 0" x-text="doc.file_type?(doc.file_type.toUpperCase()+(doc.file_size?' · '+Math.round(doc.file_size/1024)+' KB':'')):''" ></p>
+          </div>
+          <a :href="doc.url" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;font-family:var(--font-d);font-size:.78rem;font-weight:700;color:var(--cp);padding:.3rem .7rem;border-radius:var(--r-s);border:1px solid var(--bd);white-space:nowrap;text-decoration:none">Pobierz ↗</a>
+        </div>
+      </template>
+    </div>
+  </template>
+</div>
+<script>
+function drukiApp(loc){return{items:[],loading:true,async load(){try{const r=await fetch('/api/public/documents/druki?location='+loc);const d=await r.json();this.items=d.documents??[];}catch{this.items=[]}finally{this.loading=false}}}}
+</script>
+<script src="/alpine.min.js" defer></script>
+
 </main>
 
 <footer class="site-footer" role="contentinfo">
@@ -304,7 +328,7 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
         <div class="footer-school-name">Szkoła Podstawowa nr 32<br>im. L. Kruczkowskiego w Sosnowcu</div>
       </a>
       <div class="footer-ext">
-        <a href="https://portal.librus.pl/rodzina" class="footer-ext-link" target="_blank" rel="noopener">E-Dziennik ↗</a>
+        <a href="https://sp32sosnowiec.edupage.org" class="footer-ext-link" target="_blank" rel="noopener">E-Dziennik ↗</a>
         <a href="https://sp_32_sosnowiec.bip.gov.pl/" class="footer-ext-link" target="_blank" rel="noopener">BIP ↗</a>
         <a href="https://www.facebook.com/SP32Sosnowiec" class="footer-ext-link" target="_blank" rel="noopener">Facebook ↗</a>
       </div>
@@ -328,7 +352,7 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
       <details class="footer-info-card" open>
         <summary><p class="footer-info-label">Godziny pracy</p><span class="fic-chevron" aria-hidden="true">›</span></summary>
         <div class="fic-body">
-          <p>Szkoła: 6:00–21:00</p>
+          <p>Szkoła: 8:00–16:25</p>
           <p>Świetlica: 7:00–16:00</p>
           <p class="footer-note">W dni nauki szkolnej</p>
         </div>
@@ -384,13 +408,13 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
       <hr class="contact-divider">
       <div class="contact-info-row">
         <div class="contact-info-block"><p class="contact-info-lbl">Adres</p><address>ul. Armii Krajowej 93<br>41-215 Sosnowiec<br>woj. śląskie</address><a href="https://maps.google.com/?q=ul.+Armii+Krajowej+93,+41-215+Sosnowiec" target="_blank" rel="noopener" class="contact-map-link">Pokaż na mapie →</a></div>
-        <div class="contact-info-block"><p class="contact-info-lbl">Godziny pracy</p><p>Sekretariat:<br>pon–pt 7:00–15:00</p><p class="contact-note">Szkoła: 6:00–21:00<br>Świetlica: 7:00–16:00</p></div>
+        <div class="contact-info-block"><p class="contact-info-lbl">Godziny pracy</p><p>Sekretariat:<br>pon–pt 7:00–15:00</p><p class="contact-note">Szkoła: 8:00–16:25<br>Świetlica: 7:00–16:00</p></div>
       </div>
     </div>
   </div>
 </div>
 
 
-<script src="shared.js?v=5" defer></script>
+<script src="shared.js" defer></script>
 </body>
 </html>

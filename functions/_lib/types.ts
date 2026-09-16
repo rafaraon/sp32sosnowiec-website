@@ -7,6 +7,9 @@ export type Env = {
   MEDIA_PUBLIC_URL: string
   CF_ZONE_ID?: string
   CF_PURGE_TOKEN?: string
+  CF_ACCESS_TEAM_DOMAIN?: string  // e.g. "late-mud-7745.cloudflareaccess.com" — enables JWT signature verification
+  RESEND_API_KEY?: string         // secret — enable email notifications via Resend.com
+  EMAIL_FROM?: string             // e.g. "SP32 RODO <rodo@sp32sosnowiec.edu.pl>"
 }
 
 export type AdminRole = 'admin' | 'editor'
@@ -27,6 +30,7 @@ export interface NewsRow {
   created_at: string
   updated_at: string
   author_email: string | null
+  category: string | null
 }
 
 export interface GalleryAlbumRow {
@@ -66,6 +70,7 @@ export interface DocumentRow {
   published: number
   uploaded_at: string
   uploaded_by: string | null
+  location_key: string | null
 }
 
 export interface SpecialistRow {

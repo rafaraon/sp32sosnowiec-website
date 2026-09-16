@@ -4,6 +4,7 @@ import { calcGraduationYear } from '../types'
 import { adminAuth, requireAdmin } from '../auth'
 import { newsToJson, albumToJson, photoToJson, documentToJson, menuToJson, specialistToJson, publicUrl } from '../db'
 import { r2Key, uploadToR2 } from '../r2'
+import { notifyParentResolved } from '../email'
 
 type Variables = { user: AdminUser }
 
@@ -11,9 +12,26 @@ export const adminRouter = new Hono<{ Bindings: Env; Variables: Variables }>()
 
 adminRouter.use('*', adminAuth)
 
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
+const MAX_IMAGE_BYTES = 25 * 1024 * 1024 // 25 MB
+
+function validateImageUpload(file: File): { error: string; status: 400 | 413 | 415 } | null {
+  if (!ALLOWED_IMAGE_TYPES.includes(file.type)) return { error: 'Dozwolone formaty: JPG, PNG, WebP, GIF', status: 415 }
+  if (file.size > MAX_IMAGE_BYTES) return { error: 'Plik zbyt duży (maks. 25 MB)', status: 413 }
+  return null
+}
+
 adminRouter.get('/me', (c) => {
   const user = c.get('user')
   return c.json({ email: user.email, role: user.role })
+})
+
+// GET /api/admin/news — list all articles (including drafts and scheduled)
+adminRouter.get('/news', async (c) => {
+  const rows = await c.env.DB.prepare(
+    'SELECT * FROM news ORDER BY created_at DESC LIMIT 200'
+  ).all<NewsRow>()
+  return c.json({ items: (rows.results ?? []).map(r => newsToJson(r, c.env)) })
 })
 
 // POST /api/admin/news — create article
@@ -33,7 +51,7 @@ adminRouter.post('/news', async (c) => {
     return c.json({ error: 'title and slug are required' }, 400)
   }
 
-  const VALID_CATEGORIES = ['komunikat', 'ogloszenie', 'wydarzenie', 'sukces']
+  const VALID_CATEGORIES = ['komunikat', 'ogloszenie', 'wydarzenie', 'sukces', 'zfss']
   const category = body.category && VALID_CATEGORIES.includes(body.category) ? body.category : null
 
   const row = await c.env.DB.prepare(
@@ -85,7 +103,7 @@ adminRouter.put('/news/:id', async (c) => {
   const allowedKeys = ['title', 'slug', 'excerpt', 'body_html', 'cover_r2_key', 'published_at', 'category'] as const
   type AllowedKey = typeof allowedKeys[number]
 
-  const VALID_CATEGORIES = ['komunikat', 'ogloszenie', 'wydarzenie', 'sukces']
+  const VALID_CATEGORIES = ['komunikat', 'ogloszenie', 'wydarzenie', 'sukces', 'zfss']
   if ('category' in body) {
     (body as Record<string, unknown>)['category'] =
       body.category && VALID_CATEGORIES.includes(body.category) ? body.category : null
@@ -130,6 +148,8 @@ adminRouter.post('/news/:id/cover', async (c) => {
   const formData = await c.req.formData()
   const file = formData.get('file')
   if (!file || !(file instanceof File)) return c.json({ error: 'file is required' }, 400)
+  const imgErr = validateImageUpload(file)
+  if (imgErr) return c.json({ error: imgErr.error }, imgErr.status)
 
   if (article.cover_r2_key) {
     await c.env.MEDIA.delete(article.cover_r2_key).catch(() => {})
@@ -158,7 +178,7 @@ adminRouter.delete('/news/:id', async (c) => {
   }
 
   if (existing.cover_r2_key) {
-    await c.env.MEDIA.delete(existing.cover_r2_key)
+    await c.env.MEDIA.delete(existing.cover_r2_key).catch(() => {})
   }
 
   await c.env.DB.prepare('DELETE FROM news WHERE id = ?').bind(id).run()
@@ -175,10 +195,10 @@ adminRouter.get('/gallery/albums', async (c) => {
             cover_r2_key, published, created_at,
             (SELECT COUNT(*) FROM gallery_photos WHERE album_id = gallery_albums.id) as photo_count
      FROM gallery_albums ORDER BY created_at DESC`
-  ).all()
-  const albums = (rows.results ?? []).map((a: any) => ({
+  ).all<GalleryAlbumRow & { photo_count: number }>()
+  const albums = (rows.results ?? []).map((a) => ({
     ...a,
-    cover_url: a.cover_r2_key ? `/api/public/r2/${a.cover_r2_key}` : null
+    cover_url: a.cover_r2_key ? publicUrl(c.env, a.cover_r2_key) : null
   }))
   return c.json({ albums })
 })
@@ -260,8 +280,11 @@ adminRouter.put('/gallery/albums/:id', async (c) => {
   }
 
   if ('school_year' in body && body.school_year) {
-    const endYear = parseInt(body.school_year.split('/')[1] ?? '0', 10)
-    if (endYear) { sets.push('graduation_year = ?'); vals.push(endYear) }
+    const classLabel = 'class_label' in body
+      ? (body.class_label ?? null)
+      : (await c.env.DB.prepare('SELECT class_label FROM gallery_albums WHERE id = ?').bind(id).first<{ class_label: string | null }>())?.class_label ?? null
+    const grad = calcGraduationYear(body.school_year, classLabel)
+    sets.push('graduation_year = ?'); vals.push(grad)
   }
 
   if (sets.length === 0) {
@@ -303,9 +326,9 @@ adminRouter.delete('/gallery/albums/:id', async (c) => {
     .all<{ r2_key: string; r2_key_thumb: string | null }>()
 
   for (const photo of photosResult.results) {
-    await c.env.MEDIA.delete(photo.r2_key)
+    await c.env.MEDIA.delete(photo.r2_key).catch(() => {})
     if (photo.r2_key_thumb) {
-      await c.env.MEDIA.delete(photo.r2_key_thumb)
+      await c.env.MEDIA.delete(photo.r2_key_thumb).catch(() => {})
     }
   }
 
@@ -337,6 +360,8 @@ adminRouter.post('/gallery/albums/:id/cover', async (c) => {
   const formData = await c.req.formData()
   const file = formData.get('file')
   if (!file || !(file instanceof File)) return c.json({ error: 'file is required' }, 400)
+  const imgErr2 = validateImageUpload(file)
+  if (imgErr2) return c.json({ error: imgErr2.error }, imgErr2.status)
 
   if (album.cover_r2_key) {
     await c.env.MEDIA.delete(album.cover_r2_key).catch(() => {})
@@ -375,6 +400,8 @@ adminRouter.post('/gallery/albums/:id/photos', async (c) => {
   if (!file || !(file instanceof File)) {
     return c.json({ error: 'file is required' }, 400)
   }
+  const imgErr3 = validateImageUpload(file)
+  if (imgErr3) return c.json({ error: imgErr3.error }, imgErr3.status)
 
   const key = r2Key('gallery/' + album.slug, file.name)
   await uploadToR2(c.env, key, file)
@@ -455,27 +482,49 @@ adminRouter.put('/gallery/photos/:id/anonymize', async (c) => {
 
 // ── Documents ────────────────────────────────────────────────────────────────
 
+// GET /api/admin/documents — list all documents including unpublished (admin only)
+adminRouter.get('/documents', requireAdmin, async (c) => {
+  const category = c.req.query('category')
+  const allowed = ['dokumenty', 'zfss', 'druki', 'rodo']
+  let rows
+  if (category && allowed.includes(category)) {
+    rows = await c.env.DB.prepare(
+      'SELECT * FROM documents WHERE category = ? ORDER BY sort_order ASC, uploaded_at DESC'
+    ).bind(category).all<DocumentRow>()
+  } else {
+    rows = await c.env.DB.prepare(
+      'SELECT * FROM documents ORDER BY category ASC, sort_order ASC, uploaded_at DESC'
+    ).all<DocumentRow>()
+  }
+  return c.json({ documents: (rows.results ?? []).map(r => documentToJson(r, c.env)) })
+})
+
 // POST /api/admin/documents — upload document
 adminRouter.post('/documents', requireAdmin, async (c) => {
   const form = await c.req.formData()
   const file = form.get('file') as File | null
   const title = form.get('title') as string | null
   const category = form.get('category') as string | null
+  const locationKey = form.get('location_key') as string | null
 
   if (!file || !title || !category) return c.json({ error: 'file, title, category required' }, 400)
   const allowed = ['dokumenty', 'zfss', 'druki', 'rodo']
   if (!allowed.includes(category)) return c.json({ error: 'invalid category' }, 400)
+
+  const VALID_LOCATIONS = ['swietlica', 'pedagog', 'wycieczki', 'sekretariat']
+  const resolvedLocation = category === 'druki' && locationKey && VALID_LOCATIONS.includes(locationKey)
+    ? locationKey : null
 
   const key = r2Key(`documents/${category}`, file.name)
   await uploadToR2(c.env, key, file)
 
   const user = c.get('user')
   const row = await c.env.DB.prepare(
-    `INSERT INTO documents (category, title, r2_key, file_type, file_size, uploaded_by)
-     VALUES (?, ?, ?, ?, ?, ?) RETURNING *`
+    `INSERT INTO documents (category, title, r2_key, file_type, file_size, uploaded_by, location_key)
+     VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING *`
   ).bind(category, title, key,
     file.name.split('.').pop()?.toLowerCase() ?? null,
-    file.size, user.email
+    file.size, user.email, resolvedLocation
   ).first<DocumentRow>()
 
   if (!row) return c.json({ error: 'Insert failed' }, 500)
@@ -488,11 +537,17 @@ adminRouter.put('/documents/:id', requireAdmin, async (c) => {
   const existing = await c.env.DB.prepare('SELECT id FROM documents WHERE id = ?').bind(id).first()
   if (!existing) return c.json({ error: 'Not found' }, 404)
 
-  const body = await c.req.json<Partial<{ title: string; sort_order: number; published: boolean }>>()
+  const body = await c.req.json<Partial<{ title: string; sort_order: number; published: boolean; location_key: string | null }>>()
   const sets: string[] = []; const vals: unknown[] = []
   if ('title' in body) { sets.push('title = ?'); vals.push(body.title) }
   if ('sort_order' in body) { sets.push('sort_order = ?'); vals.push(body.sort_order) }
   if ('published' in body) { sets.push('published = ?'); vals.push(body.published ? 1 : 0) }
+  if ('location_key' in body) {
+    const VALID_LOCATIONS = ['swietlica', 'pedagog', 'wycieczki', 'sekretariat']
+    const loc = body.location_key
+    sets.push('location_key = ?')
+    vals.push(loc && VALID_LOCATIONS.includes(loc) ? loc : null)
+  }
   if (!sets.length) return c.json({ error: 'No fields to update' }, 400)
   vals.push(id)
 
@@ -547,6 +602,14 @@ adminRouter.put('/specialists/:role', requireAdmin, async (c) => {
 
 // ── Menu ──────────────────────────────────────────────────────────────────────
 
+// GET /api/admin/menu — list all menu weeks
+adminRouter.get('/menu', requireAdmin, async (c) => {
+  const rows = await c.env.DB.prepare(
+    'SELECT * FROM menu_weeks ORDER BY week_start DESC LIMIT 52'
+  ).all<MenuWeekRow>()
+  return c.json({ weeks: (rows.results ?? []).map(r => menuToJson(r, c.env)) })
+})
+
 // POST /api/admin/menu — upsert menu week (multipart)
 adminRouter.post('/menu', requireAdmin, async (c) => {
   const form = await c.req.formData()
@@ -565,7 +628,9 @@ adminRouter.post('/menu', requireAdmin, async (c) => {
   const row = await c.env.DB.prepare(
     `INSERT INTO menu_weeks (week_start, r2_key, notes)
      VALUES (?, ?, ?)
-     ON CONFLICT(week_start) DO UPDATE SET r2_key = excluded.r2_key, notes = excluded.notes
+     ON CONFLICT(week_start) DO UPDATE SET
+       r2_key = CASE WHEN excluded.r2_key IS NOT NULL THEN excluded.r2_key ELSE r2_key END,
+       notes = excluded.notes
      RETURNING *`
   ).bind(week_start, menuKey, notes ?? null).first<MenuWeekRow>()
   if (!row) return c.json({ error: 'Insert failed' }, 500)
@@ -607,15 +672,22 @@ adminRouter.post('/rodo/requests', requireAdmin, async (c) => {
   if (!body.student_name || !body.request_type) {
     return c.json({ error: 'student_name and request_type required' }, 400)
   }
+  const year = new Date().getFullYear()
+  const countRow = await c.env.DB.prepare(
+    'SELECT COUNT(*) as cnt FROM consent_requests WHERE requested_at >= ?'
+  ).bind(`${year}-01-01`).first<{ cnt: number }>()
+  const seq = String((countRow?.cnt ?? 0) + 1).padStart(3, '0')
+  const ref = `RODO-${year}-${seq}`
   const row = await c.env.DB.prepare(
-    `INSERT INTO consent_requests (student_name, class_label, graduation_year, request_type, notes)
-     VALUES (?, ?, ?, ?, ?) RETURNING *`
+    `INSERT INTO consent_requests (student_name, class_label, graduation_year, request_type, notes, reference_number)
+     VALUES (?, ?, ?, ?, ?, ?) RETURNING *`
   ).bind(
     body.student_name,
     body.class_label ?? null,
     body.graduation_year ?? null,
     body.request_type,
-    body.notes ?? null
+    body.notes ?? null,
+    ref
   ).first<ConsentRequestRow>()
   return c.json({ request: row }, 201)
 })
@@ -629,6 +701,11 @@ adminRouter.put('/rodo/requests/:id', requireAdmin, async (c) => {
     director_approved?: boolean
   }>()
   const user = c.get('user')
+
+  const VALID_STATUSES = ['pending', 'in_progress', 'resolved']
+  if ('status' in body && body.status !== undefined && !VALID_STATUSES.includes(body.status)) {
+    return c.json({ error: 'Nieprawidłowy status. Dozwolone: pending, in_progress, resolved' }, 400)
+  }
 
   const sets: string[] = []; const vals: unknown[] = []
   if ('status' in body) {
@@ -649,6 +726,18 @@ adminRouter.put('/rodo/requests/:id', requireAdmin, async (c) => {
     `UPDATE consent_requests SET ${sets.join(', ')} WHERE id = ? RETURNING *`
   ).bind(...vals).first<ConsentRequestRow>()
   if (!row) return c.json({ error: 'Not found' }, 404)
+
+  if (body.status === 'resolved' && row.submitter_email && row.reference_number) {
+    c.executionCtx.waitUntil(
+      notifyParentResolved(c.env, row.submitter_email, {
+        reference: row.reference_number,
+        studentName: row.student_name,
+        requestType: row.request_type,
+        resolvedBy: user.email,
+      }).catch(() => {})
+    )
+  }
+
   return c.json({ request: row })
 })
 
@@ -736,7 +825,7 @@ adminRouter.patch('/users/:id', requireAdmin, async (c) => {
   const row = await c.env.DB.prepare(
     `UPDATE admin_users SET ${sets.join(', ')} WHERE id = ? RETURNING *`
   ).bind(...vals).first<AdminUserRow>()
-
+  if (!row) return c.json({ error: 'Not found' }, 404)
   return c.json({ user: row })
 })
 
@@ -761,7 +850,7 @@ adminRouter.delete('/users/:id', requireAdmin, async (c) => {
 // ── Storage stats ─────────────────────────────────────────────────────────────
 
 // GET /api/admin/stats/storage — real R2 usage + D1 row counts
-adminRouter.get('/stats/storage', async (c) => {
+adminRouter.get('/stats/storage', requireAdmin, async (c) => {
   let totalBytes = 0
   let totalFiles = 0
   let cursor: string | undefined

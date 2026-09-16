@@ -45,6 +45,7 @@
       <div>
         <div class="nav-section">Admin</div>
         <a href="/admin/documents/index.html" class="admin-only">📄 Dokumenty</a>
+        <a href="/admin/documents/index.html?tab=zfss" class="admin-only">🏦 ZFŚS</a>
         <a href="/admin/specialists/index.html" class="admin-only">👥 Specjaliści</a>
         <a href="/admin/menu/index.html" class="admin-only">🍽️ Jadłospis</a>
         <a href="/admin/rodo/index.html" class="admin-only">🔐 RODO</a>
@@ -74,7 +75,12 @@
           Aby nauczyciel mógł się zalogować, konieczne są <strong>dwa kroki</strong>:
           <ol>
             <li>Dodaj ich email poniżej (Panel SP32 — uprawnienia i rola)</li>
-            <li>Dodaj ten sam email w <strong>Cloudflare Access → Applications → Panel Redakcja → Policies → Redakcja-redaktorzy → Emails</strong> — dopiero wtedy system wyśle im kod OTP do logowania</li>
+            <li>Dodaj ten sam email w polityce Cloudflare Access →
+              <a href="https://dash.cloudflare.com/17aee1cbc4f46d6616202896fd47cdda/one/access-controls/policies/5babfe88-565c-470b-9743-f1c56813ff8d/edit"
+                 target="_blank" rel="noopener" style="font-weight:700;color:#b94a00">
+                Redakcja-redaktorzy → Emails ↗
+              </a>
+              — dopiero wtedy system wyśle im kod OTP do logowania</li>
           </ol>
           Edytor widzi: aktualności i galerię. Administrator widzi wszystko.
         </div>
@@ -179,15 +185,22 @@
 <script>
 function usersAdmin() {
   return {
-    ...sharedAdmin(),
     users: [],
+    userEmail: '',
+    role: 'editor',
+    loading: true,
     form: { name: '', email: '', role: 'editor' },
     adding: false,
     formError: '',
 
     async init() {
-      await this.fetchMe()
+      try {
+        const me = await API.get('/me')
+        this.userEmail = me.email
+        this.role = me.role
+      } catch(e) { console.error(e) }
       if (this.role === 'admin') await this.load()
+      else this.loading = false
     },
 
     async load() {

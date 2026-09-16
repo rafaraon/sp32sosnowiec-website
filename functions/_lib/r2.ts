@@ -18,6 +18,3 @@ export async function uploadToR2(
   return key
 }
 
-export async function deleteFromR2(env: Env, key: string): Promise<void> {
-  await env.MEDIA.delete(key)
-}

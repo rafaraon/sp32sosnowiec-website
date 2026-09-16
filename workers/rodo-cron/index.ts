@@ -1,6 +1,5 @@
 export interface Env {
   DB: D1Database
-  ADMIN_EMAIL: string
 }
 
 interface AuditAlbum {
@@ -36,6 +35,7 @@ async function runAudit(env: Env): Promise<void> {
 
   console.log(`[RODO Cron] ${new Date().toISOString()} — ${albums.length} albumów wymaga uwagi`)
   for (const a of albums) {
-    console.log(`  [${a.audit_type.toUpperCase()}] ${a.title} (graduation_year: ${a.graduation_year})`)
+    // Log ID and year only — album titles contain class labels and are not logged for privacy
+    console.log(`  [${a.audit_type.toUpperCase()}] id=${a.id} graduation_year=${a.graduation_year}`)
   }
 }

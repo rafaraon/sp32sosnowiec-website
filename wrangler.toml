@@ -15,4 +15,12 @@ bucket_name = "sp32-media"
 [vars]
 ADMIN_EMAIL = "sp32.tech@gmail.com"
 MEDIA_PUBLIC_URL = "https://pub.sp32sosnowiec.edu.pl"
+CF_ACCESS_TEAM_DOMAIN = "late-mud-7745.cloudflareaccess.com"
+EMAIL_FROM = "SP32 Sosnowiec <rodo@sp32sosnowiec.edu.pl>"
+
+# Required secrets (set via: npx wrangler secret put <NAME>)
+# ADMIN_SECRET   — used by DEV_MODE bypass (X-Admin-Secret header)
+# CF_ZONE_ID     — optional, for cache purge after content changes
+# CF_PURGE_TOKEN — optional, paired with CF_ZONE_ID
+# RESEND_API_KEY — optional, enables email notifications (get at resend.com)
 

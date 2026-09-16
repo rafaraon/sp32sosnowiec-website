@@ -11,7 +11,7 @@
       <div class="info-cards">
         <div class="info-card">
           <span class="info-card-label">Godziny otwarcia</span>
-          <span class="info-card-value">6:30 – 17:00</span>
+          <span class="info-card-value">7:00 – 16:00</span>
           <p>poniedziałek – piątek<br>w dni nauki szkolnej</p>
         </div>
         <div class="info-card">
@@ -31,10 +31,10 @@
 
       <h2>Program zajęć</h2>
       <ul class="list">
-        <li><strong>6:30 – 8:00</strong> — zajęcia powitalne, gry planszowe, rysowanie</li>
+        <li><strong>7:00 – 8:00</strong> — zajęcia powitalne, gry planszowe, rysowanie</li>
         <li><strong>12:00 – 14:00</strong> — odrabianie lekcji, pomoc wychowawcy</li>
-        <li><strong>14:00 – 16:00</strong> — zajęcia tematyczne, plastyczne, sportowe</li>
-        <li><strong>16:00 – 17:00</strong> — zabawy swobodne, czas wolny</li>
+        <li><strong>14:00 – 15:30</strong> — zajęcia tematyczne, plastyczne, sportowe</li>
+        <li><strong>15:30 – 16:00</strong> — zabawy swobodne, czas wolny</li>
       </ul>
 
       <h2>Zapisy do świetlicy</h2>
@@ -46,4 +46,28 @@
 
     </div>
   </div>
+
+<div class="container" style="padding-bottom:4rem" x-data="drukiApp('swietlica')" x-init="load()">
+  <h2 style="font-family:var(--font-d);font-size:1.15rem;font-weight:800;color:var(--tx);margin-bottom:1rem">📄 Druki do pobrania</h2>
+  <template x-if="loading"><div style="height:56px;background:var(--clv);border-radius:8px;animation:pulse 1.5s ease-in-out infinite"></div></template>
+  <template x-if="!loading && items.length === 0"><p style="color:var(--tx-m);font-size:.9rem">Brak druków do pobrania.</p></template>
+  <template x-if="!loading && items.length > 0">
+    <div style="display:flex;flex-direction:column;gap:.65rem">
+      <template x-for="doc in items" :key="doc.id">
+        <div style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--r-s);padding:.9rem 1.1rem;display:flex;align-items:center;gap:.9rem;box-shadow:var(--sh)">
+          <span style="font-size:1.1rem;flex-shrink:0" x-text="doc.file_type==='docx'?'📝':'📄'"></span>
+          <div style="flex:1;min-width:0">
+            <p style="font-family:var(--font-d);font-weight:700;font-size:.88rem;color:var(--tx);margin:0" x-text="doc.title"></p>
+            <p style="font-size:.73rem;color:var(--tx-m);margin:.15rem 0 0" x-text="doc.file_type?(doc.file_type.toUpperCase()+(doc.file_size?' · '+Math.round(doc.file_size/1024)+' KB':'')):''" ></p>
+          </div>
+          <a :href="doc.url" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;font-family:var(--font-d);font-size:.78rem;font-weight:700;color:var(--cp);padding:.3rem .7rem;border-radius:var(--r-s);border:1px solid var(--bd);white-space:nowrap;text-decoration:none">Pobierz ↗</a>
+        </div>
+      </template>
+    </div>
+  </template>
+</div>
+<script>
+function drukiApp(loc){return{items:[],loading:true,async load(){try{const r=await fetch('/api/public/documents/druki?location='+loc);const d=await r.json();this.items=d.documents??[];}catch{this.items=[]}finally{this.loading=false}}}}
+</script>
+<script src="/alpine.min.js" defer></script>
 {% endblock %}
