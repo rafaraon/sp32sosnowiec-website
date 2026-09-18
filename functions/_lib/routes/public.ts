@@ -14,7 +14,9 @@ publicRouter.get('/news', async (c) => {
          ORDER BY published_at DESC LIMIT ?`
       ).bind(category, limit).all<NewsRow>()
     : await c.env.DB.prepare(
+        // Wyklucz ZFŚS z ogólnego feedu — to jest wyłącznie sekcja dla pracowników
         `SELECT * FROM news WHERE published_at IS NOT NULL AND published_at <= datetime('now')
+         AND (category IS NULL OR category != 'zfss')
          ORDER BY published_at DESC LIMIT ?`
       ).bind(limit).all<NewsRow>()
 
