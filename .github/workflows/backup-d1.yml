@@ -64,7 +64,7 @@ jobs:
           curl -fsSL https://rclone.org/install.sh | sudo bash
           rclone version | head -1
 
-      - name: Skonfiguruj rclone (konto sp32.sosnowiec)
+      - name: Skonfiguruj rclone (Dysk sp32.tech)
         env:
           RCLONE_CONFIG_D1: ${{ secrets.RCLONE_CONFIG_D1 }}
         run: |
