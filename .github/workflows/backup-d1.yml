@@ -1,66 +1,111 @@
-name: Backup D1 (co ~5 tygodni)
+name: Backup D1 → Google Drive (co miesiąc)
+
+# Zrzut bazy trafia WYŁĄCZNIE na prywatny Dysk Google (repo jest publiczne,
+# a artefakty publicznych repo może pobrać każdy zalogowany użytkownik GitHuba).
+# Ręczne uruchomienie: Actions → "Backup D1 → Google Drive" → Run workflow.
 
 on:
   schedule:
-    # Uruchamia się co poniedziałek o 02:00 UTC;
-    # krok "check-week" pomija uruchomienie jeśli numer tygodnia % 5 ≠ 0
-    - cron: '0 2 * * 1'
+    - cron: '0 2 1 * *' # 1. dzień miesiąca, 02:00 UTC
   workflow_dispatch:
-    inputs:
-      force:
-        description: 'Wymuś backup niezależnie od tygodnia'
-        type: boolean
-        default: false
+
+concurrency:
+  group: backup-d1
+  cancel-in-progress: false
 
 jobs:
   backup:
-    name: Export D1 → Artifact
+    name: Export D1 → Google Drive
     runs-on: ubuntu-latest
     permissions:
       contents: read
 
     steps:
-      - name: Sprawdź numer tygodnia
-        id: week-check
-        run: |
-          WEEK=$(date +%W | sed 's/^0*//')
-          WEEK=${WEEK:-0}
-          echo "week=$WEEK" >> $GITHUB_OUTPUT
-          if [ "${{ github.event.inputs.force }}" = "true" ]; then
-            echo "skip=false" >> $GITHUB_OUTPUT
-          elif [ $((WEEK % 5)) -eq 0 ]; then
-            echo "skip=false" >> $GITHUB_OUTPUT
-          else
-            echo "skip=true" >> $GITHUB_OUTPUT
-            echo "Tydzień $WEEK — nie jest tygodniem backupu (robimy co 5 tygodni). Pomijam."
-          fi
-
       - name: Checkout (potrzebny dla wrangler.toml)
-        if: steps.week-check.outputs.skip == 'false'
         uses: actions/checkout@v4
 
       - name: Setup Node.js
-        if: steps.week-check.outputs.skip == 'false'
         uses: actions/setup-node@v4
         with:
           node-version: '22'
 
-      - name: Eksportuj D1 do SQL
-        if: steps.week-check.outputs.skip == 'false'
+      - name: Eksportuj D1 do SQL (produkcja)
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
         run: |
-          FILENAME="sp32-cms-$(date +%Y%m%d).sql"
-          npx --yes wrangler@latest d1 export sp32-cms --output "$FILENAME"
-          echo "backup_file=$FILENAME" >> $GITHUB_ENV
-          echo "Rozmiar pliku: $(du -sh $FILENAME | cut -f1)"
+          FILENAME="sp32-db-$(date -u +%Y%m%d-%H%M).sql"
+          npx --yes wrangler@4 d1 export sp32-db --remote --output "$FILENAME"
+          echo "backup_file=$FILENAME" >> "$GITHUB_ENV"
 
-      - name: Upload jako GitHub Artifact
-        if: steps.week-check.outputs.skip == 'false'
-        uses: actions/upload-artifact@v4
-        with:
-          name: d1-backup-${{ github.run_id }}-${{ github.run_attempt }}
-          path: ${{ env.backup_file }}
-          retention-days: 365
-          if-no-files-found: error
+      - name: Zweryfikuj zrzut
+        run: |
+          SIZE=$(wc -c < "$backup_file" | tr -d ' ')
+          echo "Rozmiar zrzutu: ${SIZE} B"
+          echo "backup_size=$SIZE" >> "$GITHUB_ENV"
+          if [ "$SIZE" -lt 2048 ]; then
+            echo "::error::Zrzut podejrzanie mały (${SIZE} B) - to nie jest prawdziwa kopia bazy."
+            exit 1
+          fi
+          for TABLE in news specialists documents; do
+            if ! grep -Eq "CREATE TABLE (IF NOT EXISTS )?[\"\`]?${TABLE}[\"\`]?[ (]" "$backup_file"; then
+              echo "::error::W zrzucie brakuje tabeli '${TABLE}'."
+              exit 1
+            fi
+          done
+          if ! grep -q "INSERT INTO" "$backup_file"; then
+            echo "::error::Zrzut nie zawiera żadnych danych (INSERT INTO)."
+            exit 1
+          fi
+          echo "Zrzut wygląda poprawnie (schemat + dane)."
+
+      - name: Zainstaluj rclone
+        run: |
+          curl -fsSL https://rclone.org/install.sh | sudo bash
+          rclone version | head -1
+
+      - name: Skonfiguruj rclone (konto sp32.sosnowiec)
+        env:
+          RCLONE_CONFIG_D1: ${{ secrets.RCLONE_CONFIG_D1 }}
+        run: |
+          mkdir -p ~/.config/rclone
+          printf '%s' "$RCLONE_CONFIG_D1" | base64 -d > ~/.config/rclone/rclone.conf
+          rclone listremotes
+
+      - name: Wyślij na Google Drive i zweryfikuj
+        run: |
+          rclone copy "$backup_file" gdrive-d1:SP32-Backup-D1/ --log-level INFO
+          REMOTE_SIZE=$(rclone lsjson gdrive-d1:SP32-Backup-D1/ --include "$backup_file" | jq -r '.[0].Size // empty')
+          echo "Rozmiar na Dysku: ${REMOTE_SIZE:-brak pliku} B (lokalnie: ${backup_size} B)"
+          if [ "$REMOTE_SIZE" != "$backup_size" ]; then
+            echo "::error::Plik na Dysku nie istnieje lub ma inny rozmiar niż lokalny zrzut."
+            exit 1
+          fi
+          echo "Kopia zapisana: gdrive-d1:SP32-Backup-D1/$backup_file"
+
+  notify-failure:
+    name: Alert o nieudanym backupie
+    needs: backup
+    if: failure()
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Otwórz Issue (lub dopisz komentarz do otwartego)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          gh label create backup-failed --color B60205 \
+            --description "Automatyczny alert: backup nie powiódł się" \
+            --repo "$GITHUB_REPOSITORY" --force
+          OPEN=$(gh issue list --repo "$GITHUB_REPOSITORY" --label backup-failed \
+            --state open --json number --jq '.[0].number // empty')
+          BODY="Backup D1 nie powiódł się: ${RUN_URL}"
+          if [ -n "$OPEN" ]; then
+            gh issue comment "$OPEN" --repo "$GITHUB_REPOSITORY" --body "$BODY"
+          else
+            gh issue create --repo "$GITHUB_REPOSITORY" --label backup-failed \
+              --title "Backup D1 nieudany" \
+              --body "$BODY"$'\n\n'"Ostatnia poprawna kopia jest na Dysku Google (SP32-Backup-D1). Zamknij to Issue po naprawie."
+          fi
